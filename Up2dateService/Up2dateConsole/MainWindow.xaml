@@ -1,0 +1,142 @@
+﻿<Window x:Class="Up2dateConsole.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Up2dateConsole"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        mc:Ignorable="d"
+        ShowInTaskbar="True"
+        Icon="Images/Logo.ico"
+        Title="RITMS UP2DATE Console" 
+        Height="600" Width="1000"
+        MinHeight="200" MinWidth="500"
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="5,4"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <tb:TaskbarIcon Visibility="Visible"
+                        IconSource="{Binding TaskbarIcon}"
+                        MenuActivation="RightClick"
+                        LeftClickCommand="{Binding ShowConsoleCommand}"
+                        DoubleClickCommand="{Binding ShowConsoleCommand}"
+                        ToolTipText="{Binding TaskbarIconText}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Show console" Command="{Binding ShowConsoleCommand}"/>
+                    <!--<MenuItem Header="Settings..."/>-->
+                    <Separator/>
+                    <MenuItem Header="Quit" Command="{Binding QuitCommand}"/>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Margin="10,5" >
+                <TextBlock VerticalAlignment="Center" Text="Software packages:"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                    <Button ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
+                            Command="{Binding RequestCertificateCommand}"
+                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="Key" Foreground="DarkOrange" Width="12"/>
+                            <TextBlock Margin="5,0,0,0" Text="Authorization..."  VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="100" 
+                            Content="Install selected" 
+                            Command="{Binding InstallCommand}"
+                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages">
+                        <fa:ImageAwesome Icon="Refresh" Foreground="Gray" Width="12"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <DataGrid Grid.Row="1" Margin="10,0,10,10" 
+                        Background="White"
+                        SelectionMode="Extended"
+                        RowHeight="20"
+                        SelectionUnit="FullRow"
+                        AutoGenerateColumns="False"
+                        GridLinesVisibility="None"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeRows="False"
+                        RowHeaderWidth="0"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding AvailablePackages}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Package" Binding="{Binding Filename}" Width="2*"/>
+                    <DataGridTextColumn Header="Product name" Binding="{Binding ProductName}" Width="2*"/>
+                    <DataGridTextColumn Header="Publisher" Binding="{Binding Publisher}" Width="1*"/>
+                    <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="80"/>
+                    <DataGridTextColumn Header="Size (MB)" Binding="{Binding SizeMb}" Width="60"/>
+                    <DataGridTextColumn Header="Installed" Binding="{Binding InstallDate}" Width="80"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
+                </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Focusable" Value="False" />
+                        <Setter Property="IsTabStop" Value="False" />
+                    </Style>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="10,0,10,10">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Service state:" VerticalAlignment="Center"/>
+                <fa:ImageAwesome 
+                    Margin="8,0"
+                    VerticalAlignment="Center"
+                    Width="16" Height="16"
+                    Icon="{Binding StateIndicator.Icon}" 
+                    Foreground="{Binding StateIndicator.Color}"
+                    Spin="{Binding StateIndicator.Spin}">
+                    <fa:ImageAwesome.ToolTip>
+                        <TextBlock Text="{Binding StateIndicator.Info}" MaxWidth="400" TextWrapping="Wrap"/>
+                    </fa:ImageAwesome.ToolTip>
+                </fa:ImageAwesome>
+                <StackPanel Orientation="Horizontal" Margin="20,0,0,0"  VerticalAlignment="Center"
+                            Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="RITMS UP2DATE:" Margin="0,0,5,0"  VerticalAlignment="Center"/>
+                    <TextBox IsReadOnly="True" Text="{Binding DeviceId, Mode=OneWay}" Padding="2,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button ToolTip="Turns console into administration mode (requires administrator privilege)"
+                        Command="{Binding EnterAdminModeCommand}"
+                        Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Stretch="Fill" Width="20" Height="20" Source="Images/UAC.png" VerticalAlignment="Center"/>
+                        <TextBlock Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
+                           Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
