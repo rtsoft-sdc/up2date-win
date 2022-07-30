@@ -6,11 +6,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole.Dialogs"
         mc:Ignorable="d"
-        Title="Request Connection Certificate" 
+        Title="Authorization" 
         WindowStartupLocation="CenterOwner"
-        WindowStyle="ThreeDBorderWindow"
         ResizeMode="NoResize" 
         SizeToContent="WidthAndHeight"
+        IsEnabled="{Binding IsEnabled}"
         d:DataContext="{d:DesignInstance local:RequestCertificateDialogViewModel}">
 
     <Window.Resources>
@@ -19,6 +19,7 @@
             <Setter Property="Margin" Value="5"/>
             <Setter Property="MinWidth" Value="70"/>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid Margin="5">
@@ -32,13 +33,16 @@
                 <fa:ImageAwesome Icon="Key" Foreground="DarkOrange" Margin="0,0,10,0" Width="42" VerticalAlignment="Top"/>
                 <StackPanel>
                     <TextBlock Text="This device has not initialized to connect RITMS UP2DATE"/>
-                    <TextBlock Text="Please, provide a certification key :"/>
+                    <TextBlock Text="Please, provide a certification key:"/>
                     <TextBox Margin="0,10" Height="140" Width="500" Text="{Binding OneTimeKey, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+            <fa:ImageAwesome Width="20" Margin="10,0" VerticalAlignment="Center"
+                             Icon="Spinner" Foreground="Green" Spin="True"
+                             Visibility="{Binding IsInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="Authorize" Command="{Binding RequestCommand}"/>
             <Button Content="Cancel" IsCancel="True"/>
         </StackPanel>

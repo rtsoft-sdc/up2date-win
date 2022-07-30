@@ -43,7 +43,7 @@ namespace Up2dateConsole
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
             RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh());
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
-            RequestCertificateCommand = new RelayCommand(ExecuteRequestCertificate);
+            RequestCertificateCommand = new RelayCommand(async (_) => await ExecuteRequestCertificateAsync());
 
             AvailablePackages = new ObservableCollection<PackageItem>();
 
@@ -135,13 +135,22 @@ namespace Up2dateConsole
             }
         }
 
-        private void ExecuteRequestCertificate(object _)
+        private async Task ExecuteRequestCertificateAsync()
         {
             RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory);
             bool success = viewService.ShowDialog(vm);
             if (success)
             {
-                viewService.ShowMessageBox($"Communication certificate for RITMS UP2DATE \"{vm.DeviceId}\" successfully acquired.");
+                await ExecuteRefresh();
+                if (ServiceState == ServiceState.ServerUnaccessible)
+                {
+                    viewService.ShowMessageBox($"Communication certificate for RITMS UP2DATE \"{vm.DeviceId}\" is acquired " + 
+                        "but there is still problem establishing connection to the server.");
+                }
+                else
+                {
+                    viewService.ShowMessageBox($"Communication certificate for RITMS UP2DATE \"{vm.DeviceId}\" successfully acquired.");
+                }
             }
         }
 
@@ -237,6 +246,7 @@ namespace Up2dateConsole
                 ServiceState = ServiceState.ClientUnaccessible;
                 StateIndicator.SetInfo("RITMS Up2date client is not responding. Please check if Up2dateService is running.");
                 DeviceId = null;
+                OperationInProgress = false;
                 return;
             }
             catch (Exception e)
@@ -244,12 +254,12 @@ namespace Up2dateConsole
                 ServiceState = ServiceState.ClientUnaccessible;
                 StateIndicator.SetInfo($"Error accessing RITMS Up2date client. {e.Message}\n\nStackTrace:\n{e.StackTrace}");
                 DeviceId = null;
+                OperationInProgress = false;
                 return;
             }
             finally
             {
                 wcfClientFactory.CloseClient(service);
-                OperationInProgress = false;
             }
 
             List<Package> selected = AvailablePackages.Where(p => p.IsSelected).Select(p => p.Package).ToList();
@@ -282,17 +292,19 @@ namespace Up2dateConsole
                 firstTimeRefresh = false;
                 PromptIfCertificateNotAvailable();
             }
+
+            OperationInProgress = false;
         }
 
         private void PromptIfCertificateNotAvailable()
         {
             if (ServiceState == ServiceState.ServerUnaccessible)
             {
-                ThreadHelper.SafeInvoke(() =>
+                ThreadHelper.SafeInvoke(async () =>
                 {
                     if (IsAdminMode)
                     {
-                        ExecuteRequestCertificate(null);
+                        await ExecuteRequestCertificateAsync();
                     }
                     else
                     {
