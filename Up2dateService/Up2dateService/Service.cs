@@ -32,7 +32,7 @@ namespace Up2dateService
             ISettingsManager settingsManager = new SettingsManager();
 
             ICertificateProvider certificateProvider = new CertificateProvider(settingsManager);
-            ICertificateManager certificateManager = new CertificateManager(EventLog);
+            ICertificateManager certificateManager = new CertificateManager(settingsManager, EventLog);
 
             Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, EventLog);
 
