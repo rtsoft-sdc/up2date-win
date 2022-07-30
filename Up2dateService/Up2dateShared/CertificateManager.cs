@@ -38,14 +38,17 @@ namespace Up2dateShared
 
         public void ImportCertificate(byte[] certificateData)
         {
-            Certificate = new X509Certificate2(certificateData);
-            ImportCertificate(Certificate);
-        }
-
-        public void ImportCertificate(string fileName)
-        {
-            Certificate = new X509Certificate2(fileName);
-            ImportCertificate(Certificate);
+            try
+            {
+                X509Certificate2 cert = new X509Certificate2(certificateData);
+                ImportCertificate(cert);
+                Certificate = cert;
+            }
+            catch (Exception e)
+            {
+                eventLog.WriteEntry($"CertificateManager: Exception importing certificate. {e}");
+                throw;
+            }
         }
 
         public string GetCertificateString()

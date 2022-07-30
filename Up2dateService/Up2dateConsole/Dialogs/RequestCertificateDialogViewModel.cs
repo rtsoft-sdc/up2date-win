@@ -15,11 +15,11 @@ namespace Up2dateConsole.Dialogs
         private string oneTimeKey;
         private bool isInProgress;
 
-        public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
+        public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
-
+            ShowExplanation = showExplanation;
             RequestCommand = new RelayCommand(async (_) => await ExecuteRequestAsync(), CanRequest);
         }
 
@@ -51,6 +51,8 @@ namespace Up2dateConsole.Dialogs
         public bool IsEnabled => !IsInProgress;
 
         public string DeviceId { get; private set; }
+
+        public bool ShowExplanation { get; }
 
         private bool CanRequest(object _)
         {

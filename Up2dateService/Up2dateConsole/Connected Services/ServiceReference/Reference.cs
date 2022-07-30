@@ -573,6 +573,9 @@ namespace Up2dateConsole.ServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Running = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoCertificate = 3,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

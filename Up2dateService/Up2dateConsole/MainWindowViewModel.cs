@@ -137,15 +137,21 @@ namespace Up2dateConsole
 
         private async Task ExecuteRequestCertificateAsync()
         {
-            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory);
+            await RequestCertificateAsync(showExplanation: false);
+        }
+
+        private async Task RequestCertificateAsync(bool showExplanation)
+        {
+            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation);
             bool success = viewService.ShowDialog(vm);
             if (success)
             {
                 await ExecuteRefresh();
                 if (ServiceState == ServiceState.ServerUnaccessible)
                 {
-                    viewService.ShowMessageBox($"Communication certificate for RITMS UP2DATE \"{vm.DeviceId}\" is acquired " + 
-                        "but there is still problem establishing connection to the server.");
+                    viewService.ShowMessageBox($"Communication certificate for RITMS UP2DATE \"{vm.DeviceId}\" is acquired " +
+                        "but there is still problem establishing connection to the server.\n" +
+                        "Please check if acquired certificate is valid.");
                 }
                 else
                 {
@@ -298,19 +304,19 @@ namespace Up2dateConsole
 
         private void PromptIfCertificateNotAvailable()
         {
-            if (ServiceState == ServiceState.ServerUnaccessible)
+            if (ServiceState == ServiceState.NoCertificate)
             {
                 ThreadHelper.SafeInvoke(async () =>
                 {
                     if (IsAdminMode)
                     {
-                        await ExecuteRequestCertificateAsync();
+                        await RequestCertificateAsync(showExplanation: true);
                     }
                     else
                     {
-                        MessageBoxResult r = viewService.ShowMessageBox("Certificate to access RITMS Up2date server is not available.\n" +
-                            "You should request certificate by providing communication key acquired from your admin.\n\n" +
-                            "Press OK to request certificate.", buttons: MessageBoxButton.OKCancel);
+                        MessageBoxResult r = viewService.ShowMessageBox("This device has not initialized to connect RITMS UP2DATE.\n" +
+                            "You should provide a certification key.\n\n" +
+                            "Note that this action requires administrative privileges.", buttons: MessageBoxButton.OKCancel);
                         if (r == MessageBoxResult.OK)
                         {
                             ExecuteEnterAdminMode(null);
@@ -334,6 +340,10 @@ namespace Up2dateConsole
                 case ClientStatus.CannotAccessServer:
                     ServiceState = ServiceState.ServerUnaccessible;
                     StateIndicator.SetInfo($"Cannot access server. {clientState.LastError}");
+                    break;
+                case ClientStatus.NoCertificate:
+                    ServiceState = ServiceState.NoCertificate;
+                    StateIndicator.SetInfo($"Authorization certificate is not available.");
                     break;
                 default:
                     throw new InvalidOperationException($"unsupported status {clientState.Status}");
@@ -396,6 +406,7 @@ namespace Up2dateConsole
                     case ServiceState.ClientUnaccessible:
                         iconPath = "/Images/ClientUnaccessible.ico";
                         break;
+                    case ServiceState.NoCertificate:
                     case ServiceState.ServerUnaccessible:
                         iconPath = "/Images/ServerUnaccessible.ico";
                         break;
@@ -416,6 +427,9 @@ namespace Up2dateConsole
                 {
                     case ServiceState.ClientUnaccessible:
                         extraText = "\nClient is not running or inaccessible";
+                        break;
+                    case ServiceState.NoCertificate:
+                        extraText = "\nAuthorization certificate is not available";
                         break;
                     case ServiceState.ServerUnaccessible:
                         extraText = "\nCannot access server";

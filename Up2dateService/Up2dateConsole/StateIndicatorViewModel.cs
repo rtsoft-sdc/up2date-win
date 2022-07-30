@@ -99,6 +99,7 @@ namespace Up2dateConsole
                     Icon = FontAwesomeIcon.CheckCircle;
                     Color = greenBrush;
                     break;
+                case ServiceState.NoCertificate:
                 case ServiceState.ServerUnaccessible:
                     Icon = FontAwesomeIcon.Key;
                     Color = orangeBrush;

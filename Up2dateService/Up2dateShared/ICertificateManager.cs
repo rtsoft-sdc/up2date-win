@@ -9,7 +9,6 @@ namespace Up2dateShared
         string CertificateIssuerName { get; }
         string CertificateSubjectName { get; }
         void ImportCertificate(byte[] certificateData);
-        void ImportCertificate(string fileName);
         string GetCertificateString();
         bool IsCertificateAvailable();
     }

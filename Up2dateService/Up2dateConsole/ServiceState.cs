@@ -4,6 +4,7 @@
     {
         Unknown,
         Active,
+        NoCertificate,
         ClientUnaccessible,
         ServerUnaccessible,
         Error,
