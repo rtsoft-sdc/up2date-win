@@ -8,7 +8,7 @@ namespace Up2dateClient
 {
     public class Client
     {
-        const string clientType = "RITMS Up2date for windows";
+        const string clientType = "RITMS UP2DATE for Windows";
 
         private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi" }; // must be lowercase
         private readonly EventLog eventLog;

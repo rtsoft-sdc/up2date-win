@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -66,7 +67,7 @@ namespace Up2dateConsole.Dialogs
             try
             {
                 service = wcfClientFactory.CreateClient();
-                ResultOfstring result = service.RequestCertificate(OneTimeKey);
+                ResultOfstring result = service.RequestCertificate(RemoveWhiteSpaces(OneTimeKey));
                 if (!result.Success)
                 {
                     error = result.ErrorMessage;
@@ -96,6 +97,11 @@ namespace Up2dateConsole.Dialogs
             {
                 viewService.ShowMessageBox($"Failed to acquire certificate.\n\n{error}");
             }
+        }
+
+        private static string RemoveWhiteSpaces(string str)
+        {
+            return new string(str.Where(c => !char.IsWhiteSpace(c)).ToArray());
         }
 
         public static void RestartService(int timeout)

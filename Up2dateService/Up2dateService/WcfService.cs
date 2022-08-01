@@ -58,7 +58,7 @@ namespace Up2dateService
         public string GetDeviceId()
         {
             return certificateManager.IsCertificateAvailable()
-                ? $"{certificateManager.CertificateIssuerName} : {certificateManager.CertificateSubjectName}"
+                ? $"{certificateManager.CertificateIssuerName}:{certificateManager.CertificateSubjectName}"
                 : string.Empty;
         }
 
