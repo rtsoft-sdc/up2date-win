@@ -32,8 +32,11 @@
 
 Замечания по сборке
 -------------------
-* При переключении солюшена между x64 и x86 не забывать переключать также TargetPlatform 
-  и корректировать списки Prerequisites в свойствах Up2dateSetup проекта 
+* При сборке проекта Up2dateSetup нужно вручную корректно переключать разрядность в следующих местах:
+	Properties -> TargetPlatform (x86/x64)
+	right-click Up2dateSetup -> Properties -> Prerequisites -> Visual C++ "14" Runtime Libraries (x86/x64)
+	right-click View -> Custom actions -> {each action} -> Properties -> Run64bit (False/True)
+
 * Если возникают проблемы с Update Service Reference для консоли (небоходимо делать каждый раз при изменении контракта WCF сервиса):
   1) вместо Update Service Reference лучше удалить и пересоздать используя команду Add Service Reference
   2) при создании Service Reference снять галочку "Reuse types..." в Advanced
