@@ -6,32 +6,60 @@ on:
   workflow_dispatch:
 
 env:
-  SLN_PATH: .\Up2dateService\Setup\Setup.vdproj
+  SETUP_PATH: .\Up2dateService\Setup\Setup.vdproj
+  SLN_PATH: .\Up2dateService\Up2dateService.sln
+  ARTIFACTS_PATH: .\Up2dateService\Setup\Release\
+
 
 jobs:
-  build:
+  artifacts:
     name: Building x64 artifacts
     runs-on: windows-2022
+    strategy:
+      matrix:
+        os-arch: ['x64']
+        build-variant: ['Release']
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: 'master'
 
-      # Install the .NET Core workload
       - name: Install .NET Core
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.0.x
 
-      # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v1.0.2
 
       - uses: seanmiddleditch/gha-setup-vsdevenv@v4
 
+      - uses: nuget/setup-nuget@v1
+
       - name: Disable Out of Process Building
         run: .\DisableOutOfProcBuild.exe
         working-directory: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild
 
-      - name: Build x64 release artifacts
+      - name: Restore packages
         shell: cmd
-        run: devenv "%SLN_PATH%" /build "Release|x64"
+        env:
+          BUILD_ARCH: ${{ matrix.os-arch }}
+        run: msbuild "%SLN_PATH%" /t:restore /p:RestorePackagesConfig=true
+
+      - name: Build ${{ matrix.os-arch }} artifacts
+        shell: cmd
+        env:
+          BUILD_ARCH: ${{ matrix.os-arch }}
+        run: msbuild "%SLN_PATH%" /t:Rebuild /p:Configuration=Release;Platform=%BUILD_ARCH%
+
+      - name: Build ${{ matrix.os-arch }} Setup.exe
+        shell: cmd
+        env:
+          BUILD_ARCH: ${{ matrix.os-arch }}
+        run: devenv "%SETUP_PATH%" /build "Release|%BUILD_ARCH%"
+
+      - name: Artifacts ${{ matrix.os-arch }} list
+        shell: cmd
+        run: ls %ARTIFACTS_PATH%
