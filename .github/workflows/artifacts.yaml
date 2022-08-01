@@ -1,0 +1,37 @@
+name: artifacts.builder
+
+on:
+  push:
+    branches: [ 4-add-ci-pipeline ]
+  workflow_dispatch:
+
+env:
+  SLN_PATH: .\Up2dateService\Setup\Setup.vdproj
+
+jobs:
+  build:
+    name: Building x64 artifacts
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Install the .NET Core workload
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - uses: seanmiddleditch/gha-setup-vsdevenv@v4
+
+      - name: Disable Out of Process Building
+        run: .\DisableOutOfProcBuild.exe
+        working-directory: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild
+
+      - name: Build x64 release artifacts
+        shell: cmd
+        run: devenv "%SLN_PATH%" /build "Release|x64"
