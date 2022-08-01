@@ -8,7 +8,7 @@ namespace Up2dateClient
 {
     public class Client
     {
-        const string clientType = "RITMS Up2date for windows";
+        const string clientType = "RITMS UP2DATE for Windows";
 
         private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi" }; // must be lowercase
         private readonly EventLog eventLog;
@@ -48,7 +48,7 @@ namespace Up2dateClient
                 string cert = getCertificate();
                 if (string.IsNullOrEmpty(cert))
                 {
-                    SetState(ClientStatus.CannotAccessServer, "Certificate is not available!");
+                    SetState(ClientStatus.NoCertificate);
                     return;
                 }
                 dispatcher = Wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
@@ -162,7 +162,7 @@ namespace Up2dateClient
             }
             else
             {
-                SetState(ClientStatus.CannotAccessServer, $"Provisioning error: {errorMessage}");
+                SetState(ClientStatus.CannotAccessServer, errorMessage);
             }
         }
 

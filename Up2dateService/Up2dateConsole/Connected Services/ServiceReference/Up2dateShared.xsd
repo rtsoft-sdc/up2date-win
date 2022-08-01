@@ -5,6 +5,7 @@
       <xs:enumeration value="Stopped" />
       <xs:enumeration value="CannotAccessServer" />
       <xs:enumeration value="Running" />
+      <xs:enumeration value="NoCertificate" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ClientStatus" nillable="true" type="tns:ClientStatus" />

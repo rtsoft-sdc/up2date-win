@@ -6,7 +6,8 @@ namespace Up2dateShared
     {
         Stopped,
         CannotAccessServer,
-        Running
+        Running,
+        NoCertificate
     }
 
     [DataContract(Namespace = "http://RTSoft.Ritms.Up2date.win")]

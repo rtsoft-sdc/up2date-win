@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -8,7 +7,10 @@ namespace Up2dateShared
 {
     public class CertificateManager : ICertificateManager
     {
+        private const StoreName storeName = StoreName.TrustedPublisher;
+
         private readonly EventLog eventLog;
+        private readonly ISettingsManager settingsManager;
         private X509Certificate2 certificate;
 
         public X509Certificate2 Certificate
@@ -28,21 +30,25 @@ namespace Up2dateShared
 
         public string CertificateSubjectName => GetCN(certificate?.Subject);
 
-        public CertificateManager(EventLog eventLog)
+        public CertificateManager(ISettingsManager settingsManager, EventLog eventLog)
         {
+            this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.eventLog = eventLog;
         }
 
         public void ImportCertificate(byte[] certificateData)
         {
-            Certificate = new X509Certificate2(certificateData);
-            ImportCertificate(Certificate);
-        }
-
-        public void ImportCertificate(string fileName)
-        {
-            Certificate = new X509Certificate2(fileName);
-            ImportCertificate(Certificate);
+            try
+            {
+                X509Certificate2 cert = new X509Certificate2(certificateData);
+                ImportCertificate(cert);
+                Certificate = cert;
+            }
+            catch (Exception e)
+            {
+                eventLog.WriteEntry($"CertificateManager: Exception importing certificate. {e}");
+                throw;
+            }
         }
 
         public string GetCertificateString()
@@ -65,36 +71,48 @@ namespace Up2dateShared
 
         private void LoadCertificate()
         {
-            Certificate = TryGetCertificate(StoreName.TrustedPublisher);
-            if (Certificate != null)
-            {
-                eventLog?.WriteEntry($"Certificate found; subject: '{Certificate.Subject}'");
-            }
-            eventLog?.WriteEntry($"Cannot find certificate in TrustedPublisher certificate store!");
-        }
-
-        private static X509Certificate2 TryGetCertificate(StoreName storeName)
-        {
-            const string certificateIssuer = "CN=rts";
-
             using (X509Store store = new X509Store(storeName, StoreLocation.LocalMachine))
             {
-                store.Open(OpenFlags.ReadOnly);
-                X509Certificate2 cert = store.Certificates
-                        .Find(X509FindType.FindByIssuerDistinguishedName, certificateIssuer, false)
-                        .OfType<X509Certificate2>()
-                        .FirstOrDefault();
-                return cert;
+                Certificate = GetCertificates(store)?.OfType<X509Certificate2>().FirstOrDefault();
             }
+
+            eventLog?.WriteEntry(Certificate != null 
+                ? $"Certificate found; '{Certificate.Issuer}:{Certificate.Subject}'"
+                : $"Cannot find certificate in {storeName} certificate store!");
+        }
+
+        private X509Certificate2Collection GetCertificates(X509Store store)
+        {
+            string CertificateSerialNumber = settingsManager.CertificateSerialNumber;
+
+            if (string.IsNullOrEmpty(CertificateSerialNumber)) return null;
+
+            store.Open(OpenFlags.ReadOnly);
+            X509Certificate2Collection certificates = store.Certificates
+                    .Find(X509FindType.FindBySerialNumber, CertificateSerialNumber, false);
+            store.Close();
+
+            return certificates;
         }
 
         private void ImportCertificate(X509Certificate2 cert)
         {
-            using (X509Store store = new X509Store(StoreName.TrustedPublisher, StoreLocation.LocalMachine))
+            using (X509Store store = new X509Store(storeName, StoreLocation.LocalMachine))
             {
+                // first remove old certificate(s)
+                X509Certificate2Collection oldCertificates = GetCertificates(store);
                 store.Open(OpenFlags.ReadWrite);
+                if (oldCertificates != null && oldCertificates.Count > 0)
+                {
+                    store.RemoveRange(oldCertificates);
+                }
+
+                // now add new certificate
                 store.Add(cert);
                 store.Close();
+
+                // remember new certificate
+                settingsManager.CertificateSerialNumber = cert.SerialNumber;
             }
         }
 

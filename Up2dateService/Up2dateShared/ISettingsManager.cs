@@ -5,5 +5,6 @@
         string ProvisioningUrl { get; }
         string XApigToken { get; }
         string RequestCertificateUrl { get; }
+        string CertificateSerialNumber { get; set; }
     }
 }
