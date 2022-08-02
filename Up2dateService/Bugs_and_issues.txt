@@ -32,6 +32,25 @@
 
 Замечания по сборке
 -------------------
+* Сборка:
+	cd <path to Up2dateService folder e.g. "d:\repos\up2date-win\Up2dateService"> 
+	msbuild.exe Up2dateService.sln /t:restore /p:RestorePackagesConfig=true
+	devenv Up2dateService.sln /Rebuild "Release"
+
+	Результат сборки:
+	Setup32\Release\Setup.exe
+	Setup32\Release\Up2dateSetup32.msi
+	Setup64\Release\Setup.exe
+	Setup64\Release\Up2dateSetup64.msi
+
+Внимание!	
+Если в процессе исполнения последней команды (devenv...) возникает ошибка
+"An error occurred while validating. HRESULT = '8000000A'"
+на сборочной платформе надо однократно запустить "workaround helper":
+<path to Visual Studio at Program Files (x86)>\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\DisableOutOfProcBuild.exe
+(см. https://stackoverflow.com/questions/8648428/an-error-occurred-while-validating-hresult-8000000a)
+
+
 * При сборке проекта Up2dateSetup нужно вручную корректно переключать разрядность в следующих местах:
 	Properties -> TargetPlatform (x86/x64)
 	right-click Up2dateSetup -> Properties -> Prerequisites -> Visual C++ "14" Runtime Libraries (x86/x64)
