@@ -1,0 +1,52 @@
+name: release.builder
+
+on:
+  workflow_call:
+
+jobs:
+  release:
+    name: Building artifacts
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: 'master'
+
+      - name: Make x64 download folder
+        shell: bash
+        run: mkdir artifacts64
+
+      - name: Download Up2dateSetup64.msi
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          name: Up2dateSetup64.msi
+          path: .\artifacts64\Up2dateSetup64.msi
+
+      - name: Download setup64.exe
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          name: setup64.exe
+          path: .\artifacts64\setup.exe
+
+      - uses: vimtor/action-zip@v1
+        with:
+          files: .\artifacts64\ .\LICENSE .\README.md
+          dest: .\artifacts64\up2date-x64.zip
+
+      - name: Make x32 download folder
+        shell: bash
+        run: mkdir artifacts32
+
+      - name: Download Up2dateSetup32.msi
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          name: Up2dateSetup32.msi
+          path: .\artifacts32\Up2dateSetup64.msi
+
+      - name: Download setup32.exe
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          name: setup32.exe
+          path: .\artifacts32\setup.exe

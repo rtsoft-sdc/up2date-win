@@ -2,6 +2,10 @@ name: artifacts.builder
 
 on:
   workflow_call:
+    outputs:
+      run_id:
+        description: "run id of builder workflow"
+        value: ${{ github.run_id }}
 
 env:
   SLN_PATH: .\Up2dateService\Up2dateService.sln
