@@ -2,6 +2,10 @@ name: release.builder
 
 on:
   workflow_call:
+    inputs:
+      run_id:
+        required: true
+        type: number
 
 jobs:
   release:
@@ -23,17 +27,20 @@ jobs:
         with:
           name: Up2dateSetup64.msi
           path: .\artifacts64\Up2dateSetup64.msi
+          run_id: ${{ inputs.run_id }}
 
       - name: Download setup64.exe
         uses: dawidd6/action-download-artifact@v2
         with:
           name: setup64.exe
           path: .\artifacts64\setup.exe
+          run_id: ${{ inputs.run_id }}
 
-      - uses: vimtor/action-zip@v1
+      - name: Build x64 deploy archive
+        uses: vimtor/action-zip@v1
         with:
           files: .\artifacts64\ .\LICENSE .\README.md
-          dest: .\artifacts64\up2date-x64.zip
+          dest: .\up2date.windows-x64.zip
 
       - name: Make x32 download folder
         shell: bash
@@ -44,9 +51,51 @@ jobs:
         with:
           name: Up2dateSetup32.msi
           path: .\artifacts32\Up2dateSetup64.msi
+          run_id: ${{ inputs.run_id }}
 
       - name: Download setup32.exe
         uses: dawidd6/action-download-artifact@v2
         with:
           name: setup32.exe
           path: .\artifacts32\setup.exe
+          run_id: ${{ inputs.run_id }}
+
+      - name: Build x32 deploy archive
+        uses: vimtor/action-zip@v1
+        with:
+          files: .\artifacts32\ .\LICENSE .\README.md
+          dest: .\up2date.windows-x32.zip
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            ## Draft commit created by workflow
+            ### put data here
+          draft: true
+          prerelease: false
+
+      - name: Upload up2date.windows-x32.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\up2date.windows-x32.zip
+          asset_name: up2date.windows-x32.zip
+          asset_content_type: application/zip
+
+      - name: Upload up2date.windows-x64.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\up2date.windows-x64.zip
+          asset_name: up2date.windows-x64.zip
+          asset_content_type: application/zip

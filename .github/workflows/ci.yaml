@@ -2,7 +2,7 @@ name: artifacts.builder
 
 on:
   push:
-    branches: [ 4-add-ci-pipeline ]
+    branches: [ master ]
     tags:
       - "v*.*.*"
   workflow_dispatch:
@@ -12,9 +12,8 @@ jobs:
   build:
     uses: ./.github/workflows/build.yaml
 
-  pre-release:
+  release:
     needs: build
-    runs-on: ubuntu-20.04
-    steps:
-      - run: echo ${{ needs.build.outputs.run_id }}
+    if: startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/release.yaml
 
