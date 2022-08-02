@@ -1,0 +1,13 @@
+name: artifacts.builder
+
+on:
+  push:
+    branches: [ 4-add-ci-pipeline ]
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
