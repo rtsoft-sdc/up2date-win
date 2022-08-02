@@ -3,7 +3,6 @@ name: release.builder
 on:
   workflow_call:
 
-
 jobs:
   release:
     name: Make release draft
@@ -12,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: master
 
       - name: Make download folder
         shell: bash
@@ -79,3 +80,13 @@ jobs:
           asset_path: .\up2date.windows-x64.zip
           asset_name: up2date.windows-x64.zip
           asset_content_type: application/zip
+
+      - name: Upload LICENCE
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\LICENCE
+          asset_name: LICENCE
+          asset_content_type: text/plain

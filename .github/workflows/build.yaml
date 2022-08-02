@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: master
 
       - name: Install .NET Core
         uses: actions/setup-dotnet@v2
@@ -44,10 +46,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: x64
-          path: ${{ env.ARTIFACTS_PATH_X64 }}\
+          path: ${{ env.ARTIFACTS_PATH_X64 }}
 
       - name: Upload x32 artifacts
         uses: actions/upload-artifact@v3
         with:
           name: x32
-          path: ${{ env.ARTIFACTS_PATH_X32 }}\
+          path: ${{ env.ARTIFACTS_PATH_X32 }}
