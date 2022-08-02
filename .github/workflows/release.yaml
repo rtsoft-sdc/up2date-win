@@ -32,7 +32,7 @@ jobs:
       - name: Upload x64 deploy archive
         uses: actions/upload-artifact@v3
         with:
-          name: up2date.windows-x64.zip
+          name: x64.zip
           path: .\up2date.windows-x64.zip
 
       - name: Build x32 deploy archive
@@ -44,7 +44,7 @@ jobs:
       - name: Upload x32 deploy archive
         uses: actions/upload-artifact@v3
         with:
-          name: up2date.windows-x32.zip
+          name: x32.zip
           path: .\up2date.windows-x32.zip
 
       - name: Create Release
@@ -87,6 +87,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .\LICENCE
-          asset_name: LICENCE
+          asset_path: .\LICENSE
+          asset_name: LICENSE
           asset_content_type: text/plain
