@@ -115,6 +115,23 @@ namespace Up2dateClient
 
             WriteLogEntry($"download completed.", info);
 
+            /*
+             * TODO: RITMS-9 
+             * if(!filter)
+             * {
+             *      FileDelete;
+             *      WriteLogEntry($"downloaded file is filtered out", info);
+             *      return false;
+             * }
+             * 
+             * if (info.artifactFileName.Contains("MSI")&&!signed)
+             * {
+             *      FileDelete;
+             *      WriteLogEntry($"MSI not signed.", info);
+             *      return false;
+             * }
+             */
+
             if (info.updateType == "skip")
             {
                 WriteLogEntry($"skip installation - not requested.", info);
