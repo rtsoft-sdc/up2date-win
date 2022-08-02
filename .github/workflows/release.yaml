@@ -2,10 +2,7 @@ name: release.builder
 
 on:
   workflow_call:
-    inputs:
-      run_id:
-        required: true
-        type: number
+
 
 jobs:
   release:
