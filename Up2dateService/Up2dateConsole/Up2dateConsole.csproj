@@ -187,9 +187,6 @@
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.1.2</Version>
     </PackageReference>
-    <PackageReference Include="TaskScheduler">
-      <Version>2.10.1</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\UAC.png" />
