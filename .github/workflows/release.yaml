@@ -6,7 +6,7 @@ on:
 
 jobs:
   release:
-    name: Building artifacts
+    name: Make release draft
     runs-on: windows-2022
 
     steps:
@@ -24,14 +24,12 @@ jobs:
         with:
           name: Up2dateSetup64.msi
           path: .\artifacts64\Up2dateSetup64.msi
-          run_id: ${{ inputs.run_id }}
 
       - name: Download setup64.exe
         uses: dawidd6/action-download-artifact@v2
         with:
           name: setup64.exe
           path: .\artifacts64\setup.exe
-          run_id: ${{ inputs.run_id }}
 
       - name: Build x64 deploy archive
         uses: vimtor/action-zip@v1
@@ -48,14 +46,12 @@ jobs:
         with:
           name: Up2dateSetup32.msi
           path: .\artifacts32\Up2dateSetup64.msi
-          run_id: ${{ inputs.run_id }}
 
       - name: Download setup32.exe
         uses: dawidd6/action-download-artifact@v2
         with:
           name: setup32.exe
           path: .\artifacts32\setup.exe
-          run_id: ${{ inputs.run_id }}
 
       - name: Build x32 deploy archive
         uses: vimtor/action-zip@v1
