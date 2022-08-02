@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: 'master'
 
       - name: Make x64 download folder
         shell: bash
@@ -37,6 +35,12 @@ jobs:
           files: .\artifacts64\ .\LICENSE .\README.md
           dest: .\up2date.windows-x64.zip
 
+      - name: Upload x64 deploy archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: up2date.windows-x64.zip
+          path: .\up2date.windows-x64.zip
+
       - name: Make x32 download folder
         shell: bash
         run: mkdir artifacts32
@@ -58,6 +62,12 @@ jobs:
         with:
           files: .\artifacts32\ .\LICENSE .\README.md
           dest: .\up2date.windows-x32.zip
+
+      - name: Upload x32 deploy archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: up2date.windows-x32.zip
+          path: .\up2date.windows-x32.zip
 
       - name: Create Release
         id: create_release
