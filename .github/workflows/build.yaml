@@ -40,26 +40,14 @@ jobs:
         shell: cmd
         run: devenv "%SLN_PATH%" /build "Release"
 
-      - name: Upload setup64.exe
+      - name: Upload x64 artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: setup64.exe
-          path: ${{ env.ARTIFACTS_PATH_X64 }}\setup.exe
+          name: x64
+          path: ${{ env.ARTIFACTS_PATH_X64 }}\
 
-      - name: Upload Up2dateSetup64.msi
+      - name: Upload x32 artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Up2dateSetup64.msi
-          path: ${{ env.ARTIFACTS_PATH_X64 }}\Up2dateSetup64.msi
-
-      - name: Upload setup32.exe
-        uses: actions/upload-artifact@v3
-        with:
-          name: setup32.exe
-          path: ${{ env.ARTIFACTS_PATH_X32 }}\setup.exe
-
-      - name: Upload Up2dateSetup32.msi
-        uses: actions/upload-artifact@v3
-        with:
-          name: Up2dateSetup32.msi
-          path: ${{ env.ARTIFACTS_PATH_X32 }}\Up2dateSetup32.msi
+          name: x32
+          path: ${{ env.ARTIFACTS_PATH_X32 }}\

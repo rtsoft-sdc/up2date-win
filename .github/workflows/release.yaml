@@ -13,26 +13,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Make x64 download folder
+      - name: Make download folder
         shell: bash
-        run: mkdir artifacts64
+        run: mkdir artifacts
 
-      - name: Download Up2dateSetup64.msi
+      - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          name: Up2dateSetup64.msi
-          path: .\artifacts64\Up2dateSetup64.msi
-
-      - name: Download setup64.exe
-        uses: actions/download-artifact@v3
-        with:
-          name: setup64.exe
-          path: .\artifacts64\setup.exe
+          path: .\artifacts\
 
       - name: Build x64 deploy archive
         uses: vimtor/action-zip@v1
         with:
-          files: .\artifacts64\ .\LICENSE .\README.md
+          files: .\artifacts\x64\ .\LICENSE .\README.md
           dest: .\up2date.windows-x64.zip
 
       - name: Upload x64 deploy archive
@@ -41,26 +34,10 @@ jobs:
           name: up2date.windows-x64.zip
           path: .\up2date.windows-x64.zip
 
-      - name: Make x32 download folder
-        shell: bash
-        run: mkdir artifacts32
-
-      - name: Download Up2dateSetup32.msi
-        uses: actions/download-artifact@v3
-        with:
-          name: Up2dateSetup32.msi
-          path: .\artifacts32\Up2dateSetup64.msi
-
-      - name: Download setup32.exe
-        uses: actions/download-artifact@v3
-        with:
-          name: setup32.exe
-          path: .\artifacts32\setup.exe
-
       - name: Build x32 deploy archive
         uses: vimtor/action-zip@v1
         with:
-          files: .\artifacts32\ .\LICENSE .\README.md
+          files: .\artifacts\x32\ .\LICENSE .\README.md
           dest: .\up2date.windows-x32.zip
 
       - name: Upload x32 deploy archive
