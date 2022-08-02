@@ -20,13 +20,13 @@ jobs:
         run: mkdir artifacts64
 
       - name: Download Up2dateSetup64.msi
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: Up2dateSetup64.msi
           path: .\artifacts64\Up2dateSetup64.msi
 
       - name: Download setup64.exe
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup64.exe
           path: .\artifacts64\setup.exe
@@ -42,13 +42,13 @@ jobs:
         run: mkdir artifacts32
 
       - name: Download Up2dateSetup32.msi
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: Up2dateSetup32.msi
           path: .\artifacts32\Up2dateSetup64.msi
 
       - name: Download setup32.exe
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: setup32.exe
           path: .\artifacts32\setup.exe
