@@ -213,7 +213,7 @@ namespace Up2dateConsole
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                var message = "RITMS Up2date client is not responding. Please check if Up2dateService is running.";
+                var message = "RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.";
                 StateIndicator.SetInfo(message);
                 viewService.ShowMessageBox($"Cannot start installation:\n{message}", "Error");
             }
@@ -250,7 +250,7 @@ namespace Up2dateConsole
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                StateIndicator.SetInfo("RITMS Up2date client is not responding. Please check if Up2dateService is running.");
+                StateIndicator.SetInfo("RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.");
                 DeviceId = null;
                 OperationInProgress = false;
                 return;
@@ -258,7 +258,7 @@ namespace Up2dateConsole
             catch (Exception e)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                StateIndicator.SetInfo($"Error accessing RITMS Up2date client. {e.Message}\n\nStackTrace:\n{e.StackTrace}");
+                StateIndicator.SetInfo($"Error accessing RITMS UP2DATE Agent service. {e.Message}\n\nStackTrace:\n{e.StackTrace}");
                 DeviceId = null;
                 OperationInProgress = false;
                 return;
@@ -335,7 +335,7 @@ namespace Up2dateConsole
                     break;
                 case ClientStatus.Stopped:
                     ServiceState = ServiceState.Error;
-                    StateIndicator.SetInfo($"Client internal error. {clientState.LastError}");
+                    StateIndicator.SetInfo($"Agent internal error. {clientState.LastError}");
                     break;
                 case ClientStatus.CannotAccessServer:
                     ServiceState = ServiceState.ServerUnaccessible;
@@ -426,7 +426,7 @@ namespace Up2dateConsole
                 switch (ServiceState)
                 {
                     case ServiceState.ClientUnaccessible:
-                        extraText = "\nClient is not running or inaccessible";
+                        extraText = "\nAgent is not running or inaccessible";
                         break;
                     case ServiceState.NoCertificate:
                         extraText = "\nAuthorization certificate is not available";
@@ -435,10 +435,10 @@ namespace Up2dateConsole
                         extraText = "\nCannot access server";
                         break;
                     case ServiceState.Error:
-                        extraText = "\nClient or server failure";
+                        extraText = "\nAgent or server failure";
                         break;
                 }
-                return "RITMS Up2date" + extraText;
+                return "RITMS UP2DATE" + extraText;
             }
         }
     }

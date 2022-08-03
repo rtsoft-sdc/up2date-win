@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Up2dateConsole")]
+[assembly: AssemblyTitle("RITMS UP2DATE")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Up2dateConsole")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyProduct("RITMS UP2DATE Agent")]
+[assembly: AssemblyCopyright("Copyright ©RTSoft 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
