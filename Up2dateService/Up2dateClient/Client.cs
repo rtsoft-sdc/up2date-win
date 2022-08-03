@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Up2dateShared;
 
 namespace Up2dateClient
@@ -113,7 +115,13 @@ namespace Up2dateClient
 
             setupManager.OnDownloadFinished(info.artifactFileName);
 
-            WriteLogEntry($"download completed.", info);
+            WriteLogEntry("download completed.", info);
+            var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
+            if (!IsSigned(filePath))
+            {
+                WriteLogEntry("MSI not signed.", info);
+                return false;
+            }
 
             /*
              * TODO: RITMS-9 
@@ -195,5 +203,21 @@ namespace Up2dateClient
             }
         }
 
+
+        private bool IsSigned(string file)
+        {
+            try
+            {
+                var assembly = Assembly.LoadFrom(file);
+                var module = assembly.GetModules().First();
+                var certificate = module.GetSignerCertificate();
+                return certificate != null;
+            }
+            catch (Exception e)
+            {
+                eventLog?.WriteEntry($"Error when trying to check if file is signed: {file} ->{e.Message}");
+                return false;
+            }
+        }
     }
 }
