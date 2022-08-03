@@ -1,0 +1,55 @@
+name: artifacts.builder
+
+on:
+  workflow_call:
+
+env:
+  SLN_PATH: .\Up2dateService\Up2dateService.sln
+  ARTIFACTS_PATH_X32: .\Up2dateService\Setup32\Release\
+  ARTIFACTS_PATH_X64: .\Up2dateService\Setup64\Release\
+
+jobs:
+  artifacts:
+    name: Building artifacts
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: master
+
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2
+      - uses: seanmiddleditch/gha-setup-vsdevenv@v4
+
+      - uses: nuget/setup-nuget@v1
+
+      - name: Disable Out of Process Building
+        run: .\DisableOutOfProcBuild.exe
+        working-directory: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild
+
+      - name: Restore packages
+        shell: cmd
+        run: msbuild "%SLN_PATH%" /t:restore /p:RestorePackagesConfig=true
+
+      - name: Build Setup.exe
+        shell: cmd
+        run: devenv "%SLN_PATH%" /build "Release"
+
+      - name: Upload x64 artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: x64
+          path: ${{ env.ARTIFACTS_PATH_X64 }}
+
+      - name: Upload x32 artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: x32
+          path: ${{ env.ARTIFACTS_PATH_X32 }}
