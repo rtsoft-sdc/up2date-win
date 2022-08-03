@@ -1,3 +1,8 @@
+[![build](https://github.com/rtsoft-gmbh/up2date-win/actions/workflows/ci.yaml/badge.svg)](https://github.com/rtsoft-gmbh/up2date-win/actions/workflows/ci.yaml)
+![license](https://img.shields.io/github/license/rtsoft-gmbh/up2date-win)
+![GitHub release](https://img.shields.io/github/v/release/rtsoft-gmbh/up2date-win)
+![GitHub Release Date](https://img.shields.io/github/release-date/rtsoft-gmbh/up2date-win)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/rtsoft-gmbh/up2date-win)
 # UP2DATE CLIENT for Windows
 
 ## INTRODUCTION
