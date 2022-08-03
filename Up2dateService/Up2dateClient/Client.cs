@@ -119,7 +119,8 @@ namespace Up2dateClient
             var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
             if (!IsSigned(filePath))
             {
-                WriteLogEntry("MSI not signed.", info);
+                File.Delete(filePath);
+                WriteLogEntry("MSI not signed. File deleted", info);
                 return false;
             }
 
