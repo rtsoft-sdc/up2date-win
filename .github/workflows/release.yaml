@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: master
 
       - name: Make download folder
         shell: bash
@@ -35,17 +33,17 @@ jobs:
           name: x64.zip
           path: .\up2date.windows-x64.zip
 
-      - name: Build x32 deploy archive
+      - name: Build x86 deploy archive
         uses: vimtor/action-zip@v1
         with:
-          files: .\artifacts\x32\ .\LICENSE .\Up2dateService\README.txt
-          dest: .\up2date.windows-x32.zip
+          files: .\artifacts\x86\ .\LICENSE .\Up2dateService\README.txt
+          dest: .\up2date.windows-x86.zip
 
-      - name: Upload x32 deploy archive
+      - name: Upload x86 deploy archive
         uses: actions/upload-artifact@v3
         with:
-          name: x32.zip
-          path: .\up2date.windows-x32.zip
+          name: x86.zip
+          path: .\up2date.windows-x86.zip
 
       - name: Create Release
         id: create_release
@@ -61,16 +59,6 @@ jobs:
           draft: true
           prerelease: false
 
-      - name: Upload up2date.windows-x32.zip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .\up2date.windows-x32.zip
-          asset_name: up2date.windows-x32.zip
-          asset_content_type: application/zip
-
       - name: Upload up2date.windows-x64.zip
         uses: actions/upload-release-asset@v1
         env:
@@ -79,6 +67,16 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: .\up2date.windows-x64.zip
           asset_name: up2date.windows-x64.zip
+          asset_content_type: application/zip
+
+      - name: Upload up2date.windows-x86.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\up2date.windows-x86.zip
+          asset_name: up2date.windows-x86.zip
           asset_content_type: application/zip
 
       - name: Upload LICENCE
