@@ -1,6 +1,8 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using Up2dateConsole.Helpers;
 

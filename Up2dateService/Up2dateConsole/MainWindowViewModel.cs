@@ -13,6 +13,7 @@ using System.Windows.Input;
 using Up2dateConsole.Dialogs;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
+using Up2dateConsole.StateIndicator;
 using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole

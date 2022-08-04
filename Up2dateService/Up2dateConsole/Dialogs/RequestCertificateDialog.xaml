@@ -1,7 +1,6 @@
 ﻿<Window x:Class="Up2dateConsole.Dialogs.RequestCertificateDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole.Dialogs"
@@ -14,12 +13,18 @@
         d:DataContext="{d:DesignInstance local:RequestCertificateDialogViewModel}">
 
     <Window.Resources>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Padding" Value="5,4"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="MinWidth" Value="70"/>
-        </Style>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Padding" Value="5,4"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="MinWidth" Value="70"/>
+            </Style>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid Margin="5">
@@ -30,7 +35,9 @@
 
         <StackPanel Margin="5">
             <StackPanel Orientation="Horizontal">
-                <fa:ImageAwesome Icon="Key" Foreground="DarkOrange" Margin="0,0,10,0" Width="42" VerticalAlignment="Top"/>
+                <TextBlock Margin="0,0,10,0" VerticalAlignment="Top" 
+                           Text="{StaticResource KeyIcon}" Foreground="DarkOrange" 
+                           FontSize="42" FontFamily="{StaticResource FontAwesome}"/>
                 <StackPanel>
                     <TextBlock Text="This device has not initialized to connect RITMS UP2DATE"
                                Visibility="{Binding ShowExplanation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -41,8 +48,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-            <fa:ImageAwesome Width="20" Margin="10,0" VerticalAlignment="Center"
-                             Icon="Spinner" Foreground="Green" Spin="True"
+            <TextBlock Style="{StaticResource RotatingStateIcon}" Text="{StaticResource SpinnerIcon}" Foreground="Green"
                              Visibility="{Binding IsInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Button Content="Authorize" Command="{Binding RequestCommand}"/>
             <Button Content="Cancel" IsCancel="True"/>

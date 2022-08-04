@@ -1,7 +1,6 @@
 ﻿<Application x:Class="Up2dateConsole.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Up2dateConsole"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <FontFamily x:Key="FontAwesome">/fonts/fontawesome-webfont.ttf#FontAwesome</FontFamily>

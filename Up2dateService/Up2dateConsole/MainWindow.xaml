@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
+        xmlns:tb="http://www.hardcodet.net/taskbar" 
         mc:Ignorable="d"
         ShowInTaskbar="True"
         Icon="Images/Logo.ico"
@@ -16,11 +16,18 @@
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
 
     <Window.Resources>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Padding" Value="5,4"/>
-            <Setter Property="Margin" Value="3"/>
-        </Style>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Padding" Value="5,4"/>
+                <Setter Property="Margin" Value="3"/>
+            </Style>
+
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
@@ -53,20 +60,20 @@
             <Grid Margin="10,5" >
                 <TextBlock VerticalAlignment="Center" Text="Software packages:"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                    <Button ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
+                    <Button x:Uid="Button1" ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
                             Command="{Binding RequestCertificateCommand}"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="Key" Foreground="DarkOrange" Width="12"/>
-                            <TextBlock Margin="5,0,0,0" Text="Authorization..."  VerticalAlignment="Center"/>
+                            <TextBlock Text="{StaticResource KeyIcon}" Foreground="DarkOrange" Style="{StaticResource ButtonIcon}"/>
+                            <TextBlock x:Uid="TextBlock1" Margin="5,0,0,0" Text="Authorization..." VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Width="100" 
+                    <Button x:Uid="Button2" Width="100" 
                             Content="Install selected" 
                             Command="{Binding InstallCommand}"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Button Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages">
-                        <fa:ImageAwesome Icon="Refresh" Foreground="Gray" Width="12"/>
+                        <TextBlock Text="{StaticResource RefreshIcon}" Style="{StaticResource ButtonIcon}"/>
                     </Button>
                 </StackPanel>
             </Grid>
@@ -107,18 +114,8 @@
 
         <Grid Grid.Row="1" Margin="10,0,10,10">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Service state:" VerticalAlignment="Center"/>
-                <fa:ImageAwesome 
-                    Margin="8,0"
-                    VerticalAlignment="Center"
-                    Width="16" Height="16"
-                    Icon="{Binding StateIndicator.Icon}" 
-                    Foreground="{Binding StateIndicator.Color}"
-                    Spin="{Binding StateIndicator.Spin}">
-                    <fa:ImageAwesome.ToolTip>
-                        <TextBlock Text="{Binding StateIndicator.Info}" MaxWidth="400" TextWrapping="Wrap"/>
-                    </fa:ImageAwesome.ToolTip>
-                </fa:ImageAwesome>
+                <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
+                <stateindicator:StateIndicator Width="20" Height="20" Margin="7,0" DataContext="{Binding StateIndicator}"/>
                 <StackPanel Orientation="Horizontal" Margin="20,0,0,0"  VerticalAlignment="Center"
                             Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock Text="RITMS UP2DATE:" Margin="0,0,5,0"  VerticalAlignment="Center"/>
@@ -131,7 +128,7 @@
                         Command="{Binding EnterAdminModeCommand}"
                         Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Stretch="Fill" Width="20" Height="20" Source="Images/UAC.png" VerticalAlignment="Center"/>
+                        <Image Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
                         <TextBlock Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
