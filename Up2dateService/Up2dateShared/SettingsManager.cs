@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 
 namespace Up2dateShared
 {
@@ -44,6 +46,17 @@ namespace Up2dateShared
             {
                 AddUpdateAppSettings(nameof(CertificateSerialNumber), value);
             }
+        }
+
+        public List<string> PackageExtensionFilterList
+        {
+            get
+            {
+                ConfigurationManager.RefreshSection(AppSettingSectionName);
+                return ConfigurationManager.AppSettings[nameof(PackageExtensionFilterList)].Split(',').ToList();
+            }
+
+            set => AddUpdateAppSettings(nameof(PackageExtensionFilterList), string.Join(",", value.ToArray()));
         }
 
         private static void AddUpdateAppSettings(string key, string value)

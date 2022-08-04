@@ -101,9 +101,9 @@ namespace Up2dateClient
         {
             WriteLogEntry($"deployment requested.", info);
 
-            if (!IsSupported(info))
+            if (!IsExtensionAllowed(info))
             {
-                WriteLogEntry($"not supported - deployment rejected", info);
+                WriteLogEntry("Package is not allowed - deployment rejected", info);
                 return false;
             }
 
@@ -124,23 +124,6 @@ namespace Up2dateClient
                 return false;
             }
 
-            /*
-             * TODO: RITMS-9 
-             * if(!filter)
-             * {
-             *      FileDelete;
-             *      WriteLogEntry($"downloaded file is filtered out", info);
-             *      return false;
-             * }
-             * 
-             * if (info.artifactFileName.Contains("MSI")&&!signed)
-             * {
-             *      FileDelete;
-             *      WriteLogEntry($"MSI not signed.", info);
-             *      return false;
-             * }
-             */
-
             if (info.updateType == "skip")
             {
                 WriteLogEntry($"skip installation - not requested.", info);
@@ -153,18 +136,25 @@ namespace Up2dateClient
                 return true;
             }
 
-            WriteLogEntry($"installing...", info);
-            var success = setupManager.InstallPackage(info.artifactFileName);
-            if (!success)
+            var success = true;
+            if (IsSupported(info))
             {
-                WriteLogEntry($"installation failed.", info);
+                WriteLogEntry("installing...", info);
+                success = setupManager.InstallPackage(info.artifactFileName);
+                WriteLogEntry(!success ? "installation failed." : "installation finished.", info);
             }
             else
             {
-                WriteLogEntry($"installation finished.", info);
+                WriteLogEntry("Package is not supported for installing so skipping...", info);
             }
 
+
             return success;
+        }
+
+        private bool IsExtensionAllowed(DeploymentInfo info)
+        {
+            return settingsManager.PackageExtensionFilterList.Contains(Path.GetExtension(info.artifactFileName).ToLowerInvariant());
         }
 
         private bool IsSupported(DeploymentInfo info)
