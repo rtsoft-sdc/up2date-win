@@ -56,7 +56,7 @@ namespace Up2dateShared
                 return ConfigurationManager.AppSettings[nameof(PackageExtensionFilterList)].Split(',').ToList();
             }
 
-            set => AddUpdateAppSettings(nameof(PackageExtensionFilterList), string.Join(",", value.ToArray()));
+            set => AddUpdateAppSettings(nameof(PackageExtensionFilterList), string.Join(":", value.ToArray()));
         }
 
         private static void AddUpdateAppSettings(string key, string value)
