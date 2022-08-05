@@ -210,13 +210,12 @@ namespace Up2dateClient
                 return false;
             }
 
-            bool chainIsValid = false;
             var theCertificateChain = new X509Chain();
-            theCertificateChain.ChainPolicy.RevocationFlag = X509RevocationFlag.ExcludeRoot;
-            theCertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
+            theCertificateChain.ChainPolicy.RevocationFlag = X509RevocationFlag.EntireChain;
+            theCertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.Offline;
             theCertificateChain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
             theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
-            chainIsValid = theCertificateChain.Build(theCertificate);
+            bool chainIsValid = theCertificateChain.Build(theCertificate);
 
             return chainIsValid;
         }
