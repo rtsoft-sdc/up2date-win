@@ -205,7 +205,7 @@ namespace Up2dateClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine("No digital signature found: " + ex.Message);
+                WriteLogEntry("No digital signature found: " + ex.Message);
 
                 return false;
             }
