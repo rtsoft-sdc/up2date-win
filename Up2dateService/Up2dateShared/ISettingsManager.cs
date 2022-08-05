@@ -10,5 +10,9 @@ namespace Up2dateShared
         string CertificateSerialNumber { get; set; }
 
         List<string> PackageExtensionFilterList { get; set; }
+
+        bool CheckSignature { get; set; }
+        bool InstallAppFromSelectedIssuer { get; set; }
+        List<string> SelectedIssuers { get; set; }
     }
 }

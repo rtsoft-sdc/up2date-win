@@ -116,10 +116,17 @@ namespace Up2dateClient
 
             WriteLogEntry("download completed.", info);
             var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
-            if (!IsSigned(filePath))
+            if (settingsManager.CheckSignature && !IsSigned(filePath))
             {
                 File.Delete(filePath);
                 WriteLogEntry("File not signed. File deleted", info);
+                return false;
+            }
+
+            if(settingsManager.InstallAppFromSelectedIssuer && IsSignedByIssuer(filePath))
+            {
+                File.Delete(filePath);
+                WriteLogEntry("File not signed by selected issuer. File deleted", info);
                 return false;
             }
 
@@ -135,7 +142,7 @@ namespace Up2dateClient
                 return true;
             }
 
-            var success = true;
+            bool success;
             if (IsSupported(info))
             {
                 WriteLogEntry("installing...", info);
@@ -194,7 +201,6 @@ namespace Up2dateClient
             }
         }
 
-
         private bool IsSigned(string file)
         {
             X509Certificate2 theCertificate;
@@ -218,6 +224,26 @@ namespace Up2dateClient
             bool chainIsValid = theCertificateChain.Build(theCertificate);
 
             return chainIsValid;
+        }
+
+
+        private bool IsSignedByIssuer(string file)
+        {
+            X509Certificate2 theCertificate;
+            try
+            {
+                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(file);
+                theCertificate = new X509Certificate2(theSigner);
+                
+            }
+            catch (Exception ex)
+            {
+                WriteLogEntry("No digital signature found: " + ex.Message);
+
+                return false;
+            }
+
+            return settingsManager.SelectedIssuers.Contains(theCertificate.IssuerName.Name);
         }
     }
 }
