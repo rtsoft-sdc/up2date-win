@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
+using System.Security.Cryptography.X509Certificates;
+
 using Up2dateShared;
 
 namespace Up2dateClient
@@ -197,27 +197,29 @@ namespace Up2dateClient
 
         private bool IsSigned(string file)
         {
+            X509Certificate2 theCertificate;
             try
             {
-                var runspaceConfiguration = RunspaceConfiguration.Create();
-                using (var runspace = RunspaceFactory.CreateRunspace(runspaceConfiguration))
-                {
-                    runspace.Open();
-                    using (var pipeline = runspace.CreatePipeline())
-                    {
-                        pipeline.Commands.AddScript("Get-AuthenticodeSignature \"" + file + "\"");
-                        var results = pipeline.Invoke();
-                        runspace.Close();
-                        var signature = results[0].BaseObject as Signature;
-                        return signature != null && signature.Status == SignatureStatus.Valid;
-                    }
-                }
+                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(file);
+                theCertificate = new X509Certificate2(theSigner);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                eventLog?.WriteEntry($"Error when trying to check if file is signed: {file} ->{e.Message}");
+                Console.WriteLine("No digital signature found: " + ex.Message);
+
                 return false;
             }
+
+            bool chainIsValid = false;
+            var theCertificateChain = new X509Chain();
+            theCertificateChain.ChainPolicy.RevocationFlag = X509RevocationFlag.ExcludeRoot;
+            theCertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
+            theCertificateChain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
+            theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
+            chainIsValid = theCertificateChain.Build(theCertificate);
+
+            return chainIsValid;
         }
     }
 }
+            
