@@ -100,7 +100,6 @@ namespace Up2dateClient
         private bool OnDeploymentAction(IntPtr artifact, DeploymentInfo info)
         {
             WriteLogEntry($"deployment requested.", info);
-
             if (!IsExtensionAllowed(info))
             {
                 WriteLogEntry("Package is not allowed - deployment rejected", info);
@@ -120,7 +119,7 @@ namespace Up2dateClient
             if (!IsSigned(filePath))
             {
                 File.Delete(filePath);
-                WriteLogEntry("MSI not signed. File deleted", info);
+                WriteLogEntry("File not signed. File deleted", info);
                 return false;
             }
 
@@ -145,7 +144,8 @@ namespace Up2dateClient
             }
             else
             {
-                WriteLogEntry("Package is not supported for installing so skipping...", info);
+                WriteLogEntry("Package is not supported for installing...", info);
+                success = false;
             }
 
 
