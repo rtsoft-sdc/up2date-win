@@ -79,6 +79,11 @@
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="IWcfClientFactory.cs" />
+    <Compile Include="Properties\Resources.ru-RU.Designer.cs">
+      <DependentUpon>Resources.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="StateIndicator\StateIndicatorViewModel.cs" />
     <Compile Include="StateIndicator\StateIndicator.xaml.cs">
       <DependentUpon>StateIndicator.xaml</DependentUpon>
@@ -132,6 +137,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.ru-RU.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru-RU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -165,6 +174,7 @@
       <SubType>Designer</SubType>
     </None>
     <Resource Include="Fonts\fontawesome-webfont.ttf" />
+    <None Include="Localization\Up2dateConsole_ru-RU.csv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
