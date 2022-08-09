@@ -40,3 +40,10 @@ Benefits:
 3. Input unique one-time registration key requested after installation.
 4. Log in [https://your.tenant.ritms.online](https://tenant.up2date.poc.ritms.online), upload a deployment, assign it to a distribution and drag-n-drop to dedicated PC(s)
 5. Check a notification about installed deployment
+
+## Build Wrapper for [up2date-cpp](https://github.com/rtsoft-gmbh/up2date-cpp) library
+1. Clone [VCPKG repo](https://github.com/microsoft/vcpkg) in directory ../ from basic installation
+2. run ../vcpkg/bootstrap-vcpkg.bat
+3. Add Environment Variable %VCPKG_ROOT% with path to VCPKG storage
+4. Install CMAKE 
+5. Build via normal visual studio or msbuild compiler
