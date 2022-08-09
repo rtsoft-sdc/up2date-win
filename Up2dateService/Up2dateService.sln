@@ -21,6 +21,11 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Up2dateSetup", "Setup32\Set
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Up2dateSetup", "Setup64\Setup.vdproj", "{AB5532EA-E00A-4785-9F2F-4A4E8437C12A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A530F71A-CE5B-457A-A46D-D57A39F6BB55}"
+	ProjectSection(SolutionItems) = preProject
+		Localization.md = Localization.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
