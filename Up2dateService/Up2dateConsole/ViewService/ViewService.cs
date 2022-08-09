@@ -29,10 +29,9 @@ namespace Up2dateConsole.ViewService
             TopWindow.Activate();
         }
 
-        public MessageBoxResult ShowMessageBox(string text, string caption = null, MessageBoxButton buttons = MessageBoxButton.OK)
+        public MessageBoxResult ShowMessageBox(string text, MessageBoxButton buttons = MessageBoxButton.OK)
         {
-            caption = caption ?? TopWindow?.Title;
-            return MessageBox.Show(TopWindow, text, caption, buttons);
+            return MessageBox.Show(TopWindow, text, TopWindow?.Title, buttons);
         }
 
         public string ShowSaveDialog(string title, string filter, string defaultExt = null, string initialDirectory = null)
@@ -61,13 +60,13 @@ namespace Up2dateConsole.ViewService
 
         public void RegisterDialog(Type viewModelType, Type viewType)
         {
-            if (!viewModelType.IsSubclassOf(typeof(DialogViewModelBase))) throw new ArgumentException("Dialog viewmodel must be subclassed from DialogViewModelBase.", nameof(viewModelType));
+            if (viewModelType.GetInterface(nameof(IDialogViewModel)) == null) throw new ArgumentException("Dialog viewmodel must implement IDialogViewModel.", nameof(viewModelType));
             if (!viewType.IsSubclassOf(typeof(Window))) throw new ArgumentException("Dialog view must be subclassed from Window.", nameof(viewType));
 
             registeredDialogs[viewModelType] = viewType;
         }
 
-        public bool ShowDialog(DialogViewModelBase viewModel)
+        public bool ShowDialog(IDialogViewModel viewModel)
         {
             if (viewModel is null) throw new ArgumentNullException(nameof(viewModel));
 
@@ -85,10 +84,15 @@ namespace Up2dateConsole.ViewService
             return dlg.ShowDialog() == true;
         }
 
+        public string GetTextFromResource<TTextEnum>(Type viewModelType, TTextEnum textEnum) where TTextEnum : Enum
+        {
+            return (string)TopWindow?.FindResource(textEnum.ToString());
+        }
+
         private void ActiveDialog_Closed(object sender, EventArgs e)
         {
             var dialog = (Window)sender;
-            ((DialogViewModelBase)dialog.DataContext).CloseDialog -= ViewModel_CloseDialog;
+            ((IDialogViewModel)dialog.DataContext).CloseDialog -= ViewModel_CloseDialog;
             dialog.Closed -= ActiveDialog_Closed;
 
             nestedWindows.Pop();

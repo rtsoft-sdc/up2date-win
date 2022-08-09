@@ -1,219 +1,254 @@
-﻿Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:Up2dateConsole.Dialogs.RequestCertificateDialog.$Content,None,TRUE,TRUE,,#Grid_1;
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.Title,Title,TRUE,TRUE,,Авторизация
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.WindowStartupLocation,None,FALSE,TRUE,,CenterOwner
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.ResizeMode,None,FALSE,TRUE,,NoResize
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.SizeToContent,None,FALSE,TRUE,,WidthAndHeight
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,ResourceDictionary_2:System.Windows.ResourceDictionary.Source,None,TRUE,FALSE,,..\\Styles.xaml
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_1:System.Windows.Setter.Property,None,FALSE,FALSE,,Control.Padding
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_1:System.Windows.Setter.Value,None,FALSE,TRUE,,"5,4"
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_2:System.Windows.Setter.Property,None,FALSE,FALSE,,FrameworkElement.Margin
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_2:System.Windows.Setter.Value,None,FALSE,TRUE,,5
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_3:System.Windows.Setter.Property,None,FALSE,FALSE,,FrameworkElement.MinWidth
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_3:System.Windows.Setter.Value,None,FALSE,TRUE,,70
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Grid_1:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,5
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_1:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,5
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_2:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"0,0,10,0"
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Top
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FFFF8C00
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.Controls.TextBlock.FontSize,None,TRUE,TRUE,,42
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_2:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_2:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,Это устройство не инциализировано для подключения к RITMS UP2DATE
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_3:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_3:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,"Пожалуйста, введите ключ сертификации:"
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.Controls.TextBox.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"0,10"
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.FrameworkElement.Height,None,FALSE,TRUE,,140
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.FrameworkElement.Width,None,FALSE,TRUE,,500
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.Controls.TextBox.TextWrapping,None,FALSE,TRUE,,Wrap
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_4:System.Windows.Controls.Grid.Row,None,FALSE,TRUE,,1
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_4:System.Windows.FrameworkElement.HorizontalAlignment,None,FALSE,TRUE,,Right
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_4:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_4:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_4:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FF008000
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_1:System.Windows.Controls.Button.$Content,Button,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_1:System.Windows.Controls.ContentControl.Content,Button,TRUE,TRUE,,Авторизовать
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_2:System.Windows.Controls.Button.$Content,Button,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_2:System.Windows.Controls.ContentControl.Content,Button,TRUE,TRUE,,Отмена
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_2:System.Windows.Controls.Button.IsCancel,None,FALSE,TRUE,,TRUE
-Up2dateConsole.g.en-US.resources:stateindicator.baml,UserControl_1:Up2dateConsole.StateIndicator.StateIndicator.$Content,None,TRUE,TRUE,,#Grid_1;
-Up2dateConsole.g.en-US.resources:stateindicator.baml,ResourceDictionary_2:System.Windows.ResourceDictionary.Source,None,TRUE,FALSE,,..\\Styles.xaml
-Up2dateConsole.g.en-US.resources:stateindicator.baml,helpers:EnumToVisibilityConverter_1:Up2dateConsole.Helpers.EnumToVisibilityConverter.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_1:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_1:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FF008000
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_2:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_2:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FFFF8C00
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_3:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_3:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FFFF0000
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_4:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_4:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FFFF8C00
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_5:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_5:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FFFF8C00
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_6:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_6:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FF808080
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_7:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_7:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FF808080
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_8:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_8:System.Windows.FrameworkElement.MaxWidth,None,FALSE,TRUE,,400
-Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_8:System.Windows.Controls.TextBlock.TextWrapping,None,FALSE,TRUE,,Wrap
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:Up2dateConsole.MainWindow.$Content,None,TRUE,TRUE,,#Grid_1;
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.ShowInTaskbar,None,FALSE,TRUE,,TRUE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.Icon,None,FALSE,TRUE,,Images/Logo.ico
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.Title,Title,TRUE,TRUE,,RITMS UP2DATE Консоль
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.Height,None,FALSE,TRUE,,600
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.Width,None,FALSE,TRUE,,1000
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.MinHeight,None,FALSE,TRUE,,200
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.MinWidth,None,FALSE,TRUE,,500
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.WindowStartupLocation,None,FALSE,TRUE,,CenterScreen
-Up2dateConsole.g.en-US.resources:mainwindow.baml,ResourceDictionary_2:System.Windows.ResourceDictionary.Source,None,TRUE,FALSE,,Styles.xaml
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_1:System.Windows.Setter.Property,None,FALSE,FALSE,,Control.Padding
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_1:System.Windows.Setter.Value,None,FALSE,TRUE,,"5,4"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_2:System.Windows.Setter.Property,None,FALSE,FALSE,,FrameworkElement.Margin
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_2:System.Windows.Setter.Value,None,FALSE,TRUE,,3
-Up2dateConsole.g.en-US.resources:mainwindow.baml,tb:TaskbarIcon_1:Hardcodet.Wpf.TaskbarNotification.TaskbarIcon.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,tb:TaskbarIcon_1:System.Windows.UIElement.Visibility,None,FALSE,TRUE,,Visible
-Up2dateConsole.g.en-US.resources:mainwindow.baml,tb:TaskbarIcon_1:Hardcodet.Wpf.TaskbarNotification.TaskbarIcon.MenuActivation,None,TRUE,TRUE,,RightClick
-Up2dateConsole.g.en-US.resources:mainwindow.baml,ContextMenu_1:System.Windows.Controls.ContextMenu.$Content,Menu,TRUE,TRUE,,#MenuItem_1;#Separator_1;#MenuItem_2;
-Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_1:System.Windows.Controls.MenuItem.$Content,Menu,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_1:System.Windows.Controls.HeaderedItemsControl.Header,Menu,TRUE,TRUE,,Показать консоль
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Separator_1:System.Windows.Controls.Separator.$Content,None,FALSE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_2:System.Windows.Controls.MenuItem.$Content,Menu,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_2:System.Windows.Controls.HeaderedItemsControl.Header,Menu,TRUE,TRUE,,Выйти
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Grid_3:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"10,5"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_1:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_1:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_1:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,Программные пакеты:
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.FrameworkElement.HorizontalAlignment,None,FALSE,TRUE,,Right
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button1:System.Windows.Controls.Button.$Content,Button,TRUE,TRUE,,#StackPanel_2;
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button1:System.Windows.FrameworkElement.ToolTip,ToolTip,TRUE,TRUE,,Запрос авторизации на RITMS UP2DATE сервере (по ключу полученному у администратора)
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_2:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_2:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_2:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FFFF8C00
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"5,0,0,0"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,Авторизация...
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button2:System.Windows.Controls.Button.$Content,Button,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button2:System.Windows.FrameworkElement.Width,None,FALSE,TRUE,,100
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button2:System.Windows.Controls.ContentControl.Content,Button,TRUE,TRUE,,Установить
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_1:System.Windows.Controls.Button.$Content,Button,TRUE,TRUE,,#TextBlock_3;
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_1:System.Windows.FrameworkElement.ToolTip,ToolTip,TRUE,TRUE,,Обновление списка пакетов
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_3:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.$Content,None,FALSE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.Grid.Row,None,FALSE,TRUE,,1
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"10,0,10,10"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.Control.Background,None,FALSE,TRUE,,\#FFFFFFFF
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.SelectionMode,None,TRUE,FALSE,,Extended
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.RowHeight,None,FALSE,TRUE,,20
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.SelectionUnit,None,TRUE,FALSE,,FullRow
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.AutoGenerateColumns,None,FALSE,TRUE,,FALSE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.GridLinesVisibility,None,TRUE,FALSE,,None
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserAddRows,None,FALSE,TRUE,,FALSE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserDeleteRows,None,FALSE,TRUE,,FALSE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserReorderColumns,None,FALSE,TRUE,,FALSE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserResizeRows,None,FALSE,TRUE,,FALSE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.RowHeaderWidth,None,FALSE,TRUE,,0
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.IsReadOnly,None,FALSE,TRUE,,TRUE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_1:System.Windows.Controls.DataGridTextColumn.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_1:System.Windows.Controls.DataGridColumn.Header,None,TRUE,TRUE,,Пакет
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_1:System.Windows.Controls.DataGridColumn.Width,None,TRUE,FALSE,,2*
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_2:System.Windows.Controls.DataGridTextColumn.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_2:System.Windows.Controls.DataGridColumn.Header,None,TRUE,TRUE,,Имя продукта
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_2:System.Windows.Controls.DataGridColumn.Width,None,TRUE,FALSE,,2*
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_3:System.Windows.Controls.DataGridTextColumn.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_3:System.Windows.Controls.DataGridColumn.Header,None,TRUE,TRUE,,Издатель
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_3:System.Windows.Controls.DataGridColumn.Width,None,TRUE,FALSE,,1*
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_4:System.Windows.Controls.DataGridTextColumn.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_4:System.Windows.Controls.DataGridColumn.Header,None,TRUE,TRUE,,Версия
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_4:System.Windows.Controls.DataGridColumn.Width,None,TRUE,FALSE,,80
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_5:System.Windows.Controls.DataGridTextColumn.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_5:System.Windows.Controls.DataGridColumn.Header,None,TRUE,TRUE,,Размер (MB)
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_5:System.Windows.Controls.DataGridColumn.Width,None,TRUE,FALSE,,60
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_6:System.Windows.Controls.DataGridTextColumn.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_6:System.Windows.Controls.DataGridColumn.Header,None,TRUE,TRUE,,Установлен
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_6:System.Windows.Controls.DataGridColumn.Width,None,TRUE,FALSE,,80
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridTextColumn.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridColumn.Header,None,TRUE,TRUE,,Статус
-Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridColumn.Width,None,TRUE,FALSE,,80
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_3:System.Windows.Setter.Property,None,FALSE,FALSE,,UIElement.Focusable
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_3:System.Windows.Setter.Value,None,FALSE,TRUE,,FALSE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_4:System.Windows.Setter.Property,None,FALSE,FALSE,,KeyboardNavigation.IsTabStop
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_4:System.Windows.Setter.Value,None,FALSE,TRUE,,FALSE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_5:System.Windows.Setter.Property,None,FALSE,FALSE,,DataGridRow.IsSelected
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Grid_4:System.Windows.Controls.Grid.Row,None,FALSE,TRUE,,1
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Grid_4:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"10,0,10,10"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_3:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock2:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock2:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,Состояние сервиса:
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock2:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:Up2dateConsole.StateIndicator.StateIndicator.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:System.Windows.FrameworkElement.Width,None,FALSE,TRUE,,20
-Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:System.Windows.FrameworkElement.Height,None,FALSE,TRUE,,20
-Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"7,0"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_4:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_4:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"20,0,0,0"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_4:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,RITMS UP2DATE:
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"0,0,5,0"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.TextBox.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.Control.Padding,None,FALSE,TRUE,,2
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.Primitives.TextBoxBase.IsReadOnly,None,FALSE,TRUE,,TRUE
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.Control.FontFamily,Font,TRUE,TRUE,,Courier New
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_5:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_5:System.Windows.FrameworkElement.HorizontalAlignment,None,FALSE,TRUE,,Right
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_2:System.Windows.Controls.Button.$Content,Button,TRUE,TRUE,,#StackPanel_6;
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_2:System.Windows.FrameworkElement.ToolTip,ToolTip,TRUE,TRUE,,Переключение в административный режим (требует прав администратора)
-Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_6:System.Windows.Controls.StackPanel.Orientation,None,FALSE,TRUE,,Horizontal
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.Controls.Image.$Content,None,FALSE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.Controls.Image.Stretch,None,TRUE,FALSE,,Fill
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.FrameworkElement.Width,None,FALSE,TRUE,,16
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.FrameworkElement.Height,None,FALSE,TRUE,,16
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.Controls.Image.Source,None,FALSE,TRUE,,Images/UAC.png
-Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.FrameworkElement.Margin,None,FALSE,TRUE,,"5,0,0,0"
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,Администрирование...
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.FrameworkElement.VerticalAlignment,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.$Content,Text,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.Text,Text,TRUE,TRUE,,Административный режим
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.Foreground,None,FALSE,TRUE,,\#FF8B0000
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.FontWeight,None,TRUE,TRUE,,DemiBold
-Up2dateConsole.g.en-US.resources:styles.baml,clr:String_1:System.String.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,clr:String_2:System.String.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,clr:String_3:System.String.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,clr:String_4:System.String.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,clr:String_5:System.String.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,clr:String_6:System.String.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_1:System.Windows.Setter.Property,None,FALSE,FALSE,,TextElement.FontFamily
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_2:System.Windows.Setter.Property,None,FALSE,FALSE,,FrameworkElement.VerticalAlignment
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_2:System.Windows.Setter.Value,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_3:System.Windows.Setter.Property,None,FALSE,FALSE,,FrameworkElement.HorizontalAlignment
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_3:System.Windows.Setter.Value,None,FALSE,TRUE,,Center
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_4:System.Windows.Setter.Property,None,FALSE,FALSE,,TextElement.Foreground
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_4:System.Windows.Setter.Value,None,FALSE,TRUE,,\#FF808080
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_5:System.Windows.Setter.Property,None,FALSE,FALSE,,TextElement.FontSize
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_5:System.Windows.Setter.Value,None,FALSE,TRUE,,16
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_6:System.Windows.Setter.Property,None,FALSE,FALSE,,TextElement.FontSize
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_6:System.Windows.Setter.Value,None,FALSE,TRUE,,18
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_7:System.Windows.Setter.Property,None,FALSE,FALSE,,UIElement.RenderTransformOrigin
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_7:System.Windows.Setter.Value,None,FALSE,TRUE,,"0.5,0.5"
-Up2dateConsole.g.en-US.resources:styles.baml,Setter_8:System.Windows.Setter.Property,None,FALSE,FALSE,,UIElement.RenderTransform
-Up2dateConsole.g.en-US.resources:styles.baml,RotateTransform_1:System.Windows.Media.RotateTransform.$Content,None,FALSE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,EventTrigger_1:System.Windows.EventTrigger.$Content,None,FALSE,TRUE,,#BeginStoryboard_1;
-Up2dateConsole.g.en-US.resources:styles.baml,EventTrigger_1:System.Windows.EventTrigger.RoutedEvent,None,TRUE,TRUE,,TextBlock.Loaded
-Up2dateConsole.g.en-US.resources:styles.baml,BeginStoryboard_1:System.Windows.Media.Animation.BeginStoryboard.$Content,None,TRUE,TRUE,,#Storyboard_1;
-Up2dateConsole.g.en-US.resources:styles.baml,Storyboard_1:System.Windows.Media.Animation.Storyboard.$Content,None,FALSE,TRUE,,#DoubleAnimation_1;
-Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.DoubleAnimation.$Content,None,FALSE,TRUE,,
-Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.Timeline.Duration,None,TRUE,FALSE,,0:00:01
-Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.DoubleAnimation.From,None,TRUE,FALSE,,0
-Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.DoubleAnimation.To,None,TRUE,FALSE,,360
-Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.Timeline.RepeatBehavior,None,TRUE,FALSE,,Forever
-Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.Storyboard.TargetProperty,None,TRUE,TRUE,,(TextBlock.RenderTransform).(RotateTransform.Angle)
-Up2dateConsole.g.en-US.resources:app.baml,Application_1:Up2dateConsole.App.$Content,None,TRUE,TRUE,,
-Up2dateConsole.g.en-US.resources:app.baml,FontFamily_1:System.Windows.Media.FontFamily.$Content,Font,TRUE,TRUE,,/fonts/fontawesome-webfont.ttf\#FontAwesome
+﻿Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:Up2dateConsole.Dialogs.RequestCertificateDialog.$Content,None,True,True,,#Grid_1;,#Grid_1;,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.Title,Title,True,True,,Авторизация,Authorization,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.WindowStartupLocation,None,False,True,,CenterOwner,CenterOwner,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.ResizeMode,None,False,True,,NoResize,NoResize,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Window_1:System.Windows.Window.SizeToContent,None,False,True,,WidthAndHeight,WidthAndHeight,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,ResourceDictionary_2:System.Windows.ResourceDictionary.Source,None,True,False,,..\\Styles.xaml,..\\Styles.xaml,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_1:System.Windows.Setter.Property,None,False,False,,Control.Padding,Control.Padding,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_1:System.Windows.Setter.Value,None,False,True,,"5,4","5,4",
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_2:System.Windows.Setter.Property,None,False,False,,FrameworkElement.Margin,FrameworkElement.Margin,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_2:System.Windows.Setter.Value,None,False,True,,5,5,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_3:System.Windows.Setter.Property,None,False,False,,FrameworkElement.MinWidth,FrameworkElement.MinWidth,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Setter_3:System.Windows.Setter.Value,None,False,True,,70,70,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,clr:String_1:System.String.$Content,None,True,True,,Ошибка получения сертификата,Failed to acquire certificate,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Grid_1:System.Windows.FrameworkElement.Margin,None,False,True,,5,5,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_1:System.Windows.FrameworkElement.Margin,None,False,True,,5,5,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_2:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.FrameworkElement.Margin,None,False,True,,"0,0,10,0","0,0,10,0",
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Top,Top,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FFFF8C00,\#FFFF8C00,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_1:System.Windows.Controls.TextBlock.FontSize,None,True,True,,42,42,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_2:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_2:System.Windows.Controls.TextBlock.Text,Text,True,True,,Это устройство не инциализировано для подключения к RITMS UP2DATE,This device has not initialized to connect RITMS UP2DATE,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_3:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_3:System.Windows.Controls.TextBlock.Text,Text,True,True,,"Пожалуйста, введите ключ сертификации:","Please, provide a certification key:",
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.Controls.TextBox.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.FrameworkElement.Margin,None,False,True,,"0,10","0,10",
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.FrameworkElement.Height,None,False,True,,140,140,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.FrameworkElement.Width,None,False,True,,500,500,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_1:System.Windows.Controls.TextBox.TextWrapping,None,False,True,,Wrap,Wrap,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_4:System.Windows.Controls.Grid.Row,None,False,True,,1,1,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_4:System.Windows.FrameworkElement.HorizontalAlignment,None,False,True,,Right,Right,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_4:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_4:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_4:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FF008000,\#FF008000,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_1:System.Windows.Controls.Button.$Content,Button,True,True,,,,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_1:System.Windows.Controls.ContentControl.Content,Button,True,True,,Авторизовать,Authorize,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_2:System.Windows.Controls.Button.$Content,Button,True,True,,,,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_2:System.Windows.Controls.ContentControl.Content,Button,True,True,,Отмена,Cancel,
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,Button_2:System.Windows.Controls.Button.IsCancel,None,False,True,,True,True,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,UserControl_1:Up2dateConsole.StateIndicator.StateIndicator.$Content,None,True,True,,#Grid_1;,#Grid_1;,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,ResourceDictionary_2:System.Windows.ResourceDictionary.Source,None,True,False,,..\\Styles.xaml,..\\Styles.xaml,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,helpers:EnumToVisibilityConverter_1:Up2dateConsole.Helpers.EnumToVisibilityConverter.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_1:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_1:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FF008000,\#FF008000,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_2:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_2:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FFFF8C00,\#FFFF8C00,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_3:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_3:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FFFF0000,\#FFFF0000,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_4:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_4:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FFFF8C00,\#FFFF8C00,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_5:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_5:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FFFF8C00,\#FFFF8C00,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_6:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_6:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FF808080,\#FF808080,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_7:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_7:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FF808080,\#FF808080,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_8:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_8:System.Windows.FrameworkElement.MaxWidth,None,False,True,,400,400,
+Up2dateConsole.g.en-US.resources:stateindicator.baml,TextBlock_8:System.Windows.Controls.TextBlock.TextWrapping,None,False,True,,Wrap,Wrap,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:Up2dateConsole.MainWindow.$Content,None,True,True,,#Grid_1;,#Grid_1;,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.ShowInTaskbar,None,False,True,,True,True,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.Icon,None,False,True,,Images/Logo.ico,Images/Logo.ico,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.Title,Title,True,True,,RITMS UP2DATE Консоль,RITMS UP2DATE Console,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.Height,None,False,True,,600,600,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.Width,None,False,True,,1000,1000,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.MinHeight,None,False,True,,200,200,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.FrameworkElement.MinWidth,None,False,True,,500,500,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Window_1:System.Windows.Window.WindowStartupLocation,None,False,True,,CenterScreen,CenterScreen,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,ResourceDictionary_2:System.Windows.ResourceDictionary.Source,None,True,False,,Styles.xaml,Styles.xaml,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_1:System.Windows.Setter.Property,None,False,False,,Control.Padding,Control.Padding,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_1:System.Windows.Setter.Value,None,False,True,,"5,4","5,4",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_2:System.Windows.Setter.Property,None,False,False,,FrameworkElement.Margin,FrameworkElement.Margin,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_2:System.Windows.Setter.Value,None,False,True,,3,3,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_1:System.String.$Content,None,True,True,,"Коммуникационный сертификат для RITMS UP2DATE \\&quot;{0}\\&quot; получен
+однако все еще не удается установить соединение с сервером.
+
+Проверьте полученный сертификат.","Communication certificate for RITMS UP2DATE \\&quot;{0}\\&quot; is acquired
+but there is still problem establishing connection to the server.
+
+Please check if acquired certificate is valid.",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_2:System.String.$Content,None,True,True,,Коммуникационный сертификат для RITMS UP2DATE \\&quot;{0}\\&quot; успешно получен.,Communication certificate for RITMS UP2DATE \\&quot;{0}\\&quot; successfully acquired.,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_3:System.String.$Content,None,True,True,,RITMS UP2DATE Agent сервис не отвечает. Убедитесь что Up2dateService стартован.,RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_4:System.String.$Content,None,True,True,,Невозможно начать инсталляцию:,Cannot start installation:,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_5:System.String.$Content,None,True,True,,Ошибка доступа к сервису RITMS UP2DATE Agent.,Error accessing RITMS UP2DATE Agent service.,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_6:System.String.$Content,None,True,True,,"Это устройство не инициализировано для подключения RITMS UP2DATE. Необходимо предоставить ключ сертификата.
+
+Это действие требует административных прав.","This device has not initialized to connect RITMS UP2DATE. You should provide a certification key.
+
+Note that this action requires administrative privileges.",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_7:System.String.$Content,None,True,True,,Внутренняя ошибка агента.,Agent internal error.,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_8:System.String.$Content,None,True,True,,Сервер недоступен.,Cannot access server.,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_9:System.String.$Content,None,True,True,,Сертификат авторизации не найден.,Authorization certificate is not available.,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_10:System.String.$Content,None,True,True,,Новый программный пакет доступен для установки:,New software available for installation:,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_11:System.String.$Content,None,True,True,,Новый программный пакет установлен:,New software installed:,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_12:System.String.$Content,None,True,True,,Агент не доступен или не запущен,Agent is not running or inaccessible,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_13:System.String.$Content,None,True,True,,Сертификат авторизации не найден,Authorization certificate is not available,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_14:System.String.$Content,None,True,True,,Нет доступа к серверу,Cannot access server,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_15:System.String.$Content,None,True,True,,Ошибка агента или сервера,Agent or server failure,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_16:System.String.$Content,None,True,True,,Недоступен,Unavailable,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_17:System.String.$Content,None,True,True,,Доступен,Available,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_18:System.String.$Content,None,True,True,,Загружается,Downloading,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_19:System.String.$Content,None,True,True,,Загружен,Downloaded,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_20:System.String.$Content,None,True,True,,Устанавливается,Installing,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_21:System.String.$Content,None,True,True,,Установлен,Installed,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_22:System.String.$Content,None,True,True,,Требуется перезагрузка,RestartNeeded,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_23:System.String.$Content,None,True,True,,Ошибка,Failed,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_24:System.String.$Content,None,True,True,,Неизвестно,Unknown,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,tb:TaskbarIcon_1:Hardcodet.Wpf.TaskbarNotification.TaskbarIcon.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,tb:TaskbarIcon_1:System.Windows.UIElement.Visibility,None,False,True,,Visible,Visible,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,tb:TaskbarIcon_1:Hardcodet.Wpf.TaskbarNotification.TaskbarIcon.MenuActivation,None,True,True,,RightClick,RightClick,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,ContextMenu_1:System.Windows.Controls.ContextMenu.$Content,Menu,True,True,,#MenuItem_1;#Separator_1;#MenuItem_2;,#MenuItem_1;#Separator_1;#MenuItem_2;,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_1:System.Windows.Controls.MenuItem.$Content,Menu,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_1:System.Windows.Controls.HeaderedItemsControl.Header,Menu,True,True,,Показать консоль,Show console,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Separator_1:System.Windows.Controls.Separator.$Content,None,False,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_2:System.Windows.Controls.MenuItem.$Content,Menu,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,MenuItem_2:System.Windows.Controls.HeaderedItemsControl.Header,Menu,True,True,,Выйти,Quit,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Grid_3:System.Windows.FrameworkElement.Margin,None,False,True,,"10,5","10,5",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_1:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_1:System.Windows.Controls.TextBlock.Text,Text,True,True,,Программные пакеты:,Software packages:,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.FrameworkElement.HorizontalAlignment,None,False,True,,Right,Right,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button1:System.Windows.Controls.Button.$Content,Button,True,True,,#StackPanel_2;,#StackPanel_2;,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button1:System.Windows.FrameworkElement.ToolTip,ToolTip,True,True,,Запрос авторизации на RITMS UP2DATE сервере (по ключу полученному у администратора),Request UP2DATE service authorization data (key is provided by the administrator),
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_2:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_2:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_2:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FFFF8C00,\#FFFF8C00,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.FrameworkElement.Margin,None,False,True,,"5,0,0,0","5,0,0,0",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.Controls.TextBlock.Text,Text,True,True,,Авторизация...,Authorization...,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button2:System.Windows.Controls.Button.$Content,Button,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button2:System.Windows.FrameworkElement.Width,None,False,True,,100,100,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button2:System.Windows.Controls.ContentControl.Content,Button,True,True,,Установить,Install selected,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_1:System.Windows.Controls.Button.$Content,Button,True,True,,#TextBlock_3;,#TextBlock_3;,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_1:System.Windows.FrameworkElement.ToolTip,ToolTip,True,True,,Обновление списка пакетов,Refresh the list of packages,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_3:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.$Content,None,False,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.Grid.Row,None,False,True,,1,1,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.FrameworkElement.Margin,None,False,True,,"10,0,10,10","10,0,10,10",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.Control.Background,None,False,True,,\#FFFFFFFF,\#FFFFFFFF,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.SelectionMode,None,True,False,,Extended,Extended,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.RowHeight,None,False,True,,20,20,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.SelectionUnit,None,True,False,,FullRow,FullRow,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.AutoGenerateColumns,None,False,True,,False,False,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.GridLinesVisibility,None,True,False,,None,None,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserAddRows,None,False,True,,False,False,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserDeleteRows,None,False,True,,False,False,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserReorderColumns,None,False,True,,False,False,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.CanUserResizeRows,None,False,True,,False,False,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.RowHeaderWidth,None,False,True,,0,0,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGrid_1:System.Windows.Controls.DataGrid.IsReadOnly,None,False,True,,True,True,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_1:System.Windows.Controls.DataGridTextColumn.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_1:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Пакет,Package,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_1:System.Windows.Controls.DataGridColumn.Width,None,True,False,,2*,2*,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_2:System.Windows.Controls.DataGridTextColumn.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_2:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Имя продукта,Product name,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_2:System.Windows.Controls.DataGridColumn.Width,None,True,False,,2*,2*,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_3:System.Windows.Controls.DataGridTextColumn.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_3:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Издатель,Publisher,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_3:System.Windows.Controls.DataGridColumn.Width,None,True,False,,1*,1*,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_4:System.Windows.Controls.DataGridTextColumn.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_4:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Версия,Version,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_4:System.Windows.Controls.DataGridColumn.MinWidth,None,False,True,,80,80,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_5:System.Windows.Controls.DataGridTextColumn.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_5:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Размер (MB),Size (MB),
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_5:System.Windows.Controls.DataGridColumn.MinWidth,None,False,True,,60,60,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_6:System.Windows.Controls.DataGridTextColumn.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_6:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Установлен,Installed,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_6:System.Windows.Controls.DataGridColumn.MinWidth,None,False,True,,80,80,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridTextColumn.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Статус,Status,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridColumn.MinWidth,None,False,True,,80,80,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_3:System.Windows.Setter.Property,None,False,False,,UIElement.Focusable,UIElement.Focusable,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_3:System.Windows.Setter.Value,None,False,True,,False,False,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_4:System.Windows.Setter.Property,None,False,False,,KeyboardNavigation.IsTabStop,KeyboardNavigation.IsTabStop,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_4:System.Windows.Setter.Value,None,False,True,,False,False,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Setter_5:System.Windows.Setter.Property,None,False,False,,DataGridRow.IsSelected,DataGridRow.IsSelected,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Grid_4:System.Windows.Controls.Grid.Row,None,False,True,,1,1,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Grid_4:System.Windows.FrameworkElement.Margin,None,False,True,,"10,0,10,10","10,0,10,10",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_3:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock2:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock2:System.Windows.Controls.TextBlock.Text,Text,True,True,,Состояние сервиса:,Service state:,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock2:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:Up2dateConsole.StateIndicator.StateIndicator.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:System.Windows.FrameworkElement.Width,None,False,True,,20,20,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:System.Windows.FrameworkElement.Height,None,False,True,,20,20,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,stateindicator:StateIndicator_1:System.Windows.FrameworkElement.Margin,None,False,True,,"5,0","5,0",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_4:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_4:System.Windows.FrameworkElement.Margin,None,False,True,,"20,0,0,0","20,0,0,0",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_4:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.Controls.TextBlock.Text,Text,True,True,,RITMS UP2DATE:,RITMS UP2DATE:,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.FrameworkElement.Margin,None,False,True,,"0,0,5,0","0,0,5,0",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_4:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.TextBox.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.Control.Padding,None,False,True,,2,2,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.Primitives.TextBoxBase.IsReadOnly,None,False,True,,True,True,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.Control.FontFamily,Font,True,True,,Courier New,Courier New,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_5:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_5:System.Windows.FrameworkElement.HorizontalAlignment,None,False,True,,Right,Right,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_2:System.Windows.Controls.Button.$Content,Button,True,True,,#StackPanel_6;,#StackPanel_6;,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_2:System.Windows.FrameworkElement.ToolTip,ToolTip,True,True,,Переключение в административный режим (требует прав администратора),Turns console into administration mode (requires administrator privilege),
+Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_6:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.Controls.Image.$Content,None,False,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.Controls.Image.Stretch,None,True,False,,Fill,Fill,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.FrameworkElement.Width,None,False,True,,16,16,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.FrameworkElement.Height,None,False,True,,16,16,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.Controls.Image.Source,None,False,True,,Images/UAC.png,Images/UAC.png,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,Image_1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.FrameworkElement.Margin,None,False,True,,"5,0,0,0","5,0,0,0",
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.Controls.TextBlock.Text,Text,True,True,,Администрирование...,To admin mode...,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_5:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.Text,Text,True,True,,Административный режим,Administrator mode,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.Foreground,None,False,True,,\#FF8B0000,\#FF8B0000,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_6:System.Windows.Controls.TextBlock.FontWeight,None,True,True,,DemiBold,DemiBold,
+Up2dateConsole.g.en-US.resources:styles.baml,clr:String_1:System.String.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,clr:String_2:System.String.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,clr:String_3:System.String.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,clr:String_4:System.String.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,clr:String_5:System.String.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,clr:String_6:System.String.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_1:System.Windows.Setter.Property,None,False,False,,TextElement.FontFamily,TextElement.FontFamily,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_2:System.Windows.Setter.Property,None,False,False,,FrameworkElement.VerticalAlignment,FrameworkElement.VerticalAlignment,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_2:System.Windows.Setter.Value,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_3:System.Windows.Setter.Property,None,False,False,,FrameworkElement.HorizontalAlignment,FrameworkElement.HorizontalAlignment,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_3:System.Windows.Setter.Value,None,False,True,,Center,Center,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_4:System.Windows.Setter.Property,None,False,False,,TextElement.Foreground,TextElement.Foreground,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_4:System.Windows.Setter.Value,None,False,True,,\#FF808080,\#FF808080,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_5:System.Windows.Setter.Property,None,False,False,,TextElement.FontSize,TextElement.FontSize,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_5:System.Windows.Setter.Value,None,False,True,,16,16,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_6:System.Windows.Setter.Property,None,False,False,,TextElement.FontSize,TextElement.FontSize,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_6:System.Windows.Setter.Value,None,False,True,,18,18,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_7:System.Windows.Setter.Property,None,False,False,,UIElement.RenderTransformOrigin,UIElement.RenderTransformOrigin,
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_7:System.Windows.Setter.Value,None,False,True,,"0.5,0.5","0.5,0.5",
+Up2dateConsole.g.en-US.resources:styles.baml,Setter_8:System.Windows.Setter.Property,None,False,False,,UIElement.RenderTransform,UIElement.RenderTransform,
+Up2dateConsole.g.en-US.resources:styles.baml,RotateTransform_1:System.Windows.Media.RotateTransform.$Content,None,False,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,EventTrigger_1:System.Windows.EventTrigger.$Content,None,False,True,,#BeginStoryboard_1;,#BeginStoryboard_1;,
+Up2dateConsole.g.en-US.resources:styles.baml,EventTrigger_1:System.Windows.EventTrigger.RoutedEvent,None,True,True,,TextBlock.Loaded,TextBlock.Loaded,
+Up2dateConsole.g.en-US.resources:styles.baml,BeginStoryboard_1:System.Windows.Media.Animation.BeginStoryboard.$Content,None,True,True,,#Storyboard_1;,#Storyboard_1;,
+Up2dateConsole.g.en-US.resources:styles.baml,Storyboard_1:System.Windows.Media.Animation.Storyboard.$Content,None,False,True,,#DoubleAnimation_1;,#DoubleAnimation_1;,
+Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.DoubleAnimation.$Content,None,False,True,,,,
+Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.Timeline.Duration,None,True,False,,0:0:1,0:0:1,
+Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.DoubleAnimation.From,None,True,False,,0,0,
+Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.DoubleAnimation.To,None,True,False,,360,360,
+Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.Timeline.RepeatBehavior,None,True,False,,Forever,Forever,
+Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Media.Animation.Storyboard.TargetProperty,None,True,True,,(TextBlock.RenderTransform).(RotateTransform.Angle),(TextBlock.RenderTransform).(RotateTransform.Angle),
+Up2dateConsole.g.en-US.resources:app.baml,Application_1:Up2dateConsole.App.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:app.baml,FontFamily_1:System.Windows.Media.FontFamily.$Content,Font,True,True,,/fonts/fontawesome-webfont.ttf\#FontAwesome,/fonts/fontawesome-webfont.ttf\#FontAwesome,

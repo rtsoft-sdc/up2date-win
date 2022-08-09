@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole.Dialogs"
+        xmlns:clr="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Authorization" 
         WindowStartupLocation="CenterOwner"
@@ -23,7 +24,10 @@
                 <Setter x:Uid="Setter_2" Property="Margin" Value="5"/>
                 <Setter x:Uid="Setter_3" Property="MinWidth" Value="70"/>
             </Style>
+            
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
+
+            <clr:String x:Uid="clr:String_1" x:Key="failed_to_acquire_certificate">Failed to acquire certificate</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 

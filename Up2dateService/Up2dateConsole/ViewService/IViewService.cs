@@ -15,6 +15,8 @@ namespace Up2dateConsole.ViewService
         /// </summary>
         void ShowMainWindow();
 
+        string GetTextFromResource<TTextEnum>(Type viewModelType, TTextEnum textEnum) where TTextEnum : Enum;
+
         /// <summary>
         /// Registers dialog
         /// </summary>
@@ -27,16 +29,15 @@ namespace Up2dateConsole.ViewService
         /// </summary>
         /// <param name="viewModel">View model that will be set as data context for the dialog</param>
         /// <returns>True if OK</returns>
-        bool ShowDialog(DialogViewModelBase viewModel);
+        bool ShowDialog(IDialogViewModel viewModel);
 
         /// <summary>
         /// Displays a message box
         /// </summary>
         /// <param name="text">A String that specifies the text to display</param>
-        /// <param name="caption">A String that specifies the title bar caption to display</param>
         /// <param name="buttons">A MessageBoxButton value that specifies which button or buttons to display</param>
         /// <returns>MessageBoxResult</returns>
-        MessageBoxResult ShowMessageBox(string text, string caption = null, MessageBoxButton buttons = MessageBoxButton.OK);
+        MessageBoxResult ShowMessageBox(string text, MessageBoxButton buttons = MessageBoxButton.OK);
 
         /// <summary>
         /// Shows Win32 SaveFileDialog

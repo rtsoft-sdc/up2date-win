@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole"
+        xmlns:clr="clr-namespace:System;assembly=mscorlib"
         xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
         mc:Ignorable="d"
@@ -27,6 +28,33 @@
             </Style>
 
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
+
+            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage" xml:space="preserve">Communication certificate for RITMS UP2DATE \"{0}\" is acquired&#x0a;but there is still problem establishing connection to the server.&#x0a;&#x0a;Please check if acquired certificate is valid.</clr:String>
+            <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Communication certificate for RITMS UP2DATE \"{0}\" successfully acquired.</clr:String>
+            <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
+            <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
+            <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
+            <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized" xml:space="preserve">This device has not initialized to connect RITMS UP2DATE. You should provide a certification key.&#x0a;&#x0a;Note that this action requires administrative privileges.</clr:String>
+            <clr:String x:Uid="clr:String_7" x:Key="AgentInternalError">Agent internal error.</clr:String>
+            <clr:String x:Uid="clr:String_8" x:Key="CannotAccessServer">Cannot access server.</clr:String>
+            <clr:String x:Uid="clr:String_9" x:Key="CertificateNotAvailable">Authorization certificate is not available.</clr:String>
+            <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
+            <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
+            <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>
+            <clr:String x:Uid="clr:String_13" x:Key="NoCertificate">Authorization certificate is not available</clr:String>
+            <clr:String x:Uid="clr:String_14" x:Key="ServerUnaccessible">Cannot access server</clr:String>
+            <clr:String x:Uid="clr:String_15" x:Key="AgentOrServerFilure">Agent or server failure</clr:String>
+
+            <clr:String x:Uid="clr:String_16" x:Key="PackageStatusUnavailable">Unavailable</clr:String>
+            <clr:String x:Uid="clr:String_17" x:Key="PackageStatusAvailable">Available</clr:String>
+            <clr:String x:Uid="clr:String_18" x:Key="PackageStatusDownloading">Downloading</clr:String>
+            <clr:String x:Uid="clr:String_19" x:Key="PackageStatusDownloaded">Downloaded</clr:String>
+            <clr:String x:Uid="clr:String_20" x:Key="PackageStatusInstalling">Installing</clr:String>
+            <clr:String x:Uid="clr:String_21" x:Key="PackageStatusInstalled">Installed</clr:String>
+            <clr:String x:Uid="clr:String_22" x:Key="PackageStatusRestartNeeded">RestartNeeded</clr:String>
+            <clr:String x:Uid="clr:String_23" x:Key="PackageStatusFailed">Failed</clr:String>
+            <clr:String x:Uid="clr:String_24" x:Key="PackageStatusUnknown">Unknown</clr:String>
+
         </ResourceDictionary>
     </Window.Resources>
 
