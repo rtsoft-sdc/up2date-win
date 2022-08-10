@@ -24,7 +24,7 @@ jobs:
           url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
           target: .\locbaml
 
-      - Name: check locbaml download
+      - name: check locbaml download
         run:  dir .\locbaml
 
       - name: Install .NET Core
