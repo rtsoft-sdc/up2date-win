@@ -29,12 +29,12 @@
 
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
 
-            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage" xml:space="preserve">Communication certificate for RITMS UP2DATE \"{0}\" is acquired&#x0a;but there is still problem establishing connection to the server.&#x0a;&#x0a;Please check if acquired certificate is valid.</clr:String>
+            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Communication certificate for RITMS UP2DATE \"{0}\" is acquired but there is still problem establishing connection to the server. Please check if acquired certificate is valid.</clr:String>
             <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Communication certificate for RITMS UP2DATE \"{0}\" successfully acquired.</clr:String>
             <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
             <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
             <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
-            <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized" xml:space="preserve">This device has not initialized to connect RITMS UP2DATE. You should provide a certification key.&#x0a;&#x0a;Note that this action requires administrative privileges.</clr:String>
+            <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should provide a certification key. Note that this action requires administrative privileges.</clr:String>
             <clr:String x:Uid="clr:String_7" x:Key="AgentInternalError">Agent internal error.</clr:String>
             <clr:String x:Uid="clr:String_8" x:Key="CannotAccessServer">Cannot access server.</clr:String>
             <clr:String x:Uid="clr:String_9" x:Key="CertificateNotAvailable">Authorization certificate is not available.</clr:String>

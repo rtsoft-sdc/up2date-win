@@ -46,7 +46,7 @@ jobs:
         shell: cmd
         run: msbuild "%SLN_PATH%" /t:restore /p:RestorePackagesConfig=true
 
-      - name: Build Setup.exe
+      - name: Build solution
         shell: cmd
         run: devenv "%SLN_PATH%" /build "Release"
 
