@@ -23,17 +23,9 @@ jobs:
           url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
           target: .\locbaml
 
-      - name: check locbaml download
-        run:  dir .\locbaml
-
       - name: Set locbaml path
         run: |
           echo "locbaml=$(pwd)\locbaml\locbaml.exe" >> $env:GITHUB_ENV
-
-      - name: Set locbaml path
-        shell: cmd
-        run: |
-          echo "%locbaml%"
 
       - name: Install .NET Core
         uses: actions/setup-dotnet@v2
