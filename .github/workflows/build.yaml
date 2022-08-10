@@ -19,7 +19,6 @@ jobs:
         uses: actions/checkout@v3
 
       - uses: suisei-cn/actions-download-file@v1.0.1
-        id: locbaml.exe  # Remember to give an ID if you need the output filename
         name: Download the file
         with:
           url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
