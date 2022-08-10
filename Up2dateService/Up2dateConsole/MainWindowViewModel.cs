@@ -21,6 +21,7 @@ namespace Up2dateConsole
     public enum Texts
     {
         GoodCertificateMessage,
+        BadCertificateMessage,
         CannotStartInstallation,
         ServiceNotResponding,
         ServiceAccessError,
@@ -173,7 +174,7 @@ namespace Up2dateConsole
                 await ExecuteRefresh();
                 if (ServiceState == ServiceState.ServerUnaccessible)
                 {
-                    string message = string.Format(GetText(Texts.GoodCertificateMessage), vm.DeviceId);
+                    string message = string.Format(GetText(Texts.BadCertificateMessage), vm.DeviceId);
                     viewService.ShowMessageBox(message);
                 }
                 else

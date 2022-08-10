@@ -7,6 +7,7 @@ env:
   SLN_PATH: .\Up2dateService\Up2dateService.sln
   ARTIFACTS_PATH_X32: .\Up2dateService\Setup32\Release\
   ARTIFACTS_PATH_X64: .\Up2dateService\Setup64\Release\
+  locbaml: .\locbaml\locbaml.exe
 
 jobs:
   artifacts:
@@ -16,6 +17,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - uses: suisei-cn/actions-download-file@v1.0.1
+        id: locbaml.exe  # Remember to give an ID if you need the output filename
+        name: Download the file
+        with:
+          url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
+          target: locbaml/.
 
       - name: Install .NET Core
         uses: actions/setup-dotnet@v2
