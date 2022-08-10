@@ -371,3 +371,5 @@ Up2dateService/wrapperdll/vcpkg_installed/*
 
 #deps
 Up2dateService/wrapperdll/up2date-cpp
+*.lib
+*.exp

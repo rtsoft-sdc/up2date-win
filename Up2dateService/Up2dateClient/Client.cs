@@ -95,50 +95,66 @@ namespace Up2dateClient
             }
         }
 
-        private bool OnDeploymentAction(IntPtr artifact, DeploymentInfo info)
+        private void OnDeploymentAction(IntPtr artifact, DeploymentInfo info, out ClientResult result)
         {
-            WriteLogEntry($"deployment requested.", info);
+            result.message = String.Empty;
+            result.result = true;
 
+            WriteLogEntry("deployment requested.", info);
             if (!IsSupported(info))
             {
-                WriteLogEntry($"not supported - deployment rejected", info);
-                return false;
+                result.message = "not supported - deployment rejected";
+                WriteLogEntry(result.message, info);
+                result.result = false;
+                return;
             }
 
-            WriteLogEntry($"downloading...", info);
+            WriteLogEntry("downloading...", info);
 
             setupManager.OnDownloadStarted(info.artifactFileName);
-
-            Wrapper.DownloadArtifact(artifact, getDownloadLocation());
+            try
+            {
+                Wrapper.DownloadArtifact(artifact, getDownloadLocation());
+            }
+            catch(Exception e)
+            {
+                result.message = "download failed.";
+                WriteLogEntry(result.message, info);
+                result.result = false;
+                return;
+            }
 
             setupManager.OnDownloadFinished(info.artifactFileName);
 
-            WriteLogEntry($"download completed.", info);
+            WriteLogEntry("download completed.", info);
 
             if (info.updateType == "skip")
             {
-                WriteLogEntry($"skip installation - not requested.", info);
-                return true;
+                result.message = "skip installation - not requested";
+                WriteLogEntry(result.message, info);
+                return;
             }
 
             if (setupManager.IsPackageInstalled(info.artifactFileName))
             {
-                WriteLogEntry($"skip installation - already installed.", info);
-                return true;
+                result.message = "skip installation - already installed";
+                WriteLogEntry(result.message, info);
+                return;
             }
 
             WriteLogEntry($"installing...", info);
             var success = setupManager.InstallPackage(info.artifactFileName);
             if (!success)
             {
-                WriteLogEntry($"installation failed.", info);
+                result.message = "Installation failed.";
+                WriteLogEntry(result.message, info);
+                result.result = false;
+                return;
             }
             else
             {
                 WriteLogEntry($"installation finished.", info);
             }
-
-            return success;
         }
 
         private bool IsSupported(DeploymentInfo info)
