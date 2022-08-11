@@ -10,6 +10,8 @@ namespace Up2dateConsole
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            //Debugger.Launch(); // todo remove for production
+
             if (CommandLineHelper.IsPresent(CommandLineHelper.StartUnelevatedCommand))
             {
                 Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
