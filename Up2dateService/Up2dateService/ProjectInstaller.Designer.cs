@@ -40,8 +40,8 @@ namespace Up2dateService
             // 
             // serviceInstaller
             // 
-            this.serviceInstaller.Description = "RITMS Up2date client service";
-            this.serviceInstaller.DisplayName = "RITMS Up2date";
+            this.serviceInstaller.Description = "RITMS UP2DATE Agent service";
+            this.serviceInstaller.DisplayName = "RITMS UP2DATE";
             this.serviceInstaller.ServiceName = "Up2dateService";
             this.serviceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             this.serviceInstaller.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller_AfterInstall);

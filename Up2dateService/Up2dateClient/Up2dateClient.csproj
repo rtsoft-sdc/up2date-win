@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientResult.cs" />
     <Compile Include="DeploymentInfo.cs" />
     <Compile Include="KeyValuePair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,7 +54,6 @@
       <Name>Up2dateShared</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="cppclient\bin-x64\libcrypto-1_1-x64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

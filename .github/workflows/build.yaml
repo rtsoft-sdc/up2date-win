@@ -1,0 +1,72 @@
+name: artifacts.builder
+
+on:
+  workflow_call:
+
+env:
+  SLN_PATH: .\Up2dateService\Up2dateService.sln
+  ARTIFACTS_PATH_X32: .\Up2dateService\Setup32\Release\
+  ARTIFACTS_PATH_X64: .\Up2dateService\Setup64\Release\
+  
+jobs:
+  artifacts:
+    name: Building artifacts
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: suisei-cn/actions-download-file@v1.0.1
+        name: Download locbaml
+        with:
+          url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
+          target: .\locbaml
+          
+      - name: Clone vcpkg
+        shell: cmd
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git 
+          .\vcpkg\bootstrap-vcpkg.bat
+
+      - name: Set locbaml and vcpkg path
+        run: |
+          echo "locbaml=$(pwd)\locbaml\locbaml.exe" >> $env:GITHUB_ENV
+          echo "VCPKG_ROOT=$(pwd)\vcpkg" >> $env:GITHUB_ENV
+
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2
+      - uses: seanmiddleditch/gha-setup-vsdevenv@v4
+
+      - uses: nuget/setup-nuget@v1
+
+      - name: Disable Out of Process Building
+        run: .\DisableOutOfProcBuild.exe
+        working-directory: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild
+
+      - name: Restore packages
+        shell: cmd
+        run: msbuild "%SLN_PATH%" /t:restore /p:RestorePackagesConfig=true
+
+      - name: Build solution
+        shell: cmd
+        run: devenv "%SLN_PATH%" /build "Release"
+
+      - name: Upload x64 artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: x64
+          path: ${{ env.ARTIFACTS_PATH_X64 }}
+
+      - name: Upload x86 artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: x86
+          path: ${{ env.ARTIFACTS_PATH_X32 }}
