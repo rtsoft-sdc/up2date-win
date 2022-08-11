@@ -8,6 +8,7 @@
     <clr:String x:Uid="clr:String_4" x:Key="CheckCircleIcon">&#xf058;</clr:String>
     <clr:String x:Uid="clr:String_5" x:Key="QuestionIcon">&#xf128;</clr:String>
     <clr:String x:Uid="clr:String_6" x:Key="SpinnerIcon">&#xf110;</clr:String>
+    <clr:String x:Uid="clr:String_7" x:Key="wrenchIcon">&#xf0ad;</clr:String>
 
     <Style x:Uid="Style_1" x:Key="AwesomeIcon" TargetType="{x:Type TextBlock}">
         <Setter x:Uid="Setter_1" Property="FontFamily" Value="{StaticResource FontAwesome}"/>

@@ -101,6 +101,10 @@
                             Content="Install selected" 
                             Command="{Binding InstallCommand}"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings"
+                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock x:Uid="TextBlock_7" Text="{StaticResource wrenchIcon}" Style="{StaticResource ButtonIcon}"/>
+                    </Button>
                     <Button x:Uid="Button_1" Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages">
                         <TextBlock x:Uid="TextBlock_3" Text="{StaticResource RefreshIcon}" Style="{StaticResource ButtonIcon}"/>
                     </Button>

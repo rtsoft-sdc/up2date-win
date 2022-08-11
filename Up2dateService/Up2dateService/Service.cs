@@ -36,7 +36,7 @@ namespace Up2dateService
 
             Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, EventLog);
 
-            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State, certificateProvider, certificateManager);
+            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State, certificateProvider, certificateManager, settingsManager);
             serviceHost = new ServiceHost(wcfService);
             serviceHost.Open();
 

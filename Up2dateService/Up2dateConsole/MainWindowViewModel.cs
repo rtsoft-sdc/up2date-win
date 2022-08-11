@@ -72,6 +72,7 @@ namespace Up2dateConsole
             RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh());
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             RequestCertificateCommand = new RelayCommand(async (_) => await ExecuteRequestCertificateAsync());
+            SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
 
             AvailablePackages = new ObservableCollection<PackageItem>();
 
@@ -85,6 +86,7 @@ namespace Up2dateConsole
         public ICommand ShowConsoleCommand { get; }
         public ICommand QuitCommand { get; }
         public ICommand RequestCertificateCommand { get; }
+        public ICommand SettingsCommand { get; }
 
         public StateIndicatorViewModel StateIndicator { get; } = new StateIndicatorViewModel();
 
@@ -213,6 +215,20 @@ namespace Up2dateConsole
                     Application.Current.Shutdown();
                 }
             };
+        }
+
+        private bool CanSettings(object obj)
+        {
+            // todo block if service is not available
+            return true;
+        }
+
+        private void ExecuteSettings(object obj)
+        {
+            SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory);
+            if (!vm.IsInitialized) return;
+
+            viewService.ShowDialog(vm);
         }
 
         private bool CanInstall(object _)
