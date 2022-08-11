@@ -71,7 +71,7 @@ namespace Up2dateShared
 
         private void LoadCertificate()
         {
-            using (X509Store store = new X509Store(StoreName, StoreLocation.LocalMachine))
+            using (X509Store store = new X509Store(storeName, StoreLocation.LocalMachine))
             {
                 Certificate = GetCertificates(store)?.OfType<X509Certificate2>().FirstOrDefault();
             }
