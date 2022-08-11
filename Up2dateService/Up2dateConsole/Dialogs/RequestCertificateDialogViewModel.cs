@@ -95,7 +95,8 @@ namespace Up2dateConsole.Dialogs
             }
             else
             {
-                viewService.ShowMessageBox($"Failed to acquire certificate.\n\n{error}");
+                string message = viewService.GetText(Texts.FailedToAcquireCertificate) + $"\n\n{error}";
+                viewService.ShowMessageBox(message);
             }
         }
 

@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Up2dateService")]
+[assembly: AssemblyTitle("RITMS UP2DATE Agent service")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Up2dateService")]
+[assembly: AssemblyProduct("RITMS UP2DATE Agent")]
 [assembly: AssemblyCopyright("Copyright ©RTSoft 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -1,4 +1,4 @@
-﻿namespace Up2dateConsole
+﻿namespace Up2dateConsole.StateIndicator
 {
     public enum ServiceState
     {

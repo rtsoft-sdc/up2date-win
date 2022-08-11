@@ -2,6 +2,9 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <UICulture>en-US</UICulture>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{06A754B8-B045-40FE-BADB-2F0469BC43BA}</ProjectGuid>
@@ -39,6 +42,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -73,13 +79,23 @@
       <DependentUpon>RequestCertificateDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CommandLineHelper.cs" />
+    <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="IWcfClientFactory.cs" />
+    <Compile Include="Properties\Resources.ru-RU.Designer.cs">
+      <DependentUpon>Resources.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="StateIndicator\StateIndicatorViewModel.cs" />
+    <Compile Include="StateIndicator\StateIndicator.xaml.cs">
+      <DependentUpon>StateIndicator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewService\IDialogViewModel.cs" />
     <Compile Include="ViewService\IViewService.cs" />
     <Compile Include="Helpers\ThreadHelper.cs" />
     <Compile Include="PackageItem.cs" />
-    <Compile Include="ServiceState.cs" />
-    <Compile Include="StateIndicatorViewModel.cs" />
+    <Compile Include="StateIndicator\ServiceState.cs" />
     <Compile Include="ViewService\DialogViewModelBase.cs" />
     <Compile Include="ViewService\ViewService.cs" />
     <Compile Include="WcfClientFactory.cs" />
@@ -101,6 +117,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="StateIndicator\StateIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowViewModel.cs" />
@@ -117,6 +141,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.ru-RU.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru-RU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -149,6 +177,9 @@
     <None Include="Connected Services\ServiceReference\Up2dateShared.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Resource Include="Fonts\fontawesome-webfont.ttf" />
+    <None Include="Localization\CheckAndGenerate.cmd" />
+    <None Include="Localization\Up2dateConsole_ru-RU.csv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -161,9 +192,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FontAwesome.WPF">
-      <Version>4.7.0.9</Version>
-    </PackageReference>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
       <Version>1.1.0</Version>
     </PackageReference>
@@ -200,5 +228,10 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(ProjectDir)Localization\CheckAndGenerate.cmd" ru-RU $(TargetDir) $(TargetName) $(ProjectDir) $(ProjectName)
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

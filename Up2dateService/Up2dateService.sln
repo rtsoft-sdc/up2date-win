@@ -13,11 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Up2dateClient", "Up2dateCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Up2dateShared", "Up2dateShared\Up2dateShared.csproj", "{1C40CD08-B1B8-4EC1-A41A-719F1E0B3690}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2D0F88E-1BBB-4B90-883A-62B883B0AFEF}"
-	ProjectSection(SolutionItems) = preProject
-		Bugs_and_issues.txt = Bugs_and_issues.txt
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup32", "Setup32", "{F2BCC9C3-4EEA-4D7B-A233-97857F940DF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup64", "Setup64", "{47E8C978-8CE4-43AF-9D8D-44404675FDB7}"
@@ -31,6 +26,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Up2dateTests", "Tests\Up2dateTests\Up2dateTests.csproj", "{DB8778E5-4F26-4919-AEEE-B0D776F7FD6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsShared", "Tests\Tests_Shared\TestsShared.csproj", "{E33D6A3F-E2DB-4B5B-977B-9CCE31098845}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A530F71A-CE5B-457A-A46D-D57A39F6BB55}"
+	ProjectSection(SolutionItems) = preProject
+		Localization.md = Localization.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
