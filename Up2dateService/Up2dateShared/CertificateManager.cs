@@ -71,7 +71,7 @@ namespace Up2dateShared
 
         private void LoadCertificate()
         {
-            using (X509Store store = new X509Store(storeName, StoreLocation.LocalMachine))
+            using (X509Store store = new X509Store(StoreName, StoreLocation.LocalMachine))
             {
                 Certificate = GetCertificates(store)?.OfType<X509Certificate2>().FirstOrDefault();
             }
@@ -125,6 +125,49 @@ namespace Up2dateShared
 
             return fullname.Substring(cnPrefix.Length);
         }
+
+        public bool IsSigned(string file)
+        {
+            X509Certificate2 theCertificate;
+            try
+            {
+                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(file);
+                theCertificate = new X509Certificate2(theSigner);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            var theCertificateChain = new X509Chain();
+            theCertificateChain.ChainPolicy.RevocationFlag = X509RevocationFlag.EntireChain;
+            theCertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.Offline;
+            theCertificateChain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
+            theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
+
+            return theCertificateChain.Build(theCertificate);
+        }
+
+
+        public bool IsSignedByIssuer(string file)
+        {
+            const string cnPrefix = "CN=";
+            X509Certificate2 theCertificate;
+            try
+            {
+                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(file);
+                theCertificate = new X509Certificate2(theSigner);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            if (theCertificate.IssuerName.Name == null) return false;
+            var issuerName = theCertificate.IssuerName.Name.Split(',').First().Substring(cnPrefix.Length);
+            return settingsManager.SelectedIssuers.Contains(issuerName);
+        }
+        
 
     }
 }
