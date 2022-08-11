@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-
 #include "ddi.hpp"
 #include "CallbackDispatcher.hpp"
 
@@ -35,23 +34,47 @@ namespace HkbClient {
 
         bool anyFailed = false;
 
-        for (const auto &chunk: dp->getChunks()) {
-            info.chunkName = chunk->getName();
-            info.chunkPart = chunk->getPart();
-            info.chunkVersion = chunk->getVersion();
+        for (const auto& chunk : dp->getChunks()) {
+            try
+            {
+                info.chunkName = chunk->getName();
+                info.chunkPart = chunk->getPart();
+                info.chunkVersion = chunk->getVersion();
+                for (const auto& artifact : chunk->getArtifacts()) {
+                    builder->addDetail("Attribute deployment started " + artifact->getFilename());
 
-            for (const auto &artifact: chunk->getArtifacts()) {
-                builder->addDetail("Attribute deployment started " + artifact->getFilename());
+                    info.artifactFileName = artifact->getFilename();
+                    info.artifactFileHashMd5 = artifact->getFileHashes().md5;
+                    info.artifactFileHashSha1 = artifact->getFileHashes().sha1;
+                    info.artifactFileHashSha256 = artifact->getFileHashes().sha256;
+                    ClientResult result;
+                    DeployArtifact(artifact, info, result);
+                    bool attrDeployed = result.result;
+                    std::cout << result.result << std::endl;
+                    std::cout << result.message << std::endl;
+                    anyFailed |= !attrDeployed;
+                    
+                    if (attrDeployed)
+                    {
+                        builder->addDetail("Attribute deployment completed " + artifact->getFilename());
+                    }
+                    else
+                    {
+                        builder->addDetail("Attribute deployment failed " + artifact->getFilename());
+                    }
 
-                info.artifactFileName = artifact->getFilename();
-                info.artifactFileHashMd5 = artifact->getFileHashes().md5;
-                info.artifactFileHashSha1 = artifact->getFileHashes().sha1;
-                info.artifactFileHashSha256 = artifact->getFileHashes().sha256;
-
-                bool attrDeployed = DeployArtifact(artifact, info);
-                anyFailed |= !attrDeployed;
-
-                builder->addDetail("Attribute deployment " + attrDeployed ? "completed " : "failed " + artifact->getFilename());
+                    if (!attrDeployed)
+                    {
+                        std::string message = result.message;
+                        builder->addDetail("Message: " + message);
+                    }
+                }
+            }
+            catch(std::exception& error)
+            {
+                anyFailed = true;
+                std::string errorMessage = std::string(error.what());
+                builder->addDetail("Internal Exception Occured: " + errorMessage);
             }
         }
 
@@ -84,7 +107,7 @@ namespace HkbClient {
     void CallbackDispatcher::onNoActions() {
     }
 
-    bool CallbackDispatcher::DeployArtifact(const std::shared_ptr<::Artifact> artifact, DEPLOYMENTINFO info)
+    void CallbackDispatcher::DeployArtifact(const std::shared_ptr<::Artifact> artifact, DEPLOYMENTINFO info, ClientResult& result )
     {
         _DEPLOYMENTINFO callback_info;
         callback_info.id = info.id;
@@ -99,7 +122,7 @@ namespace HkbClient {
         callback_info.artifactFileHashSha1 = info.artifactFileHashSha1.c_str();
         callback_info.artifactFileHashSha256 = info.artifactFileHashSha256.c_str();
 
-        return deploymentAction(artifact.get(), callback_info);
+        deploymentAction(artifact.get(), callback_info, result);
     }
 
 }

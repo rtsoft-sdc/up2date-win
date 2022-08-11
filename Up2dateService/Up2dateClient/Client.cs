@@ -97,20 +97,46 @@ namespace Up2dateClient
             }
         }
 
-        private bool OnDeploymentAction(IntPtr artifact, DeploymentInfo info)
+        private void OnDeploymentAction(IntPtr artifact, DeploymentInfo info, out ClientResult result)
         {
+            result = new ClientResult
+            {
+                Message = string.Empty,
+                Success = true
+            };
+
             WriteLogEntry("deployment requested.", info);
+
             if (!IsExtensionAllowed(info))
             {
-                WriteLogEntry("Package is not allowed - deployment rejected", info);
-                return false;
+                result.Message = "Package is not allowed - deployment rejected";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
+                return;
+            }
+
+            if (!IsSupported(info))
+            {
+                result.Message = "not supported - deployment rejected";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
+                return;
             }
 
             WriteLogEntry("downloading...", info);
 
             setupManager.OnDownloadStarted(info.artifactFileName);
-
-            Wrapper.DownloadArtifact(artifact, getDownloadLocation());
+            try
+            {
+                Wrapper.DownloadArtifact(artifact, getDownloadLocation());
+            }
+            catch(Exception)
+            {
+                result.Message = "download failed.";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
+                return;
+            }
 
             setupManager.OnDownloadFinished(info.artifactFileName);
 
@@ -119,44 +145,48 @@ namespace Up2dateClient
             if (settingsManager.CheckSignature && !certificateManager.IsSigned(filePath))
             {
                 File.Delete(filePath);
-                WriteLogEntry("File not signed. File deleted", info);
-                return false;
+                result.Message = "File not signed. File deleted";
+                result.Success = false;
+                WriteLogEntry(result.Message, info);
+                return;
             }
 
             if(settingsManager.InstallAppFromSelectedIssuer && certificateManager.IsSignedByIssuer(filePath))
             {
+                result.Message = "File not signed by selected issuer. File deleted";
+                result.Success = false;
                 File.Delete(filePath);
-                WriteLogEntry("File not signed by selected issuer. File deleted", info);
-                return false;
+                WriteLogEntry(result.Message, info);
+                return;
             }
 
             if (info.updateType == "skip")
             {
-                WriteLogEntry("skip installation - not requested.", info);
-                return true;
+                result.Message = "skip installation - not requested";
+                WriteLogEntry(result.Message, info);
+                return;
             }
 
             if (setupManager.IsPackageInstalled(info.artifactFileName))
             {
-                WriteLogEntry("skip installation - already installed.", info);
-                return true;
+                result.Message = "skip installation - already installed";
+                WriteLogEntry(result.Message, info);
+                return;
             }
 
-            bool success;
             if (IsSupported(info))
-            {
                 WriteLogEntry("installing...", info);
-                success = setupManager.InstallPackage(info.artifactFileName);
-                WriteLogEntry(!success ? "installation failed." : "installation finished.", info);
+            var success = setupManager.InstallPackage(info.artifactFileName);
+            if (!success)
+            {
+                result.Message = "Installation failed.";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
             }
             else
             {
-                WriteLogEntry("Package is not supported for installing...", info);
-                success = false;
+                WriteLogEntry("installation finished.", info);
             }
-
-
-            return success;
         }
 
         private bool IsExtensionAllowed(DeploymentInfo info)
@@ -197,4 +227,3 @@ namespace Up2dateClient
         }
     }
 }
-            

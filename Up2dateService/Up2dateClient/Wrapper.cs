@@ -62,7 +62,7 @@ namespace Up2dateClient
 
         public delegate void ConfigRequestFunc(IntPtr responseBuilder);
 
-        public delegate bool DeploymentActionFunc(IntPtr artifact, DeploymentInfo info);
+        public delegate void DeploymentActionFunc(IntPtr artifact, DeploymentInfo info, out ClientResult result);
 
         public delegate bool CancelActionFunc(int stopId);
 

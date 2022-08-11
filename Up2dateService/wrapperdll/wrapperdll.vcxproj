@@ -63,10 +63,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>build.bat $(Configuration)</NMakeBuildCommandLine>
     <NMakeOutput>wrapperdll.dll</NMakeOutput>
-    <NMakeCleanCommandLine>rm -r build_$(PlatformShortName)</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>RMDIR /S /Q build_$(PlatformShortName)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>build.bat $(Configuration)</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)wrapperdll\up2date-cpp\ddi\include;$(SolutionDir)wrapperdll\up2date-cpp\dps\include</ExternalIncludePath>
     <NMakeIncludeSearchPath>$(SolutionDir)wrapperdll\up2date-cpp\dps\include;$(SolutionDir)wrapperdll\up2date-cpp\ddi\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
