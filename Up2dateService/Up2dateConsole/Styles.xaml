@@ -1,0 +1,46 @@
+﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:clr="clr-namespace:System;assembly=mscorlib"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <clr:String x:Uid="clr:String_1" x:Key="KeyIcon">&#xf084;</clr:String>
+    <clr:String x:Uid="clr:String_2" x:Key="RefreshIcon">&#xf021;</clr:String>
+    <clr:String x:Uid="clr:String_3" x:Key="ExclamationTriangleIcon">&#xf071;</clr:String>
+    <clr:String x:Uid="clr:String_4" x:Key="CheckCircleIcon">&#xf058;</clr:String>
+    <clr:String x:Uid="clr:String_5" x:Key="QuestionIcon">&#xf128;</clr:String>
+    <clr:String x:Uid="clr:String_6" x:Key="SpinnerIcon">&#xf110;</clr:String>
+
+    <Style x:Uid="Style_1" x:Key="AwesomeIcon" TargetType="{x:Type TextBlock}">
+        <Setter x:Uid="Setter_1" Property="FontFamily" Value="{StaticResource FontAwesome}"/>
+        <Setter x:Uid="Setter_2" Property="VerticalAlignment" Value="Center"/>
+        <Setter x:Uid="Setter_3" Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Uid="Style_2" x:Key="ButtonIcon" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource AwesomeIcon}">
+        <Setter x:Uid="Setter_4" Property="Foreground" Value="Gray"/>
+        <Setter x:Uid="Setter_5" Property="FontSize" Value="16"/>
+    </Style>
+
+    <Style x:Uid="Style_3" x:Key="StateIcon" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource AwesomeIcon}">
+        <Setter x:Uid="Setter_6" Property="FontSize" Value="18"/>
+    </Style>
+
+    <Style x:Uid="Style_4" x:Key="RotatingStateIcon" BasedOn="{StaticResource StateIcon}" TargetType="{x:Type TextBlock}">
+        <Setter x:Uid="Setter_7" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter x:Uid="Setter_8" Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform x:Uid="RotateTransform_1"/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <EventTrigger x:Uid="EventTrigger_1" RoutedEvent="TextBlock.Loaded">
+                <BeginStoryboard x:Uid="BeginStoryboard_1">
+                    <Storyboard x:Uid="Storyboard_1">
+                        <DoubleAnimation x:Uid="DoubleAnimation_1" Duration="0:0:1" From="0" To="360" RepeatBehavior="Forever"
+                                            Storyboard.TargetProperty="(TextBlock.RenderTransform).(RotateTransform.Angle)"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
