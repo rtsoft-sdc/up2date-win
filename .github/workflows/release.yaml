@@ -1,0 +1,100 @@
+name: release.builder
+
+on:
+  workflow_call:
+
+jobs:
+  release:
+    name: Make release draft
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Make download folder
+        shell: bash
+        run: mkdir artifacts
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: .\artifacts\
+
+      - name: Build x64 deploy archive
+        uses: vimtor/action-zip@v1
+        with:
+          files: .\artifacts\x64\ .\LICENSE .\Up2dateService\README.txt
+          dest: .\up2date.windows-x64.zip
+
+      - name: Upload x64 deploy archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: x64.zip
+          path: .\up2date.windows-x64.zip
+
+      - name: Build x86 deploy archive
+        uses: vimtor/action-zip@v1
+        with:
+          files: .\artifacts\x86\ .\LICENSE .\Up2dateService\README.txt
+          dest: .\up2date.windows-x86.zip
+
+      - name: Upload x86 deploy archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: x86.zip
+          path: .\up2date.windows-x86.zip
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            ## Draft commit created by workflow
+            ### put data here
+          draft: true
+          prerelease: false
+
+      - name: Upload up2date.windows-x64.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\up2date.windows-x64.zip
+          asset_name: up2date.windows-x64.zip
+          asset_content_type: application/zip
+
+      - name: Upload up2date.windows-x86.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\up2date.windows-x86.zip
+          asset_name: up2date.windows-x86.zip
+          asset_content_type: application/zip
+
+      - name: Upload LICENCE
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\LICENSE
+          asset_name: LICENSE
+          asset_content_type: text/plain
+
+      - name: Upload README.txt
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .\Up2dateService\README.txt
+          asset_name: README.txt
+          asset_content_type: text/plain

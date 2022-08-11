@@ -1,0 +1,41 @@
+﻿<UserControl x:Uid="UserControl_1" x:Class="Up2dateConsole.StateIndicator.StateIndicator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Up2dateConsole.StateIndicator" 
+             xmlns:helpers="clr-namespace:Up2dateConsole.Helpers"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance local:StateIndicatorViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="..\Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <helpers:EnumToVisibilityConverter x:Uid="helpers:EnumToVisibilityConverter_1" x:Key="EnumToVisibilityConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid x:Uid="Grid_1">
+        <TextBlock x:Uid="TextBlock_1" Style="{StaticResource StateIcon}" Text="{StaticResource CheckCircleIcon}" Foreground="Green"
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.Active}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+        <TextBlock x:Uid="TextBlock_2" Style="{StaticResource StateIcon}" Text="{StaticResource ExclamationTriangleIcon}" Foreground="DarkOrange"
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.ClientUnaccessible}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+        <TextBlock x:Uid="TextBlock_3" Style="{StaticResource StateIcon}" Text="{StaticResource ExclamationTriangleIcon}" Foreground="Red"
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.Error}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+        <TextBlock x:Uid="TextBlock_4" Style="{StaticResource StateIcon}" Text="{StaticResource KeyIcon}" Foreground="DarkOrange"
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.NoCertificate}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+        <TextBlock x:Uid="TextBlock_5" Style="{StaticResource StateIcon}" Text="{StaticResource KeyIcon}" Foreground="DarkOrange"
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.ServerUnaccessible}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+        <TextBlock x:Uid="TextBlock_6" Style="{StaticResource StateIcon}" Text="{StaticResource QuestionIcon}" Foreground="Gray"
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.Unknown}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+        <TextBlock x:Uid="TextBlock_7" Style="{StaticResource RotatingStateIcon}" Text="{StaticResource SpinnerIcon}" Foreground="Gray"
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.Accessing}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+
+        <Grid.ToolTip>
+            <TextBlock x:Uid="TextBlock_8" Text="{Binding Info}" MaxWidth="400" TextWrapping="Wrap"/>
+        </Grid.ToolTip>
+    </Grid>
+</UserControl>

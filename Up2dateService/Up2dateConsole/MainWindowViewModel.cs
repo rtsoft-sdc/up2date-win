@@ -13,10 +13,38 @@ using System.Windows.Input;
 using Up2dateConsole.Dialogs;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
+using Up2dateConsole.StateIndicator;
 using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
 {
+    public enum Texts
+    {
+        GoodCertificateMessage,
+        BadCertificateMessage,
+        CannotStartInstallation,
+        ServiceNotResponding,
+        ServiceAccessError,
+        DeviceNotInitialized,
+        CertificateNotAvailable,
+        NewPackageAvailable,
+        NewPackageInstalled,
+        ClientUnaccessible,
+        NoCertificate,
+        ServerUnaccessible,
+        AgentOrServerFilure,
+        PackageStatusUnavailable,
+        PackageStatusAvailable,
+        PackageStatusDownloading,
+        PackageStatusDownloaded,
+        PackageStatusInstalling,
+        PackageStatusInstalled,
+        PackageStatusRestartNeeded,
+        PackageStatusFailed,
+        PackageStatusUnknown,
+        FailedToAcquireCertificate,
+    }
+
     public class MainWindowViewModel : NotifyPropertyChanged
     {
         private const int InitialDelay = 1000; // milliseconds
@@ -149,13 +177,13 @@ namespace Up2dateConsole
                 await ExecuteRefresh();
                 if (ServiceState == ServiceState.ServerUnaccessible)
                 {
-                    viewService.ShowMessageBox($"Communication certificate for RITMS UP2DATE \"{vm.DeviceId}\" is acquired " +
-                        "but there is still problem establishing connection to the server.\n" +
-                        "Please check if acquired certificate is valid.");
+                    string message = string.Format(GetText(Texts.BadCertificateMessage), vm.DeviceId);
+                    viewService.ShowMessageBox(message);
                 }
                 else
                 {
-                    viewService.ShowMessageBox($"Communication certificate for RITMS UP2DATE \"{vm.DeviceId}\" successfully acquired.");
+                    string message = string.Format(GetText(Texts.GoodCertificateMessage), vm.DeviceId);
+                    viewService.ShowMessageBox(message);
                 }
             }
         }
@@ -192,7 +220,7 @@ namespace Up2dateConsole
             if (ServiceState != ServiceState.Active) return false;
 
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
-            return selected.Any() && selected.All(p => p.Status == PackageStatus.Downloaded);
+            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded);
         }
 
         private async void ExecuteInstall(object _)
@@ -201,7 +229,7 @@ namespace Up2dateConsole
             IWcfService service = null;
 
             Package[] selectedPackages = AvailablePackages
-                .Where(p => p.IsSelected && p.Status == PackageStatus.Downloaded)
+                .Where(p => p.IsSelected && p.Package.Status == PackageStatus.Downloaded)
                 .Select(p => p.Package)
                 .ToArray();
             try
@@ -213,16 +241,16 @@ namespace Up2dateConsole
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                var message = "RITMS Up2date client is not responding. Please check if Up2dateService is running.";
+                var message = GetText(Texts.CannotStartInstallation);
                 StateIndicator.SetInfo(message);
-                viewService.ShowMessageBox($"Cannot start installation:\n{message}", "Error");
+                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}");
             }
             catch (Exception e)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
                 var message = e.Message;
                 StateIndicator.SetInfo(message);
-                viewService.ShowMessageBox($"Cannot start installation:\n{message}\n\nStackTrace:\n{e.StackTrace}", "Error");
+                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}\n\n{e.StackTrace}");
             }
             finally
             {
@@ -250,7 +278,7 @@ namespace Up2dateConsole
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                StateIndicator.SetInfo("RITMS Up2date client is not responding. Please check if Up2dateService is running.");
+                StateIndicator.SetInfo(GetText(Texts.ServiceNotResponding));
                 DeviceId = null;
                 OperationInProgress = false;
                 return;
@@ -258,7 +286,7 @@ namespace Up2dateConsole
             catch (Exception e)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                StateIndicator.SetInfo($"Error accessing RITMS Up2date client. {e.Message}\n\nStackTrace:\n{e.StackTrace}");
+                StateIndicator.SetInfo($"GetText(Texts.ServiceAccessError)\n{e.Message}\n\n{e.StackTrace}");
                 DeviceId = null;
                 OperationInProgress = false;
                 return;
@@ -274,7 +302,7 @@ namespace Up2dateConsole
             foreach (Package p in packages)
             {
                 bool wasSelected = selected.Any(s => s.Filepath.Equals(p.Filepath, StringComparison.InvariantCultureIgnoreCase));
-                packageItems.Add(new PackageItem(p) { IsSelected = wasSelected });
+                packageItems.Add(new PackageItem(p, ConvertToString) { IsSelected = wasSelected });
             }
 
             if (!firstTimeRefresh)
@@ -302,6 +330,31 @@ namespace Up2dateConsole
             OperationInProgress = false;
         }
 
+        private string ConvertToString(PackageStatus status)
+        {
+            switch (status)
+            {
+                case PackageStatus.Unavailable:
+                    return GetText(Texts.PackageStatusUnavailable);
+                case PackageStatus.Available:
+                    return GetText(Texts.PackageStatusAvailable);
+                case PackageStatus.Downloading:
+                    return GetText(Texts.PackageStatusDownloading);
+                case PackageStatus.Downloaded:
+                    return GetText(Texts.PackageStatusDownloaded);
+                case PackageStatus.Installing:
+                    return GetText(Texts.PackageStatusInstalling);
+                case PackageStatus.Installed:
+                    return GetText(Texts.PackageStatusInstalled);
+                case PackageStatus.RestartNeeded:
+                    return GetText(Texts.PackageStatusRestartNeeded);
+                case PackageStatus.Failed:
+                    return GetText(Texts.PackageStatusFailed);
+                default:
+                    return GetText(Texts.PackageStatusUnknown);
+            }
+        }
+
         private void PromptIfCertificateNotAvailable()
         {
             if (ServiceState == ServiceState.NoCertificate)
@@ -314,9 +367,7 @@ namespace Up2dateConsole
                     }
                     else
                     {
-                        MessageBoxResult r = viewService.ShowMessageBox("This device has not initialized to connect RITMS UP2DATE.\n" +
-                            "You should provide a certification key.\n\n" +
-                            "Note that this action requires administrative privileges.", buttons: MessageBoxButton.OKCancel);
+                        MessageBoxResult r = viewService.ShowMessageBox(GetText(Texts.DeviceNotInitialized), buttons: MessageBoxButton.OKCancel);
                         if (r == MessageBoxResult.OK)
                         {
                             ExecuteEnterAdminMode(null);
@@ -335,15 +386,15 @@ namespace Up2dateConsole
                     break;
                 case ClientStatus.Stopped:
                     ServiceState = ServiceState.Error;
-                    StateIndicator.SetInfo($"Client internal error. {clientState.LastError}");
+                    StateIndicator.SetInfo($"{GetText(Texts.CertificateNotAvailable)} {clientState.LastError}");
                     break;
                 case ClientStatus.CannotAccessServer:
                     ServiceState = ServiceState.ServerUnaccessible;
-                    StateIndicator.SetInfo($"Cannot access server. {clientState.LastError}");
+                    StateIndicator.SetInfo($"{GetText(Texts.CertificateNotAvailable)} {clientState.LastError}");
                     break;
                 case ClientStatus.NoCertificate:
                     ServiceState = ServiceState.NoCertificate;
-                    StateIndicator.SetInfo($"Authorization certificate is not available.");
+                    StateIndicator.SetInfo(GetText(Texts.CertificateNotAvailable));
                     break;
                 default:
                     throw new InvalidOperationException($"unsupported status {clientState.Status}");
@@ -354,19 +405,21 @@ namespace Up2dateConsole
         {
             IEnumerable<PackageItem> GetNewItemsWithStatus(PackageStatus status)
             {
-                return newList.Where(p => p.Status == status && !oldList.Any(pi => pi.Status == status && pi.Package.Filepath.Equals(p.Package.Filepath, StringComparison.InvariantCultureIgnoreCase)));
+                return newList.Where(p => p.Package.Status == status && !oldList
+                                .Any(pi => pi.Package.Status == status
+                                    && pi.Package.Filepath.Equals(p.Package.Filepath, StringComparison.InvariantCultureIgnoreCase)));
             }
 
             var newDownloaded = GetNewItemsWithStatus(PackageStatus.Downloaded).ToList();
             if (newDownloaded.Any())
             {
-                TryShowToastNotification("New software available for installation:", newDownloaded.Select(p => p.ProductName));
+                TryShowToastNotification(GetText(Texts.NewPackageAvailable), newDownloaded.Select(p => p.ProductName));
             }
 
             var newInstalled = GetNewItemsWithStatus(PackageStatus.Installed).ToList();
             if (newInstalled.Any())
             {
-                TryShowToastNotification("New software installed:", newInstalled.Select(p => p.ProductName));
+                TryShowToastNotification(GetText(Texts.NewPackageInstalled), newInstalled.Select(p => p.ProductName));
 
             }
         }
@@ -426,20 +479,27 @@ namespace Up2dateConsole
                 switch (ServiceState)
                 {
                     case ServiceState.ClientUnaccessible:
-                        extraText = "\nClient is not running or inaccessible";
+                        extraText = GetText(Texts.ClientUnaccessible);
                         break;
                     case ServiceState.NoCertificate:
-                        extraText = "\nAuthorization certificate is not available";
+                        extraText = GetText(Texts.NoCertificate);
                         break;
                     case ServiceState.ServerUnaccessible:
-                        extraText = "\nCannot access server";
+                        extraText = GetText(Texts.ServerUnaccessible);
                         break;
                     case ServiceState.Error:
-                        extraText = "\nClient or server failure";
+                        extraText = GetText(Texts.AgentOrServerFilure);
+                        break;
+                    default:
                         break;
                 }
-                return "RITMS Up2date" + extraText;
+                return "RITMS UP2DATE" + (string.IsNullOrEmpty(extraText) ? string.Empty : "\n" + extraText);
             }
+        }
+
+        private string GetText(Texts text)
+        {
+            return viewService.GetText(text);
         }
     }
 }

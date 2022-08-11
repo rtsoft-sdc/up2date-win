@@ -1,6 +1,4 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
-using Microsoft.Win32.TaskScheduler;
-using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
@@ -12,6 +10,8 @@ namespace Up2dateConsole
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            //Debugger.Launch(); // todo remove for production
+
             if (CommandLineHelper.IsPresent(CommandLineHelper.StartUnelevatedCommand))
             {
                 Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);

@@ -8,18 +8,20 @@ namespace Up2dateConsole
 {
     public class PackageItem : NotifyPropertyChanged
     {
+        private readonly Func<PackageStatus, string> statusToString;
         private bool isSelected;
 
-        public PackageItem(Package package)
+        public PackageItem(Package package, Func<PackageStatus, string> statusToString)
         {
             Package = package;
+            this.statusToString = statusToString ?? throw new ArgumentNullException(nameof(statusToString));
         }
 
         public Package Package { get; }
 
         public string Filename => Path.GetFileName(Package.Filepath);
 
-        public PackageStatus Status => Package.Status;
+        public string Status => statusToString(Package.Status);
 
         public string ProductName => string.IsNullOrWhiteSpace(Package.DisplayName) ? Package.ProductName : Package.DisplayName;
 
