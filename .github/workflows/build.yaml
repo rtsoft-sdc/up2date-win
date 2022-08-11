@@ -26,7 +26,7 @@ jobs:
       - name: Clone vcpkg
         shell: cmd
         run: |
-          git clone https://github.com/microsoft/vcpkg.git && \
+          git clone https://github.com/microsoft/vcpkg.git 
           .\vcpkg\bootstrap-vcpkg.bat
 
       - name: Set locbaml and vcpkg path
