@@ -54,7 +54,6 @@
       <Name>Up2dateShared</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="cppclient\bin-x64\libcrypto-1_1-x64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
