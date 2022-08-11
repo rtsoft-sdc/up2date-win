@@ -13,6 +13,7 @@ namespace Up2dateConsole
 
             IViewService viewService = new ViewService.ViewService();
             viewService.RegisterDialog(typeof(RequestCertificateDialogViewModel), typeof(RequestCertificateDialog));
+            viewService.RegisterDialog(typeof(SettingsDialogViewModel), typeof(SettingsDialog));
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
 

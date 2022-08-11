@@ -17,9 +17,10 @@ namespace Up2dateService
         private readonly Func<ClientState> getClientState;
         private readonly ICertificateProvider certificateProvider;
         private readonly ICertificateManager certificateManager;
+        private readonly ISettingsManager settingsManager;
 
         public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, Func<ClientState> getClientState, 
-            ICertificateProvider certificateProvider, ICertificateManager certificateManager)
+            ICertificateProvider certificateProvider, ICertificateManager certificateManager, ISettingsManager settingsManager)
         {
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
@@ -27,6 +28,7 @@ namespace Up2dateService
             this.getClientState = getClientState ?? throw new ArgumentNullException(nameof(getClientState));
             this.certificateProvider = certificateProvider ?? throw new ArgumentNullException(nameof(certificateProvider));
             this.certificateManager = certificateManager ?? throw new ArgumentNullException(nameof(certificateManager));
+            this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
         }
 
         public List<Package> GetPackages()
@@ -82,6 +84,26 @@ namespace Up2dateService
                 return Result<string>.Failed(e.Message);
             }
             return Result<string>.Successful(GetDeviceId());
+        }
+
+        public string GetRequestCertificateUrl()
+        {
+            return settingsManager.RequestCertificateUrl;
+        }
+
+        public void SetRequestCertificateUrl(string url)
+        {
+            settingsManager.RequestCertificateUrl = url;
+        }
+
+        public string GetProvisioningUrl()
+        {
+            return settingsManager.ProvisioningUrl;
+        }
+
+        public void SetProvisioningUrl(string url)
+        {
+            settingsManager.ProvisioningUrl = url;
         }
     }
 }

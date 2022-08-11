@@ -78,6 +78,10 @@
     <Compile Include="Dialogs\RequestCertificateDialog.xaml.cs">
       <DependentUpon>RequestCertificateDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\SettingsDialog.xaml.cs">
+      <DependentUpon>SettingsDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SettingsDialogViewModel.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
@@ -100,6 +104,10 @@
     <Compile Include="ViewService\ViewService.cs" />
     <Compile Include="WcfClientFactory.cs" />
     <Page Include="Dialogs\RequestCertificateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\SettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,6 +157,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <None Include="Connected Services\ServiceReference\RTSoft.Ritms.Up2date.win.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -177,7 +186,6 @@
     <None Include="Connected Services\ServiceReference\Up2dateShared.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <None Include="Localization\CheckAndGenerate.cmd" />
     <None Include="Localization\Up2dateConsole_ru-RU.csv" />
     <None Include="Properties\Settings.settings">
@@ -228,7 +236,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)Localization\CheckAndGenerate.cmd" ru-RU $(TargetDir) $(TargetName) $(ProjectDir) $(ProjectName)

@@ -4,9 +4,9 @@ namespace Up2dateShared
 {
     public interface ISettingsManager
     {
-        string ProvisioningUrl { get; }
+        string ProvisioningUrl { get; set; }
         string XApigToken { get; }
-        string RequestCertificateUrl { get; }
+        string RequestCertificateUrl { get; set; }
         string CertificateSerialNumber { get; set; }
 
         List<string> PackageExtensionFilterList { get; set; }

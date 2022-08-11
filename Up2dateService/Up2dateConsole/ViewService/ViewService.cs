@@ -35,6 +35,11 @@ namespace Up2dateConsole.ViewService
             return MessageBox.Show(TopWindow, text, TopWindow?.Title, buttons);
         }
 
+        public MessageBoxResult ShowMessageBox<TTextEnum>(TTextEnum textEnum, MessageBoxButton buttons = MessageBoxButton.OK) where TTextEnum : Enum
+        {
+            return ShowMessageBox(GetText(textEnum), buttons);
+        }
+
         public string ShowSaveDialog(string title, string filter, string defaultExt = null, string initialDirectory = null)
         {
             var dlg = new SaveFileDialog
