@@ -106,6 +106,15 @@ namespace Up2dateClient
             };
 
             WriteLogEntry("deployment requested.", info);
+
+            if (!IsExtensionAllowed(info))
+            {
+                result.Message = "Package is not allowed - deployment rejected";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
+                return;
+            }
+
             if (!IsSupported(info))
             {
                 result.Message = "not supported - deployment rejected";
