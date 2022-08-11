@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
-namespace Up2dateShared
+using Up2dateShared;
+
+namespace TestsShared
 {
-    public class SettingsManager : ISettingsManager
+    public class SettingsManagerMock : ISettingsManager
     {
         private const string AppSettingSectionName = "appSettings";
 
