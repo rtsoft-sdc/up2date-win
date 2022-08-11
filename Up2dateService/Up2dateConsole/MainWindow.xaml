@@ -29,8 +29,8 @@
 
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
 
-            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Communication certificate for RITMS UP2DATE \"{0}\" is acquired but there is still problem establishing connection to the server. Please check if acquired certificate is valid.</clr:String>
-            <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Communication certificate for RITMS UP2DATE \"{0}\" successfully acquired.</clr:String>
+            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' is acquired but there is still problem establishing connection to the server. Please check if acquired certificate is valid.</clr:String>
+            <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' successfully acquired.</clr:String>
             <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
             <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
             <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
