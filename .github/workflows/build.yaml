@@ -7,7 +7,7 @@ env:
   SLN_PATH: .\Up2dateService\Up2dateService.sln
   ARTIFACTS_PATH_X32: .\Up2dateService\Setup32\Release\
   ARTIFACTS_PATH_X64: .\Up2dateService\Setup64\Release\
-
+  
 jobs:
   artifacts:
     name: Building artifacts
@@ -16,6 +16,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - uses: suisei-cn/actions-download-file@v1.0.1
+        name: Download locbaml
+        with:
+          url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
+          target: .\locbaml
+
+      - name: Set locbaml path
+        run: |
+          echo "locbaml=$(pwd)\locbaml\locbaml.exe" >> $env:GITHUB_ENV
 
       - name: Install .NET Core
         uses: actions/setup-dotnet@v2
@@ -36,7 +46,7 @@ jobs:
         shell: cmd
         run: msbuild "%SLN_PATH%" /t:restore /p:RestorePackagesConfig=true
 
-      - name: Build Setup.exe
+      - name: Build solution
         shell: cmd
         run: devenv "%SLN_PATH%" /build "Release"
 

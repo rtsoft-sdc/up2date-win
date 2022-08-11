@@ -1,11 +1,12 @@
-﻿<Window x:Class="Up2dateConsole.MainWindow"
+﻿<Window x:Uid="Window_1" x:Class="Up2dateConsole.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:clr="clr-namespace:System;assembly=mscorlib"
+        xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
+        xmlns:tb="http://www.hardcodet.net/taskbar" 
         mc:Ignorable="d"
         ShowInTaskbar="True"
         Icon="Images/Logo.ico"
@@ -16,61 +17,96 @@
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
 
     <Window.Resources>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Padding" Value="5,4"/>
-            <Setter Property="Margin" Value="3"/>
-        </Style>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Uid="Style_1" TargetType="{x:Type Button}">
+                <Setter x:Uid="Setter_1" Property="Padding" Value="5,4"/>
+                <Setter x:Uid="Setter_2" Property="Margin" Value="3"/>
+            </Style>
+
+            <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
+
+            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' is acquired but there is still problem establishing connection to the server. Please check if acquired certificate is valid.</clr:String>
+            <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' successfully acquired.</clr:String>
+            <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
+            <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
+            <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
+            <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should provide a certification key. Note that this action requires administrative privileges.</clr:String>
+            <clr:String x:Uid="clr:String_7" x:Key="AgentInternalError">Agent internal error.</clr:String>
+            <clr:String x:Uid="clr:String_8" x:Key="CannotAccessServer">Cannot access server.</clr:String>
+            <clr:String x:Uid="clr:String_9" x:Key="CertificateNotAvailable">Authorization certificate is not available.</clr:String>
+            <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
+            <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
+            <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>
+            <clr:String x:Uid="clr:String_13" x:Key="NoCertificate">Authorization certificate is not available</clr:String>
+            <clr:String x:Uid="clr:String_14" x:Key="ServerUnaccessible">Cannot access server</clr:String>
+            <clr:String x:Uid="clr:String_15" x:Key="AgentOrServerFilure">Agent or server failure</clr:String>
+
+            <clr:String x:Uid="clr:String_16" x:Key="PackageStatusUnavailable">Unavailable</clr:String>
+            <clr:String x:Uid="clr:String_17" x:Key="PackageStatusAvailable">Available</clr:String>
+            <clr:String x:Uid="clr:String_18" x:Key="PackageStatusDownloading">Downloading</clr:String>
+            <clr:String x:Uid="clr:String_19" x:Key="PackageStatusDownloaded">Downloaded</clr:String>
+            <clr:String x:Uid="clr:String_20" x:Key="PackageStatusInstalling">Installing</clr:String>
+            <clr:String x:Uid="clr:String_21" x:Key="PackageStatusInstalled">Installed</clr:String>
+            <clr:String x:Uid="clr:String_22" x:Key="PackageStatusRestartNeeded">RestartNeeded</clr:String>
+            <clr:String x:Uid="clr:String_23" x:Key="PackageStatusFailed">Failed</clr:String>
+            <clr:String x:Uid="clr:String_24" x:Key="PackageStatusUnknown">Unknown</clr:String>
+
+            <clr:String x:Uid="clr:String_25" x:Key="FailedToAcquireCertificate">Failed to acquire certificate</clr:String>
+        </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
+    <Grid x:Uid="Grid_1">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_1"/>
+            <RowDefinition x:Uid="RowDefinition_2" Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <tb:TaskbarIcon Visibility="Visible"
+        <tb:TaskbarIcon x:Uid="tb:TaskbarIcon_1" Visibility="Visible"
                         IconSource="{Binding TaskbarIcon}"
                         MenuActivation="RightClick"
                         LeftClickCommand="{Binding ShowConsoleCommand}"
                         DoubleClickCommand="{Binding ShowConsoleCommand}"
                         ToolTipText="{Binding TaskbarIconText}">
             <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Show console" Command="{Binding ShowConsoleCommand}"/>
+                <ContextMenu x:Uid="ContextMenu_1">
+                    <MenuItem x:Uid="MenuItem_1" Header="Show console" Command="{Binding ShowConsoleCommand}"/>
                     <!--<MenuItem Header="Settings..."/>-->
-                    <Separator/>
-                    <MenuItem Header="Quit" Command="{Binding QuitCommand}"/>
+                    <Separator x:Uid="Separator_1"/>
+                    <MenuItem x:Uid="MenuItem_2" Header="Quit" Command="{Binding QuitCommand}"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
 
-        <Grid>
+        <Grid x:Uid="Grid_2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition x:Uid="RowDefinition_3" Height="Auto"/>
+                <RowDefinition x:Uid="RowDefinition_4"/>
             </Grid.RowDefinitions>
-            <Grid Margin="10,5" >
-                <TextBlock VerticalAlignment="Center" Text="Software packages:"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                    <Button ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
+            <Grid x:Uid="Grid_3" Margin="10,5" >
+                <TextBlock x:Uid="TextBlock_1" VerticalAlignment="Center" Text="Software packages:"/>
+                <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                    <Button x:Uid="Button1" ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
                             Command="{Binding RequestCertificateCommand}"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="Key" Foreground="DarkOrange" Width="12"/>
-                            <TextBlock Margin="5,0,0,0" Text="Authorization..."  VerticalAlignment="Center"/>
+                        <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
+                            <TextBlock x:Uid="TextBlock_2" Text="{StaticResource KeyIcon}" Foreground="DarkOrange" Style="{StaticResource ButtonIcon}"/>
+                            <TextBlock x:Uid="TextBlock1" Margin="5,0,0,0" Text="Authorization..." VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Width="100" 
+                    <Button x:Uid="Button2" Width="100" 
                             Content="Install selected" 
                             Command="{Binding InstallCommand}"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages">
-                        <fa:ImageAwesome Icon="Refresh" Foreground="Gray" Width="12"/>
+                    <Button x:Uid="Button_1" Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages">
+                        <TextBlock x:Uid="TextBlock_3" Text="{StaticResource RefreshIcon}" Style="{StaticResource ButtonIcon}"/>
                     </Button>
                 </StackPanel>
             </Grid>
-            <DataGrid Grid.Row="1" Margin="10,0,10,10" 
+            <DataGrid x:Uid="DataGrid_1" Grid.Row="1" Margin="10,0,10,10" 
                         Background="White"
                         SelectionMode="Extended"
                         RowHeight="20"
@@ -85,57 +121,47 @@
                         IsReadOnly="True"
                         ItemsSource="{Binding AvailablePackages}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Package" Binding="{Binding Filename}" Width="2*"/>
-                    <DataGridTextColumn Header="Product name" Binding="{Binding ProductName}" Width="2*"/>
-                    <DataGridTextColumn Header="Publisher" Binding="{Binding Publisher}" Width="1*"/>
-                    <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="80"/>
-                    <DataGridTextColumn Header="Size (MB)" Binding="{Binding SizeMb}" Width="60"/>
-                    <DataGridTextColumn Header="Installed" Binding="{Binding InstallDate}" Width="80"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
+                    <DataGridTextColumn x:Uid="DataGridTextColumn_1" Header="Package" Binding="{Binding Filename}" Width="2*"/>
+                    <DataGridTextColumn x:Uid="DataGridTextColumn_2" Header="Product name" Binding="{Binding ProductName}" Width="2*"/>
+                    <DataGridTextColumn x:Uid="DataGridTextColumn_3" Header="Publisher" Binding="{Binding Publisher}" Width="1*"/>
+                    <DataGridTextColumn x:Uid="DataGridTextColumn_4" Header="Version" Binding="{Binding Version}" MinWidth="80"/>
+                    <DataGridTextColumn x:Uid="DataGridTextColumn_5" Header="Size (MB)" Binding="{Binding SizeMb}" MinWidth="60"/>
+                    <DataGridTextColumn x:Uid="DataGridTextColumn_6" Header="Installed" Binding="{Binding InstallDate}" MinWidth="80"/>
+                    <DataGridTextColumn x:Uid="DataGridTextColumn_7" Header="Status" Binding="{Binding Status}" MinWidth="80"/>
                 </DataGrid.Columns>
                 <DataGrid.Resources>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="Focusable" Value="False" />
-                        <Setter Property="IsTabStop" Value="False" />
+                    <Style x:Uid="Style_2" TargetType="DataGridCell">
+                        <Setter x:Uid="Setter_3" Property="Focusable" Value="False" />
+                        <Setter x:Uid="Setter_4" Property="IsTabStop" Value="False" />
                     </Style>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                    <Style x:Uid="Style_3" TargetType="DataGridRow">
+                        <Setter x:Uid="Setter_5" Property="IsSelected" Value="{Binding IsSelected}" />
                     </Style>
                 </DataGrid.Resources>
             </DataGrid>
         </Grid>
 
-        <Grid Grid.Row="1" Margin="10,0,10,10">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Service state:" VerticalAlignment="Center"/>
-                <fa:ImageAwesome 
-                    Margin="8,0"
-                    VerticalAlignment="Center"
-                    Width="16" Height="16"
-                    Icon="{Binding StateIndicator.Icon}" 
-                    Foreground="{Binding StateIndicator.Color}"
-                    Spin="{Binding StateIndicator.Spin}">
-                    <fa:ImageAwesome.ToolTip>
-                        <TextBlock Text="{Binding StateIndicator.Info}" MaxWidth="400" TextWrapping="Wrap"/>
-                    </fa:ImageAwesome.ToolTip>
-                </fa:ImageAwesome>
-                <StackPanel Orientation="Horizontal" Margin="20,0,0,0"  VerticalAlignment="Center"
+        <Grid x:Uid="Grid_4" Grid.Row="1" Margin="10,0,10,10">
+            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
+                <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
+                <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Width="20" Height="20" Margin="5,0" DataContext="{Binding StateIndicator}"/>
+                <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal" Margin="20,0,0,0"  VerticalAlignment="Center"
                             Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock Text="RITMS UP2DATE:" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                    <TextBox VerticalAlignment="Center" Padding="2" IsReadOnly="True" 
+                    <TextBlock x:Uid="TextBlock_4" Text="RITMS UP2DATE:" Margin="0,0,5,0"  VerticalAlignment="Center"/>
+                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" Padding="2" IsReadOnly="True" 
                              Text="{Binding DeviceId, Mode=OneWay}" FontFamily="Courier New"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button ToolTip="Turns console into administration mode (requires administrator privilege)"
+            <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Uid="Button_2" ToolTip="Turns console into administration mode (requires administrator privilege)"
                         Command="{Binding EnterAdminModeCommand}"
                         Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Stretch="Fill" Width="20" Height="20" Source="Images/UAC.png" VerticalAlignment="Center"/>
-                        <TextBlock Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
+                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
+                        <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
+                        <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <TextBlock Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
+                <TextBlock x:Uid="TextBlock_6" Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </StackPanel>
         </Grid>
