@@ -97,15 +97,18 @@ namespace Up2dateClient
 
         private void OnDeploymentAction(IntPtr artifact, DeploymentInfo info, out ClientResult result)
         {
-            result.message = String.Empty;
-            result.result = true;
+            result = new ClientResult
+            {
+                Message = string.Empty,
+                Success = true
+            };
 
             WriteLogEntry("deployment requested.", info);
             if (!IsSupported(info))
             {
-                result.message = "not supported - deployment rejected";
-                WriteLogEntry(result.message, info);
-                result.result = false;
+                result.Message = "not supported - deployment rejected";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
                 return;
             }
 
@@ -116,11 +119,11 @@ namespace Up2dateClient
             {
                 Wrapper.DownloadArtifact(artifact, getDownloadLocation());
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                result.message = "download failed.";
-                WriteLogEntry(result.message, info);
-                result.result = false;
+                result.Message = "download failed.";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
                 return;
             }
 
@@ -130,30 +133,29 @@ namespace Up2dateClient
 
             if (info.updateType == "skip")
             {
-                result.message = "skip installation - not requested";
-                WriteLogEntry(result.message, info);
+                result.Message = "skip installation - not requested";
+                WriteLogEntry(result.Message, info);
                 return;
             }
 
             if (setupManager.IsPackageInstalled(info.artifactFileName))
             {
-                result.message = "skip installation - already installed";
-                WriteLogEntry(result.message, info);
+                result.Message = "skip installation - already installed";
+                WriteLogEntry(result.Message, info);
                 return;
             }
 
-            WriteLogEntry($"installing...", info);
+            WriteLogEntry("installing...", info);
             var success = setupManager.InstallPackage(info.artifactFileName);
             if (!success)
             {
-                result.message = "Installation failed.";
-                WriteLogEntry(result.message, info);
-                result.result = false;
-                return;
+                result.Message = "Installation failed.";
+                WriteLogEntry(result.Message, info);
+                result.Success = false;
             }
             else
             {
-                WriteLogEntry($"installation finished.", info);
+                WriteLogEntry("installation finished.", info);
             }
         }
 
@@ -184,14 +186,9 @@ namespace Up2dateClient
 
         private void WriteLogEntry(string message, DeploymentInfo? info = null)
         {
-            if (info == null)
-            {
-                eventLog?.WriteEntry($"Up2date client: {message}");
-            }
-            else
-            {
-                eventLog?.WriteEntry($"Up2date client: {message} Artifact={info.Value.artifactFileName}");
-            }
+            eventLog?.WriteEntry(info == null
+                ? $"Up2date client: {message}"
+                : $"Up2date client: {message} Artifact={info.Value.artifactFileName}");
         }
 
     }

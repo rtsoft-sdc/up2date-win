@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-
 #include "ddi.hpp"
 #include "CallbackDispatcher.hpp"
 
@@ -41,7 +40,6 @@ namespace HkbClient {
                 info.chunkName = chunk->getName();
                 info.chunkPart = chunk->getPart();
                 info.chunkVersion = chunk->getVersion();
-
                 for (const auto& artifact : chunk->getArtifacts()) {
                     builder->addDetail("Attribute deployment started " + artifact->getFilename());
 
@@ -51,9 +49,12 @@ namespace HkbClient {
                     info.artifactFileHashSha256 = artifact->getFileHashes().sha256;
                     ClientResult result;
                     DeployArtifact(artifact, info, result);
-                    bool attrDeployed = true;
-                    anyFailed |= !result.result;
-                    if (result.result)
+                    bool attrDeployed = result.result;
+                    std::cout << result.result << std::endl;
+                    std::cout << result.message << std::endl;
+                    anyFailed |= !attrDeployed;
+                    
+                    if (attrDeployed)
                     {
                         builder->addDetail("Attribute deployment completed " + artifact->getFilename());
                     }
@@ -62,9 +63,10 @@ namespace HkbClient {
                         builder->addDetail("Attribute deployment failed " + artifact->getFilename());
                     }
 
-                    if (!result.result)
+                    if (!attrDeployed)
                     {
-                        builder->addDetail("Message: " + result.message);
+                        std::string message = result.message;
+                        builder->addDetail("Message: " + message);
                     }
                 }
             }
