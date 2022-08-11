@@ -15,7 +15,13 @@ namespace Up2dateConsole.ViewService
         /// </summary>
         void ShowMainWindow();
 
-        string GetTextFromResource<TTextEnum>(Type viewModelType, TTextEnum textEnum) where TTextEnum : Enum;
+        /// <summary>
+        /// Extracts text from string resource using enum as resource key
+        /// </summary>
+        /// <typeparam name="TTextEnum"></typeparam>
+        /// <param name="textEnum">used as key of string resource to extract</param>
+        /// <returns>string value of the requesteed resource</returns>
+        string GetText<TTextEnum>(TTextEnum textEnum) where TTextEnum : Enum;
 
         /// <summary>
         /// Registers dialog

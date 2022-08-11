@@ -55,6 +55,7 @@
             <clr:String x:Uid="clr:String_23" x:Key="PackageStatusFailed">Failed</clr:String>
             <clr:String x:Uid="clr:String_24" x:Key="PackageStatusUnknown">Unknown</clr:String>
 
+            <clr:String x:Uid="clr:String_25" x:Key="FailedToAcquireCertificate">Failed to acquire certificate</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 

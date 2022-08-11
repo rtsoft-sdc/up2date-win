@@ -9,19 +9,16 @@ using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole.Dialogs
 {
-    public enum Texts
+    public class RequestCertificateDialogViewModel : DialogViewModelBase
     {
-        failed_to_acquire_certificate,
-    };
-
-    public class RequestCertificateDialogViewModel : DialogViewModelBase<Texts>
-    {
+        private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
         private string oneTimeKey;
         private bool isInProgress;
 
-        public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation) : base(viewService)
+        public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation)
         {
+            this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             ShowExplanation = showExplanation;
             RequestCommand = new RelayCommand(async (_) => await ExecuteRequestAsync(), CanRequest);
@@ -98,7 +95,7 @@ namespace Up2dateConsole.Dialogs
             }
             else
             {
-                string message = GetText(Texts.failed_to_acquire_certificate) + $"\n\n{error}";
+                string message = viewService.GetText(Texts.FailedToAcquireCertificate) + $"\n\n{error}";
                 viewService.ShowMessageBox(message);
             }
         }

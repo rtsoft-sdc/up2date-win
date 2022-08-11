@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using Up2dateConsole.Helpers;
 
 namespace Up2dateConsole.ViewService
 {
@@ -84,9 +85,15 @@ namespace Up2dateConsole.ViewService
             return dlg.ShowDialog() == true;
         }
 
-        public string GetTextFromResource<TTextEnum>(Type viewModelType, TTextEnum textEnum) where TTextEnum : Enum
+        public string GetText<TTextEnum>(TTextEnum textEnum) where TTextEnum : Enum
         {
-            return (string)TopWindow?.FindResource(textEnum.ToString());
+            string text = string.Empty;
+            ThreadHelper.SafeInvoke(() =>
+            {
+                text = (string)Application.Current.MainWindow.TryFindResource(textEnum.ToString()) ?? $"<{textEnum}>";
+            });
+
+            return text;
         }
 
         private void ActiveDialog_Closed(object sender, EventArgs e)

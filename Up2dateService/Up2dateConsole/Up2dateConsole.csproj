@@ -98,7 +98,6 @@
     <Compile Include="StateIndicator\ServiceState.cs" />
     <Compile Include="ViewService\DialogViewModelBase.cs" />
     <Compile Include="ViewService\ViewService.cs" />
-    <Compile Include="ViewService\WindowViewModelBase.cs" />
     <Compile Include="WcfClientFactory.cs" />
     <Page Include="Dialogs\RequestCertificateDialog.xaml">
       <SubType>Designer</SubType>

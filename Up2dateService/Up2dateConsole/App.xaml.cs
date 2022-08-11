@@ -1,8 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
 using Up2dateConsole.Helpers;
 
@@ -12,6 +10,8 @@ namespace Up2dateConsole
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            //Debugger.Launch(); // todo remove for production
+
             if (CommandLineHelper.IsPresent(CommandLineHelper.StartUnelevatedCommand))
             {
                 Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);

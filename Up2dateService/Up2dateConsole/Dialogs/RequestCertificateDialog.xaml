@@ -26,8 +26,6 @@
             </Style>
             
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
-
-            <clr:String x:Uid="clr:String_1" x:Key="failed_to_acquire_certificate">Failed to acquire certificate</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 

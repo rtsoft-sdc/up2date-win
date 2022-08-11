@@ -41,10 +41,11 @@ namespace Up2dateConsole
         PackageStatusInstalled,
         PackageStatusRestartNeeded,
         PackageStatusFailed,
-        PackageStatusUnknown
+        PackageStatusUnknown,
+        FailedToAcquireCertificate,
     }
 
-    public class MainWindowViewModel : WindowViewModelBase<Texts>
+    public class MainWindowViewModel : NotifyPropertyChanged
     {
         private const int InitialDelay = 1000; // milliseconds
         private const int RefreshInterval = 20000; // milliseconds
@@ -56,10 +57,12 @@ namespace Up2dateConsole
         private ServiceState serviceState;
         private string deviceId;
         private readonly Timer timer = new Timer(InitialDelay);
+        private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory) : base(viewService)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
         {
+            this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
 
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
@@ -492,6 +495,11 @@ namespace Up2dateConsole
                 }
                 return "RITMS UP2DATE" + (string.IsNullOrEmpty(extraText) ? string.Empty : "\n" + extraText);
             }
+        }
+
+        private string GetText(Texts text)
+        {
+            return viewService.GetText(text);
         }
     }
 }
