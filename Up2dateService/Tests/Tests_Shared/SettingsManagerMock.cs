@@ -94,6 +94,9 @@ namespace TestsShared
             set => AddUpdateAppSettings(nameof(SelectedIssuers), string.Join(":", value.ToArray()));
         }
 
+        string ISettingsManager.ProvisioningUrl { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        string ISettingsManager.RequestCertificateUrl { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         private static void AddUpdateAppSettings(string key, string value)
         {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

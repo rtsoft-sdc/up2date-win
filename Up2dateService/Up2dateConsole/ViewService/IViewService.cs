@@ -38,12 +38,21 @@ namespace Up2dateConsole.ViewService
         bool ShowDialog(IDialogViewModel viewModel);
 
         /// <summary>
-        /// Displays a message box
+        /// Displays message box
         /// </summary>
         /// <param name="text">A String that specifies the text to display</param>
         /// <param name="buttons">A MessageBoxButton value that specifies which button or buttons to display</param>
         /// <returns>MessageBoxResult</returns>
         MessageBoxResult ShowMessageBox(string text, MessageBoxButton buttons = MessageBoxButton.OK);
+
+        /// <summary>
+        /// Displays message box
+        /// </summary>
+        /// <typeparam name="TTextEnum"></typeparam>
+        /// <param name="textEnum">Key of the resource string that specifies the text to display</param>
+        /// <param name="buttons">A MessageBoxButton value that specifies which button or buttons to display</param>
+        /// <returns>MessageBoxResult</returns>
+        MessageBoxResult ShowMessageBox<TTextEnum>(TTextEnum textEnum, MessageBoxButton buttons = MessageBoxButton.OK) where TTextEnum : Enum;
 
         /// <summary>
         /// Shows Win32 SaveFileDialog

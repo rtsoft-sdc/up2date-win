@@ -30,5 +30,17 @@ namespace Up2dateService
 
         [OperationContract]
         Result<string> RequestCertificate(string oneTimeKey);
+
+        [OperationContract]
+        string GetRequestCertificateUrl();
+
+        [OperationContract]
+        void SetRequestCertificateUrl(string url);
+
+        [OperationContract]
+        string GetProvisioningUrl();
+
+        [OperationContract]
+        void SetProvisioningUrl(string url);
     }
 }

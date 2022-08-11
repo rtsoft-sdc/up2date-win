@@ -16,6 +16,10 @@ namespace Up2dateShared
                 ConfigurationManager.RefreshSection(AppSettingSectionName);
                 return ConfigurationManager.AppSettings[nameof(ProvisioningUrl)];
             }
+            set
+            {
+                AddUpdateAppSettings(nameof(ProvisioningUrl), value);
+            }
         }
 
         public string XApigToken
@@ -33,6 +37,10 @@ namespace Up2dateShared
             {
                 ConfigurationManager.RefreshSection(AppSettingSectionName);
                 return ConfigurationManager.AppSettings[nameof(RequestCertificateUrl)];
+            }
+            set
+            {
+                AddUpdateAppSettings(nameof(RequestCertificateUrl), value);
             }
         }
 

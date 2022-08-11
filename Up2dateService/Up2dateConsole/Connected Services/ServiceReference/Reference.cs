@@ -705,6 +705,30 @@ namespace Up2dateConsole.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RequestCertificate", ReplyAction="http://tempuri.org/IWcfService/RequestCertificateResponse")]
         System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> RequestCertificateAsync(string oneTimeKey);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetRequestCertificateUrl", ReplyAction="http://tempuri.org/IWcfService/GetRequestCertificateUrlResponse")]
+        string GetRequestCertificateUrl();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetRequestCertificateUrl", ReplyAction="http://tempuri.org/IWcfService/GetRequestCertificateUrlResponse")]
+        System.Threading.Tasks.Task<string> GetRequestCertificateUrlAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetRequestCertificateUrl", ReplyAction="http://tempuri.org/IWcfService/SetRequestCertificateUrlResponse")]
+        void SetRequestCertificateUrl(string url);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetRequestCertificateUrl", ReplyAction="http://tempuri.org/IWcfService/SetRequestCertificateUrlResponse")]
+        System.Threading.Tasks.Task SetRequestCertificateUrlAsync(string url);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetProvisioningUrl", ReplyAction="http://tempuri.org/IWcfService/GetProvisioningUrlResponse")]
+        string GetProvisioningUrl();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetProvisioningUrl", ReplyAction="http://tempuri.org/IWcfService/GetProvisioningUrlResponse")]
+        System.Threading.Tasks.Task<string> GetProvisioningUrlAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetProvisioningUrl", ReplyAction="http://tempuri.org/IWcfService/SetProvisioningUrlResponse")]
+        void SetProvisioningUrl(string url);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetProvisioningUrl", ReplyAction="http://tempuri.org/IWcfService/SetProvisioningUrlResponse")]
+        System.Threading.Tasks.Task SetProvisioningUrlAsync(string url);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -796,6 +820,38 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> RequestCertificateAsync(string oneTimeKey) {
             return base.Channel.RequestCertificateAsync(oneTimeKey);
+        }
+        
+        public string GetRequestCertificateUrl() {
+            return base.Channel.GetRequestCertificateUrl();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetRequestCertificateUrlAsync() {
+            return base.Channel.GetRequestCertificateUrlAsync();
+        }
+        
+        public void SetRequestCertificateUrl(string url) {
+            base.Channel.SetRequestCertificateUrl(url);
+        }
+        
+        public System.Threading.Tasks.Task SetRequestCertificateUrlAsync(string url) {
+            return base.Channel.SetRequestCertificateUrlAsync(url);
+        }
+        
+        public string GetProvisioningUrl() {
+            return base.Channel.GetProvisioningUrl();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetProvisioningUrlAsync() {
+            return base.Channel.GetProvisioningUrlAsync();
+        }
+        
+        public void SetProvisioningUrl(string url) {
+            base.Channel.SetProvisioningUrl(url);
+        }
+        
+        public System.Threading.Tasks.Task SetProvisioningUrlAsync(string url) {
+            return base.Channel.SetProvisioningUrlAsync(url);
         }
     }
 }
