@@ -1,0 +1,27 @@
+
+name: Test.run
+
+on:
+  workflow_call:
+
+jobs:
+  testrun:
+    name: Test Running
+    runs-on: windows-2022
+    
+    steps:        
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Make download folder
+        shell: bash
+        run: mkdir artifacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: Test
+          path: .\Test\
+      - name: vstest-action
+        uses: microsoft/vstest-action@v1.0.0
+        with:
+          testAssembly: "Test\\Up2dateTests.dll"
+
