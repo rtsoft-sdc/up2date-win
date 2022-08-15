@@ -12840,7 +12840,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:RITMS Up2date client"
+        "ProductName" = "8:RITMS UP2DATE Client"
         "ProductCode" = "8:{4937A001-45A3-4345-AA4A-B60A5951D0C6}"
         "PackageCode" = "8:{13E095DF-D743-442E-9CD8-7E9F54C25814}"
         "UpgradeCode" = "8:{A4D493F8-CC2D-4DA5-A6CC-98A5D6CBD926}"
@@ -12857,7 +12857,7 @@
         "Subject" = "8:"
         "ARPCONTACT" = "8:RTSoft"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:RITMS Up2date client"
+        "ARPCOMMENTS" = "8:RITMS UP2DATE Client"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:_EF46BB6C9DCA46E79443C77BFA623F9D"
         "ARPIconIndex" = "3:0"
@@ -12964,7 +12964,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2F52E370531741D88CEF2487D2BFAA20"
             {
-            "Name" = "8:RITMS Up2date Client"
+            "Name" = "8:RITMS UP2DATE Client"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -12978,7 +12978,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_772047AD4DD44C5381CB16F7C0C8F5E8"
             {
-            "Name" = "8:RITMS Up2date Client"
+            "Name" = "8:RITMS UP2DATE Client"
             "Arguments" = "8:v"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -12992,7 +12992,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C310B075687F4A2D8B28699C0DE89E2D"
             {
-            "Name" = "8:RITMS Up2date Client"
+            "Name" = "8:RITMS UP2DATE Client"
             "Arguments" = "8:v"
             "Description" = "8:"
             "ShowCmd" = "3:1"
