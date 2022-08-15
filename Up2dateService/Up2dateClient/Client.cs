@@ -148,14 +148,7 @@ namespace Up2dateClient
                 result.Message = "skip installation - not requested";
                 WriteLogEntry(result.Message, info);
                 return;
-            }
-
-            if (setupManager.IsPackageInstalled(info.artifactFileName))
-            {
-                result.Message = "skip installation - already installed";
-                WriteLogEntry(result.Message, info);
-                return;
-            }            
+            }      
             
             var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
             if (settingsManager.CheckSignature && !certificateManager.IsSigned(filePath))
