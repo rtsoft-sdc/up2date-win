@@ -12,6 +12,9 @@ namespace Up2dateConsole.Dialogs
         private readonly IWcfClientFactory wcfClientFactory;
         private string tokenUrl;
         private string dpsUrl;
+        private bool checkSignatureStatus;
+        private bool installAppFromSelectedIssuers;
+        private string selectedIssuers;
 
         public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
         {
@@ -49,6 +52,43 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
+
+
+        public bool CheckSignatureStatus
+        {
+            get => checkSignatureStatus;
+            set
+            {
+                if(checkSignatureStatus == value) return;
+                checkSignatureStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool InstallAppFromSelectedIssuers
+        {
+            get => installAppFromSelectedIssuers;
+            set
+            {
+                if (installAppFromSelectedIssuers == value) return;
+                installAppFromSelectedIssuers = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+        public string SelectedIssuers
+        {
+            get => selectedIssuers;
+            set
+            {
+                if (selectedIssuers == value) return;
+                selectedIssuers = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool CanOk(object obj)
         {
             return !string.IsNullOrWhiteSpace(TokenUrl) && !string.IsNullOrWhiteSpace(DpsUrl);
@@ -63,6 +103,9 @@ namespace Up2dateConsole.Dialogs
                 service = wcfClientFactory.CreateClient();
                 service.SetRequestCertificateUrl(TokenUrl);
                 service.SetProvisioningUrl(DpsUrl);
+                service.SetCheckSignature(checkSignatureStatus);
+                service.SetInstallAppFromSelectedIssuer(installAppFromSelectedIssuers);
+                service.SetSelectedIssuers(selectedIssuers);
             }
             catch (Exception e)
             {
@@ -91,6 +134,9 @@ namespace Up2dateConsole.Dialogs
                 service = wcfClientFactory.CreateClient();
                 TokenUrl = service.GetRequestCertificateUrl();
                 DpsUrl = service.GetProvisioningUrl();
+                checkSignatureStatus = service.GetCheckSignature();
+                installAppFromSelectedIssuers = service.GetInstallAppFromSelectedIssuer();
+                selectedIssuers = service.GetSelectedIssuers();
             }
             catch (Exception e)
             {

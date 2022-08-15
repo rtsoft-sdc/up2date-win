@@ -42,5 +42,23 @@ namespace Up2dateService
 
         [OperationContract]
         void SetProvisioningUrl(string url);
+
+        [OperationContract]
+        bool GetCheckSignature();
+
+        [OperationContract]
+        void SetCheckSignature(bool newState);
+
+        [OperationContract]
+        bool GetInstallAppFromSelectedIssuer();
+
+        [OperationContract]
+        void SetInstallAppFromSelectedIssuer(bool newState);
+
+        [OperationContract]
+        string GetSelectedIssuers();
+
+        [OperationContract]
+        void SetSelectedIssuers(string selectedIssuers);
     }
 }
