@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Dialogs\SettingsDialogViewModel.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
+    <Compile Include="Helpers\BoolToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="IWcfClientFactory.cs" />
