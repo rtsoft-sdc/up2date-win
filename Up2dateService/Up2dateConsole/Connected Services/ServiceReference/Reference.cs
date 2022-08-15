@@ -729,6 +729,42 @@ namespace Up2dateConsole.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetProvisioningUrl", ReplyAction="http://tempuri.org/IWcfService/SetProvisioningUrlResponse")]
         System.Threading.Tasks.Task SetProvisioningUrlAsync(string url);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/GetCheckSignatureResponse")]
+        bool GetCheckSignature();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/GetCheckSignatureResponse")]
+        System.Threading.Tasks.Task<bool> GetCheckSignatureAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/SetCheckSignatureResponse")]
+        void SetCheckSignature(bool newState);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/SetCheckSignatureResponse")]
+        System.Threading.Tasks.Task SetCheckSignatureAsync(bool newState);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuerResponse")]
+        bool GetInstallAppFromSelectedIssuer();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuerResponse")]
+        System.Threading.Tasks.Task<bool> GetInstallAppFromSelectedIssuerAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuerResponse")]
+        void SetInstallAppFromSelectedIssuer(bool newState);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuerResponse")]
+        System.Threading.Tasks.Task SetInstallAppFromSelectedIssuerAsync(bool newState);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/GetSelectedIssuersResponse")]
+        string GetSelectedIssuers();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/GetSelectedIssuersResponse")]
+        System.Threading.Tasks.Task<string> GetSelectedIssuersAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/SetSelectedIssuersResponse")]
+        void SetSelectedIssuers(string selectedIssuers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/SetSelectedIssuersResponse")]
+        System.Threading.Tasks.Task SetSelectedIssuersAsync(string selectedIssuers);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -852,6 +888,54 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task SetProvisioningUrlAsync(string url) {
             return base.Channel.SetProvisioningUrlAsync(url);
+        }
+        
+        public bool GetCheckSignature() {
+            return base.Channel.GetCheckSignature();
+        }
+        
+        public System.Threading.Tasks.Task<bool> GetCheckSignatureAsync() {
+            return base.Channel.GetCheckSignatureAsync();
+        }
+        
+        public void SetCheckSignature(bool newState) {
+            base.Channel.SetCheckSignature(newState);
+        }
+        
+        public System.Threading.Tasks.Task SetCheckSignatureAsync(bool newState) {
+            return base.Channel.SetCheckSignatureAsync(newState);
+        }
+        
+        public bool GetInstallAppFromSelectedIssuer() {
+            return base.Channel.GetInstallAppFromSelectedIssuer();
+        }
+        
+        public System.Threading.Tasks.Task<bool> GetInstallAppFromSelectedIssuerAsync() {
+            return base.Channel.GetInstallAppFromSelectedIssuerAsync();
+        }
+        
+        public void SetInstallAppFromSelectedIssuer(bool newState) {
+            base.Channel.SetInstallAppFromSelectedIssuer(newState);
+        }
+        
+        public System.Threading.Tasks.Task SetInstallAppFromSelectedIssuerAsync(bool newState) {
+            return base.Channel.SetInstallAppFromSelectedIssuerAsync(newState);
+        }
+        
+        public string GetSelectedIssuers() {
+            return base.Channel.GetSelectedIssuers();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetSelectedIssuersAsync() {
+            return base.Channel.GetSelectedIssuersAsync();
+        }
+        
+        public void SetSelectedIssuers(string selectedIssuers) {
+            base.Channel.SetSelectedIssuers(selectedIssuers);
+        }
+        
+        public System.Threading.Tasks.Task SetSelectedIssuersAsync(string selectedIssuers) {
+            return base.Channel.SetSelectedIssuersAsync(selectedIssuers);
         }
     }
 }

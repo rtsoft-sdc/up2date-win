@@ -95,7 +95,7 @@ namespace Up2dateShared
             get
             {
                 ConfigurationManager.RefreshSection(AppSettingSectionName);
-                return ConfigurationManager.AppSettings[nameof(SelectedIssuers)].Split(':').ToList(); ;
+                return ConfigurationManager.AppSettings[nameof(SelectedIssuers)].Split(':').ToList();
             }
             set => AddUpdateAppSettings(nameof(SelectedIssuers), string.Join(":", value.ToArray()));
         }

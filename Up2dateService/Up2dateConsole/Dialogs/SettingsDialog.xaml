@@ -23,7 +23,7 @@
                 <Setter x:Uid="Setter_2" Property="Margin" Value="5"/>
                 <Setter x:Uid="Setter_3" Property="MinWidth" Value="70"/>
             </Style>
-
+            <BooleanToVisibilityConverter x:Key="Up2dateConsole.Helpers.BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -38,6 +38,10 @@
             <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
             <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox x:Name="CheckSignatureStatus" Margin="0,0,0,5" Content="Verify Installator Signature" IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox x:Name="InstallAppFromSelectedIssuerStatus" Margin="0,0,0,5" Content="Install Apps Only from selected certificate issuers" IsChecked="{Binding InstallAppFromSelectedIssuers, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock x:Uid="SelectedIssuersLabel" Margin="0,5,0,5" Text="Selected Issuers (separator ':') :" Visibility="{Binding InstallAppFromSelectedIssuers, Converter={StaticResource Up2dateConsole.Helpers.BooleanToVisibilityConverter}}"/>
+            <TextBox x:Uid="SelectedIssuers" Margin="0,0,0,5" Text="{Binding SelectedIssuers, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding InstallAppFromSelectedIssuers, Converter={StaticResource Up2dateConsole.Helpers.BooleanToVisibilityConverter}}"/>
         </StackPanel>
 
         <StackPanel x:Uid="StackPanel_2" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
