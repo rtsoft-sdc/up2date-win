@@ -141,6 +141,15 @@ namespace Up2dateClient
             setupManager.OnDownloadFinished(info.artifactFileName);
 
             WriteLogEntry("download completed.", info);
+
+
+            if (info.updateType == "skip")
+            {
+                result.Message = "skip installation - not requested";
+                WriteLogEntry(result.Message, info);
+                return;
+            }      
+            
             var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
             if (settingsManager.CheckSignature && !certificateManager.IsSigned(filePath))
             {
@@ -156,20 +165,6 @@ namespace Up2dateClient
                 result.Message = "File not signed by selected issuer. File deleted";
                 result.Success = false;
                 File.Delete(filePath);
-                WriteLogEntry(result.Message, info);
-                return;
-            }
-
-            if (info.updateType == "skip")
-            {
-                result.Message = "skip installation - not requested";
-                WriteLogEntry(result.Message, info);
-                return;
-            }
-
-            if (setupManager.IsPackageInstalled(info.artifactFileName))
-            {
-                result.Message = "skip installation - already installed";
                 WriteLogEntry(result.Message, info);
                 return;
             }
