@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Up2dateClient;
 using Up2dateShared;
 
 namespace SimpleClientApp
@@ -11,7 +12,7 @@ namespace SimpleClientApp
             return new List<Package>();
         }
 
-        public bool InstallPackage(string packageFile)
+        public bool InstallPackage(string packageFile, SupportedTypes packageType = SupportedTypes.Unsupported)
         {
             return true;
         }

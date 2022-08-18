@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Up2dateShared;
 
 namespace Up2dateClient
@@ -10,7 +11,11 @@ namespace Up2dateClient
     {
         const string ClientType = "RITMS UP2DATE for Windows";
 
-        private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi" }; // must be lowercase
+        private readonly Dictionary<SupportedTypes, string> supportedTypes = new Dictionary<SupportedTypes, string>()
+        {
+            { SupportedTypes.Zip, ".zip"},
+            { SupportedTypes.Msi , ".msi"}
+        };
         private readonly EventLog eventLog;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
@@ -169,18 +174,47 @@ namespace Up2dateClient
                 return;
             }
 
-            if (IsSupported(info))
-                WriteLogEntry("installing...", info);
-            var success = setupManager.InstallPackage(info.artifactFileName);
-            if (!success)
+            if (!IsSupported(info))
+            {
+                result.Message = "File Not supported to install.";
+                result.Success = false;
+                return;
+            }
+
+            WriteLogEntry("installing...", info);
+            var packageType = SupportedTypes.Unsupported;
+            try
+            {
+                packageType = supportedTypes.FirstOrDefault(type =>
+                    type.Value == Path.GetExtension(info.artifactFileName).ToLowerInvariant()).Key;
+            }
+            catch
+            {
+                result.Message = "File Not supported to install.";
+                result.Success = false;
+
+                WriteLogEntry(result.Message, info);
+            }
+
+            try
+            {
+                var success = setupManager.InstallPackage(info.artifactFileName, packageType);
+                if (!success)
+                {
+                    result.Message = "Installation failed.";
+                    WriteLogEntry(result.Message, info);
+                    result.Success = false;
+                }
+                else
+                {
+                    WriteLogEntry("installation finished.", info);
+                }
+            }
+            catch (Exception)
             {
                 result.Message = "Installation failed.";
                 WriteLogEntry(result.Message, info);
                 result.Success = false;
-            }
-            else
-            {
-                WriteLogEntry("installation finished.", info);
             }
         }
 
@@ -191,7 +225,7 @@ namespace Up2dateClient
 
         private bool IsSupported(DeploymentInfo info)
         {
-            return supportedTypes.Contains(Path.GetExtension(info.artifactFileName).ToLowerInvariant());
+            return supportedTypes.ContainsValue(Path.GetExtension(info.artifactFileName).ToLowerInvariant());
         }
 
         private bool OnCancelAction(int stopId)

@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="SettingsManager.cs" />
+    <Compile Include="SupportedTypes.cs" />
     <Compile Include="SystemInfo.cs" />
   </ItemGroup>
   <ItemGroup>
