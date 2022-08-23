@@ -64,8 +64,8 @@ jobs:
         run: |
           Test-Path -Path *.nupkg -PathType Leaf
           ls .\          
-          echo "ChocoPackage=((Get-Item *.nupkg")).Name >> $env:GITHUB_ENV
-          echo ((((Get-Item .\picam-mount.gcode)).Name)) >> ChocoPackage.txt
+          $packageName=((Get-Item *.nupkg)).Name
+          echo "ChocoPackage=$packageName" >> $env:GITHUB_ENV
         working-directory: package\      
 
       - name: Upload nupkg
