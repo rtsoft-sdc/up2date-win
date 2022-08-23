@@ -63,15 +63,19 @@ jobs:
         shell: powershell
         run: |
           Test-Path -Path *.nupkg -PathType Leaf
-          ls .\
+          ls .\          
+          echo "ChocoPackage=((Get-Item *.nupkg")).Name >> $env:GITHUB_ENV
+          echo ((((Get-Item .\picam-mount.gcode)).Name)) >> ChocoPackage.txt
         working-directory: package\      
 
       - name: Upload nupkg
         uses: actions/upload-artifact@v3
         with:
-          path: package\*.nupkg
+          name: ${{ env.ChocoPackage }}
+          path: package\${{ env.ChocoPackage }}      
 
-
-
-        
-
+      - name: Upload nupkg
+        uses: actions/upload-artifact@v3
+        with:
+          name: ChocoPackage.txt
+          path: package\ChocoPackage.txt
