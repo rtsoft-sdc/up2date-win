@@ -66,6 +66,7 @@ jobs:
           ls .\          
           $packageName=((Get-Item *.nupkg)).Name
           echo "ChocoPackage=$packageName" >> $env:GITHUB_ENV
+          echo $packageName >> ChocoPackage.txt
         working-directory: package\      
 
       - name: Upload nupkg
