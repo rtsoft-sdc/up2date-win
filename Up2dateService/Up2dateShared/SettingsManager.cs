@@ -52,7 +52,7 @@ namespace Up2dateShared
                 try
                 {
                     // ReSharper disable PossibleNullReferenceException
-                    var value = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE").OpenSubKey("RTSoft").OpenSubKey("RITMS").OpenSubKey("UP2DATE").GetValue(nameof(CertificateSerialNumber)) as string;
+                    var value = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE").OpenSubKey("RTSoft").OpenSubKey("RITMS").OpenSubKey("UP2DATE").GetValue("Certificate") as string;
                     return value;
                     // ReSharper restore PossibleNullReferenceException
                 }
@@ -61,7 +61,7 @@ namespace Up2dateShared
                     return string.Empty;
                 }
             }
-            set => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).CreateSubKey("SOFTWARE")?.CreateSubKey("RTSoft")?.CreateSubKey("RITMS")?.CreateSubKey("UP2DATE")?.SetValue(nameof(CertificateSerialNumber), value);
+            set => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).CreateSubKey("SOFTWARE")?.CreateSubKey("RTSoft")?.CreateSubKey("RITMS")?.CreateSubKey("UP2DATE")?.SetValue("Certificate", value);
         }
 
         public List<string> PackageExtensionFilterList
