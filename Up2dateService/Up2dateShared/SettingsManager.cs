@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace Up2dateShared
 {
@@ -48,13 +49,19 @@ namespace Up2dateShared
         {
             get
             {
-                ConfigurationManager.RefreshSection(AppSettingSectionName);
-                return ConfigurationManager.AppSettings[nameof(CertificateSerialNumber)];
+                try
+                {
+                    // ReSharper disable PossibleNullReferenceException
+                    var value = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE").OpenSubKey("RTSoft").OpenSubKey("RITMS").OpenSubKey("UP2DATE").GetValue("Certificate") as string;
+                    return value;
+                    // ReSharper restore PossibleNullReferenceException
+                }
+                catch
+                {
+                    return string.Empty;
+                }
             }
-            set
-            {
-                AddUpdateAppSettings(nameof(CertificateSerialNumber), value);
-            }
+            set => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).CreateSubKey("SOFTWARE")?.CreateSubKey("RTSoft")?.CreateSubKey("RITMS")?.CreateSubKey("UP2DATE")?.SetValue("Certificate", value);
         }
 
         public List<string> PackageExtensionFilterList
