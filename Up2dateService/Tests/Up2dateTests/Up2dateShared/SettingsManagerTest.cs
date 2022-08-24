@@ -16,15 +16,6 @@ namespace Up2dateTests.Up2dateShared
         }
 
         [TestMethod]
-        public void CertificateSerialNumber_Test_CheckWorkability()
-        {
-            //Act
-            var certificateSerialNumber = _settingsManager.CertificateSerialNumber;
-            //Assert
-            Assert.AreEqual("1", certificateSerialNumber);
-        }
-
-        [TestMethod]
         public void CheckSignature_Test_CheckWorkability()
         {
             //Act
