@@ -12,14 +12,17 @@ jobs:
     steps:        
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Make download folder
         shell: bash
         run: mkdir artifacts
+
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: Test
           path: .\Test\
+          
       - name: vstest-action
         uses: microsoft/vstest-action@v1.0.0
         with:
