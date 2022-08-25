@@ -10,7 +10,7 @@ namespace Up2dateClient
     {
         const string ClientType = "RITMS UP2DATE for Windows";
 
-        private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi" }; // must be lowercase
+        private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi",".nupkg" }; // must be lowercase
         private readonly EventLog eventLog;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
