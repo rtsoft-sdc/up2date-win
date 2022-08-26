@@ -31,6 +31,7 @@ jobs:
   # You may pin to the exact commit or the version.
   # uses: NasAmin/trx-parser@2ba59ca11c1060572e96540966b730b779e0bdd0
         uses: NasAmin/trx-parser@v0.2.0
+        if: contains(github.ref, "master")
         with:
           TRX_PATH: ${{ github.workspace }}/TestResults
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
