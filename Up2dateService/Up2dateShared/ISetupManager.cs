@@ -7,7 +7,7 @@ namespace Up2dateShared
     {
         List<Package> GetAvaliablePackages();
         bool InstallPackage(string packageFile);
-        Task InstallPackagesAsync(IEnumerable<Package> packages);
+        Task InstallPackagesAsync(IEnumerable<Package> packagesList);
         bool IsPackageAvailable(string packageFile);
         bool IsPackageInstalled(string packageFile);
         void OnDownloadStarted(string artifactFileName);

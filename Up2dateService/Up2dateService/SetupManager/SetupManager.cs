@@ -19,11 +19,12 @@ namespace Up2dateService.SetupManager
         private const string MsiExtension = ".msi";
         private const string NugetExtension = ".nupkg";
         private const string ExternalInstallLog = "install.out";
+        private const string Up2DateChocoId = "up2date";
 
         private const int MillisecondsToWait = 1000;
 
-        private const int MsiExecResult_Success = 0;
-        private const int MsiExecResult_RestartNeeded = 3010;
+        private const int MsiExecResultSuccess = 0;
+        private const int MsiExecResultRestartNeeded = 3010;
 
         private static readonly List<string> AllowedExtensions = new List<string>
         {
@@ -36,14 +37,16 @@ namespace Up2dateService.SetupManager
         private readonly Action<Package, int> onSetupFinished;
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
+        private readonly ISettingsManager settingsManager;
 
         public SetupManager(EventLog eventLog, Action<Package, int> onSetupFinished,
-            Func<string> downloadLocationProvider)
+            Func<string> downloadLocationProvider, ISettingsManager settingsManager)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.onSetupFinished = onSetupFinished;
             this.downloadLocationProvider = downloadLocationProvider ??
                                             throw new ArgumentNullException(nameof(downloadLocationProvider));
+            this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
 
             RefreshPackageList();
         }
@@ -54,9 +57,12 @@ namespace Up2dateService.SetupManager
             return SafeGetPackages();
         }
 
-        public async Task InstallPackagesAsync(IEnumerable<Package> packages)
+        public async Task InstallPackagesAsync(IEnumerable<Package> packagesList)
         {
-            await InstallPackages(packages);
+            await Task.Run(() =>
+            {
+                InstallPackages(packagesList);
+            });
         }
 
         public bool IsPackageAvailable(string packageFile)
@@ -122,7 +128,7 @@ namespace Up2dateService.SetupManager
                 {
                     if (Directory.Exists(logDirectory)) Directory.Delete(logDirectory, true);
 
-                    Directory.CreateDirectory(logDirectory ?? throw new InvalidOperationException());
+                    Directory.CreateDirectory(logDirectory);
                 }
                 catch (Exception)
                 {
@@ -206,8 +212,6 @@ namespace Up2dateService.SetupManager
             {
                 lockedPackages = packages.ToList();
             }
-
-            ;
             return lockedPackages;
         }
 
@@ -218,8 +222,6 @@ namespace Up2dateService.SetupManager
                 packages.Clear();
                 packages.AddRange(newPackageList);
             }
-
-            ;
         }
 
         private void SafeUpdatePackage(Package package)
@@ -230,8 +232,6 @@ namespace Up2dateService.SetupManager
                     p.Filepath.Equals(package.Filepath, StringComparison.InvariantCultureIgnoreCase));
                 if (original.Status != PackageStatus.Unavailable) packages[packages.IndexOf(original)] = package;
             }
-
-            ;
         }
 
         private void SafeRemovePackage(string filepath, PackageStatus status)
@@ -242,8 +242,6 @@ namespace Up2dateService.SetupManager
                     p.Status == status && p.Filepath.Equals(filepath, StringComparison.InvariantCultureIgnoreCase));
                 if (package.Status != PackageStatus.Unavailable) packages.Remove(package);
             }
-
-            ;
         }
 
         private void SafeAddOrUpdatePackage(Package package)
@@ -257,24 +255,27 @@ namespace Up2dateService.SetupManager
                 else
                     packages[packages.IndexOf(original)] = package;
             }
-
-            ;
         }
 
-        private async Task InstallPackages(IEnumerable<Package> packagesToInstall)
+        private void InstallPackages(IEnumerable<Package> packagesToInstall)
         {
-            foreach (var inPackage in packagesToInstall)
+            foreach (var inPackage in packagesToInstall.Select(inPackage => inPackage.Filepath))
             {
-                if (!AllowedExtensions.Contains(Path.GetExtension(inPackage.Filepath),
+                if (!AllowedExtensions.Contains(Path.GetExtension(inPackage),
                         StringComparer.InvariantCultureIgnoreCase))
                     continue;
 
                 var lockedPackages = SafeGetPackages();
 
                 var package = lockedPackages.FirstOrDefault(p =>
-                    p.Filepath.Equals(inPackage.Filepath, StringComparison.InvariantCultureIgnoreCase));
+                    p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
                 if (package.Status == PackageStatus.Unavailable) continue;
-
+                if (package.ProductName.Contains(Up2DateChocoId))
+                {
+                    continue;
+                    // TODO: Properly integrate selfUpdate
+                    // settingsManager.UpdateVersionMarker = package.DisplayVersion;
+                }
                 package.ErrorCode = 0;
                 package.Status = PackageStatus.Installing;
 
@@ -296,10 +297,10 @@ namespace Up2dateService.SetupManager
         {
             switch (result)
             {
-                case MsiExecResult_Success:
+                case MsiExecResultSuccess:
                     package.Status = PackageStatus.Installed;
                     break;
-                case MsiExecResult_RestartNeeded:
+                case MsiExecResultRestartNeeded:
                     package.Status = PackageStatus.RestartNeeded;
                     break;
                 default:
@@ -391,7 +392,6 @@ namespace Up2dateService.SetupManager
                     using (var zipFile = ZipFile.OpenRead(updatedPackage.Filepath))
                     {
                         var nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
-                        string packageId;
                         using (var nuspecStream = nuspec.Open())
                         {
                             using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
@@ -399,9 +399,8 @@ namespace Up2dateService.SetupManager
                                 var xmlData = sr.ReadToEnd();
                                 var doc = new XmlDocument();
                                 doc.LoadXml(xmlData);
-                                packageId = doc.GetElementsByTagName("id")[0].InnerText;
                                 updatedPackage.DisplayName = doc.GetElementsByTagName("title")[0].InnerText;
-                                updatedPackage.ProductName = doc.GetElementsByTagName("title")[0].InnerText;
+                                updatedPackage.ProductName = doc.GetElementsByTagName("id")[0].InnerText;
                                 updatedPackage.DisplayVersion = doc.GetElementsByTagName("version")[0].InnerText;
                                 updatedPackage.Publisher = doc.GetElementsByTagName("authors")[0].InnerText;
                             }
@@ -412,7 +411,7 @@ namespace Up2dateService.SetupManager
                             const string psCommand = @"choco list -li";
                             ps.AddScript(psCommand);
                             var result = ps.Invoke<string>();
-                            if (result.Any(item => item.Contains(packageId)))
+                            if (result.Any(item => item.Contains(updatedPackage.ProductName)))
                             {
                                 updatedPackage.Status = PackageStatus.Installed;
                             }

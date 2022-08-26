@@ -16,7 +16,7 @@ namespace SimpleClientApp
             return true;
         }
 
-        public Task InstallPackagesAsync(IEnumerable<Package> packages)
+        public Task InstallPackagesAsync(IEnumerable<Package> packagesList)
         {
             return Task.CompletedTask;
         }
