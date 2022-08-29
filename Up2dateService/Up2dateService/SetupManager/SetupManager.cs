@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using Up2dateService.ErrorCodes;
 using Up2dateShared;
 
 namespace Up2dateService.SetupManager
@@ -59,10 +58,7 @@ namespace Up2dateService.SetupManager
 
         public async Task InstallPackagesAsync(IEnumerable<Package> packagesList)
         {
-            await Task.Run(() =>
-            {
-                InstallPackages(packagesList);
-            });
+            await Task.Run(() => { InstallPackages(packagesList); });
         }
 
         public bool IsPackageAvailable(string packageFile)
@@ -78,27 +74,32 @@ namespace Up2dateService.SetupManager
             return package.Status == PackageStatus.Installed || package.Status == PackageStatus.RestartNeeded;
         }
 
-        public bool InstallPackage(string packageFile)
+        public InstallPackageStatus InstallPackage(string packageFile)
         {
-            var package = FindPackage(packageFile);
-            if (package.Status == PackageStatus.Unavailable) return false;
-            int exitCode;
-            if (package.Filepath.Contains(NugetExtension))
-                try
-                {
-                    InstallChocoNupkg(package);
-                    exitCode = 0;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            else
-                exitCode = InstallPackageAsync(package, CancellationToken.None).Result;
+            try
+            {
+                var package = FindPackage(packageFile);
+                if (package.Status == PackageStatus.Unavailable) return InstallPackageStatus.PackageUnavailable;
 
+                if (package.Filepath.Contains(NugetExtension))
+                    try
+                    {
+                        return !IsChocoInstalled()
+                            ? InstallPackageStatus.ChocoNotInstalled
+                            : InstallChocoNupkg(package);
+                    }
+                    catch (Exception)
+                    {
+                        return InstallPackageStatus.GeneralChocoError;
+                    }
 
-            RefreshPackageList();
-            return exitCode == 0;
+                var exitCode = InstallPackageAsync(package, CancellationToken.None).Result;
+                return exitCode == 0 ? InstallPackageStatus.Ok : InstallPackageStatus.MsiInstallationError;
+            }
+            finally
+            {
+                RefreshPackageList();
+            }
         }
 
         public void OnDownloadStarted(string artifactFileName)
@@ -119,84 +120,80 @@ namespace Up2dateService.SetupManager
             RefreshPackageList();
         }
 
-        private int InstallChocoNupkg(Package package)
+        private InstallPackageStatus InstallChocoNupkg(Package package)
         {
             var logDirectory = downloadLocationProvider() + @"\install\";
             try
             {
+                if (Directory.Exists(logDirectory)) Directory.Delete(logDirectory, true);
+
+                Directory.CreateDirectory(logDirectory);
+            }
+            catch (Exception)
+            {
+                return InstallPackageStatus.TempDirectoryFail;
+            }
+
+            string packageId;
+            string packageVersion;
+            using (var zipFile = ZipFile.OpenRead(package.Filepath))
+            {
                 try
                 {
-                    if (Directory.Exists(logDirectory)) Directory.Delete(logDirectory, true);
-
-                    Directory.CreateDirectory(logDirectory);
+                    var nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
+                    using (var nuspecStream = nuspec.Open())
+                    {
+                        using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
+                        {
+                            var xmlData = sr.ReadToEnd();
+                            var doc = new XmlDocument();
+                            doc.LoadXml(xmlData);
+                            packageId = doc.GetElementsByTagName("id")[0].InnerText;
+                            packageVersion = doc.GetElementsByTagName("version")[0].InnerText;
+                        }
+                    }
                 }
                 catch (Exception)
                 {
-                    return (int)InstallChocoNupkgErrors.FailedToCreateDirectory;
+                    return InstallPackageStatus.DataCannotBeRead;
                 }
+            }
 
-                string packageId;
-                string packageVersion;
-                using (var zipFile = ZipFile.OpenRead(package.Filepath))
-                {
-                    try
-                    {
-                        var nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
-                        using (var nuspecStream = nuspec.Open())
-                        {
-                            using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
-                            {
-                                var xmlData = sr.ReadToEnd();
-                                var doc = new XmlDocument();
-                                doc.LoadXml(xmlData);
-                                packageId = doc.GetElementsByTagName("id")[0].InnerText;
-                                packageVersion = doc.GetElementsByTagName("version")[0].InnerText;
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        return (int)InstallChocoNupkgErrors.FailedToExtractNupkg;
-                    }
-                }
-
+            try
+            {
                 // TODO: Possible will find better way to work with
                 var chocoInstallCommand =
                     $@"Start-Process -FilePath powershell -ArgumentList('Start-Process -FilePath choco -ArgumentList(''install {packageId} --version {packageVersion} -s {downloadLocationProvider()} -y --force --no-progress'') -RedirectStandardOutput ""{logDirectory}\{ExternalInstallLog}""') -RedirectStandardOutput ""{logDirectory}\{ExternalInstallLog}""";
                 var ps = PowerShell.Create();
                 ps.AddScript(chocoInstallCommand);
                 ps.Invoke<string>();
-                var chocoProcesses = Process.GetProcessesByName("choco.exe").ToList();
-                while (chocoProcesses.Count > 0)
-                {
-                    // TODO: Possibly need to change
-                    Thread.Sleep(MillisecondsToWait);
-                    chocoProcesses = Process.GetProcessesByName("choco.exe").ToList();
-                }
-
-                var installed = false;
-                try
-                {
-                    using (var reader = File.OpenText($"{logDirectory}\\{ExternalInstallLog}"))
-                    {
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
-                            if (line.Contains("Chocolatey installed 1/1 packages. "))
-                                installed = true;
-                    }
-                }
-                catch
-                {
-                    return (int)InstallChocoNupkgErrors.FailedToInstallNupkg;
-                }
-
-                if (!installed) return (int)InstallChocoNupkgErrors.FailedToInstallNupkg;
-                return (int)InstallChocoNupkgErrors.Ok;
             }
             catch (Exception)
             {
-                return (int)InstallChocoNupkgErrors.FailedToWriteDateToArchive;
+                return InstallPackageStatus.PsScriptInvokeError;
             }
+
+            while (Process.GetProcessesByName("choco.exe").Length > 0)
+                // TODO: Possibly need to change
+                Thread.Sleep(MillisecondsToWait);
+
+            var installed = false;
+            try
+            {
+                using (var reader = File.OpenText($"{logDirectory}\\{ExternalInstallLog}"))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                        if (line.Contains("Chocolatey installed 1/1 packages. "))
+                            installed = true;
+                }
+            }
+            catch
+            {
+                return InstallPackageStatus.FailedToInstallChocoPackage;
+            }
+
+            return !installed ? InstallPackageStatus.FailedToInstallChocoPackage : InstallPackageStatus.Ok;
         }
 
         private Package FindPackage(string packageFile)
@@ -212,6 +209,7 @@ namespace Up2dateService.SetupManager
             {
                 lockedPackages = packages.ToList();
             }
+
             return lockedPackages;
         }
 
@@ -270,18 +268,15 @@ namespace Up2dateService.SetupManager
                 var package = lockedPackages.FirstOrDefault(p =>
                     p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
                 if (package.Status == PackageStatus.Unavailable) continue;
-                if (package.ProductName.Contains(Up2DateChocoId))
-                {
-                    continue;
-                    // TODO: Properly integrate selfUpdate
-                    // settingsManager.UpdateVersionMarker = package.DisplayVersion;
-                }
+                if (package.ProductName.Contains(Up2DateChocoId)) continue;
+                // TODO: Properly integrate selfUpdate
+                // settingsManager.UpdateVersionMarker = package.DisplayVersion;
                 package.ErrorCode = 0;
                 package.Status = PackageStatus.Installing;
 
                 SafeUpdatePackage(package);
-                var result = package.Filepath.Contains(NugetExtension)
-                    ? InstallChocoNupkg(package)
+                var result = NugetExtension.Contains(package.Filepath)
+                    ? (int)InstallChocoNupkg(package)
                     : InstallPackageAsync(package, CancellationToken.None).Result;
 
                 UpdatePackageStatus(ref package, result);
@@ -412,9 +407,7 @@ namespace Up2dateService.SetupManager
                             ps.AddScript(psCommand);
                             var result = ps.Invoke<string>();
                             if (result.Any(item => item.Contains(updatedPackage.ProductName)))
-                            {
                                 updatedPackage.Status = PackageStatus.Installed;
-                            }
                         }
                     }
 
@@ -422,6 +415,14 @@ namespace Up2dateService.SetupManager
             }
 
             SafeUpdatePackages(lockedPackages);
+        }
+
+        private static bool IsChocoInstalled()
+        {
+            var ps = PowerShell.Create();
+            ps.AddScript("choco --version");
+            var value = ps.Invoke<string>();
+            return value.Count > 0;
         }
     }
 }
