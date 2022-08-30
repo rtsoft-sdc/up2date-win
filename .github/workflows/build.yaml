@@ -7,6 +7,7 @@ env:
   SLN_PATH: .\Up2dateService\Up2dateService.sln
   ARTIFACTS_PATH_X32: .\Up2dateService\Setup32\Release\
   ARTIFACTS_PATH_X64: .\Up2dateService\Setup64\Release\
+  ARTIFACTS_PATH_TESTS: .\Up2dateService\Tests\Up2dateTests\bin\Release\
   
 jobs:
   artifacts:
@@ -70,3 +71,9 @@ jobs:
         with:
           name: x86
           path: ${{ env.ARTIFACTS_PATH_X32 }}
+
+      - name: Upload Test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Test
+          path: ${{ env.ARTIFACTS_PATH_TESTS }}

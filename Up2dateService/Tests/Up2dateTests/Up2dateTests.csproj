@@ -51,9 +51,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Up2dateShared\CertificateManagerTest.cs" />
+    <Compile Include="Up2dateShared\SettingsManagerTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="settings.runsettings" />
     <None Include="testData\invalidSignature.testObject" />
   </ItemGroup>
   <ItemGroup>

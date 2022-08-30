@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestsShared;
+using Tests_Shared;
 using Up2dateShared;
 
 namespace Up2dateTests.Up2dateShared
@@ -22,7 +22,14 @@ namespace Up2dateTests.Up2dateShared
             {
                 SelectedIssuers = new List<string> { TestIssuer }
             };
+
             _certificateManager = new CertificateManager(_settings, new EventLog());
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            _settings = null;
         }
 
         [TestMethod]
