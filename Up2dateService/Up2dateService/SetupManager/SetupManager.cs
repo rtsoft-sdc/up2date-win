@@ -153,23 +153,7 @@ namespace Up2dateService.SetupManager
                 // TODO: Possibly need to change
                 Thread.Sleep(MillisecondsToWait);
 
-            var installed = false;
-            try
-            {
-                using (var reader = File.OpenText($"{logDirectory}\\{ExternalInstallLog}"))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                        if (line.Contains("Chocolatey installed 1/1 packages. "))
-                            installed = true;
-                }
-            }
-            catch
-            {
-                return InstallPackageStatus.FailedToInstallChocoPackage;
-            }
-
-            return !installed ? InstallPackageStatus.FailedToInstallChocoPackage : InstallPackageStatus.Ok;
+            return ChocoHelper.IsPackageInstalled(packageId) ? InstallPackageStatus.Ok : InstallPackageStatus.FailedToInstallChocoPackage;
         }
 
 
