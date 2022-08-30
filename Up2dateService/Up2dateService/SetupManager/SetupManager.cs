@@ -74,7 +74,7 @@ namespace Up2dateService.SetupManager
                 Package package = FindPackage(packageFile);
                 if (package.Status == PackageStatus.Unavailable) return InstallPackageStatus.PackageUnavailable;
 
-                if (package.Filepath.Contains(NugetExtension))
+                if (package.Filepath.Contains(Path.GetExtension(NugetExtension)))
                     try
                     {
                         return !ChocoHelper.IsChocoInstalled()
@@ -350,7 +350,8 @@ namespace Up2dateService.SetupManager
                     }
                 }
 
-                if (ChocoHelper.IsChocoInstalled() && updatedPackage.Filepath.Contains(NugetExtension))
+                if (ChocoHelper.IsChocoInstalled() &&
+                    updatedPackage.Filepath.Contains(Path.GetExtension(NugetExtension)))
                 {
                     ChocoNugetInfo nugetInfo = ChocoNugetInfo.GetInfo(updatedPackage.Filepath);
                     updatedPackage.DisplayName = nugetInfo.Title;
