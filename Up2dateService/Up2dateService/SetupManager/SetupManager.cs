@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Management.Automation;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 using Up2dateShared;
 
 namespace Up2dateService.SetupManager
@@ -136,37 +132,20 @@ namespace Up2dateService.SetupManager
 
             string packageId;
             string packageVersion;
-            using (var zipFile = ZipFile.OpenRead(package.Filepath))
+            try
             {
-                try
-                {
-                    var nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
-                    using (var nuspecStream = nuspec.Open())
-                    {
-                        using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
-                        {
-                            var xmlData = sr.ReadToEnd();
-                            var doc = new XmlDocument();
-                            doc.LoadXml(xmlData);
-                            packageId = doc.GetElementsByTagName("id")[0].InnerText;
-                            packageVersion = doc.GetElementsByTagName("version")[0].InnerText;
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    return InstallPackageStatus.DataCannotBeRead;
-                }
+                ChocoNugetInfo nugetInfo = ChocoNugetInfo.getInfo(package.Filepath);
+                packageVersion = nugetInfo.Version;
+                packageId = nugetInfo.Id;
+            }
+            catch (Exception)
+            {
+                return InstallPackageStatus.DataCannotBeRead;
             }
 
             try
             {
-                // TODO: Possible will find better way to work with
-                var chocoInstallCommand =
-                    $@"Start-Process -FilePath powershell -ArgumentList('Start-Process -FilePath choco -ArgumentList(''install {packageId} --version {packageVersion} -s {downloadLocationProvider()} -y --force --no-progress'') -RedirectStandardOutput ""{logDirectory}\{ExternalInstallLog}""') -RedirectStandardOutput ""{logDirectory}\{ExternalInstallLog}""";
-                var ps = PowerShell.Create();
-                ps.AddScript(chocoInstallCommand);
-                ps.Invoke<string>();
+                ChocoHelper.InstallChocoPackage(packageId, packageVersion, logDirectory);
             }
             catch (Exception)
             {
@@ -195,6 +174,7 @@ namespace Up2dateService.SetupManager
 
             return !installed ? InstallPackageStatus.FailedToInstallChocoPackage : InstallPackageStatus.Ok;
         }
+
 
         private Package FindPackage(string packageFile)
         {

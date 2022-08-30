@@ -26,5 +26,15 @@ namespace Up2dateService.SetupManager
                 return value.Count > 0;
             }
         }
+
+        public static void InstallChocoPackage(string packageId, string packageVersion, string logDirectory)
+        {
+            // TODO: Possible will find better way to work with
+            var chocoInstallCommand =
+                $@"Start-Process -FilePath powershell -ArgumentList('Start-Process -FilePath choco -ArgumentList(''install {packageId} --version {packageVersion} -s {downloadLocationProvider()} -y --force --no-progress'') -RedirectStandardOutput ""{logDirectory}\{ExternalInstallLog}""') -RedirectStandardOutput ""{logDirectory}\{ExternalInstallLog}""";
+            var ps = PowerShell.Create();
+            ps.AddScript(chocoInstallCommand);
+            ps.Invoke<string>();
+        }
     }
 }
