@@ -367,7 +367,7 @@ namespace Up2dateService.SetupManager
                 {
                     ChocoNugetInfo nugetInfo = ChocoNugetInfo.getInfo(updatedPackage.Filepath);
                     updatedPackage.DisplayName = nugetInfo.Title;
-                    updatedPackage.ProductName = nugetInfo.Id;
+                    updatedPackage.ProductCode = nugetInfo.Id;
                     updatedPackage.DisplayVersion = nugetInfo.Version;
                     updatedPackage.Publisher = nugetInfo.Publisher;
 
