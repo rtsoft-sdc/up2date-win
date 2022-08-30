@@ -137,7 +137,7 @@ namespace Up2dateService.SetupManager
             }
             catch (Exception)
             {
-                return InstallPackageStatus.DataCannotBeRead;
+                return InstallPackageStatus.InvalidChocoPackage;
             }
 
             try

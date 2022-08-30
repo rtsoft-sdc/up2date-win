@@ -64,26 +64,6 @@ namespace Up2dateShared
             set => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).CreateSubKey("SOFTWARE")?.CreateSubKey("RTSoft")?.CreateSubKey("RITMS")?.CreateSubKey("UP2DATE")?.SetValue("Certificate", value);
         }
 
-        public string UpdateVersionMarker
-        {
-            get
-            {
-                try
-                {
-                    // ReSharper disable PossibleNullReferenceException
-                    var value = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE").OpenSubKey("RTSoft").OpenSubKey("RITMS").OpenSubKey("UP2DATE").GetValue("UpdateVersionMarker") as string;
-                    return value;
-                    // ReSharper restore PossibleNullReferenceException
-                }
-                catch
-                {
-                    return string.Empty;
-                }
-            }
-
-            set => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).CreateSubKey("SOFTWARE")?.CreateSubKey("RTSoft")?.CreateSubKey("RITMS")?.CreateSubKey("UP2DATE")?.SetValue("UpdateVersionMarker", value);
-        }
-
         public List<string> PackageExtensionFilterList
         {
             get

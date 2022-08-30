@@ -184,7 +184,7 @@ namespace Up2dateClient
                     case InstallPackageStatus.TempDirectoryFail:
                         additionalMessage = "Temporary Directory failed to create";
                         break;
-                    case InstallPackageStatus.DataCannotBeRead:
+                    case InstallPackageStatus.InvalidChocoPackage:
                         additionalMessage = "Package Data Cannot be Processed";
                         break;
                     case InstallPackageStatus.FailedToInstallChocoPackage:

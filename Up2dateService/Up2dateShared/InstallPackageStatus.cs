@@ -5,7 +5,7 @@
         Ok,
         PackageUnavailable,
         TempDirectoryFail,
-        DataCannotBeRead,
+        InvalidChocoPackage,
         FailedToInstallChocoPackage,
         GeneralChocoError,
         PsScriptInvokeError,
