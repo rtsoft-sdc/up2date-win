@@ -13,7 +13,6 @@ namespace Tests_Shared
         public string RequestCertificateUrl { get; set; }
 
         public string CertificateSerialNumber { get; set; }
-        public string UpdateVersionMarker { get; set; }
 
         public List<string> PackageExtensionFilterList { get; set; }
 
