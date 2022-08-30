@@ -43,7 +43,13 @@ namespace Up2dateService.SetupManager
         public bool IsPackageInstalled(string productCode)
         {
             if (productCode == null) return false;
-            return productCodes.Concat(wow6432productCodes).Contains(productCode);
+            bool packageInstalled = productCodes.Concat(wow6432productCodes).Contains(productCode);
+            if (!packageInstalled)
+            {
+                packageInstalled = ChocoHelper.IsPackageInstalled(productCode);
+            }
+
+            return packageInstalled;
         }
 
         public void UpdateInfo(ref Package package)

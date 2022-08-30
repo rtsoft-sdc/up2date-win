@@ -175,7 +175,7 @@ namespace Up2dateClient
             if (installPackageStatus != InstallPackageStatus.Ok)
             {
                 result.Message = "Installation failed.";
-                var additionalMessage = string.Empty;
+                string additionalMessage = string.Empty;
                 switch (installPackageStatus)
                 {
                     case InstallPackageStatus.PackageUnavailable:

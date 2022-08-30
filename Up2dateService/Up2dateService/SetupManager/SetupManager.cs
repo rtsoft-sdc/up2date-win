@@ -51,7 +51,7 @@ namespace Up2dateService.SetupManager
 
         public async Task InstallPackagesAsync(IEnumerable<Package> packages)
         {
-            await Task.Run(() => { InstallPackages(packages); });
+            await InstallPackages(packages);
         }
 
         public bool IsPackageAvailable(string packageFile)
@@ -63,7 +63,7 @@ namespace Up2dateService.SetupManager
         public bool IsPackageInstalled(string packageFile)
         {
             RefreshPackageList();
-            var package = FindPackage(packageFile);
+            Package package = FindPackage(packageFile);
             return package.Status == PackageStatus.Installed || package.Status == PackageStatus.RestartNeeded;
         }
 
@@ -71,7 +71,7 @@ namespace Up2dateService.SetupManager
         {
             try
             {
-                var package = FindPackage(packageFile);
+                Package package = FindPackage(packageFile);
                 if (package.Status == PackageStatus.Unavailable) return InstallPackageStatus.PackageUnavailable;
 
                 if (package.Filepath.Contains(NugetExtension))
@@ -86,7 +86,7 @@ namespace Up2dateService.SetupManager
                         return InstallPackageStatus.GeneralChocoError;
                     }
 
-                var exitCode = InstallPackageAsync(package, CancellationToken.None).Result;
+                int exitCode = InstallPackageAsync(package, CancellationToken.None).Result;
                 return exitCode == 0 ? InstallPackageStatus.Ok : InstallPackageStatus.MsiInstallationError;
             }
             finally
@@ -115,7 +115,7 @@ namespace Up2dateService.SetupManager
 
         private InstallPackageStatus InstallChocoNupkg(Package package)
         {
-            var logDirectory = downloadLocationProvider() + @"\install\";
+            string logDirectory = downloadLocationProvider() + @"\install\";
             try
             {
                 if (Directory.Exists(logDirectory)) Directory.Delete(logDirectory, true);
@@ -131,7 +131,7 @@ namespace Up2dateService.SetupManager
             string packageVersion;
             try
             {
-                ChocoNugetInfo nugetInfo = ChocoNugetInfo.getInfo(package.Filepath);
+                ChocoNugetInfo nugetInfo = ChocoNugetInfo.GetInfo(package.Filepath);
                 packageVersion = nugetInfo.Version;
                 packageId = nugetInfo.Id;
             }
@@ -150,7 +150,6 @@ namespace Up2dateService.SetupManager
             }
 
             while (Process.GetProcessesByName("choco.exe").Length > 0)
-                // TODO: Possibly need to change
                 Thread.Sleep(MillisecondsToWait);
 
             return ChocoHelper.IsPackageInstalled(packageId) ? InstallPackageStatus.Ok : InstallPackageStatus.FailedToInstallChocoPackage;
@@ -221,34 +220,38 @@ namespace Up2dateService.SetupManager
             };
         }
 
-        private void InstallPackages(IEnumerable<Package> packagesToInstall)
+        private async Task InstallPackages(IEnumerable<Package> packagesToInstall)
         {
-            foreach (var inPackage in packagesToInstall.Select(inPackage => inPackage.Filepath))
+            await Task.Run(() =>
             {
-                if (!AllowedExtensions.Contains(Path.GetExtension(inPackage), StringComparer.InvariantCultureIgnoreCase)) continue;
+                foreach (string inPackage in packagesToInstall.Select(inPackage => inPackage.Filepath))
+                {
+                    if (!AllowedExtensions.Contains(Path.GetExtension(inPackage),
+                            StringComparer.InvariantCultureIgnoreCase)) continue;
 
-                var lockedPackages = SafeGetPackages();
+                    var lockedPackages = SafeGetPackages();
 
-                Package package = lockedPackages.FirstOrDefault(p => p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
-                if (package.Status == PackageStatus.Unavailable) continue;
+                    Package package = lockedPackages.FirstOrDefault(p =>
+                        p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
+                    if (package.Status == PackageStatus.Unavailable) continue;
 
-                if (package.ProductName.Contains(Up2DateChocoId)) continue;
-                // TODO: Properly integrate selfUpdate
-                // settingsManager.UpdateVersionMarker = package.DisplayVersion;
-                package.ErrorCode = 0;
-                package.Status = PackageStatus.Installing;
+                    if (package.ProductName.Contains(Up2DateChocoId)) continue;
+                    package.ErrorCode = 0;
+                    package.Status = PackageStatus.Installing;
 
-                SafeUpdatePackage(package);
-                var result = NugetExtension.Contains(Path.GetExtension(package.Filepath))
-                    ? (int)InstallChocoNupkg(package)
-                    : InstallPackageAsync(package, CancellationToken.None).Result;
+                    SafeUpdatePackage(package);
+                    int result = NugetExtension.Contains(Path.GetExtension(package.Filepath))
+                        ? (int)InstallChocoNupkg(package)
+                        : InstallPackageAsync(package, CancellationToken.None).Result;
 
-                UpdatePackageStatus(ref package, result);
-                eventLog.WriteEntry($"{Path.GetFileName(package.Filepath)} installation finished with result: {package.Status}");
-                onSetupFinished?.Invoke(package, result);
+                    UpdatePackageStatus(ref package, result);
+                    eventLog.WriteEntry(
+                        $"{Path.GetFileName(package.Filepath)} installation finished with result: {package.Status}");
+                    onSetupFinished?.Invoke(package, result);
 
-                SafeUpdatePackage(package);
-            }
+                    SafeUpdatePackage(package);
+                }
+            });
         }
 
         private void UpdatePackageStatus(ref Package package, int result)
@@ -274,7 +277,7 @@ namespace Up2dateService.SetupManager
             {
                 const int cancellationCheckPeriodMs = 1000;
 
-                using (var p = new Process())
+                using (Process p = new Process())
                 {
                     p.StartInfo.FileName = "msiexec.exe";
                     p.StartInfo.Arguments = $"/i \"{package.Filepath}\" ALLUSERS=1 /qn";
@@ -347,19 +350,15 @@ namespace Up2dateService.SetupManager
                     }
                 }
 
-                if (updatedPackage.Filepath.Contains(NugetExtension))
+                if (ChocoHelper.IsChocoInstalled() && updatedPackage.Filepath.Contains(NugetExtension))
                 {
-                    ChocoNugetInfo nugetInfo = ChocoNugetInfo.getInfo(updatedPackage.Filepath);
+                    ChocoNugetInfo nugetInfo = ChocoNugetInfo.GetInfo(updatedPackage.Filepath);
                     updatedPackage.DisplayName = nugetInfo.Title;
                     updatedPackage.ProductCode = nugetInfo.Id;
                     updatedPackage.DisplayVersion = nugetInfo.Version;
                     updatedPackage.Publisher = nugetInfo.Publisher;
-
-                    if (ChocoHelper.IsPackageInstalled(updatedPackage.ProductCode))
-                    {
-                        updatedPackage.Status = PackageStatus.Installed;
-                    }
                 }
+
                 lockedPackages[i] = updatedPackage;
             }
 

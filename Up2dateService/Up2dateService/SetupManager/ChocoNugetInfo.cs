@@ -29,22 +29,22 @@ namespace Up2dateService.SetupManager
         public string Version { get; }
         public string Publisher { get; }
 
-        public static ChocoNugetInfo getInfo(string fullFilePath)
+        public static ChocoNugetInfo GetInfo(string fullFilePath)
         {
-            using (var zipFile = ZipFile.OpenRead(fullFilePath))
+            using (ZipArchive zipFile = ZipFile.OpenRead(fullFilePath))
             {
-                var nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
-                using (var nuspecStream = nuspec.Open())
+                ZipArchiveEntry nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
+                using (Stream nuspecStream = nuspec.Open())
                 {
-                    using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
+                    using (StreamReader sr = new StreamReader(nuspecStream, Encoding.UTF8))
                     {
-                        var xmlData = sr.ReadToEnd();
-                        var doc = new XmlDocument();
+                        string xmlData = sr.ReadToEnd();
+                        XmlDocument doc = new XmlDocument();
                         doc.LoadXml(xmlData);
-                        var id = doc.GetElementsByTagName("id")[0].InnerText;
-                        var title = doc.GetElementsByTagName("title")[0].InnerText;
-                        var version = doc.GetElementsByTagName("version")[0].InnerText;
-                        var publisher = doc.GetElementsByTagName("authors")[0].InnerText;
+                        string id = doc.GetElementsByTagName("id")[0].InnerText;
+                        string title = doc.GetElementsByTagName("title")[0].InnerText;
+                        string version = doc.GetElementsByTagName("version")[0].InnerText;
+                        string publisher = doc.GetElementsByTagName("authors")[0].InnerText;
                         return new ChocoNugetInfo(id, title, version, publisher);
                     }
                 }
