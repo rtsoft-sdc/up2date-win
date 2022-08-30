@@ -72,6 +72,8 @@
   <ItemGroup>
     <Compile Include="ErrorCodes\InstallChocoNupkgErrors.cs" />
     <Compile Include="IWcfService.cs" />
+    <Compile Include="SetupManager\ChocoHelper.cs" />
+    <Compile Include="SetupManager\ChocoNugetInfo.cs" />
     <Compile Include="SetupManager\MsiHelper.cs" />
     <Compile Include="SetupManager\MsiInfo.cs" />
     <Compile Include="SetupManager\ProductInstallationChecker.cs" />

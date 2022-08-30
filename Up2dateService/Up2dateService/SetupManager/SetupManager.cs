@@ -22,8 +22,8 @@ namespace Up2dateService.SetupManager
 
         private const int MillisecondsToWait = 1000;
 
-        private const int MsiExecResultSuccess = 0;
-        private const int MsiExecResultRestartNeeded = 3010;
+        private const int MsiExecResult_Success = 0;
+        private const int MsiExecResult_RestartNeeded = 3010;
 
         private static readonly List<string> AllowedExtensions = new List<string>
         {
@@ -56,9 +56,9 @@ namespace Up2dateService.SetupManager
             return SafeGetPackages();
         }
 
-        public async Task InstallPackagesAsync(IEnumerable<Package> packagesList)
+        public async Task InstallPackagesAsync(IEnumerable<Package> packages)
         {
-            await Task.Run(() => { InstallPackages(packagesList); });
+            await Task.Run(() => { InstallPackages(packages); });
         }
 
         public bool IsPackageAvailable(string packageFile)
@@ -84,7 +84,7 @@ namespace Up2dateService.SetupManager
                 if (package.Filepath.Contains(NugetExtension))
                     try
                     {
-                        return !IsChocoInstalled()
+                        return !ChocoHelper.IsChocoInstalled()
                             ? InstallPackageStatus.ChocoNotInstalled
                             : InstallChocoNupkg(package);
                     }
@@ -198,8 +198,7 @@ namespace Up2dateService.SetupManager
 
         private Package FindPackage(string packageFile)
         {
-            return SafeGetPackages().FirstOrDefault(p =>
-                Path.GetFileName(p.Filepath).Equals(packageFile, StringComparison.InvariantCultureIgnoreCase));
+            return SafeGetPackages().FirstOrDefault(p => Path.GetFileName(p.Filepath).Equals(packageFile, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private List<Package> SafeGetPackages()
@@ -208,8 +207,7 @@ namespace Up2dateService.SetupManager
             lock (packagesLock)
             {
                 lockedPackages = packages.ToList();
-            }
-
+            };
             return lockedPackages;
         }
 
@@ -219,55 +217,60 @@ namespace Up2dateService.SetupManager
             {
                 packages.Clear();
                 packages.AddRange(newPackageList);
-            }
+            };
         }
 
         private void SafeUpdatePackage(Package package)
         {
             lock (packagesLock)
             {
-                var original = packages.FirstOrDefault(p =>
-                    p.Filepath.Equals(package.Filepath, StringComparison.InvariantCultureIgnoreCase));
-                if (original.Status != PackageStatus.Unavailable) packages[packages.IndexOf(original)] = package;
-            }
+                Package original = packages.FirstOrDefault(p => p.Filepath.Equals(package.Filepath, StringComparison.InvariantCultureIgnoreCase));
+                if (original.Status != PackageStatus.Unavailable)
+                {
+                    packages[packages.IndexOf(original)] = package;
+                }
+            };
         }
 
         private void SafeRemovePackage(string filepath, PackageStatus status)
         {
             lock (packagesLock)
             {
-                var package = packages.FirstOrDefault(p =>
-                    p.Status == status && p.Filepath.Equals(filepath, StringComparison.InvariantCultureIgnoreCase));
-                if (package.Status != PackageStatus.Unavailable) packages.Remove(package);
-            }
+                Package package = packages.FirstOrDefault(p => p.Status == status && p.Filepath.Equals(filepath, StringComparison.InvariantCultureIgnoreCase));
+                if (package.Status != PackageStatus.Unavailable)
+                {
+                    packages.Remove(package);
+                }
+            };
         }
 
         private void SafeAddOrUpdatePackage(Package package)
         {
             lock (packagesLock)
             {
-                var original = packages.FirstOrDefault(p =>
-                    p.Filepath.Equals(package.Filepath, StringComparison.InvariantCultureIgnoreCase));
+                Package original = packages.FirstOrDefault(p => p.Filepath.Equals(package.Filepath, StringComparison.InvariantCultureIgnoreCase));
                 if (original.Status == PackageStatus.Unavailable)
+                {
                     packages.Add(package);
+                }
                 else
+                {
                     packages[packages.IndexOf(original)] = package;
-            }
+                }
+            };
         }
 
         private void InstallPackages(IEnumerable<Package> packagesToInstall)
         {
             foreach (var inPackage in packagesToInstall.Select(inPackage => inPackage.Filepath))
             {
-                if (!AllowedExtensions.Contains(Path.GetExtension(inPackage),
-                        StringComparer.InvariantCultureIgnoreCase))
-                    continue;
+                if (!AllowedExtensions.Contains(Path.GetExtension(inPackage), StringComparer.InvariantCultureIgnoreCase)) continue;
 
                 var lockedPackages = SafeGetPackages();
 
-                var package = lockedPackages.FirstOrDefault(p =>
-                    p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
+                Package package = lockedPackages.FirstOrDefault(p => p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
                 if (package.Status == PackageStatus.Unavailable) continue;
+
                 if (package.ProductName.Contains(Up2DateChocoId)) continue;
                 // TODO: Properly integrate selfUpdate
                 // settingsManager.UpdateVersionMarker = package.DisplayVersion;
@@ -280,8 +283,7 @@ namespace Up2dateService.SetupManager
                     : InstallPackageAsync(package, CancellationToken.None).Result;
 
                 UpdatePackageStatus(ref package, result);
-                eventLog.WriteEntry(
-                    $"{Path.GetFileName(package.Filepath)} installation finished with result: {package.Status}");
+                eventLog.WriteEntry($"{Path.GetFileName(package.Filepath)} installation finished with result: {package.Status}");
                 onSetupFinished?.Invoke(package, result);
 
                 SafeUpdatePackage(package);
@@ -292,17 +294,16 @@ namespace Up2dateService.SetupManager
         {
             switch (result)
             {
-                case MsiExecResultSuccess:
+                case MsiExecResult_Success:
                     package.Status = PackageStatus.Installed;
                     break;
-                case MsiExecResultRestartNeeded:
+                case MsiExecResult_RestartNeeded:
                     package.Status = PackageStatus.RestartNeeded;
                     break;
                 default:
                     package.Status = PackageStatus.Failed;
                     break;
             }
-
             package.ErrorCode = result;
         }
 
@@ -324,7 +325,8 @@ namespace Up2dateService.SetupManager
                     do
                     {
                         cancellationToken.ThrowIfCancellationRequested();
-                    } while (!p.WaitForExit(cancellationCheckPeriodMs));
+                    } 
+                    while (!p.WaitForExit(cancellationCheckPeriodMs));
 
                     return p.ExitCode;
                 }
@@ -335,22 +337,22 @@ namespace Up2dateService.SetupManager
         {
             var lockedPackages = SafeGetPackages();
 
-            var msiFolder = downloadLocationProvider();
-            var files = Directory.GetFiles(msiFolder).ToList();
+            string msiFolder = downloadLocationProvider();
+            List<string> files = Directory.GetFiles(msiFolder).ToList();
 
-            var packagesToRemove = lockedPackages.Where(p =>
-                p.Status != PackageStatus.Downloading &&
-                !files.Any(f => p.Filepath.Equals(f, StringComparison.InvariantCultureIgnoreCase))).ToList();
-            foreach (var package in packagesToRemove) _ = lockedPackages.Remove(package);
-
-            foreach (var file in files)
+            List<Package> packagesToRemove = lockedPackages.Where(p => p.Status != PackageStatus.Downloading && !files.Any(f => p.Filepath.Equals(f, StringComparison.InvariantCultureIgnoreCase))).ToList();
+            foreach (Package package in packagesToRemove)
             {
-                var package = lockedPackages.FirstOrDefault(p =>
-                    p.Filepath.Equals(file, StringComparison.InvariantCultureIgnoreCase));
+                _ = lockedPackages.Remove(package);
+            }
+
+            foreach (string file in files)
+            {
+                Package package = lockedPackages.FirstOrDefault(p => p.Filepath.Equals(file, StringComparison.InvariantCultureIgnoreCase));
                 if (!lockedPackages.Contains(package))
                 {
                     package.Filepath = file;
-                    var info = MsiHelper.GetInfo(file);
+                    MsiInfo info = MsiHelper.GetInfo(file);
                     package.ProductCode = info?.ProductCode;
                     package.ProductName = info?.ProductName;
                     lockedPackages.Add(package);
@@ -358,12 +360,12 @@ namespace Up2dateService.SetupManager
                 }
             }
 
-            var installationChecker = new ProductInstallationChecker();
+            ProductInstallationChecker installationChecker = new ProductInstallationChecker();
 
 
-            for (var i = 0; i < lockedPackages.Count; i++)
+            for (int i = 0; i < lockedPackages.Count; i++)
             {
-                var updatedPackage = lockedPackages[i];
+                Package updatedPackage = lockedPackages[i];
                 if (installationChecker.IsPackageInstalled(updatedPackage.ProductCode))
                 {
                     installationChecker.UpdateInfo(ref updatedPackage);
@@ -378,51 +380,29 @@ namespace Up2dateService.SetupManager
                     updatedPackage.InstallDate = null;
                     updatedPackage.EstimatedSize = null;
                     updatedPackage.UrlInfoAbout = null;
-                    if (updatedPackage.Status != PackageStatus.Downloading &&
-                        updatedPackage.Status != PackageStatus.Installing)
+                    if (updatedPackage.Status != PackageStatus.Downloading && updatedPackage.Status != PackageStatus.Installing)
+                    {
                         updatedPackage.Status = PackageStatus.Downloaded;
+                    }
                 }
 
                 if (updatedPackage.Filepath.Contains(NugetExtension))
-                    using (var zipFile = ZipFile.OpenRead(updatedPackage.Filepath))
+                {
+                    ChocoNugetInfo nugetInfo = ChocoNugetInfo.getInfo(updatedPackage.Filepath);
+                    updatedPackage.DisplayName = nugetInfo.Title;
+                    updatedPackage.ProductName = nugetInfo.Id;
+                    updatedPackage.DisplayVersion = nugetInfo.Version;
+                    updatedPackage.Publisher = nugetInfo.Publisher;
+
+                    if (ChocoHelper.IsPackageInstalled(updatedPackage.ProductCode))
                     {
-                        var nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
-                        using (var nuspecStream = nuspec.Open())
-                        {
-                            using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
-                            {
-                                var xmlData = sr.ReadToEnd();
-                                var doc = new XmlDocument();
-                                doc.LoadXml(xmlData);
-                                updatedPackage.DisplayName = doc.GetElementsByTagName("title")[0].InnerText;
-                                updatedPackage.ProductName = doc.GetElementsByTagName("id")[0].InnerText;
-                                updatedPackage.DisplayVersion = doc.GetElementsByTagName("version")[0].InnerText;
-                                updatedPackage.Publisher = doc.GetElementsByTagName("authors")[0].InnerText;
-                            }
-                        }
-
-                        using (var ps = PowerShell.Create())
-                        {
-                            const string psCommand = @"choco list -li";
-                            ps.AddScript(psCommand);
-                            var result = ps.Invoke<string>();
-                            if (result.Any(item => item.Contains(updatedPackage.ProductName)))
-                                updatedPackage.Status = PackageStatus.Installed;
-                        }
+                        updatedPackage.Status = PackageStatus.Installed;
                     }
-
+                }
                 lockedPackages[i] = updatedPackage;
             }
 
             SafeUpdatePackages(lockedPackages);
-        }
-
-        private static bool IsChocoInstalled()
-        {
-            var ps = PowerShell.Create();
-            ps.AddScript("choco --version");
-            var value = ps.Invoke<string>();
-            return value.Count > 0;
         }
     }
 }
