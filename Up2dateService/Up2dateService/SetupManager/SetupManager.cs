@@ -142,7 +142,7 @@ namespace Up2dateService.SetupManager
 
             try
             {
-                ChocoHelper.InstallChocoPackage(packageId, packageVersion, logDirectory);
+                ChocoHelper.InstallChocoPackage(packageId, packageVersion, logDirectory, downloadLocationProvider(), ExternalInstallLog);
             }
             catch (Exception)
             {
@@ -255,7 +255,7 @@ namespace Up2dateService.SetupManager
                 package.Status = PackageStatus.Installing;
 
                 SafeUpdatePackage(package);
-                var result = NugetExtension.Contains(package.Filepath)
+                var result = NugetExtension.Contains(Path.GetExtension(package.Filepath))
                     ? (int)InstallChocoNupkg(package)
                     : InstallPackageAsync(package, CancellationToken.None).Result;
 
