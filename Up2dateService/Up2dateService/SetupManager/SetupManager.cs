@@ -21,6 +21,7 @@ namespace Up2dateService.SetupManager
         private const int MsiExecResult_Success = 0;
         private const int MsiExecResult_RestartNeeded = 3010;
 
+        private readonly Action<Package, int> onSetupFinished;
         private static readonly List<string> AllowedExtensions = new List<string>
         {
             MsiExtension, NugetExtension
@@ -28,19 +29,15 @@ namespace Up2dateService.SetupManager
 
         private readonly Func<string> downloadLocationProvider;
         private readonly EventLog eventLog;
-
-        private readonly Action<Package, int> onSetupFinished;
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public SetupManager(EventLog eventLog, Action<Package, int> onSetupFinished,
-            Func<string> downloadLocationProvider, ISettingsManager settingsManager)
+        public SetupManager(EventLog eventLog, Action<Package, int> onSetupFinished, Func<string> downloadLocationProvider, ISettingsManager settingsManager)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.onSetupFinished = onSetupFinished;
-            this.downloadLocationProvider = downloadLocationProvider ??
-                                            throw new ArgumentNullException(nameof(downloadLocationProvider));
+            this.downloadLocationProvider = downloadLocationProvider ?? throw new ArgumentNullException(nameof(downloadLocationProvider));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
 
             RefreshPackageList();
@@ -305,7 +302,7 @@ namespace Up2dateService.SetupManager
                     do
                     {
                         cancellationToken.ThrowIfCancellationRequested();
-                    } 
+                    }
                     while (!p.WaitForExit(cancellationCheckPeriodMs));
 
                     return p.ExitCode;
