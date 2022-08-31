@@ -1,9 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Configuration.Install;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.ServiceProcess;
 
 namespace Up2dateService
@@ -22,7 +18,10 @@ namespace Up2dateService
 
             using (ServiceController sc = new ServiceController(serviceInstaller.ServiceName))
             {
-                sc.Start();
+                if (!sc.Status.Equals(ServiceControllerStatus.Running) && !sc.Status.Equals(ServiceControllerStatus.StartPending))
+                {
+                    sc.Start();
+                }
             }
         }
 
