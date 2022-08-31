@@ -23,7 +23,8 @@
                 <Setter x:Uid="Setter_2" Property="Margin" Value="5"/>
                 <Setter x:Uid="Setter_3" Property="MinWidth" Value="70"/>
             </Style>
-            <BooleanToVisibilityConverter x:Key="Up2dateConsole.Helpers.BooleanToVisibilityConverter" />
+            
+            <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -38,10 +39,12 @@
             <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
             <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Name="CheckSignatureStatus" Margin="0,0,0,5" Content="Verify Installator Signature" IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Name="InstallAppFromSelectedIssuerStatus" Margin="0,0,0,5" Content="Install Apps Only from selected certificate issuers" IsChecked="{Binding InstallAppFromSelectedIssuers, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock x:Uid="SelectedIssuersLabel" Margin="0,5,0,5" Text="Selected Issuers (separator ':') :" Visibility="{Binding InstallAppFromSelectedIssuers, Converter={StaticResource Up2dateConsole.Helpers.BooleanToVisibilityConverter}}"/>
-            <TextBox x:Uid="SelectedIssuers" Margin="0,0,0,5" Text="{Binding SelectedIssuers, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding InstallAppFromSelectedIssuers, Converter={StaticResource Up2dateConsole.Helpers.BooleanToVisibilityConverter}}"/>
+            <CheckBox x:Uid="CheckBox_1" Margin="0,10,0,5" Content="Verify package signature before installation" IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox x:Uid="CheckBox_2" Margin="0,5,0,5" Content="Install packages only signed by selected certificate issuers" IsChecked="{Binding InstallAppFromSelectedIssuers, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel x:Uid="StackPanel_3" Margin="20,0,0,0" Visibility="{Binding InstallAppFromSelectedIssuers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock x:Uid="TextBlock_3" Margin="0,0,0,5" Text="Selected issuers (use ':' as separator):"/>
+                <TextBox x:Uid="TextBox_3" Margin="0,0,0,5" Text="{Binding SelectedIssuers}"/>
+            </StackPanel>
         </StackPanel>
 
         <StackPanel x:Uid="StackPanel_2" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
