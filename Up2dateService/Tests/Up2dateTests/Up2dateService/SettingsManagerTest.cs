@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Up2dateShared;
+using Up2dateService;
 
-namespace Up2dateTests.Up2dateShared
+namespace Up2dateTests.Up2dateService
 {
     [TestClass]
     public class SettingsManagerTest
