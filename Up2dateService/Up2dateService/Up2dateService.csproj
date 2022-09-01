@@ -57,6 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IWcfService.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="SetupManager\ChocoHelper.cs" />
     <Compile Include="SetupManager\ChocoNugetInfo.cs" />
     <Compile Include="SetupManager\MsiHelper.cs" />
@@ -81,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ProjectInstaller.resx">
