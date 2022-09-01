@@ -136,13 +136,11 @@ namespace Up2dateService.SetupManager
                 return InstallPackageStatus.TempDirectoryFail;
             }
 
-            string packageId;
-            string packageVersion;
             try
             {
                 ChocoNugetInfo nugetInfo = ChocoNugetInfo.GetInfo(package.Filepath);
-                packageVersion = nugetInfo.Version;
-                packageId = nugetInfo.Id;
+                package.ProductCode = nugetInfo.Id;
+                package.DisplayVersion = nugetInfo.Version;
             }
             catch (Exception exception)
             {
@@ -152,7 +150,7 @@ namespace Up2dateService.SetupManager
 
             try
             {
-                ChocoHelper.InstallChocoPackage(packageId, packageVersion, logDirectory, downloadLocationProvider(), ExternalInstallLog);
+                ChocoHelper.InstallChocoPackage(package, logDirectory, downloadLocationProvider(), ExternalInstallLog);
             }
             catch (Exception exception)
             {
@@ -361,18 +359,6 @@ namespace Up2dateService.SetupManager
                     {
                         updatedPackage.Status = PackageStatus.Downloaded;
                     }
-                }
-
-                if (ChocoHelper.IsChocoInstalled() &&
-                    string.Equals(Path.GetExtension(updatedPackage.Filepath),
-                        NugetExtension,
-                        StringComparison.InvariantCultureIgnoreCase))
-                {
-                    ChocoNugetInfo nugetInfo = ChocoNugetInfo.GetInfo(updatedPackage.Filepath);
-                    updatedPackage.DisplayName = nugetInfo.Title;
-                    updatedPackage.ProductCode = nugetInfo.Id;
-                    updatedPackage.DisplayVersion = nugetInfo.Version;
-                    updatedPackage.Publisher = nugetInfo.Publisher;
                 }
 
                 lockedPackages[i] = updatedPackage;

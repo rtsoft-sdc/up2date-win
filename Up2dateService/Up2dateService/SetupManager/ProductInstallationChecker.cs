@@ -61,7 +61,11 @@ namespace Up2dateService.SetupManager
             string uninstallKeyName = productCodes.Contains(package.ProductCode) 
                 ? UninstallKeyName 
                 : wow6432productCodes.Contains(package.ProductCode) ? Wow6432UninstallKeyName : null;
-            if (uninstallKeyName == null) return;
+            if (uninstallKeyName == null && ChocoHelper.IsPackageInstalled(package))
+            {
+                ChocoHelper.GetPackageInfo(ref package);
+                return;
+            }
 
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(uninstallKeyName + @"\" + package.ProductCode))
             {

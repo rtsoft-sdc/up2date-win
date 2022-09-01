@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Management.Automation;
 using Up2dateShared;
 
@@ -6,6 +8,7 @@ namespace Up2dateService.SetupManager
 {
     public static class ChocoHelper
     {
+        private const string NugetExtension = ".nupkg";
         public static bool IsPackageInstalled(Package package)
         {
             if (package.ProductCode == string.Empty ||
@@ -50,6 +53,21 @@ namespace Up2dateService.SetupManager
             {
                 ps.AddScript(chocoInstallCommand);
                 ps.Invoke<string>();
+            }
+        }
+
+        public static void GetPackageInfo(ref Package package)
+        {
+            if (IsChocoInstalled() &&
+                string.Equals(Path.GetExtension(package.Filepath),
+                    NugetExtension,
+                    StringComparison.InvariantCultureIgnoreCase))
+            {
+                ChocoNugetInfo nugetInfo = ChocoNugetInfo.GetInfo(package.Filepath);
+                package.DisplayName = nugetInfo.Title;
+                package.ProductCode = nugetInfo.Id;
+                package.DisplayVersion = nugetInfo.Version;
+                package.Publisher = nugetInfo.Publisher;
             }
         }
     }
