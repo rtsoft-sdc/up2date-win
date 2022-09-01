@@ -51,6 +51,7 @@
     <Compile Include="ClientState.cs" />
     <Compile Include="ICertificateManager.cs" />
     <Compile Include="ICertificateProvider.cs" />
+    <Compile Include="InstallPackageStatus.cs" />
     <Compile Include="ISettingsManager.cs" />
     <Compile Include="ISetupManager.cs" />
     <Compile Include="Package.cs" />

@@ -10,7 +10,7 @@ namespace Up2dateClient
     {
         const string ClientType = "RITMS UP2DATE for Windows";
 
-        private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi" }; // must be lowercase
+        private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi",".nupkg" }; // must be lowercase
         private readonly EventLog eventLog;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
@@ -171,10 +171,41 @@ namespace Up2dateClient
 
             if (IsSupported(info))
                 WriteLogEntry("installing...", info);
-            var success = setupManager.InstallPackage(info.artifactFileName);
-            if (!success)
+            var installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
+            if (installPackageStatus != InstallPackageStatus.Ok)
             {
                 result.Message = "Installation failed.";
+                string additionalMessage = string.Empty;
+                switch (installPackageStatus)
+                {
+                    case InstallPackageStatus.PackageUnavailable:
+                        additionalMessage = "Package Unavailable";
+                        break;
+                    case InstallPackageStatus.TempDirectoryFail:
+                        additionalMessage = "Temporary Directory failed to create";
+                        break;
+                    case InstallPackageStatus.InvalidChocoPackage:
+                        additionalMessage = "Package Data Cannot be Processed";
+                        break;
+                    case InstallPackageStatus.FailedToInstallChocoPackage:
+                        additionalMessage = "Failed To Install Choco package";
+                        break;
+                    case InstallPackageStatus.ChocoNotInstalled:
+                        additionalMessage = "Chocolatey not installed";
+                        break;
+                    case InstallPackageStatus.GeneralChocoError:
+                        additionalMessage = "General Choco Error";
+                        break;
+                    case InstallPackageStatus.PsScriptInvokeError:
+                        additionalMessage = "General Choco Error";
+                        break;
+                }
+
+                if (additionalMessage != string.Empty)
+                {
+                    result.Message += Environment.NewLine + additionalMessage;
+                }
+
                 WriteLogEntry(result.Message, info);
                 result.Success = false;
             }

@@ -6,7 +6,7 @@ namespace Up2dateShared
     public interface ISetupManager
     {
         List<Package> GetAvaliablePackages();
-        bool InstallPackage(string packageFile);
+        InstallPackageStatus InstallPackage(string packageFile);
         Task InstallPackagesAsync(IEnumerable<Package> packages);
         bool IsPackageAvailable(string packageFile);
         bool IsPackageInstalled(string packageFile);

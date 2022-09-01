@@ -11,9 +11,9 @@ namespace SimpleClientApp
             return new List<Package>();
         }
 
-        public bool InstallPackage(string packageFile)
+        public InstallPackageStatus InstallPackage(string packageFile)
         {
-            return true;
+            return InstallPackageStatus.Ok;
         }
 
         public Task InstallPackagesAsync(IEnumerable<Package> packages)
