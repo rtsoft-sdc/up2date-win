@@ -40,13 +40,17 @@ namespace Up2dateService.SetupManager
             }
         }
 
-        public bool IsPackageInstalled(string productCode)
+        public bool IsPackageInstalled(Package package)
         {
-            if (productCode == null) return false;
-            bool packageInstalled = productCodes.Concat(wow6432productCodes).Contains(productCode);
+            if (package.ProductCode == null)
+            {
+                return false;
+            }
+
+            bool packageInstalled = productCodes.Concat(wow6432productCodes).Contains(package.ProductCode);
             if (!packageInstalled)
             {
-                packageInstalled = ChocoHelper.IsPackageInstalled(productCode);
+                packageInstalled = ChocoHelper.IsPackageInstalled(package);
             }
 
             return packageInstalled;

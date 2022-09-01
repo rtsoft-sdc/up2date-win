@@ -1,51 +1,52 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Management.Automation;
+using Up2dateShared;
 
 namespace Up2dateService.SetupManager
 {
     public static class ChocoHelper
     {
-        public static bool IsPackageInstalled(string packageName)
+        public static bool IsPackageInstalled(Package package)
         {
-            if (packageName == null)
-            {
+            if (package.ProductCode == string.Empty ||
+                package.DisplayVersion == string.Empty ||
+                !IsChocoInstalled())
                 return false;
-            }
 
-            packageName = packageName.ToLowerInvariant();
-
-            using (PowerShell ps = PowerShell.Create())
+            using (var ps = PowerShell.Create())
             {
                 const string psCommand = @"choco list -li";
                 ps.AddScript(psCommand);
-                Collection<string> result = ps.Invoke<string>();
-                return result.Any(item => item.ToLowerInvariant().Contains(packageName));
+                var result = ps.Invoke<string>();
+                return result.Any(item => item.Equals($"{package.ProductCode} {package.DisplayVersion}"));
             }
         }
 
         public static bool IsChocoInstalled()
         {
-            using (PowerShell ps = PowerShell.Create())
+            using (var ps = PowerShell.Create())
             {
                 ps.AddScript("choco --version");
-                Collection<string> value = ps.Invoke<string>();
+                var value = ps.Invoke<string>();
                 return value.Count > 0;
             }
         }
 
-        public static void InstallChocoPackage(string packageId, string packageVersion, string logDirectory, string downloadLocation, string externalInstallLog)
+        public static void InstallChocoPackage(Package package, string logDirectory, string downloadLocation,
+            string externalInstallLog)
         {
             // Second powershell starting is using as intermediate process to start choco process as detached 
-            string chocoInstallCommand =
+            // Second source is used to prevent problems in downloading dependencies
+            var chocoInstallCommand =
                 @"Start-Process -FilePath powershell -ArgumentList(" +
                 @"'Start-Process -FilePath choco -ArgumentList(''" +
-                $@"install {packageId} --version {packageVersion} -s {downloadLocation}" +
+                $@"install {package.ProductCode} --version {package.DisplayVersion} " +
+                $@"-s ""{downloadLocation};https://community.chocolatey.org/api/v2/""" +
                 @"-y --force --no-progress'')" +
                 $@"-RedirectStandardOutput ""{logDirectory}\{externalInstallLog}""')" +
                 $@"-RedirectStandardOutput ""{logDirectory}\{externalInstallLog}""";
 
-            using (PowerShell ps = PowerShell.Create())
+            using (var ps = PowerShell.Create())
             {
                 ps.AddScript(chocoInstallCommand);
                 ps.Invoke<string>();

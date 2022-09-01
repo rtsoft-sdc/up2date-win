@@ -83,8 +83,9 @@ namespace Up2dateService.SetupManager
                             ? InstallPackageStatus.ChocoNotInstalled
                             : InstallChocoNupkg(package);
                     }
-                    catch (Exception)
+                    catch (Exception exception)
                     {
+                        WriteLogEntry(exception);
                         return InstallPackageStatus.GeneralChocoError;
                     }
 
@@ -117,6 +118,11 @@ namespace Up2dateService.SetupManager
 
         private InstallPackageStatus InstallChocoNupkg(Package package)
         {
+            if (!ChocoHelper.IsChocoInstalled())
+            {
+                return InstallPackageStatus.ChocoNotInstalled;
+            }
+
             string logDirectory = downloadLocationProvider() + @"\install\";
             try
             {
@@ -124,8 +130,9 @@ namespace Up2dateService.SetupManager
 
                 Directory.CreateDirectory(logDirectory);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                WriteLogEntry(exception);
                 return InstallPackageStatus.TempDirectoryFail;
             }
 
@@ -137,8 +144,9 @@ namespace Up2dateService.SetupManager
                 packageVersion = nugetInfo.Version;
                 packageId = nugetInfo.Id;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                WriteLogEntry(exception);
                 return InstallPackageStatus.InvalidChocoPackage;
             }
 
@@ -146,15 +154,16 @@ namespace Up2dateService.SetupManager
             {
                 ChocoHelper.InstallChocoPackage(packageId, packageVersion, logDirectory, downloadLocationProvider(), ExternalInstallLog);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                WriteLogEntry(exception);
                 return InstallPackageStatus.PsScriptInvokeError;
             }
 
             while (Process.GetProcessesByName("choco.exe").Length > 0)
                 Thread.Sleep(MillisecondsToWait);
-
-            return ChocoHelper.IsPackageInstalled(packageId) ? InstallPackageStatus.Ok : InstallPackageStatus.FailedToInstallChocoPackage;
+            
+            return ChocoHelper.IsPackageInstalled(package) ? InstallPackageStatus.Ok : InstallPackageStatus.FailedToInstallChocoPackage;
         }
 
 
@@ -334,7 +343,7 @@ namespace Up2dateService.SetupManager
             for (int i = 0; i < lockedPackages.Count; i++)
             {
                 Package updatedPackage = lockedPackages[i];
-                if (installationChecker.IsPackageInstalled(updatedPackage.ProductCode))
+                if (installationChecker.IsPackageInstalled(updatedPackage))
                 {
                     installationChecker.UpdateInfo(ref updatedPackage);
                     updatedPackage.Status = PackageStatus.Installed;
@@ -370,6 +379,11 @@ namespace Up2dateService.SetupManager
             }
 
             SafeUpdatePackages(lockedPackages);
+        }
+
+        private void WriteLogEntry(Exception error)
+        {
+            EventLog.WriteEntry("UP2DATEService", error.Message);
         }
     }
 }
