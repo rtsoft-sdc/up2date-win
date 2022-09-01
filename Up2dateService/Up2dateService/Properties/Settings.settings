@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Up2dateService.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ProvisioningUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://dps.ritms.online/provisioning</Value>
+    </Setting>
+    <Setting Name="XApigToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</Value>
+    </Setting>
+    <Setting Name="RequestCertificateUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://enter.dev.ritms.online</Value>
+    </Setting>
+    <Setting Name="PackageExtensionFilterList" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.msi:.cert:.exe</Value>
+    </Setting>
+    <Setting Name="SelectedIssuers" Type="System.String" Scope="User">
+      <Value Profile="(Default)">rts</Value>
+    </Setting>
+    <Setting Name="InstallAppFromSelectedIssuer" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CheckSignature" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UpgradeFlag" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
