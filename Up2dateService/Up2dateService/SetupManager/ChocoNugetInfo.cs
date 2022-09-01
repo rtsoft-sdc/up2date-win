@@ -37,16 +37,16 @@ namespace Up2dateService.SetupManager
                         var xmlData = sr.ReadToEnd();
                         var doc = new XmlDocument();
                         doc.LoadXml(xmlData);
-                        var id = doc.GetElementsByTagName("id")[0] != null
+                        var id = doc.GetElementsByTagName("id").Count > 0
                             ? doc.GetElementsByTagName("id")[0].InnerText
                             : string.Empty;
-                        var title = doc.GetElementsByTagName("title")[0] != null
+                        var title = doc.GetElementsByTagName("title").Count > 0
                             ? doc.GetElementsByTagName("title")[0].InnerText
                             : string.Empty;
-                        var version = doc.GetElementsByTagName("version")[0] != null
+                        var version = doc.GetElementsByTagName("version").Count > 0
                             ? doc.GetElementsByTagName("version")[0].InnerText
                             : string.Empty;
-                        var publisher = doc.GetElementsByTagName("authors")[0] != null
+                        var publisher = doc.GetElementsByTagName("authors").Count > 0
                             ? doc.GetElementsByTagName("authors")[0].InnerText
                             : string.Empty;
                         return new ChocoNugetInfo(id, title, version, publisher);
