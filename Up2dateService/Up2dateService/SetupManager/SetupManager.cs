@@ -73,15 +73,14 @@ namespace Up2dateService.SetupManager
             {
                 Package package = FindPackage(packageFile);
                 if (package.Status == PackageStatus.Unavailable) return InstallPackageStatus.PackageUnavailable;
+                if (package.Status == PackageStatus.Installed || package.Status == PackageStatus.RestartNeeded) return InstallPackageStatus.Ok;
 
                 if (string.Equals(Path.GetExtension(packageFile),
                         NugetExtension,
                         StringComparison.InvariantCultureIgnoreCase))
                     try
                     {
-                        return !ChocoHelper.IsChocoInstalled()
-                            ? InstallPackageStatus.ChocoNotInstalled
-                            : InstallChocoNupkg(package);
+                        return InstallChocoNupkg(package);
                     }
                     catch (Exception exception)
                     {
