@@ -18,7 +18,6 @@ namespace Up2dateClient
         private readonly Func<SystemInfo> getSysInfo;
         private readonly Func<string> getDownloadLocation;
         private ClientState state;
-        private readonly CertificateManager certificateManager;
 
         public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, EventLog eventLog = null)
         {
@@ -28,7 +27,6 @@ namespace Up2dateClient
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
             this.getDownloadLocation = getDownloadLocation ?? throw new ArgumentNullException(nameof(getDownloadLocation));
             this.eventLog = eventLog;
-            this.certificateManager = new CertificateManager(this.settingsManager, this.eventLog);
         }
 
         public ClientState State
@@ -151,23 +149,6 @@ namespace Up2dateClient
             }      
             
             var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
-            if (settingsManager.CheckSignature && !certificateManager.IsSigned(filePath))
-            {
-                File.Delete(filePath);
-                result.Message = "File not signed. File deleted";
-                result.Success = false;
-                WriteLogEntry(result.Message, info);
-                return;
-            }
-
-            if(settingsManager.InstallAppFromSelectedIssuer && certificateManager.IsSignedByIssuer(filePath))
-            {
-                result.Message = "File not signed by selected issuer. File deleted";
-                result.Success = false;
-                File.Delete(filePath);
-                WriteLogEntry(result.Message, info);
-                return;
-            }
 
             if (IsSupported(info))
                 WriteLogEntry("installing...", info);
@@ -175,7 +156,7 @@ namespace Up2dateClient
             if (installPackageStatus != InstallPackageStatus.Ok)
             {
                 result.Message = "Installation failed.";
-                string additionalMessage = string.Empty;
+                string additionalMessage;
                 switch (installPackageStatus)
                 {
                     case InstallPackageStatus.PackageUnavailable:
@@ -199,10 +180,24 @@ namespace Up2dateClient
                     case InstallPackageStatus.PsScriptInvokeError:
                         additionalMessage = "General Choco Error";
                         break;
+                    case InstallPackageStatus.MsiInstallationError:
+                        additionalMessage = "Msi Installation Error";
+                        break;
+                    case InstallPackageStatus.InstallationPackageIsNotSigned:
+                        additionalMessage = "File not signed. File deleted";
+                        File.Delete(filePath);
+                        break;
+                    case InstallPackageStatus.InstallationPackageIsNotSignedBySelectedIssuer:
+                        additionalMessage = "File not signed by selected issuer. File deleted";
+                        File.Delete(filePath);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 if (additionalMessage != string.Empty)
                 {
+                    WriteLogEntry(additionalMessage, info);
                     result.Message += Environment.NewLine + additionalMessage;
                 }
 
