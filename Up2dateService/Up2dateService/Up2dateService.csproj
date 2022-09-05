@@ -67,6 +67,7 @@
     <Compile Include="SetupManager\ChocoNugetInfo.cs" />
     <Compile Include="SetupManager\MsiHelper.cs" />
     <Compile Include="SetupManager\MsiInfo.cs" />
+    <Compile Include="SetupManager\ChocoPackageInstallationStatus.cs" />
     <Compile Include="SetupManager\ProductInstallationChecker.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>

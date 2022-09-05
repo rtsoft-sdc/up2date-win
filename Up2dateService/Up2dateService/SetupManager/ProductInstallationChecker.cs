@@ -50,7 +50,7 @@ namespace Up2dateService.SetupManager
             bool packageInstalled = productCodes.Concat(wow6432productCodes).Contains(package.ProductCode);
             if (!packageInstalled)
             {
-                packageInstalled = ChocoHelper.IsPackageInstalled(package);
+                packageInstalled = ChocoHelper.IsPackageInstalled(package) == ChocoPackageInstallationStatus.ChocoPackageInstalled;
             }
 
             return packageInstalled;
@@ -61,7 +61,7 @@ namespace Up2dateService.SetupManager
             string uninstallKeyName = productCodes.Contains(package.ProductCode) 
                 ? UninstallKeyName 
                 : wow6432productCodes.Contains(package.ProductCode) ? Wow6432UninstallKeyName : null;
-            if (uninstallKeyName == null && ChocoHelper.IsPackageInstalled(package))
+            if (uninstallKeyName == null && ChocoHelper.IsPackageInstalled(package) == ChocoPackageInstallationStatus.ChocoPackageInstalled)
             {
                 ChocoHelper.GetPackageInfo(ref package);
                 return;

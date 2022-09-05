@@ -175,7 +175,9 @@ namespace Up2dateService.SetupManager
             while (Process.GetProcessesByName("choco.exe").Length > 0)
                 Thread.Sleep(MillisecondsToWait);
             
-            return ChocoHelper.IsPackageInstalled(package) ? InstallPackageStatus.Ok : InstallPackageStatus.FailedToInstallChocoPackage;
+            return ChocoHelper.IsPackageInstalled(package) == ChocoPackageInstallationStatus.ChocoPackageInstalled ?
+                InstallPackageStatus.Ok :
+                InstallPackageStatus.FailedToInstallChocoPackage;
         }
 
 
