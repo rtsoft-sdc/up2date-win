@@ -10,6 +10,8 @@
         GeneralChocoError,
         PsScriptInvokeError,
         ChocoNotInstalled,
-        MsiInstallationError
+        MsiInstallationError,
+        InstallationPackageIsNotSigned,
+        InstallationPackageIsNotSignedBySelectedIssuer
     }
 }

@@ -11,5 +11,7 @@ namespace Up2dateShared
         void ImportCertificate(byte[] certificateData);
         string GetCertificateString();
         bool IsCertificateAvailable();
+        bool IsSigned(string file);
+        bool IsSignedByIssuer(string file);
     }
 }
