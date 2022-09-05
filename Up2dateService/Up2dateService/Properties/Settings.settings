@@ -12,7 +12,7 @@
       <Value Profile="(Default)">http://enter.dev.ritms.online</Value>
     </Setting>
     <Setting Name="PackageExtensionFilterList" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.msi:.cert:.exe</Value>
+      <Value Profile="(Default)">.msi:.nupkg</Value>
     </Setting>
     <Setting Name="SelectedIssuers" Type="System.String" Scope="User">
       <Value Profile="(Default)">rts</Value>

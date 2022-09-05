@@ -61,7 +61,7 @@ namespace Up2dateService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".msi:.cert:.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".msi:.nupkg")]
         public string PackageExtensionFilterList {
             get {
                 return ((string)(this["PackageExtensionFilterList"]));
