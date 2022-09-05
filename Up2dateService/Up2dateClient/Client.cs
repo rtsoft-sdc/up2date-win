@@ -149,9 +149,7 @@ namespace Up2dateClient
             }      
             
             var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
-
-            if (IsSupported(info))
-                WriteLogEntry("installing...", info);
+            WriteLogEntry("installing...", info);
             var installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
             if (installPackageStatus != InstallPackageStatus.Ok)
             {
@@ -184,11 +182,11 @@ namespace Up2dateClient
                         additionalMessage = "Msi Installation Error";
                         break;
                     case InstallPackageStatus.InstallationPackageIsNotSigned:
-                        additionalMessage = "File not signed. File deleted";
+                        additionalMessage = "Package is not signed. Deployment rejected";
                         File.Delete(filePath);
                         break;
                     case InstallPackageStatus.InstallationPackageIsNotSignedBySelectedIssuer:
-                        additionalMessage = "File not signed by selected issuer. File deleted";
+                        additionalMessage = "Package is not signed by any whitelisted issuer. Deployment rejected";
                         File.Delete(filePath);
                         break;
                     default:
