@@ -17,5 +17,12 @@ namespace Up2dateService.SetupManager
         /// <param name="package">Package</param>
         /// <returns></returns>
         bool IsSupported(Package package);
+
+        /// <summary>
+        /// Checks if an Installer is available for the specified file
+        /// </summary>
+        /// <param name="artifactFileName"></param>
+        /// <returns></returns>
+        bool IsSupported(string artifactFileName);
     }
 }

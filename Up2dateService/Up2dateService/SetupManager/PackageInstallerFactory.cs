@@ -39,7 +39,12 @@ namespace Up2dateService.SetupManager
 
         public bool IsSupported(Package package)
         {
-            string key = Path.GetExtension(package.Filepath).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            return IsSupported(package.Filepath);
+        }
+
+        public bool IsSupported(string artifactFileName)
+        {
+            string key = Path.GetExtension(artifactFileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             return installers.ContainsKey(key);
         }
     }

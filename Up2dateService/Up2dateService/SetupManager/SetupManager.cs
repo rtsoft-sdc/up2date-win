@@ -88,6 +88,11 @@ namespace Up2dateService.SetupManager
             RefreshPackageList();
         }
 
+        public bool IsFileSupported(string artifactFileName)
+        {
+            return installerFactory.IsSupported(artifactFileName);
+        }
+
         private InstallPackageResult InstallPackage(Package package)
         {
             try

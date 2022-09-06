@@ -11,5 +11,6 @@ namespace Up2dateShared
         bool IsPackageInstalled(string packageFile);
         void OnDownloadStarted(string artifactFileName);
         void OnDownloadFinished(string artifactFileName);
+        bool IsFileSupported(string artifactFileName);
     }
 }

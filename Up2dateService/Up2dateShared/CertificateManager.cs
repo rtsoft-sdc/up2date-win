@@ -148,7 +148,6 @@ namespace Up2dateShared
             return theCertificateChain.Build(theCertificate);
         }
 
-
         public bool IsSignedByIssuer(string file)
         {
             const string cnPrefix = "CN=";
@@ -167,7 +166,5 @@ namespace Up2dateShared
             var issuerName = theCertificate.IssuerName.Name.Split(',').First().Substring(cnPrefix.Length);
             return settingsManager.SelectedIssuers.Contains(issuerName);
         }
-        
-
     }
 }
