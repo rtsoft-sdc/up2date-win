@@ -160,7 +160,7 @@ namespace Up2dateClient
                 return;
             }
 
-            if(settingsManager.InstallAppFromSelectedIssuer && certificateManager.IsSignedByIssuer(filePath))
+            if(settingsManager.InstallAppFromSelectedIssuer && !certificateManager.IsSignedByIssuer(filePath))
             {
                 result.Message = "File not signed by selected issuer. File deleted";
                 result.Success = false;
