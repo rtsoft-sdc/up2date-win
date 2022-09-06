@@ -179,7 +179,7 @@ namespace Up2dateClient
                 switch (installPackageStatus)
                 {
                     case InstallPackageResult.PackageUnavailable:
-                        additionalMessage = "Package unavailable";
+                        additionalMessage = "Package unavailable or unusable";
                         break;
                     case InstallPackageResult.FailedToInstallChocoPackage:
                         additionalMessage = "Failed to install Choco package";

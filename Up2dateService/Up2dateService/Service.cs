@@ -27,8 +27,9 @@ namespace Up2dateService
             serviceHost?.Close();
             EventLog.WriteEntry($"Packages folder: '{GetCreatePackagesFolder()}'");
 
+            SetupManager.IPackageInstallerFactory installerFactory = new SetupManager.PackageInstallerFactory();
             ISettingsManager settingsManager = new SettingsManager(); 
-            ISetupManager setupManager = new SetupManager.SetupManager(EventLog, GetCreatePackagesFolder);
+            ISetupManager setupManager = new SetupManager.SetupManager(EventLog, GetCreatePackagesFolder, installerFactory);
             ICertificateProvider certificateProvider = new CertificateProvider(settingsManager);
             ICertificateManager certificateManager = new CertificateManager(settingsManager, EventLog);
 

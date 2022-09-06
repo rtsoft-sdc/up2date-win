@@ -3,6 +3,7 @@
     public enum InstallPackageResult
     {
         Success,
+        PackageNotSupported,
         PackageUnavailable,
         FailedToInstallChocoPackage,
         GeneralInstallationError,

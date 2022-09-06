@@ -1,83 +1,49 @@
-﻿using Microsoft.Win32;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Up2dateShared;
 
 namespace Up2dateService.SetupManager
 {
     public class ProductInstallationChecker
     {
-        private const string UninstallKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-        private const string Wow6432UninstallKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
+        private readonly IPackageInstallerFactory installerFactory;
 
-        private readonly List<string> productCodes = new List<string>();
-        private readonly List<string> wow6432productCodes = new List<string>();
-
-        public ProductInstallationChecker()
+        public ProductInstallationChecker(IPackageInstallerFactory installerFactory, IEnumerable<Package> packages)
         {
-            UpdateProductList();
-        }
+            this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
+            if (packages is null) throw new ArgumentNullException(nameof(packages));
 
-        public void UpdateProductList()
-        {
-            productCodes.Clear();
-
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UninstallKeyName))
-            {
-                if (key != null)
-                {
-                    productCodes.AddRange(key.GetSubKeyNames());
-                    key.Close();
-                }
-            }
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(Wow6432UninstallKeyName))
-            {
-                if (key != null)
-                {
-                    wow6432productCodes.AddRange(key.GetSubKeyNames());
-                    key.Close();
-                }
-            }
+            RefreshProductList(packages);
         }
 
         public bool IsPackageInstalled(Package package)
         {
-            if (package.ProductCode == null)
-            {
-                return false;
-            }
+            if (!installerFactory.IsSupported(package)) return false;
 
-            bool packageInstalled = productCodes.Concat(wow6432productCodes).Contains(package.ProductCode);
-            if (!packageInstalled)
-            {
-                packageInstalled = ChocoHelper.IsPackageInstalled(package);
-            }
-
-            return packageInstalled;
+            var installer = installerFactory.GetInstaller(package);
+            return installer.IsPackageInstalled(package);
         }
 
         public void UpdateInfo(ref Package package)
         {
-            string uninstallKeyName = productCodes.Contains(package.ProductCode) 
-                ? UninstallKeyName 
-                : wow6432productCodes.Contains(package.ProductCode) ? Wow6432UninstallKeyName : null;
+            if (!installerFactory.IsSupported(package)) return;
 
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(uninstallKeyName + @"\" + package.ProductCode))
+            var installer = installerFactory.GetInstaller(package);
+            installer.UpdatePackageInfo(ref package);
+        }
+
+        private void RefreshProductList(IEnumerable<Package> packages)
+        {
+            var installers = new List<IPackageInstaller>();
+            foreach(Package package in packages)
             {
-                if (key != null)
+                if (!installerFactory.IsSupported(package)) continue;
+
+                var installer = installerFactory.GetInstaller(package);
+                if (!installers.Contains(installer))
                 {
-                    package.DisplayName = key.GetValue("DisplayName") as string;
-                    package.Publisher = key.GetValue("Publisher") as string;
-                    package.DisplayVersion = key.GetValue("DisplayVersion") as string;
-                    package.Version = key.GetValue("Version") as int?;
-                    package.InstallDate = key.GetValue("InstallDate") as string;
-                    package.EstimatedSize = key.GetValue("EstimatedSize") as int?;
-                    package.UrlInfoAbout = key.GetValue("URLInfoAbout") as string;
-                    key.Close();
-                }
-                else if (ChocoHelper.IsPackageInstalled(package))
-                {
-                    ChocoHelper.UpdatePackageInfo(ref package);
+                    installers.Add(installer);
+                    installer.Refresh();
                 }
             }
         }

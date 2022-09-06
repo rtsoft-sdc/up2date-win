@@ -9,31 +9,17 @@ namespace Up2dateService.SetupManager
 {
     public class SetupManager : ISetupManager
     {
-        private enum PackageType
-        {
-            Msi,
-            Choco,
-            Unknown
-        }
-
-        private const string MsiExtension = ".msi";
-        private const string NugetExtension = ".nupkg";
-
-        private static readonly List<string> SupportedExtensions = new List<string>
-        {
-            MsiExtension, NugetExtension
-        };
-
         private readonly Func<string> downloadLocationProvider;
+        private readonly IPackageInstallerFactory installerFactory;
         private readonly EventLog eventLog;
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
 
-        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider)
+        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, IPackageInstallerFactory installerFactory)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.downloadLocationProvider = downloadLocationProvider ?? throw new ArgumentNullException(nameof(downloadLocationProvider));
-
+            this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
             RefreshPackageList();
         }
 
@@ -63,10 +49,8 @@ namespace Up2dateService.SetupManager
 
         public void InstallPackages(IEnumerable<Package> packagesToInstall)
         {
-            foreach (string inPackage in packagesToInstall.Select(inPackage => inPackage.Filepath))
+            foreach (string inPackage in packagesToInstall.Where(p => installerFactory.IsSupported(p)).Select(inPackage => inPackage.Filepath))
             {
-                if (!SupportedExtensions.Contains(Path.GetExtension(inPackage), StringComparer.InvariantCultureIgnoreCase)) continue;
-
                 var lockedPackages = SafeGetPackages();
 
                 Package package = lockedPackages.FirstOrDefault(p => p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
@@ -112,9 +96,10 @@ namespace Up2dateService.SetupManager
                 if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
                 if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
 
-                return GetType(package) == PackageType.Choco
-                    ? ChocoHelper.InstallPackage(package)
-                    : MsiHelper.InstallPackage(package);
+                if (!installerFactory.IsSupported(package)) return InstallPackageResult.PackageNotSupported;
+
+                IPackageInstaller installer = installerFactory.GetInstaller(package);
+                return installer.InstallPackage(package);
             }
             catch (Exception exception)
             {
@@ -212,8 +197,8 @@ namespace Up2dateService.SetupManager
         {
             var lockedPackages = SafeGetPackages();
 
-            string msiFolder = downloadLocationProvider();
-            List<string> files = Directory.GetFiles(msiFolder).ToList();
+            string downloadFolder = downloadLocationProvider();
+            List<string> files = Directory.GetFiles(downloadFolder).ToList();
 
             List<Package> packagesToRemove = lockedPackages.Where(p => p.Status != PackageStatus.Downloading && !files.Any(f => p.Filepath.Equals(f, StringComparison.InvariantCultureIgnoreCase))).ToList();
             foreach (Package package in packagesToRemove)
@@ -228,27 +213,17 @@ namespace Up2dateService.SetupManager
                 {
                     package.Filepath = file;
 
-                    if (GetType(package) == PackageType.Choco)
-                    {
-                        ChocoNugetInfo info = ChocoNugetInfo.GetInfo(package.Filepath);
-                        package.ProductName = info?.Id;
-                        package.DisplayVersion = info?.Version;
-                        package.ProductCode = $"{info?.Id} {info?.Version}";
-                    }
-                    else
-                    {
-                        MsiInfo info = MsiHelper.GetInfo(file);
-                        package.ProductName = info?.ProductName;
-                        package.DisplayVersion = info?.ProductVersion;
-                        package.ProductCode = info?.ProductCode;
-                    }
+                    if (!installerFactory.IsSupported(package)) continue;
+
+                    IPackageInstaller installer = installerFactory.GetInstaller(package);
+                    if (!installer.Initialize(ref package)) continue;
 
                     package.Status = PackageStatus.Downloaded;
                     lockedPackages.Add(package);
                 }
             }
 
-            ProductInstallationChecker installationChecker = new ProductInstallationChecker();
+            ProductInstallationChecker installationChecker = new ProductInstallationChecker(installerFactory, lockedPackages);
 
             for (int i = 0; i < lockedPackages.Count; i++)
             {
@@ -280,13 +255,6 @@ namespace Up2dateService.SetupManager
         private void WriteLogEntry(Exception error)
         {
             EventLog.WriteEntry("UP2DATEService", error.Message);
-        }
-
-        private PackageType GetType(Package package)
-        {
-            if (string.Equals(Path.GetExtension(package.Filepath), NugetExtension, StringComparison.InvariantCultureIgnoreCase)) return PackageType.Choco;
-            if (string.Equals(Path.GetExtension(package.Filepath), MsiExtension, StringComparison.InvariantCultureIgnoreCase)) return PackageType.Msi;
-            return PackageType.Unknown;
         }
     }
 }
