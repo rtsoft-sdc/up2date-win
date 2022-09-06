@@ -20,6 +20,11 @@ namespace SimpleClientApp
             throw new System.NotImplementedException();
         }
 
+        public bool IsFileSupported(string artifactFileName)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool IsPackageAvailable(string packageFile)
         {
             return false;

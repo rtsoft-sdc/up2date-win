@@ -63,7 +63,6 @@ namespace Up2dateService.SetupManager
         public void Refresh()
         {
             productCodes.Clear();
-
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(UninstallKeyName))
             {
                 if (key != null)
@@ -72,6 +71,8 @@ namespace Up2dateService.SetupManager
                     key.Close();
                 }
             }
+
+            wow6432productCodes.Clear();
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(Wow6432UninstallKeyName))
             {
                 if (key != null)
