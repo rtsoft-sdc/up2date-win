@@ -28,12 +28,10 @@ namespace Up2dateService
             EventLog.WriteEntry($"Packages folder: '{GetCreatePackagesFolder()}'");
 
 
-            ISettingsManager settingsManager = new SettingsManager(); 
-            ISetupManager setupManager = new SetupManager.SetupManager(EventLog, null, GetCreatePackagesFolder, settingsManager);
-
-
+            ISettingsManager settingsManager = new SettingsManager();
             ICertificateProvider certificateProvider = new CertificateProvider(settingsManager);
             ICertificateManager certificateManager = new CertificateManager(settingsManager, EventLog);
+            ISetupManager setupManager = new SetupManager.SetupManager(EventLog, null, GetCreatePackagesFolder, settingsManager, certificateManager);
 
             Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, EventLog);
             WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State, certificateProvider, certificateManager, settingsManager);

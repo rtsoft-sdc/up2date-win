@@ -22,6 +22,8 @@ namespace Up2dateService.SetupManager
         private const int MsiExecResult_RestartNeeded = 3010;
 
         private readonly Action<Package, int> onSetupFinished;
+        private readonly ICertificateManager certificateManager;
+
         private static readonly List<string> AllowedExtensions = new List<string>
         {
             MsiExtension, NugetExtension
@@ -33,13 +35,14 @@ namespace Up2dateService.SetupManager
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public SetupManager(EventLog eventLog, Action<Package, int> onSetupFinished, Func<string> downloadLocationProvider, ISettingsManager settingsManager)
+        public SetupManager(EventLog eventLog, Action<Package, int> onSetupFinished,
+            Func<string> downloadLocationProvider, ISettingsManager settingsManager, ICertificateManager manager)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.onSetupFinished = onSetupFinished;
             this.downloadLocationProvider = downloadLocationProvider ?? throw new ArgumentNullException(nameof(downloadLocationProvider));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
-
+            certificateManager = manager;
             RefreshPackageList();
         }
 
@@ -73,6 +76,17 @@ namespace Up2dateService.SetupManager
             {
                 Package package = FindPackage(packageFile);
                 if (package.Status == PackageStatus.Unavailable) return InstallPackageStatus.PackageUnavailable;
+
+                if (settingsManager.CheckSignature && !certificateManager.IsSigned(package.Filepath))
+                {
+                    return InstallPackageStatus.InstallationPackageIsNotSigned;
+                }
+
+                if (settingsManager.InstallAppFromSelectedIssuer &&
+                    certificateManager.IsSignedByIssuer(package.Filepath))
+                {
+                    return InstallPackageStatus.InstallationPackageIsNotSignedBySelectedIssuer;
+                }
 
                 if (string.Equals(Path.GetExtension(packageFile),
                         NugetExtension,
