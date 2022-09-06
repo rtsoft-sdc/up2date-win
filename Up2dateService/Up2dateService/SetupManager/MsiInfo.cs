@@ -4,7 +4,7 @@ namespace Up2dateService.SetupManager
 {
     public class MsiInfo
     {
-        public MsiInfo(string productCode, string productName)
+        public MsiInfo(string productCode, string productName, string productVersion)
         {
             if (string.IsNullOrWhiteSpace(productCode))
             {
@@ -13,10 +13,13 @@ namespace Up2dateService.SetupManager
 
             ProductCode = productCode;
             ProductName = productName;
+            ProductVersion = productVersion;
         }
 
         public string ProductCode { get; }
 
         public string ProductName { get; }
+
+        public string ProductVersion { get; }
     }
 }

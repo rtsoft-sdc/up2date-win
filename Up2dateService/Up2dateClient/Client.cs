@@ -169,35 +169,26 @@ namespace Up2dateClient
                 return;
             }
 
-            if (IsSupported(info))
-                WriteLogEntry("installing...", info);
+            WriteLogEntry("installing...", info);
+
             var installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
-            if (installPackageStatus != InstallPackageStatus.Ok)
+            if (installPackageStatus != InstallPackageResult.Success && installPackageStatus != InstallPackageResult.RestartNeeded)
             {
                 result.Message = "Installation failed.";
                 string additionalMessage = string.Empty;
                 switch (installPackageStatus)
                 {
-                    case InstallPackageStatus.PackageUnavailable:
-                        additionalMessage = "Package Unavailable";
+                    case InstallPackageResult.PackageUnavailable:
+                        additionalMessage = "Package unavailable";
                         break;
-                    case InstallPackageStatus.TempDirectoryFail:
-                        additionalMessage = "Temporary Directory failed to create";
+                    case InstallPackageResult.FailedToInstallChocoPackage:
+                        additionalMessage = "Failed to install Choco package";
                         break;
-                    case InstallPackageStatus.InvalidChocoPackage:
-                        additionalMessage = "Package Data Cannot be Processed";
-                        break;
-                    case InstallPackageStatus.FailedToInstallChocoPackage:
-                        additionalMessage = "Failed To Install Choco package";
-                        break;
-                    case InstallPackageStatus.ChocoNotInstalled:
+                    case InstallPackageResult.ChocoNotInstalled:
                         additionalMessage = "Chocolatey not installed";
                         break;
-                    case InstallPackageStatus.GeneralChocoError:
-                        additionalMessage = "General Choco Error";
-                        break;
-                    case InstallPackageStatus.PsScriptInvokeError:
-                        additionalMessage = "General Choco Error";
+                    case InstallPackageResult.GeneralInstallationError:
+                        additionalMessage = "General installation error";
                         break;
                 }
 

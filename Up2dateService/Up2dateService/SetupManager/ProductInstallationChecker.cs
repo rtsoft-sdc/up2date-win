@@ -61,11 +61,6 @@ namespace Up2dateService.SetupManager
             string uninstallKeyName = productCodes.Contains(package.ProductCode) 
                 ? UninstallKeyName 
                 : wow6432productCodes.Contains(package.ProductCode) ? Wow6432UninstallKeyName : null;
-            if (uninstallKeyName == null && ChocoHelper.IsPackageInstalled(package))
-            {
-                ChocoHelper.GetPackageInfo(ref package);
-                return;
-            }
 
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(uninstallKeyName + @"\" + package.ProductCode))
             {
@@ -79,6 +74,10 @@ namespace Up2dateService.SetupManager
                     package.EstimatedSize = key.GetValue("EstimatedSize") as int?;
                     package.UrlInfoAbout = key.GetValue("URLInfoAbout") as string;
                     key.Close();
+                }
+                else if (ChocoHelper.IsPackageInstalled(package))
+                {
+                    ChocoHelper.UpdatePackageInfo(ref package);
                 }
             }
         }

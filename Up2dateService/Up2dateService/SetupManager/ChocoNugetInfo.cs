@@ -9,7 +9,7 @@ namespace Up2dateService.SetupManager
 {
     public class ChocoNugetInfo
     {
-        public ChocoNugetInfo(string id, string title, string version, string publisher)
+        private ChocoNugetInfo(string id, string title, string version, string publisher)
         {
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentException($@"'{nameof(id)}' cannot be null or whitespace.", nameof(id));
@@ -29,7 +29,9 @@ namespace Up2dateService.SetupManager
         {
             using (var zipFile = ZipFile.OpenRead(fullFilePath))
             {
-                var nuspec = zipFile.Entries.First(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
+                var nuspec = zipFile.Entries.FirstOrDefault(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
+                if (nuspec == null) return null;
+
                 using (var nuspecStream = nuspec.Open())
                 {
                     using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
@@ -39,16 +41,16 @@ namespace Up2dateService.SetupManager
                         doc.LoadXml(xmlData);
                         var id = doc.GetElementsByTagName("id").Count > 0
                             ? doc.GetElementsByTagName("id")[0].InnerText
-                            : string.Empty;
+                            : null;
                         var title = doc.GetElementsByTagName("title").Count > 0
                             ? doc.GetElementsByTagName("title")[0].InnerText
-                            : string.Empty;
+                            : null;
                         var version = doc.GetElementsByTagName("version").Count > 0
                             ? doc.GetElementsByTagName("version")[0].InnerText
-                            : string.Empty;
+                            : null;
                         var publisher = doc.GetElementsByTagName("authors").Count > 0
                             ? doc.GetElementsByTagName("authors")[0].InnerText
-                            : string.Empty;
+                            : null;
                         return new ChocoNugetInfo(id, title, version, publisher);
                     }
                 }
