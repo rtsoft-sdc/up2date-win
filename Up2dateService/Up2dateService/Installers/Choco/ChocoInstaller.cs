@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
@@ -10,6 +11,12 @@ namespace Up2dateService.Installers.Choco
     public class ChocoInstaller : IPackageInstaller
     {
         private readonly List<string> productCodes = new List<string>();
+        private readonly Func<string> getDefaultSources;
+
+        public ChocoInstaller(Func<string> getDefaultSources = null)
+        {
+            this.getDefaultSources = getDefaultSources ?? (() => "https://community.chocolatey.org/api/v2/");
+        }
 
         public bool Initialize(ref Package package)
         {
@@ -30,7 +37,7 @@ namespace Up2dateService.Installers.Choco
             Process p = new Process();
             p.StartInfo.FileName = "choco.exe";
             p.StartInfo.Arguments = $"install {package.ProductName} --version {package.DisplayVersion} " +
-                                    $"-s \"{location};https://community.chocolatey.org/api/v2/\" " +
+                                    $"-s \"{location};{getDefaultSources()}\" " +
                                     "-y --force --no-progress";
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.UseShellExecute = false;

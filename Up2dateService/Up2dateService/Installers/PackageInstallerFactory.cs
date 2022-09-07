@@ -18,7 +18,7 @@ namespace Up2dateService.Installers
 
         private readonly Dictionary<string, Func<IPackageInstaller>> installers = new Dictionary<string, Func<IPackageInstaller>>();
 
-        public PackageInstallerFactory()
+        public PackageInstallerFactory(ISettingsManager settingsManager)
         {
             installers.Add(MsiExtension, () =>
             {
@@ -27,7 +27,7 @@ namespace Up2dateService.Installers
             });
             installers.Add(NugetExtension, () =>
             {
-                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller();
+                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources);
                 return chocoInstaller;
             });
         }

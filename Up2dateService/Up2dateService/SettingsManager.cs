@@ -110,5 +110,15 @@ namespace Up2dateService
                 Properties.Settings.Default.Save();
             }
         }
+
+        public string DefaultChocoSources
+        {
+            get => Properties.Settings.Default.DefaultChocoSources;
+            set
+            {
+                Properties.Settings.Default.DefaultChocoSources = value;
+                Properties.Settings.Default.Save();
+            }
+        }
     }
 }

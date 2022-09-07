@@ -29,5 +29,8 @@
     <Setting Name="PackageInProgress" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="DefaultChocoSources" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://community.chocolatey.org/api/v2/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

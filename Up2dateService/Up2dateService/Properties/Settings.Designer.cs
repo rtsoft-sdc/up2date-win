@@ -130,5 +130,17 @@ namespace Up2dateService.Properties {
                 this["PackageInProgress"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://community.chocolatey.org/api/v2/")]
+        public string DefaultChocoSources {
+            get {
+                return ((string)(this["DefaultChocoSources"]));
+            }
+            set {
+                this["DefaultChocoSources"] = value;
+            }
+        }
     }
 }
