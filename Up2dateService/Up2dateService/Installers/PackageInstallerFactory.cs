@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Up2dateService.Installers.Choco;
+using Up2dateService.Installers.Msi;
+using Up2dateService.Interfaces;
 using Up2dateShared;
 
-namespace Up2dateService.SetupManager
+namespace Up2dateService.Installers
 {
     public class PackageInstallerFactory : IPackageInstallerFactory
     {

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Up2dateService.SetupManager
+namespace Up2dateService.Installers.Msi
 {
     public class MsiInfo
     {

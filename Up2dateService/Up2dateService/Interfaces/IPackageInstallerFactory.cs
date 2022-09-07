@@ -1,6 +1,6 @@
 ﻿using Up2dateShared;
 
-namespace Up2dateService.SetupManager
+namespace Up2dateService.Interfaces
 {
     public interface IPackageInstallerFactory
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Up2dateService.Interfaces;
 using Up2dateShared;
 
 namespace Up2dateService.SetupManager

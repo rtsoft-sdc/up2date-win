@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace Up2dateService.SetupManager
+namespace Up2dateService.Installers.Choco
 {
     public class ChocoNugetInfo
     {

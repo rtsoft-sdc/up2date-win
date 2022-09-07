@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Up2dateService.Interfaces;
 using Up2dateShared;
 
 namespace Up2dateService.SetupManager

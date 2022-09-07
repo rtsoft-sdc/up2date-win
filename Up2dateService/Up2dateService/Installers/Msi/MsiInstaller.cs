@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Up2dateService.Interfaces;
 using Up2dateShared;
 
-namespace Up2dateService.SetupManager
+namespace Up2dateService.Installers.Msi
 {
     public class MsiInstaller : IPackageInstaller
     {

@@ -63,13 +63,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SettingsManager.cs" />
-    <Compile Include="SetupManager\ChocoInstaller.cs" />
-    <Compile Include="SetupManager\ChocoNugetInfo.cs" />
-    <Compile Include="SetupManager\IPackageInstaller.cs" />
-    <Compile Include="SetupManager\IPackageInstallerFactory.cs" />
-    <Compile Include="SetupManager\MsiInfo.cs" />
-    <Compile Include="SetupManager\MsiInstaller.cs" />
-    <Compile Include="SetupManager\PackageInstallerFactory.cs" />
+    <Compile Include="Installers\Choco\ChocoInstaller.cs" />
+    <Compile Include="Installers\Choco\ChocoNugetInfo.cs" />
+    <Compile Include="Interfaces\IPackageInstallerFactory.cs" />
+    <Compile Include="Interfaces\IPackageInstaller.cs" />
+    <Compile Include="Installers\Msi\MsiInfo.cs" />
+    <Compile Include="Installers\Msi\MsiInstaller.cs" />
+    <Compile Include="Installers\PackageInstallerFactory.cs" />
     <Compile Include="SetupManager\ProductInstallationChecker.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>

@@ -5,6 +5,8 @@ using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using Up2dateClient;
+using Up2dateService.Installers;
+using Up2dateService.Interfaces;
 using Up2dateShared;
 
 namespace Up2dateService
@@ -30,7 +32,7 @@ namespace Up2dateService
             ISettingsManager settingsManager = new SettingsManager(); 
             ICertificateProvider certificateProvider = new CertificateProvider(settingsManager);
             ICertificateManager certificateManager = new CertificateManager(settingsManager, EventLog);
-            SetupManager.IPackageInstallerFactory installerFactory = new SetupManager.PackageInstallerFactory();
+            IPackageInstallerFactory installerFactory = new PackageInstallerFactory();
             ISetupManager setupManager = new SetupManager.SetupManager(EventLog, GetCreatePackagesFolder, settingsManager, certificateManager, installerFactory);
 
             Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, EventLog);

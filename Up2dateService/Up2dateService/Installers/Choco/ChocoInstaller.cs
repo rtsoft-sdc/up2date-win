@@ -2,9 +2,10 @@
 using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
+using Up2dateService.Interfaces;
 using Up2dateShared;
 
-namespace Up2dateService.SetupManager
+namespace Up2dateService.Installers.Choco
 {
     public class ChocoInstaller : IPackageInstaller
     {
