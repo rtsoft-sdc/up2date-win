@@ -53,7 +53,7 @@ namespace Up2dateTests.Up2dateService
             //Act
             var packageExtensionFilterList = _settingsManager.PackageExtensionFilterList;
             //Assert
-            CollectionAssert.AreEqual(new List<string> { ".msi", ".cert", ".exe" }, packageExtensionFilterList);
+            CollectionAssert.AreEqual(new List<string> { ".msi", ".nupkg" }, packageExtensionFilterList);
         }
 
 
