@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
 using Up2dateService.Interfaces;
 
 using Up2dateShared;
@@ -37,7 +38,7 @@ namespace Up2dateService.Installers.Choco
 
             Process p = new Process();
             p.StartInfo.FileName = "choco.exe";
-            p.StartInfo.Arguments = $"{GetInstallationType(package)} {package.ProductName} " +
+            p.StartInfo.Arguments = $"{GetInstallationVerb(package)} {package.ProductName} " +
                                     $"--version {package.DisplayVersion} " +
                                     $"-s \"{location};{getDefaultSources()}\" " +
                                     "-y --no-progress";
@@ -48,16 +49,9 @@ namespace Up2dateService.Installers.Choco
             return p;
         }
 
-        private string GetInstallationType(Package package)
-        {
-            string packageInstallationType = "install";
-            if (productCodes.Any(item => item.StartsWith(package.ProductCode.Split(' ').First())))
-            {
-                packageInstallationType = "upgrade";
-            }
-
-            return packageInstallationType;
-        }
+        private string GetInstallationVerb(Package package) =>
+            productCodes.Any(item => item.Split(' ').
+                First() == package.ProductName) ? "upgrade" : "install";
 
         public bool IsPackageInstalled(Package package)
         {
@@ -76,9 +70,11 @@ namespace Up2dateService.Installers.Choco
             p.Start();
             p.WaitForExit();
             productCodes.Clear();
-            productCodes.AddRange(p.StandardOutput.ReadToEnd()
-                .Split(new[] { Environment.NewLine },
-                    StringSplitOptions.RemoveEmptyEntries));
+            StreamReader standardOutput = p.StandardOutput;
+            while (!standardOutput.EndOfStream)
+            {
+                productCodes.Add(standardOutput.ReadLine());
+            }
         }
 
         public void UpdatePackageInfo(ref Package package)
@@ -99,7 +95,6 @@ namespace Up2dateService.Installers.Choco
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.UseShellExecute = false;
                 p.Start();
-                p.WaitForExit();
                 return true;
             }
             catch
