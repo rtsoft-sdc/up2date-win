@@ -21,5 +21,9 @@ namespace Tests_Shared
         public bool InstallAppFromSelectedIssuer { get; set; }
 
         public List<string> SelectedIssuers { get; set; }
+
+        public string PackageInProgress { get; set; }
+
+        public string DefaultChocoSources { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Up2dateShared;
 
 namespace SimpleClientApp
@@ -11,14 +10,19 @@ namespace SimpleClientApp
             return new List<Package>();
         }
 
-        public InstallPackageStatus InstallPackage(string packageFile)
+        public InstallPackageResult InstallPackage(string packageFile)
         {
-            return InstallPackageStatus.Ok;
+            return InstallPackageResult.Success;
         }
 
-        public Task InstallPackagesAsync(IEnumerable<Package> packages)
+        public void InstallPackages(IEnumerable<Package> packages)
         {
-            return Task.CompletedTask;
+            throw new System.NotImplementedException();
+        }
+
+        public bool IsFileSupported(string artifactFileName)
+        {
+            throw new System.NotImplementedException();
         }
 
         public bool IsPackageAvailable(string packageFile)

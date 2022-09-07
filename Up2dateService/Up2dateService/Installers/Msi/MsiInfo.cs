@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Up2dateService.SetupManager
+namespace Up2dateService.Installers.Msi
 {
-    public class MsiHelper
+    public class MsiInfo
     {
         [DllImport("msi.dll", CharSet = CharSet.Unicode, PreserveSig = true, SetLastError = true, ExactSpelling = true)]
         private static extern uint MsiOpenPackageW(string szPackagePath, out IntPtr hProduct);
@@ -14,6 +14,24 @@ namespace Up2dateService.SetupManager
 
         [DllImport("msi.dll", CharSet = CharSet.Unicode, PreserveSig = true, SetLastError = true, ExactSpelling = true)]
         private static extern uint MsiGetPropertyW(IntPtr hAny, string name, StringBuilder buffer, ref int bufferLength);
+
+        private MsiInfo(string productCode, string productName, string productVersion)
+        {
+            if (string.IsNullOrWhiteSpace(productCode))
+            {
+                throw new ArgumentException($"'{nameof(productCode)}' cannot be null or whitespace.", nameof(productCode));
+            }
+
+            ProductCode = productCode;
+            ProductName = productName;
+            ProductVersion = productVersion;
+        }
+
+        public string ProductCode { get; }
+
+        public string ProductName { get; }
+
+        public string ProductVersion { get; }
 
         public static MsiInfo GetInfo(string msiFileName)
         {
@@ -36,7 +54,15 @@ namespace Up2dateService.SetupManager
                 {
                     productName = buffer.ToString();
                 }
-                return new MsiInfo(productCode, productName);
+
+                string productVersion = null;
+                errcode = MsiGetPropertyW(MsiHandle, "ProductVersion", buffer, ref length);
+                if (errcode == ErrorSuccess)
+                {
+                    productVersion = buffer.ToString();
+                }
+
+                return new MsiInfo(productCode, productName, productVersion);
             }
             catch (Exception)
             {

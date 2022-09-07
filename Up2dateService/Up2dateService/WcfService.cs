@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Permissions;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
 using Up2dateShared;
 
 namespace Up2dateService
@@ -45,7 +46,7 @@ namespace Up2dateService
         [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
         public void StartInstallation(IEnumerable<Package> packages)
         {
-            _ = setupManager.InstallPackagesAsync(packages);
+            Task.Run(() => setupManager.InstallPackages(packages));
         }
 
         public string GetMsiFolder()

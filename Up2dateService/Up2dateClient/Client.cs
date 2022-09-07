@@ -149,45 +149,41 @@ namespace Up2dateClient
             }      
             
             var filePath = Path.Combine(getDownloadLocation(), info.artifactFileName);
+
             WriteLogEntry("installing...", info);
+            
             var installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
-            if (installPackageStatus != InstallPackageStatus.Ok)
+            if (installPackageStatus != InstallPackageResult.Success && installPackageStatus != InstallPackageResult.RestartNeeded)
             {
                 result.Message = "Installation failed.";
                 string additionalMessage;
                 switch (installPackageStatus)
                 {
-                    case InstallPackageStatus.PackageUnavailable:
-                        additionalMessage = "Package Unavailable";
+                    case InstallPackageResult.PackageUnavailable:
+                        additionalMessage = "Package unavailable or unusable";
                         break;
-                    case InstallPackageStatus.TempDirectoryFail:
-                        additionalMessage = "Temporary Directory failed to create";
+                    case InstallPackageResult.FailedToInstallChocoPackage:
+                        additionalMessage = "Failed to install Choco package";
                         break;
-                    case InstallPackageStatus.InvalidChocoPackage:
-                        additionalMessage = "Package Data Cannot be Processed";
+                    case InstallPackageResult.ChocoNotInstalled:
+                        additionalMessage = "Chocolatey is not installed";
                         break;
-                    case InstallPackageStatus.FailedToInstallChocoPackage:
-                        additionalMessage = "Failed To Install Choco package";
+                    case InstallPackageResult.GeneralInstallationError:
+                        additionalMessage = "General installation error";
                         break;
-                    case InstallPackageStatus.ChocoNotInstalled:
-                        additionalMessage = "Chocolatey not installed";
-                        break;
-                    case InstallPackageStatus.GeneralChocoError:
-                        additionalMessage = "General Choco Error";
-                        break;
-                    case InstallPackageStatus.PsScriptInvokeError:
-                        additionalMessage = "General Choco Error";
-                        break;
-                    case InstallPackageStatus.MsiInstallationError:
-                        additionalMessage = "Msi Installation Error";
-                        break;
-                    case InstallPackageStatus.InstallationPackageIsNotSigned:
+                    case InstallPackageResult.InstallationPackageIsNotSigned:
                         additionalMessage = "Package is not signed. Deployment rejected";
                         File.Delete(filePath);
                         break;
-                    case InstallPackageStatus.InstallationPackageIsNotSignedBySelectedIssuer:
+                    case InstallPackageResult.InstallationPackageIsNotSignedBySelectedIssuer:
                         additionalMessage = "Package is not signed by any whitelisted issuer. Deployment rejected";
                         File.Delete(filePath);
+                        break;
+                    case InstallPackageResult.PackageNotSupported:
+                        additionalMessage = "Package of this type is not supported";
+                        break;
+                    case InstallPackageResult.CannotStartInstaller:
+                        additionalMessage = "Failed to start installer process";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -195,7 +191,6 @@ namespace Up2dateClient
 
                 if (additionalMessage != string.Empty)
                 {
-                    WriteLogEntry(additionalMessage, info);
                     result.Message += Environment.NewLine + additionalMessage;
                 }
 

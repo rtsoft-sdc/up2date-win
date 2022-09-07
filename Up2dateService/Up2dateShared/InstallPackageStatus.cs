@@ -1,17 +1,16 @@
 ﻿namespace Up2dateShared
 {
-    public enum InstallPackageStatus
+    public enum InstallPackageResult
     {
-        Ok,
+        Success,
+        PackageNotSupported,
         PackageUnavailable,
-        TempDirectoryFail,
-        InvalidChocoPackage,
         FailedToInstallChocoPackage,
-        GeneralChocoError,
-        PsScriptInvokeError,
+        GeneralInstallationError,
         ChocoNotInstalled,
-        MsiInstallationError,
         InstallationPackageIsNotSigned,
-        InstallationPackageIsNotSignedBySelectedIssuer
+        InstallationPackageIsNotSignedBySelectedIssuer,
+        RestartNeeded,
+        CannotStartInstaller
     }
 }

@@ -12,7 +12,7 @@
       <Value Profile="(Default)">http://enter.dev.ritms.online</Value>
     </Setting>
     <Setting Name="PackageExtensionFilterList" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.msi:.cert:.exe</Value>
+      <Value Profile="(Default)">.msi:.nupkg</Value>
     </Setting>
     <Setting Name="SelectedIssuers" Type="System.String" Scope="User">
       <Value Profile="(Default)">rts</Value>
@@ -25,6 +25,12 @@
     </Setting>
     <Setting Name="UpgradeFlag" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PackageInProgress" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultChocoSources" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://community.chocolatey.org/api/v2/</Value>
     </Setting>
   </Settings>
 </SettingsFile>
