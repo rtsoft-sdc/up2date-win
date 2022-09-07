@@ -103,6 +103,14 @@ namespace Up2dateService.SetupManager
         {
             try
             {
+                if (IsSetPackageInProgressFlag(package))
+                {
+                    ClearPackageInProgressFlag();
+                    if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
+                    if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
+                    return InstallPackageResult.GeneralInstallationError;
+                }
+
                 if (package.Status == PackageStatus.Unavailable) return InstallPackageResult.PackageUnavailable;
                 if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
                 if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
@@ -120,7 +128,32 @@ namespace Up2dateService.SetupManager
                 }
 
                 IPackageInstaller installer = installerFactory.GetInstaller(package);
-                return installer.InstallPackage(package);
+
+                SetPackageInProgressFlag(package);
+                try
+                {
+                    using (Process p = installer.StartInstallationProcess(package))
+                    {
+                        const int checkPeriodMs = 1000;
+                        const int ExitCodeSuccess = 0;
+                        const int MsiExitCodeRestartNeeded = 3010;
+
+                        while (!p.WaitForExit(checkPeriodMs)) ;
+
+                        if (p.ExitCode == ExitCodeSuccess) return InstallPackageResult.Success;
+                        if (p.ExitCode == MsiExitCodeRestartNeeded) return InstallPackageResult.RestartNeeded;
+                        return InstallPackageResult.GeneralInstallationError;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    WriteLogEntry(exception);
+                    return InstallPackageResult.CannotStartInstaller;
+                }
+                finally
+                {
+                    ClearPackageInProgressFlag();
+                }
             }
             catch (Exception exception)
             {
@@ -131,6 +164,21 @@ namespace Up2dateService.SetupManager
             {
                 RefreshPackageList();
             }
+        }
+
+        private void SetPackageInProgressFlag(Package package)
+        {
+            settingsManager.PackageInProgress = package.ProductCode;
+        }
+
+        private void ClearPackageInProgressFlag()
+        {
+            settingsManager.PackageInProgress = string.Empty;
+        }
+
+        private bool IsSetPackageInProgressFlag(Package package)
+        {
+            return string.Equals(package.ProductCode, settingsManager.PackageInProgress);
         }
 
         private Package FindPackage(string packageFile)

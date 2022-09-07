@@ -118,5 +118,17 @@ namespace Up2dateService.Properties {
                 this["UpgradeFlag"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PackageInProgress {
+            get {
+                return ((string)(this["PackageInProgress"]));
+            }
+            set {
+                this["PackageInProgress"] = value;
+            }
+        }
     }
 }

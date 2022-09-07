@@ -182,6 +182,9 @@ namespace Up2dateClient
                     case InstallPackageResult.PackageNotSupported:
                         additionalMessage = "Package of this type is not supported";
                         break;
+                    case InstallPackageResult.CannotStartInstaller:
+                        additionalMessage = "Failed to start installer process";
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

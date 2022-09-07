@@ -10,6 +10,7 @@
         ChocoNotInstalled,
         InstallationPackageIsNotSigned,
         InstallationPackageIsNotSignedBySelectedIssuer,
-        RestartNeeded
+        RestartNeeded,
+        CannotStartInstaller
     }
 }

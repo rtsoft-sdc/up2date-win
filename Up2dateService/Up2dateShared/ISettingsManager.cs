@@ -14,5 +14,6 @@ namespace Up2dateShared
         bool CheckSignature { get; set; }
         bool InstallAppFromSelectedIssuer { get; set; }
         List<string> SelectedIssuers { get; set; }
+        string PackageInProgress { get; set; }
     }
 }

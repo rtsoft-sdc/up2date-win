@@ -100,5 +100,15 @@ namespace Up2dateService
                 Properties.Settings.Default.Save();
             }
         }
+
+        public string PackageInProgress 
+        {
+            get => Properties.Settings.Default.PackageInProgress;
+            set
+            {
+                Properties.Settings.Default.PackageInProgress = value;
+                Properties.Settings.Default.Save();
+            }
+        }
     }
 }

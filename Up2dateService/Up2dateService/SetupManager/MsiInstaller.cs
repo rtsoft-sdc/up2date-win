@@ -31,26 +31,16 @@ namespace Up2dateService.SetupManager
             return true;
         }
 
-        public InstallPackageResult InstallPackage(Package package)
+        public Process StartInstallationProcess(Package package)
         {
-            const int MsiExecResult_Success = 0;
-            const int MsiExecResult_RestartNeeded = 3010;
+            Process p = new Process();
+            p.StartInfo.FileName = "msiexec.exe";
+            p.StartInfo.Arguments = $"/i \"{package.Filepath}\" ALLUSERS=1 /qn";
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
 
-            const int cancellationCheckPeriodMs = 1000;
-
-            using (Process p = new Process())
-            {
-                p.StartInfo.FileName = "msiexec.exe";
-                p.StartInfo.Arguments = $"/i \"{package.Filepath}\" ALLUSERS=1 /qn";
-                p.StartInfo.UseShellExecute = false;
-                _ = p.Start();
-
-                while (!p.WaitForExit(cancellationCheckPeriodMs)) ;
-
-                if (p.ExitCode == MsiExecResult_Success) return InstallPackageResult.Success;
-                if (p.ExitCode == MsiExecResult_RestartNeeded) return InstallPackageResult.RestartNeeded;
-                return InstallPackageResult.GeneralInstallationError;
-            }
+            return p;
         }
 
         public bool IsPackageInstalled(Package package)

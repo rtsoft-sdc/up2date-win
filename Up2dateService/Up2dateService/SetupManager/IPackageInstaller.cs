@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using Up2dateShared;
 
 namespace Up2dateService.SetupManager
@@ -11,13 +12,6 @@ namespace Up2dateService.SetupManager
         /// <param name="package">Package. Must have Package.Filepath property set</param>
         /// <returns>False if installer failed to initialize (e.g. wrong package format or access problems)</returns>
         bool Initialize(ref Package package);
-
-        /// <summary>
-        /// Installs the package
-        /// </summary>
-        /// <param name="package">Package to be installed</param>
-        /// <returns>Result of the package installation</returns>
-        InstallPackageResult InstallPackage(Package package);
 
         /// <summary>
         /// Checks if the Package is installed (tries to get information from installation registry/database/store)
@@ -37,5 +31,12 @@ namespace Up2dateService.SetupManager
         /// Recommended to invoke before using IsPackageInstalled/UpdatePackageInfo if some changes in installation base is expected
         /// </summary>
         void Refresh();
+
+        /// <summary>
+        /// Starts separate process to install the Package
+        /// </summary>
+        /// <param name="package">Package</param>
+        /// <returns>started process</returns>
+        Process StartInstallationProcess(Package package);
     }
 }

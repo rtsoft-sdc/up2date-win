@@ -18,35 +18,24 @@ namespace Up2dateService.SetupManager
             package.ProductName = info.Id;
             package.DisplayVersion = info.Version;
             package.ProductCode = $"{info.Id} {info.Version}";
-            package.DisplayName = info.Title;
-            package.Publisher = info.Publisher;
 
             return true;
         }
 
-        public InstallPackageResult InstallPackage(Package package)
+        public Process StartInstallationProcess(Package package)
         {
-            if (!IsChocoInstalled()) return InstallPackageResult.ChocoNotInstalled;
-
-            const int cancellationCheckPeriodMs = 1000;
-
             string location = Path.GetDirectoryName(package.Filepath);
 
-            using (Process p = new Process())
-            {
-                p.StartInfo.FileName = "choco.exe";
-                p.StartInfo.Arguments = $"install {package.ProductName} --version {package.DisplayVersion} " +
-                                        $"-s \"{location};https://community.chocolatey.org/api/v2/\" " +
-                                        "-y --force --no-progress";
-                p.StartInfo.UseShellExecute = false;
-                _ = p.Start();
+            Process p = new Process();
+            p.StartInfo.FileName = "choco.exe";
+            p.StartInfo.Arguments = $"install {package.ProductName} --version {package.DisplayVersion} " +
+                                    $"-s \"{location};https://community.chocolatey.org/api/v2/\" " +
+                                    "-y --force --no-progress";
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
 
-                while (!p.WaitForExit(cancellationCheckPeriodMs)) ;
-
-                if (p.ExitCode != 0) return InstallPackageResult.FailedToInstallChocoPackage;
-
-                return IsPackageInstalled(package) ? InstallPackageResult.Success : InstallPackageResult.FailedToInstallChocoPackage;
-            }
+            return p;
         }
 
         public bool IsPackageInstalled(Package package)
@@ -69,7 +58,11 @@ namespace Up2dateService.SetupManager
 
         public void UpdatePackageInfo(ref Package package)
         {
-            // nothing to update while we don't know how to access Choco store
+            ChocoNugetInfo info = ChocoNugetInfo.GetInfo(package.Filepath);
+            if (info == null || string.IsNullOrWhiteSpace(info.Id) || string.IsNullOrWhiteSpace(info.Version)) return;
+
+            package.DisplayName = info.Title;
+            package.Publisher = info.Publisher;
         }
 
         private static bool IsChocoInstalled()
