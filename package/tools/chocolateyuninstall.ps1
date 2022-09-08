@@ -4,7 +4,7 @@
 $ErrorActionPreference = 'Stop';
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
-  softwareName  = '*Up2date*'
+  softwareName  = 'RITMS UP2DATE Client'
   fileType      = 'MSI'
   silentArgs    = "/qn /norestart"
   validExitCodes= @(0, 3010, 1605, 1614, 1641)

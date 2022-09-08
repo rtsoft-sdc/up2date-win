@@ -24,7 +24,7 @@ namespace Up2dateService
         {
             const int clientStartRertyPeriodMs = 30000;
 
-            //System.Diagnostics.Debugger.Launch(); //todo: remove!
+            System.Diagnostics.Debugger.Launch(); //todo: remove!
 
             serviceHost?.Close();
             EventLog.WriteEntry($"Packages folder: '{GetCreatePackagesFolder()}'");
