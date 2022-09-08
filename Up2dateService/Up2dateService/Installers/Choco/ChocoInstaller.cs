@@ -71,9 +71,25 @@ namespace Up2dateService.Installers.Choco
             p.WaitForExit();
             productCodes.Clear();
             StreamReader standardOutput = p.StandardOutput;
+
+            bool firstLineSkipped = false;
             while (!standardOutput.EndOfStream)
             {
-                productCodes.Add(standardOutput.ReadLine());
+                string line = standardOutput.ReadLine();
+                if (!firstLineSkipped)
+                {
+                    firstLineSkipped = true;
+                    continue;
+                }
+                if (line != string.Empty)
+                {
+                    productCodes.Add(line);
+                }
+            }
+
+            if (productCodes.Count > 0)
+            {
+                productCodes.RemoveAt(productCodes.Count - 1);
             }
         }
 
