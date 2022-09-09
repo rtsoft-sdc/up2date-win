@@ -10,7 +10,7 @@ namespace Up2dateShared
         SignedByWhitelistedCertificate
     }
 
-    public interface ISignatureVerifyer
+    public interface ISignatureVerifier
     {
         bool VerifySignature(string file, SignatureVerificationLevel level);
         bool VerifySignature(X509Certificate2 certificate, SignatureVerificationLevel level);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Permissions;
 using System.ServiceModel;
 using System.Text;
@@ -116,26 +115,6 @@ namespace Up2dateService
         public void SetCheckSignature(bool newState)
         {
             settingsManager.CheckSignature = newState;
-        }
-
-        public bool GetInstallAppFromSelectedIssuer()
-        {
-            return settingsManager.InstallAppFromSelectedIssuer;
-        }
-
-        public void SetInstallAppFromSelectedIssuer(bool newState)
-        {
-            settingsManager.InstallAppFromSelectedIssuer = newState;
-        }
-
-        public string GetSelectedIssuers()
-        {
-            return string.Join(":", settingsManager.SelectedIssuers.ToArray());
-        }
-
-        public void SetSelectedIssuers(string selectedIssuers)
-        {
-            settingsManager.SelectedIssuers = selectedIssuers.Split(':').ToList();
         }
     }
 }

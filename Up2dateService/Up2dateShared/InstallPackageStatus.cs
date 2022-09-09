@@ -8,8 +8,7 @@
         FailedToInstallChocoPackage,
         GeneralInstallationError,
         ChocoNotInstalled,
-        InstallationPackageIsNotSigned,
-        InstallationPackageIsNotSignedBySelectedIssuer,
+        SignatureVerificationFailed,
         RestartNeeded,
         CannotStartInstaller
     }

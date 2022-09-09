@@ -25,5 +25,6 @@ namespace Tests_Shared
         public string PackageInProgress { get; set; }
 
         public string DefaultChocoSources { get; set; }
+        public SignatureVerificationLevel SignatureVerificationLevel { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }

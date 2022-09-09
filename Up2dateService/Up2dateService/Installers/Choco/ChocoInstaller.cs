@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
+using System.Security.Cryptography.X509Certificates;
 using Up2dateService.Interfaces;
 using Up2dateShared;
 
@@ -12,10 +13,12 @@ namespace Up2dateService.Installers.Choco
     {
         private readonly List<string> productCodes = new List<string>();
         private readonly Func<string> getDefaultSources;
+        private readonly Func<X509Certificate2, bool> verifyCertificate;
 
-        public ChocoInstaller(Func<string> getDefaultSources = null)
+        public ChocoInstaller(Func<string> getDefaultSources, Func<X509Certificate2, bool> verifyCertificate)
         {
-            this.getDefaultSources = getDefaultSources ?? (() => "https://community.chocolatey.org/api/v2/");
+            this.getDefaultSources = getDefaultSources ?? throw new ArgumentNullException(nameof(getDefaultSources));
+            this.verifyCertificate = verifyCertificate ?? throw new ArgumentNullException(nameof(verifyCertificate));
         }
 
         public bool Initialize(ref Package package)
@@ -71,6 +74,12 @@ namespace Up2dateService.Installers.Choco
 
             package.DisplayName = info.Title;
             package.Publisher = info.Publisher;
+        }
+
+        public bool VerifySignature(Package package)
+        {
+            // TODO extract certificate from the choco package and check it using verifyCertificate delegate
+            return true;
         }
 
         private static bool IsChocoInstalled()

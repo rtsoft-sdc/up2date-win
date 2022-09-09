@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Up2dateService.Interfaces;
 using Up2dateShared;
 
@@ -14,9 +16,12 @@ namespace Up2dateService.Installers.Msi
 
         private readonly List<string> productCodes = new List<string>();
         private readonly List<string> wow6432productCodes = new List<string>();
+        private Func<X509Certificate2, bool> verifyCertificate;
 
-        public MsiInstaller()
+        public MsiInstaller(Func<X509Certificate2, bool> verifyCertificate)
         {
+            this.verifyCertificate = verifyCertificate ?? throw new ArgumentNullException(nameof(verifyCertificate));
+
             Refresh();
         }
 
@@ -96,5 +101,20 @@ namespace Up2dateService.Installers.Msi
             }
         }
 
+        public bool VerifySignature(Package package)
+        {
+            X509Certificate2 certificate;
+            try
+            {
+                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(package.Filepath);
+                certificate = new X509Certificate2(theSigner);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return verifyCertificate(certificate);
+        }
     }
 }

@@ -4,9 +4,17 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Up2dateShared
 {
-    public class SignatureVerifyer : ISignatureVerifyer
+    public class SignatureVerifier : ISignatureVerifier
     {
-        private const string whiteListStore = "RITMS_UP2DATE_WhiteList";
+        private const string defaultWhiteListStoreName = "RITMS_UP2DATE_WhiteList";
+        private readonly string whiteListStoreName;
+        private readonly StoreLocation whiteListStoreLocation;
+
+        public SignatureVerifier(string whiteListStoreName = defaultWhiteListStoreName, StoreLocation whiteListStoreLocation = StoreLocation.LocalMachine)
+        {
+            this.whiteListStoreName = whiteListStoreName;
+            this.whiteListStoreLocation = whiteListStoreLocation;
+        }
 
         public bool VerifySignature(X509Certificate2 certificate, SignatureVerificationLevel level)
         {
@@ -42,7 +50,7 @@ namespace Up2dateShared
         public IList<X509Certificate2> GetWhitelistedCertificates()
         {
             var certs = new List<X509Certificate2>();
-            using (X509Store store = new X509Store(whiteListStore, StoreLocation.LocalMachine))
+            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
             {
                 store.Open(OpenFlags.ReadOnly);
                 var enumerator = store.Certificates.GetEnumerator();
@@ -54,7 +62,7 @@ namespace Up2dateShared
 
         public void RemoveCertificateFromWhilelist(X509Certificate2 certificate)
         {
-            using (X509Store store = new X509Store(whiteListStore, StoreLocation.LocalMachine))
+            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
             {
                 store.Open(OpenFlags.ReadWrite);
                 store.Remove(certificate);
@@ -64,7 +72,7 @@ namespace Up2dateShared
 
         public void AddCertificateToWhilelist(X509Certificate2 certificate)
         {
-            using (X509Store store = new X509Store(whiteListStore, StoreLocation.LocalMachine))
+            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
             {
                 store.Open(OpenFlags.ReadWrite);
                 store.Add(certificate);
@@ -85,7 +93,7 @@ namespace Up2dateShared
 
         private bool IsWhitelistedCertificate(X509Certificate2 certificate)
         {
-            using (X509Store store = new X509Store(whiteListStore, StoreLocation.LocalMachine))
+            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
             {
                 store.Open(OpenFlags.ReadOnly);
                 bool result = store.Certificates.Contains(certificate);

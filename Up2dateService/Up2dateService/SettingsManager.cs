@@ -81,22 +81,12 @@ namespace Up2dateService
             }
         }
 
-        public bool InstallAppFromSelectedIssuer
+        public SignatureVerificationLevel SignatureVerificationLevel
         {
-            get => Properties.Settings.Default.InstallAppFromSelectedIssuer;
+            get => Properties.Settings.Default.SignatureVerificationLevel;
             set
             {
-                Properties.Settings.Default.InstallAppFromSelectedIssuer = value;
-                Properties.Settings.Default.Save();
-            }
-        }
-
-        public List<string> SelectedIssuers
-        {
-            get => Properties.Settings.Default.SelectedIssuers.Split(':').ToList();
-            set
-            {
-                Properties.Settings.Default.SelectedIssuers = string.Join(":", value);
+                Properties.Settings.Default.SignatureVerificationLevel = value;
                 Properties.Settings.Default.Save();
             }
         }
