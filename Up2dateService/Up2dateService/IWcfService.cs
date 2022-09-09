@@ -48,5 +48,11 @@ namespace Up2dateService
 
         [OperationContract]
         void SetCheckSignature(bool newState);
+
+        [OperationContract]
+        SignatureVerificationLevel GetSignatureVerificationLevel();
+
+        [OperationContract]
+        void SetSignatureVerificationLevel(SignatureVerificationLevel level);
     }
 }

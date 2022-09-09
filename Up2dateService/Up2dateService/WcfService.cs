@@ -116,5 +116,15 @@ namespace Up2dateService
         {
             settingsManager.CheckSignature = newState;
         }
+
+        public SignatureVerificationLevel GetSignatureVerificationLevel()
+        {
+            return settingsManager.SignatureVerificationLevel;
+        }
+
+        public void SetSignatureVerificationLevel(SignatureVerificationLevel level)
+        {
+            settingsManager.SignatureVerificationLevel = level;
+        }
     }
 }

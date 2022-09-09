@@ -654,6 +654,20 @@ namespace Up2dateConsole.ServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SignatureVerificationLevel", Namespace="http://schemas.datacontract.org/2004/07/Up2dateShared")]
+    public enum SignatureVerificationLevel : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SignedByAnyCertificate = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SignedByTrustedCertificate = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SignedByWhitelistedCertificate = 2,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference.IWcfService")]
     public interface IWcfService {
@@ -742,29 +756,17 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/SetCheckSignatureResponse")]
         System.Threading.Tasks.Task SetCheckSignatureAsync(bool newState);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuerResponse")]
-        bool GetInstallAppFromSelectedIssuer();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSignatureVerificationLevel", ReplyAction="http://tempuri.org/IWcfService/GetSignatureVerificationLevelResponse")]
+        Up2dateConsole.ServiceReference.SignatureVerificationLevel GetSignatureVerificationLevel();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/GetInstallAppFromSelectedIssuerResponse")]
-        System.Threading.Tasks.Task<bool> GetInstallAppFromSelectedIssuerAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSignatureVerificationLevel", ReplyAction="http://tempuri.org/IWcfService/GetSignatureVerificationLevelResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.SignatureVerificationLevel> GetSignatureVerificationLevelAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuerResponse")]
-        void SetInstallAppFromSelectedIssuer(bool newState);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetSignatureVerificationLevel", ReplyAction="http://tempuri.org/IWcfService/SetSignatureVerificationLevelResponse")]
+        void SetSignatureVerificationLevel(Up2dateConsole.ServiceReference.SignatureVerificationLevel level);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuer", ReplyAction="http://tempuri.org/IWcfService/SetInstallAppFromSelectedIssuerResponse")]
-        System.Threading.Tasks.Task SetInstallAppFromSelectedIssuerAsync(bool newState);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/GetSelectedIssuersResponse")]
-        string GetSelectedIssuers();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/GetSelectedIssuersResponse")]
-        System.Threading.Tasks.Task<string> GetSelectedIssuersAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/SetSelectedIssuersResponse")]
-        void SetSelectedIssuers(string selectedIssuers);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetSelectedIssuers", ReplyAction="http://tempuri.org/IWcfService/SetSelectedIssuersResponse")]
-        System.Threading.Tasks.Task SetSelectedIssuersAsync(string selectedIssuers);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetSignatureVerificationLevel", ReplyAction="http://tempuri.org/IWcfService/SetSignatureVerificationLevelResponse")]
+        System.Threading.Tasks.Task SetSignatureVerificationLevelAsync(Up2dateConsole.ServiceReference.SignatureVerificationLevel level);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -906,36 +908,20 @@ namespace Up2dateConsole.ServiceReference {
             return base.Channel.SetCheckSignatureAsync(newState);
         }
         
-        public bool GetInstallAppFromSelectedIssuer() {
-            return base.Channel.GetInstallAppFromSelectedIssuer();
+        public Up2dateConsole.ServiceReference.SignatureVerificationLevel GetSignatureVerificationLevel() {
+            return base.Channel.GetSignatureVerificationLevel();
         }
         
-        public System.Threading.Tasks.Task<bool> GetInstallAppFromSelectedIssuerAsync() {
-            return base.Channel.GetInstallAppFromSelectedIssuerAsync();
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.SignatureVerificationLevel> GetSignatureVerificationLevelAsync() {
+            return base.Channel.GetSignatureVerificationLevelAsync();
         }
         
-        public void SetInstallAppFromSelectedIssuer(bool newState) {
-            base.Channel.SetInstallAppFromSelectedIssuer(newState);
+        public void SetSignatureVerificationLevel(Up2dateConsole.ServiceReference.SignatureVerificationLevel level) {
+            base.Channel.SetSignatureVerificationLevel(level);
         }
         
-        public System.Threading.Tasks.Task SetInstallAppFromSelectedIssuerAsync(bool newState) {
-            return base.Channel.SetInstallAppFromSelectedIssuerAsync(newState);
-        }
-        
-        public string GetSelectedIssuers() {
-            return base.Channel.GetSelectedIssuers();
-        }
-        
-        public System.Threading.Tasks.Task<string> GetSelectedIssuersAsync() {
-            return base.Channel.GetSelectedIssuersAsync();
-        }
-        
-        public void SetSelectedIssuers(string selectedIssuers) {
-            base.Channel.SetSelectedIssuers(selectedIssuers);
-        }
-        
-        public System.Threading.Tasks.Task SetSelectedIssuersAsync(string selectedIssuers) {
-            return base.Channel.SetSelectedIssuersAsync(selectedIssuers);
+        public System.Threading.Tasks.Task SetSignatureVerificationLevelAsync(Up2dateConsole.ServiceReference.SignatureVerificationLevel level) {
+            return base.Channel.SetSignatureVerificationLevelAsync(level);
         }
     }
 }

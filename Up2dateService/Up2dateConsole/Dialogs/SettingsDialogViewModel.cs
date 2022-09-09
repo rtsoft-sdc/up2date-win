@@ -13,8 +13,7 @@ namespace Up2dateConsole.Dialogs
         private string tokenUrl;
         private string dpsUrl;
         private bool checkSignatureStatus;
-        private bool installAppFromSelectedIssuers;
-        private string selectedIssuers;
+        private SignatureVerificationLevel signatureVerificationLevel;
 
         public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
         {
@@ -52,8 +51,6 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
-
-
         public bool CheckSignatureStatus
         {
             get => checkSignatureStatus;
@@ -65,26 +62,13 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
-        public bool InstallAppFromSelectedIssuers
+        public SignatureVerificationLevel SignatureVerificationLevel
         {
-            get => installAppFromSelectedIssuers;
+            get => signatureVerificationLevel;
             set
             {
-                if (installAppFromSelectedIssuers == value) return;
-                installAppFromSelectedIssuers = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-
-        public string SelectedIssuers
-        {
-            get => selectedIssuers;
-            set
-            {
-                if (selectedIssuers == value) return;
-                selectedIssuers = value;
+                if (signatureVerificationLevel == value) return;
+                signatureVerificationLevel = value;
                 OnPropertyChanged();
             }
         }
@@ -104,8 +88,7 @@ namespace Up2dateConsole.Dialogs
                 service.SetRequestCertificateUrl(TokenUrl);
                 service.SetProvisioningUrl(DpsUrl);
                 service.SetCheckSignature(checkSignatureStatus);
-                service.SetInstallAppFromSelectedIssuer(installAppFromSelectedIssuers);
-                service.SetSelectedIssuers(selectedIssuers);
+                service.SetSignatureVerificationLevel(signatureVerificationLevel);
             }
             catch (Exception e)
             {
@@ -135,8 +118,7 @@ namespace Up2dateConsole.Dialogs
                 TokenUrl = service.GetRequestCertificateUrl();
                 DpsUrl = service.GetProvisioningUrl();
                 checkSignatureStatus = service.GetCheckSignature();
-                installAppFromSelectedIssuers = service.GetInstallAppFromSelectedIssuer();
-                selectedIssuers = service.GetSelectedIssuers();
+                signatureVerificationLevel = service.GetSignatureVerificationLevel();
             }
             catch (Exception e)
             {
