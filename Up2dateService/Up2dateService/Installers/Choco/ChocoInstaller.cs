@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Management.Automation;
+using System.Linq;
+
 using Up2dateService.Interfaces;
+
 using Up2dateShared;
 
 namespace Up2dateService.Installers.Choco
@@ -36,15 +38,20 @@ namespace Up2dateService.Installers.Choco
 
             Process p = new Process();
             p.StartInfo.FileName = "choco.exe";
-            p.StartInfo.Arguments = $"install {package.ProductName} --version {package.DisplayVersion} " +
+            p.StartInfo.Arguments = $"{GetInstallationVerb(package)} {package.ProductName} " +
+                                    $"--version {package.DisplayVersion} " +
                                     $"-s \"{location};{getDefaultSources()}\" " +
-                                    "-y --force --no-progress";
+                                    "-y --no-progress";
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.UseShellExecute = false;
             p.Start();
 
             return p;
         }
+
+        private string GetInstallationVerb(Package package) =>
+            productCodes.Any(item => item.Split(' ').
+                First() == package.ProductName) ? "upgrade" : "install";
 
         public bool IsPackageInstalled(Package package)
         {
@@ -55,12 +62,34 @@ namespace Up2dateService.Installers.Choco
 
         public void Refresh()
         {
-            using (var ps = PowerShell.Create())
+            Process p = new Process();
+            p.StartInfo.FileName = "choco.exe";
+            p.StartInfo.Arguments = "list -l";
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
+            p.WaitForExit();
+            productCodes.Clear();
+            StreamReader standardOutput = p.StandardOutput;
+
+            bool firstLineSkipped = false;
+            while (!standardOutput.EndOfStream)
             {
-                const string psCommand = @"choco list -li";
-                ps.AddScript(psCommand);
-                productCodes.Clear();
-                productCodes.AddRange(ps.Invoke<string>());
+                string line = standardOutput.ReadLine();
+                if (!firstLineSkipped)
+                {
+                    firstLineSkipped = true;
+                    continue;
+                }
+                if (line != string.Empty)
+                {
+                    productCodes.Add(line);
+                }
+            }
+
+            if (productCodes.Count > 0)
+            {
+                productCodes.RemoveAt(productCodes.Count - 1);
             }
         }
 
@@ -68,18 +97,25 @@ namespace Up2dateService.Installers.Choco
         {
             ChocoNugetInfo info = ChocoNugetInfo.GetInfo(package.Filepath);
             if (info == null || string.IsNullOrWhiteSpace(info.Id) || string.IsNullOrWhiteSpace(info.Version)) return;
-
             package.DisplayName = info.Title;
             package.Publisher = info.Publisher;
         }
 
         private static bool IsChocoInstalled()
         {
-            using (var ps = PowerShell.Create())
+            try
             {
-                ps.AddScript("choco --version");
-                var value = ps.Invoke<string>();
-                return value.Count > 0;
+                Process p = new Process();
+                p.StartInfo.FileName = "choco.exe";
+                p.StartInfo.Arguments = "--version";
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.UseShellExecute = false;
+                p.Start();
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

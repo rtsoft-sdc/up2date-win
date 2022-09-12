@@ -29,28 +29,28 @@ namespace Up2dateService.Installers.Choco
         {
             try
             {
-                using (var zipFile = ZipFile.OpenRead(fullFilePath))
+                using (ZipArchive zipFile = ZipFile.OpenRead(fullFilePath))
                 {
-                    var nuspec = zipFile.Entries.FirstOrDefault(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
+                    ZipArchiveEntry nuspec = zipFile.Entries.FirstOrDefault(zipArchiveEntry => zipArchiveEntry.Name.Contains(".nuspec"));
                     if (nuspec == null) return null;
 
-                    using (var nuspecStream = nuspec.Open())
+                    using (Stream nuspecStream = nuspec.Open())
                     {
-                        using (var sr = new StreamReader(nuspecStream, Encoding.UTF8))
+                        using (StreamReader sr = new StreamReader(nuspecStream, Encoding.UTF8))
                         {
-                            var xmlData = sr.ReadToEnd();
-                            var doc = new XmlDocument();
+                            string xmlData = sr.ReadToEnd();
+                            XmlDocument doc = new XmlDocument();
                             doc.LoadXml(xmlData);
-                            var id = doc.GetElementsByTagName("id").Count > 0
+                            string id = doc.GetElementsByTagName("id").Count > 0
                                 ? doc.GetElementsByTagName("id")[0].InnerText
                                 : null;
-                            var title = doc.GetElementsByTagName("title").Count > 0
+                            string title = doc.GetElementsByTagName("title").Count > 0
                                 ? doc.GetElementsByTagName("title")[0].InnerText
                                 : null;
-                            var version = doc.GetElementsByTagName("version").Count > 0
+                            string version = doc.GetElementsByTagName("version").Count > 0
                                 ? doc.GetElementsByTagName("version")[0].InnerText
                                 : null;
-                            var publisher = doc.GetElementsByTagName("authors").Count > 0
+                            string publisher = doc.GetElementsByTagName("authors").Count > 0
                                 ? doc.GetElementsByTagName("authors")[0].InnerText
                                 : null;
                             return new ChocoNugetInfo(id, title, version, publisher);

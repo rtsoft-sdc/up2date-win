@@ -8,7 +8,7 @@ $packageArgs = @{
   file           = Get-Item $toolsDir\Up2dateSetup32.msi
   file64           = Get-Item $toolsDir\Up2dateSetup64.msi
 
-  softwareName  = '*Up2date*'
+  softwareName  = 'RITMS UP2DATE Client'
 
   checksum      = '2CE42C49EDA71DA2311AAB9A773BD88FDD306FBF697F56ED243C0F930261E77E'
   checksumType  = 'sha256'
