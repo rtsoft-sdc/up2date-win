@@ -50,8 +50,9 @@
                 <Grid x:Uid="Grid_2">
                     <RadioButton x:Uid="RadioButton_3" Margin="0,5,0,5" VerticalAlignment="Center" Content="Accept only packages signed by a whitelisted certificate" 
                                  IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
-                    <Button x:Uid="Button_3" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" Content="Manage Whitelist..."
-                            IsEnabled="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
+                    <Button x:Uid="Button_3" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" 
+                            Content="Add Certificate" ToolTip="Add certificate to whitelist" 
+                            Command="{Binding AddCertificateCommand}"/>
                 </Grid>
             </StackPanel>
         </StackPanel>

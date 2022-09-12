@@ -53,8 +53,11 @@ namespace Up2dateShared
             using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
             {
                 store.Open(OpenFlags.ReadOnly);
-                var enumerator = store.Certificates.GetEnumerator();
-                do certs.Add(enumerator.Current); while (enumerator.MoveNext());
+                X509Certificate2Enumerator enumerator = store.Certificates.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    certs.Add(enumerator.Current);
+                }
                 store.Close();
             }
             return certs;
@@ -70,14 +73,53 @@ namespace Up2dateShared
             }
         }
 
-        public void AddCertificateToWhilelist(X509Certificate2 certificate)
+        public bool IsCertificateValidAndTrusted(string certificateFilePath)
         {
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
+            X509Certificate2 cert;
+            try
             {
-                store.Open(OpenFlags.ReadWrite);
-                store.Add(certificate);
-                store.Close();
+                cert = new X509Certificate2(certificateFilePath);
             }
+            catch
+            {
+                return false;
+            }
+
+            return IsTrustedCertificate(cert);
+        }
+
+        public Result AddCertificateToWhitelist(X509Certificate2 certificate)
+        {
+            try
+            {
+                using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
+                {
+                    store.Open(OpenFlags.ReadWrite);
+                    store.Add(certificate);
+                    store.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                return Result.Failed(e.Message);
+            }
+
+            return Result.Successful();
+        }
+
+        public Result AddCertificateToWhitelist(string certificateFilePath)
+        {
+            X509Certificate2 cert;
+            try
+            {
+                cert = new X509Certificate2(certificateFilePath);
+            }
+            catch (Exception e)
+            {
+                return Result.Failed(e.Message);
+            }
+
+            return AddCertificateToWhitelist(cert);
         }
 
         private bool IsTrustedCertificate(X509Certificate2 certificate)

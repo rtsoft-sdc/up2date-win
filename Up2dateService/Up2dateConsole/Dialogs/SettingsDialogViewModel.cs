@@ -23,11 +23,14 @@ namespace Up2dateConsole.Dialogs
             IsInitialized = Initialize();
 
             OkCommand = new RelayCommand(ExecuteOk, CanOk);
+            AddCertificateCommand = new RelayCommand(ExecuteAddCertificate, CanAddCertificate);
         }
 
         public bool IsInitialized { get; }
 
         public ICommand OkCommand { get; }
+
+        public ICommand AddCertificateCommand { get; }
 
         public string TokenUrl
         {
@@ -73,6 +76,49 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
+        private bool CanAddCertificate(object obj)
+        {
+            return CheckSignatureStatus && SignatureVerificationLevel == SignatureVerificationLevel.SignedByWhitelistedCertificate;
+        }
+
+        private void ExecuteAddCertificate(object obj)
+        {
+            var certFilePath = viewService.ShowOpenDialog(viewService.GetText(Texts.AddCertificateToWhiteList),
+                "X.509 certificate files|*.cer|All files|*.*");
+            if (string.IsNullOrWhiteSpace(certFilePath)) return;
+
+            IWcfService service = null;
+            try
+            {
+                service = wcfClientFactory.CreateClient();
+                if (!service.IsCertificateValidAndTrusted(certFilePath))
+                {
+                    var r = viewService.ShowMessageBox(Texts.InvalidCertificateForWhiteList, System.Windows.MessageBoxButton.YesNo);
+                    if (r == System.Windows.MessageBoxResult.No) return;
+                }
+
+                var result = service.AddCertificateToWhitelist(certFilePath);
+                if (result.Success)
+                {
+                    viewService.ShowMessageBox(Texts.CertificateAddedToWhiteList);
+                }
+                else
+                {
+                    string message = string.Format(viewService.GetText(Texts.FailedToAddCertificateToWhiteList), result.ErrorMessage);
+                    viewService.ShowMessageBox(message);
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format(viewService.GetText(Texts.FailedToAddCertificateToWhiteList), e.Message);
+                viewService.ShowMessageBox(message);
+            }
+            finally
+            {
+                wcfClientFactory.CloseClient(service);
+            }
+        }
+
         private bool CanOk(object obj)
         {
             return !string.IsNullOrWhiteSpace(TokenUrl) && !string.IsNullOrWhiteSpace(DpsUrl);
@@ -85,6 +131,13 @@ namespace Up2dateConsole.Dialogs
             try
             {
                 service = wcfClientFactory.CreateClient();
+                if (SignatureVerificationLevel == SignatureVerificationLevel.SignedByWhitelistedCertificate
+                    && service.GetWhitelistedCertificates().Length == 0)
+                {
+                    var r = viewService.ShowMessageBox(Texts.NoAnyWhitelistedCertificate, System.Windows.MessageBoxButton.OKCancel);
+                    if (r == System.Windows.MessageBoxResult.Cancel) return;
+                }
+
                 service.SetRequestCertificateUrl(TokenUrl);
                 service.SetProvisioningUrl(DpsUrl);
                 service.SetCheckSignature(checkSignatureStatus);

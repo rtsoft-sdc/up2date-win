@@ -36,8 +36,11 @@ namespace Up2dateService
             IPackageInstallerFactory installerFactory = new PackageInstallerFactory(settingsManager, signatureVerifier);
             ISetupManager setupManager = new SetupManager.SetupManager(EventLog, GetCreatePackagesFolder, settingsManager, signatureVerifier, installerFactory);
 
-            Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, EventLog);
-            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State, certificateProvider, certificateManager, settingsManager);
+            Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve,
+                GetCreatePackagesFolder, EventLog);
+
+            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State,
+                certificateProvider, certificateManager, settingsManager, signatureVerifier);
             serviceHost = new ServiceHost(wcfService);
             serviceHost.Open();
 

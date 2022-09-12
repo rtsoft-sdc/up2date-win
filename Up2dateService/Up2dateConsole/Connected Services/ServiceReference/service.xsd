@@ -2,6 +2,7 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://RTSoft.Ritms.Up2date.win" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Up2dateShared" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:element name="GetPackages">
     <xs:complexType>
       <xs:sequence />
@@ -194,6 +195,46 @@
   <xs:element name="SetSignatureVerificationLevelResponse">
     <xs:complexType>
       <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsCertificateValidAndTrusted">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="certificateFilePath" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsCertificateValidAndTrustedResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsCertificateValidAndTrustedResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetWhitelistedCertificates">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetWhitelistedCertificatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetWhitelistedCertificatesResult" nillable="true" type="q8:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddCertificateToWhitelist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="certificateFilePath" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddCertificateToWhitelistResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="AddCertificateToWhitelistResult" type="q9:Result" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

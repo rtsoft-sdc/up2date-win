@@ -54,5 +54,14 @@ namespace Up2dateService
 
         [OperationContract]
         void SetSignatureVerificationLevel(SignatureVerificationLevel level);
+
+        [OperationContract]
+        bool IsCertificateValidAndTrusted(string certificateFilePath);
+
+        [OperationContract]
+        IList<string> GetWhitelistedCertificates();
+
+        [OperationContract]
+        Result AddCertificateToWhitelist(string certificateFilePath);
     }
 }

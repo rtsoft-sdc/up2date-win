@@ -160,6 +160,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Fonts\fontawesome-webfont.ttf" />
+    <None Include="Connected Services\ServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\ServiceReference\RTSoft.Ritms.Up2date.win.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -177,6 +180,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ServiceReference\Up2dateConsole.ServiceReference.Package.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ServiceReference\Up2dateConsole.ServiceReference.Result.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ServiceReference\Up2dateConsole.ServiceReference.ResultOfstring.datasource">
