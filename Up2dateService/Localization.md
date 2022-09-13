@@ -20,14 +20,12 @@ https://github.com/vchaplinski/locbaml/tree/master/bin/Release
 `Up2DateConsole` project is already appropriately configured for localization. So, this section describes routine actions needed in different development scenarios. You have to execute these actions to make sure your localization is up-to-date.
 
 ### Scenario #1. Any changes made in XAMLs
-Build the project (e.g. for Debug configuration) and execute the following commands:
-cd <your Up2DateService solution location>
-msbuild /t:updateuid Up2DateConsole\Up2DateConsole.csproj
-cd Up2dateConsole\bin\Debug\
-copy /Y %locbaml%
-locbaml.exe /parse /update en-US\Up2dateConsole.resources.dll /out:..\..\Localization\Up2dateConsole_ru-RU.csv
+Open Develop Command Prompt, go to Localization folder and execute the following script with the language specified as parameter:
+`Update.cmd ru-RU`
 
 Open `Up2dateConsole_ru-RU.csv` file in any text editor convenient to edit csv tables.
+Note! If you use MS Excel then make sure all columns are treated as Text to avoid problems with unexpected conversions.
+
 The meaning of the columns:
 1.	BAML Name. The name of the BAML resource with respect to the source language satellite assembly.
 2.	Resource Key. The localized resource identifier.
@@ -48,14 +46,12 @@ In order to test your localization, re-build the project and run it in the appro
 ### Scenario #2. Localization to another language is requested
 1.	Create additional empty resource file for the new language:
 In VisualStudio add “Resource File” to Up2dateConsole/Properties with the corresponding name, for instance `Resources.fr-FR.resx`
-2.	Build the project (e.g. for Debug configuration) and execute the following commands:
-cd Up2dateConsole\bin\Debug\
-copy /Y %locbaml%
-locbaml.exe /parse /update en-US\Up2dateConsole.resources.dll /out:..\..\Localization\Up2dateConsole_fr-FR.csv
-3.	Open `Up2dateConsole_fr-FR.csv` file in any text editor convenient for editing csv tables.
+2.  Open Develop Command Prompt, go to Localization folder and execute the following script with the language specified as parameter:
+`Update.cmd fr-FR`
+3.  In Visual Studio add to the project (to the Localization folder) the file Up2dateConsole_fr-FR.csv created on the previous step.
 4.	Translate all localizable texts as described in Scenario #1.
 5.	Open Build Events page on the Up2dateConsole project Properties screen.
-Add another one `Post-build event command line` with corresponding culture identifier as the first parameter, e.g. `fr-FR`
+6.  Extend `Post-build event command line` to cover additional language
 
 ### Scenario #3. New localizable UI project is created
 1.	Insert the following lines into the yourproject.csproj file:

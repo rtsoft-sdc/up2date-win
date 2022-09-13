@@ -10,8 +10,7 @@ namespace Up2dateShared
         string CertificateSerialNumber { get; set; }
         List<string> PackageExtensionFilterList { get; set; }
         bool CheckSignature { get; set; }
-        bool InstallAppFromSelectedIssuer { get; set; }
-        List<string> SelectedIssuers { get; set; }
+        SignatureVerificationLevel SignatureVerificationLevel { get; set; }
         string PackageInProgress { get; set; }
         string DefaultChocoSources { get; set; }
     }

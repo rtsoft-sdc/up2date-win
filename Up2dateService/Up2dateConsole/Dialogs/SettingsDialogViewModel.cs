@@ -13,8 +13,7 @@ namespace Up2dateConsole.Dialogs
         private string tokenUrl;
         private string dpsUrl;
         private bool checkSignatureStatus;
-        private bool installAppFromSelectedIssuers;
-        private string selectedIssuers;
+        private SignatureVerificationLevel signatureVerificationLevel;
 
         public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
         {
@@ -24,11 +23,14 @@ namespace Up2dateConsole.Dialogs
             IsInitialized = Initialize();
 
             OkCommand = new RelayCommand(ExecuteOk, CanOk);
+            AddCertificateCommand = new RelayCommand(ExecuteAddCertificate, CanAddCertificate);
         }
 
         public bool IsInitialized { get; }
 
         public ICommand OkCommand { get; }
+
+        public ICommand AddCertificateCommand { get; }
 
         public string TokenUrl
         {
@@ -52,8 +54,6 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
-
-
         public bool CheckSignatureStatus
         {
             get => checkSignatureStatus;
@@ -65,27 +65,57 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
-        public bool InstallAppFromSelectedIssuers
+        public SignatureVerificationLevel SignatureVerificationLevel
         {
-            get => installAppFromSelectedIssuers;
+            get => signatureVerificationLevel;
             set
             {
-                if (installAppFromSelectedIssuers == value) return;
-                installAppFromSelectedIssuers = value;
+                if (signatureVerificationLevel == value) return;
+                signatureVerificationLevel = value;
                 OnPropertyChanged();
             }
         }
 
-
-
-        public string SelectedIssuers
+        private bool CanAddCertificate(object obj)
         {
-            get => selectedIssuers;
-            set
+            return CheckSignatureStatus && SignatureVerificationLevel == SignatureVerificationLevel.SignedByWhitelistedCertificate;
+        }
+
+        private void ExecuteAddCertificate(object obj)
+        {
+            var certFilePath = viewService.ShowOpenDialog(viewService.GetText(Texts.AddCertificateToWhiteList),
+                "X.509 certificate files|*.cer|All files|*.*");
+            if (string.IsNullOrWhiteSpace(certFilePath)) return;
+
+            IWcfService service = null;
+            try
             {
-                if (selectedIssuers == value) return;
-                selectedIssuers = value;
-                OnPropertyChanged();
+                service = wcfClientFactory.CreateClient();
+                if (!service.IsCertificateValidAndTrusted(certFilePath))
+                {
+                    var r = viewService.ShowMessageBox(Texts.InvalidCertificateForWhiteList, System.Windows.MessageBoxButton.YesNo);
+                    if (r == System.Windows.MessageBoxResult.No) return;
+                }
+
+                var result = service.AddCertificateToWhitelist(certFilePath);
+                if (result.Success)
+                {
+                    viewService.ShowMessageBox(Texts.CertificateAddedToWhiteList);
+                }
+                else
+                {
+                    string message = string.Format(viewService.GetText(Texts.FailedToAddCertificateToWhiteList), result.ErrorMessage);
+                    viewService.ShowMessageBox(message);
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format(viewService.GetText(Texts.FailedToAddCertificateToWhiteList), e.Message);
+                viewService.ShowMessageBox(message);
+            }
+            finally
+            {
+                wcfClientFactory.CloseClient(service);
             }
         }
 
@@ -101,11 +131,17 @@ namespace Up2dateConsole.Dialogs
             try
             {
                 service = wcfClientFactory.CreateClient();
+                if (SignatureVerificationLevel == SignatureVerificationLevel.SignedByWhitelistedCertificate
+                    && service.GetWhitelistedCertificates().Length == 0)
+                {
+                    var r = viewService.ShowMessageBox(Texts.NoAnyWhitelistedCertificate, System.Windows.MessageBoxButton.OKCancel);
+                    if (r == System.Windows.MessageBoxResult.Cancel) return;
+                }
+
                 service.SetRequestCertificateUrl(TokenUrl);
                 service.SetProvisioningUrl(DpsUrl);
                 service.SetCheckSignature(checkSignatureStatus);
-                service.SetInstallAppFromSelectedIssuer(installAppFromSelectedIssuers);
-                service.SetSelectedIssuers(selectedIssuers);
+                service.SetSignatureVerificationLevel(signatureVerificationLevel);
             }
             catch (Exception e)
             {
@@ -135,8 +171,7 @@ namespace Up2dateConsole.Dialogs
                 TokenUrl = service.GetRequestCertificateUrl();
                 DpsUrl = service.GetProvisioningUrl();
                 checkSignatureStatus = service.GetCheckSignature();
-                installAppFromSelectedIssuers = service.GetInstallAppFromSelectedIssuer();
-                selectedIssuers = service.GetSelectedIssuers();
+                signatureVerificationLevel = service.GetSignatureVerificationLevel();
             }
             catch (Exception e)
             {

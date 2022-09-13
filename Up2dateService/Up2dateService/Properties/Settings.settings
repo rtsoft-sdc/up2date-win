@@ -14,12 +14,6 @@
     <Setting Name="PackageExtensionFilterList" Type="System.String" Scope="User">
       <Value Profile="(Default)">.msi:.nupkg</Value>
     </Setting>
-    <Setting Name="SelectedIssuers" Type="System.String" Scope="User">
-      <Value Profile="(Default)">rts</Value>
-    </Setting>
-    <Setting Name="InstallAppFromSelectedIssuer" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="CheckSignature" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -31,6 +25,9 @@
     </Setting>
     <Setting Name="DefaultChocoSources" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://community.chocolatey.org/api/v2/</Value>
+    </Setting>
+    <Setting Name="SignatureVerificationLevel" Type="Up2dateShared.SignatureVerificationLevel" Scope="User">
+      <Value Profile="(Default)">SignedByAnyCertificate</Value>
     </Setting>
   </Settings>
 </SettingsFile>

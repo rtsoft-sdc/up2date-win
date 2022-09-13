@@ -43,6 +43,11 @@ namespace Up2dateConsole
         PackageStatusFailed,
         PackageStatusUnknown,
         FailedToAcquireCertificate,
+        AddCertificateToWhiteList,
+        InvalidCertificateForWhiteList,
+        NoAnyWhitelistedCertificate,
+        CertificateAddedToWhiteList,
+        FailedToAddCertificateToWhiteList
     }
 
     public class MainWindowViewModel : NotifyPropertyChanged

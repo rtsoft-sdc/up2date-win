@@ -36,5 +36,6 @@ namespace SimpleClientApp
         public List<string> SelectedIssuers { get => new List<string>(); set => throw new System.NotImplementedException(); }
         public string PackageInProgress { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public string DefaultChocoSources { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public SignatureVerificationLevel SignatureVerificationLevel { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }

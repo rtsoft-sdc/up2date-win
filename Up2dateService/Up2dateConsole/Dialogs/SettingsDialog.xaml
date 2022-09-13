@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:clr="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Up2dateConsole.Dialogs"
+        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers"
+        xmlns:service="clr-namespace:Up2dateConsole.ServiceReference"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize" 
@@ -23,8 +24,9 @@
                 <Setter x:Uid="Setter_2" Property="Margin" Value="5"/>
                 <Setter x:Uid="Setter_3" Property="MinWidth" Value="70"/>
             </Style>
-            
+
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter" />
+            <helpers:EnumToBooleanConverter x:Uid="helpers:EnumToBooleanConverter_1" x:Key="EnumToBooleanConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -34,16 +36,24 @@
             <RowDefinition x:Uid="RowDefinition_2" Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel x:Uid="StackPanel_1" Width="500" Margin="5,5,5,20">
+        <StackPanel x:Uid="StackPanel_1" Width="550" Margin="5,5,5,20">
             <TextBlock x:Uid="TextBlock_1" Margin="0,5,0,5" Text="Certificate request URL:"/>
             <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
             <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Uid="CheckBox_1" Margin="0,10,0,5" Content="Verify package signature before installation" IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Uid="CheckBox_2" Margin="0,5,0,5" Content="Install packages only signed by selected certificate issuers" IsChecked="{Binding InstallAppFromSelectedIssuers, UpdateSourceTrigger=PropertyChanged}"/>
-            <StackPanel x:Uid="StackPanel_3" Margin="20,0,0,0" Visibility="{Binding InstallAppFromSelectedIssuers, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock x:Uid="TextBlock_3" Margin="0,0,0,5" Text="Selected issuers (use ':' as separator):"/>
-                <TextBox x:Uid="TextBox_3" Margin="0,0,0,5" Text="{Binding SelectedIssuers}"/>
+            <CheckBox x:Uid="CheckBox_1" Margin="0,15,0,5" Content="Verify package signature before installation" IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel x:Uid="StackPanel_3" Margin="20,0,0,0" Visibility="{Binding CheckSignatureStatus, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <RadioButton x:Uid="RadioButton_1" Margin="0,5,0,5" Content="Accept packages signed by any certificate"
+                             IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByAnyCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
+                <RadioButton x:Uid="RadioButton_2" Margin="0,5,0,5" Content="Accept packages signed by valid trusted certificate"
+                             IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByTrustedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
+                <Grid x:Uid="Grid_2">
+                    <RadioButton x:Uid="RadioButton_3" Margin="0,5,0,5" VerticalAlignment="Center" Content="Accept only packages signed by a whitelisted certificate" 
+                                 IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
+                    <Button x:Uid="Button_3" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" 
+                            Content="Add Certificate" ToolTip="Add certificate to whitelist" 
+                            Command="{Binding AddCertificateCommand}"/>
+                </Grid>
             </StackPanel>
         </StackPanel>
 

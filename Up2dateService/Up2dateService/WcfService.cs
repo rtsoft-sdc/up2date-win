@@ -20,9 +20,11 @@ namespace Up2dateService
         private readonly ICertificateProvider certificateProvider;
         private readonly ICertificateManager certificateManager;
         private readonly ISettingsManager settingsManager;
+        private readonly ISignatureVerifier signatureVerifier;
 
-        public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, Func<ClientState> getClientState, 
-            ICertificateProvider certificateProvider, ICertificateManager certificateManager, ISettingsManager settingsManager)
+        public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, Func<ClientState> getClientState,
+            ICertificateProvider certificateProvider, ICertificateManager certificateManager,
+            ISettingsManager settingsManager, ISignatureVerifier signatureVerifier)
         {
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
@@ -31,6 +33,7 @@ namespace Up2dateService
             this.certificateProvider = certificateProvider ?? throw new ArgumentNullException(nameof(certificateProvider));
             this.certificateManager = certificateManager ?? throw new ArgumentNullException(nameof(certificateManager));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
+            this.signatureVerifier = signatureVerifier ?? throw new ArgumentNullException(nameof(signatureVerifier));
         }
 
         public List<Package> GetPackages()
@@ -118,24 +121,29 @@ namespace Up2dateService
             settingsManager.CheckSignature = newState;
         }
 
-        public bool GetInstallAppFromSelectedIssuer()
+        public SignatureVerificationLevel GetSignatureVerificationLevel()
         {
-            return settingsManager.InstallAppFromSelectedIssuer;
+            return settingsManager.SignatureVerificationLevel;
         }
 
-        public void SetInstallAppFromSelectedIssuer(bool newState)
+        public void SetSignatureVerificationLevel(SignatureVerificationLevel level)
         {
-            settingsManager.InstallAppFromSelectedIssuer = newState;
+            settingsManager.SignatureVerificationLevel = level;
         }
 
-        public string GetSelectedIssuers()
+        public bool IsCertificateValidAndTrusted(string certificateFilePath)
         {
-            return string.Join(":", settingsManager.SelectedIssuers.ToArray());
+            return signatureVerifier.IsCertificateValidAndTrusted(certificateFilePath);
         }
 
-        public void SetSelectedIssuers(string selectedIssuers)
+        public IList<string> GetWhitelistedCertificates()
         {
-            settingsManager.SelectedIssuers = selectedIssuers.Split(':').ToList();
+            return signatureVerifier.GetWhitelistedCertificates().Select(c => c.FriendlyName).ToList();
+        }
+
+        public Result AddCertificateToWhitelist(string certificateFilePath)
+        {
+            return signatureVerifier.AddCertificateToWhitelist(certificateFilePath);
         }
     }
 }
