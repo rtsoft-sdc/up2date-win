@@ -73,30 +73,6 @@ namespace Up2dateService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("rts")]
-        public string SelectedIssuers {
-            get {
-                return ((string)(this["SelectedIssuers"]));
-            }
-            set {
-                this["SelectedIssuers"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool InstallAppFromSelectedIssuer {
-            get {
-                return ((bool)(this["InstallAppFromSelectedIssuer"]));
-            }
-            set {
-                this["InstallAppFromSelectedIssuer"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool CheckSignature {
             get {
@@ -140,6 +116,18 @@ namespace Up2dateService.Properties {
             }
             set {
                 this["DefaultChocoSources"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SignedByAnyCertificate")]
+        public global::Up2dateShared.SignatureVerificationLevel SignatureVerificationLevel {
+            get {
+                return ((global::Up2dateShared.SignatureVerificationLevel)(this["SignatureVerificationLevel"]));
+            }
+            set {
+                this["SignatureVerificationLevel"] = value;
             }
         }
     }

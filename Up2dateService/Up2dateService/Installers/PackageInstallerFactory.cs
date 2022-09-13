@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using Up2dateService.Installers.Choco;
 using Up2dateService.Installers.Msi;
 using Up2dateService.Interfaces;
@@ -17,17 +18,22 @@ namespace Up2dateService.Installers
         private ChocoInstaller chocoInstaller = null;
 
         private readonly Dictionary<string, Func<IPackageInstaller>> installers = new Dictionary<string, Func<IPackageInstaller>>();
+        private readonly ISettingsManager settingsManager;
+        private readonly ISignatureVerifier signatureVerifier;
 
-        public PackageInstallerFactory(ISettingsManager settingsManager)
+        public PackageInstallerFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier)
         {
+            this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
+            this.signatureVerifier = signatureVerifier ?? throw new ArgumentNullException(nameof(signatureVerifier));
+
             installers.Add(MsiExtension, () =>
             {
-                if (msiInstaller == null) msiInstaller = new MsiInstaller();
+                if (msiInstaller == null) msiInstaller = new MsiInstaller(VerifyCertificate);
                 return msiInstaller;
             });
             installers.Add(NugetExtension, () =>
             {
-                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources);
+                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources, VerifyCertificate);
                 return chocoInstaller;
             });
         }
@@ -49,6 +55,11 @@ namespace Up2dateService.Installers
         {
             string key = Path.GetExtension(artifactFileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             return installers.ContainsKey(key);
+        }
+
+        private bool VerifyCertificate(X509Certificate2 certificate)
+        {
+            return signatureVerifier.VerifySignature(certificate, settingsManager.SignatureVerificationLevel);
         }
     }
 }

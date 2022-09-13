@@ -50,15 +50,18 @@ namespace Up2dateService
         void SetCheckSignature(bool newState);
 
         [OperationContract]
-        bool GetInstallAppFromSelectedIssuer();
+        SignatureVerificationLevel GetSignatureVerificationLevel();
 
         [OperationContract]
-        void SetInstallAppFromSelectedIssuer(bool newState);
+        void SetSignatureVerificationLevel(SignatureVerificationLevel level);
 
         [OperationContract]
-        string GetSelectedIssuers();
+        bool IsCertificateValidAndTrusted(string certificateFilePath);
 
         [OperationContract]
-        void SetSelectedIssuers(string selectedIssuers);
+        IList<string> GetWhitelistedCertificates();
+
+        [OperationContract]
+        Result AddCertificateToWhitelist(string certificateFilePath);
     }
 }

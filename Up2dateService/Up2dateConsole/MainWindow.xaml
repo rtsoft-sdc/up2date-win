@@ -56,6 +56,12 @@
             <clr:String x:Uid="clr:String_24" x:Key="PackageStatusUnknown">Unknown</clr:String>
 
             <clr:String x:Uid="clr:String_25" x:Key="FailedToAcquireCertificate">Failed to acquire certificate</clr:String>
+
+            <clr:String x:Uid="clr:String_26" x:Key="AddCertificateToWhiteList">Add Certificate to White List</clr:String>
+            <clr:String x:Uid="clr:String_27" x:Key="InvalidCertificateForWhiteList">This certificate is not valid or not trusted. Are you sure you want to add it to whitelist?</clr:String>
+            <clr:String x:Uid="clr:String_28" x:Key="NoAnyWhitelistedCertificate">Warning! Currently whitelist doesn't contain any certificate. Thus no any package could pass signature verification and hence could not be deployed.</clr:String>
+            <clr:String x:Uid="clr:String_29" x:Key="CertificateAddedToWhiteList">Certificate sucessfully added to whitelist.</clr:String>
+            <clr:String x:Uid="clr:String_30" x:Key="FailedToAddCertificateToWhiteList">Failed to add certificate to whitelist. {0}</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 

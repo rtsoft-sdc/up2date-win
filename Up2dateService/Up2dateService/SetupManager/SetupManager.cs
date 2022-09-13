@@ -11,20 +11,20 @@ namespace Up2dateService.SetupManager
     public class SetupManager : ISetupManager
     {
         private readonly Func<string> downloadLocationProvider;
-        private readonly ICertificateManager certificateManager;
+        private readonly ISignatureVerifier signatureVerifier;
         private readonly IPackageInstallerFactory installerFactory;
         private readonly EventLog eventLog;
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, ISettingsManager settingsManager, 
-            ICertificateManager certificateManager, IPackageInstallerFactory installerFactory)
+        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
+            ISignatureVerifier signatureVerifier, IPackageInstallerFactory installerFactory)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.downloadLocationProvider = downloadLocationProvider ?? throw new ArgumentNullException(nameof(downloadLocationProvider));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
-            this.certificateManager = certificateManager ?? throw new ArgumentNullException(nameof(certificateManager));
+            this.signatureVerifier = signatureVerifier ?? throw new ArgumentNullException(nameof(signatureVerifier));
             this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
 
             RefreshPackageList();
@@ -118,17 +118,12 @@ namespace Up2dateService.SetupManager
 
                 if (!installerFactory.IsSupported(package)) return InstallPackageResult.PackageNotSupported;
 
-                if (settingsManager.CheckSignature && !certificateManager.IsSigned(package.Filepath))
-                {
-                    return InstallPackageResult.InstallationPackageIsNotSigned;
-                }
-
-                if (settingsManager.InstallAppFromSelectedIssuer && certificateManager.IsSignedByIssuer(package.Filepath))
-                {
-                    return InstallPackageResult.InstallationPackageIsNotSignedBySelectedIssuer;
-                }
-
                 IPackageInstaller installer = installerFactory.GetInstaller(package);
+
+                if (settingsManager.CheckSignature && !installer.VerifySignature(package))
+                {
+                    return InstallPackageResult.SignatureVerificationFailed;
+                }
 
                 SetPackageInProgressFlag(package);
                 try

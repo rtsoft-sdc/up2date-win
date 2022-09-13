@@ -9,4 +9,12 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ClientStatus" nillable="true" type="tns:ClientStatus" />
+  <xs:simpleType name="SignatureVerificationLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SignedByAnyCertificate" />
+      <xs:enumeration value="SignedByTrustedCertificate" />
+      <xs:enumeration value="SignedByWhitelistedCertificate" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SignatureVerificationLevel" nillable="true" type="tns:SignatureVerificationLevel" />
 </xs:schema>

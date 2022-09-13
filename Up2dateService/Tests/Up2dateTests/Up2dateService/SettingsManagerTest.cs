@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Up2dateService;
+using Up2dateShared;
 
 namespace Up2dateTests.Up2dateService
 {
@@ -28,24 +29,10 @@ namespace Up2dateTests.Up2dateService
         public void InstallAppFromSelectedIssuer_Test_CheckWorkability()
         {
             //Act
-            var installAppFromSelectedIssuer = _settingsManager.InstallAppFromSelectedIssuer;
+            var signatureVerificationLevel = _settingsManager.SignatureVerificationLevel;
             //Assert
-            Assert.AreEqual(false, installAppFromSelectedIssuer);
+            Assert.AreEqual(SignatureVerificationLevel.SignedByAnyCertificate, signatureVerificationLevel);
         }
-
-        [TestMethod]
-        public void SelectedIssuers_Test_CheckWorkability()
-        {
-            //Arrange
-            var expectedIssuers = new List<string> { "rts" };
-            //Act
-            var selectedIssuers = _settingsManager.SelectedIssuers;
-            //Assert
-            for (var index = 0; index < selectedIssuers.Count; index++)
-                Assert.AreEqual(expectedIssuers[index], selectedIssuers[index],
-                    $"Item at index {index} are not equal. Expected: {expectedIssuers[index]}. Was {selectedIssuers[index]}");
-        }
-
 
         [TestMethod]
         public void PackageExtensionFilterList_Test_CheckWorkability()
