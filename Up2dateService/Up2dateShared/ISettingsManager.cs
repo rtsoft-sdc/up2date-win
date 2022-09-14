@@ -7,7 +7,7 @@ namespace Up2dateShared
         string ProvisioningUrl { get; set; }
         string XApigToken { get; }
         string RequestCertificateUrl { get; set; }
-        string CertificateSerialNumber { get; set; }
+        string CertificateThumbprint { get; set; }
         List<string> PackageExtensionFilterList { get; set; }
         bool CheckSignature { get; set; }
         SignatureVerificationLevel SignatureVerificationLevel { get; set; }

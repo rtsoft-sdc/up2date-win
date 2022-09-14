@@ -130,5 +130,17 @@ namespace Up2dateService.Properties {
                 this["SignatureVerificationLevel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CertificateThumbprint {
+            get {
+                return ((string)(this["CertificateThumbprint"]));
+            }
+            set {
+                this["CertificateThumbprint"] = value;
+            }
+        }
     }
 }
