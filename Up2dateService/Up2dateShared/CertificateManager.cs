@@ -83,13 +83,13 @@ namespace Up2dateShared
 
         private X509Certificate2Collection GetCertificates(X509Store store)
         {
-            string CertificateSerialNumber = settingsManager.CertificateSerialNumber;
+            string CertificateThumbprint = settingsManager.CertificateThumbprint;
 
-            if (string.IsNullOrEmpty(CertificateSerialNumber)) return null;
+            if (string.IsNullOrEmpty(CertificateThumbprint)) return null;
 
             store.Open(OpenFlags.ReadOnly);
             X509Certificate2Collection certificates = store.Certificates
-                    .Find(X509FindType.FindBySerialNumber, CertificateSerialNumber, false);
+                    .Find(X509FindType.FindByThumbprint, CertificateThumbprint, false);
             store.Close();
 
             return certificates;
@@ -112,7 +112,7 @@ namespace Up2dateShared
                 store.Close();
 
                 // remember new certificate
-                settingsManager.CertificateSerialNumber = cert.SerialNumber;
+                settingsManager.CertificateThumbprint = cert.Thumbprint;
             }
         }
 

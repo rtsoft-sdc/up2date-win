@@ -37,5 +37,6 @@ namespace SimpleClientApp
         public string PackageInProgress { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public string DefaultChocoSources { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public SignatureVerificationLevel SignatureVerificationLevel { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public string CertificateThumbprint { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }
