@@ -42,23 +42,14 @@ namespace Up2dateService
             }
         }
 
-        public string CertificateSerialNumber
+        public string CertificateThumbprint
         {
-            get
+            get => Properties.Settings.Default.CertificateThumbprint;
+            set
             {
-                try
-                {
-                    // ReSharper disable PossibleNullReferenceException
-                    var value = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).OpenSubKey("SOFTWARE").OpenSubKey("RTSoft").OpenSubKey("RITMS").OpenSubKey("UP2DATE").GetValue("Certificate") as string;
-                    return value;
-                    // ReSharper restore PossibleNullReferenceException
-                }
-                catch
-                {
-                    return string.Empty;
-                }
+                Properties.Settings.Default.CertificateThumbprint = value;
+                Properties.Settings.Default.Save();
             }
-            set => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default).CreateSubKey("SOFTWARE")?.CreateSubKey("RTSoft")?.CreateSubKey("RITMS")?.CreateSubKey("UP2DATE")?.SetValue("Certificate", value);
         }
 
         public List<string> PackageExtensionFilterList

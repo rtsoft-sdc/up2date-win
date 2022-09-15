@@ -29,5 +29,8 @@
     <Setting Name="SignatureVerificationLevel" Type="Up2dateShared.SignatureVerificationLevel" Scope="User">
       <Value Profile="(Default)">SignedByAnyCertificate</Value>
     </Setting>
+    <Setting Name="CertificateThumbprint" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
