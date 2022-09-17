@@ -21,10 +21,11 @@ namespace Up2dateService
         private readonly ICertificateManager certificateManager;
         private readonly ISettingsManager settingsManager;
         private readonly ISignatureVerifier signatureVerifier;
+        private readonly IWhiteListManager whiteListManager;
 
         public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, Func<ClientState> getClientState,
             ICertificateProvider certificateProvider, ICertificateManager certificateManager,
-            ISettingsManager settingsManager, ISignatureVerifier signatureVerifier)
+            ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager)
         {
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
@@ -34,6 +35,7 @@ namespace Up2dateService
             this.certificateManager = certificateManager ?? throw new ArgumentNullException(nameof(certificateManager));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.signatureVerifier = signatureVerifier ?? throw new ArgumentNullException(nameof(signatureVerifier));
+            this.whiteListManager = whiteListManager ?? throw new ArgumentNullException(nameof(whiteListManager));
         }
 
         public List<Package> GetPackages()
@@ -138,12 +140,12 @@ namespace Up2dateService
 
         public IList<string> GetWhitelistedCertificates()
         {
-            return signatureVerifier.GetWhitelistedCertificates().Select(c => c.FriendlyName).ToList();
+            return whiteListManager.GetWhitelistedCertificates().Select(c => c.FriendlyName).ToList();
         }
 
         public Result AddCertificateToWhitelist(string certificateFilePath)
         {
-            return signatureVerifier.AddCertificateToWhitelist(certificateFilePath);
+            return whiteListManager.AddCertificateToWhitelist(certificateFilePath);
         }
     }
 }

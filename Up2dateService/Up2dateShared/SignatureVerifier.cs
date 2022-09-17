@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Up2dateShared
 {
     public class SignatureVerifier : ISignatureVerifier
     {
-        private const string defaultWhiteListStoreName = "RITMS_UP2DATE_WhiteList";
-        private readonly string whiteListStoreName;
-        private readonly StoreLocation whiteListStoreLocation;
+        private readonly IWhiteListManager whiteListManager;
 
-        public SignatureVerifier(string whiteListStoreName = defaultWhiteListStoreName, StoreLocation whiteListStoreLocation = StoreLocation.LocalMachine)
+        public SignatureVerifier(IWhiteListManager whiteListManager)
         {
-            this.whiteListStoreName = whiteListStoreName;
-            this.whiteListStoreLocation = whiteListStoreLocation;
+            this.whiteListManager = whiteListManager ?? throw new ArgumentNullException(nameof(whiteListManager));
         }
 
         public bool VerifySignature(X509Certificate2 certificate, SignatureVerificationLevel level)
@@ -25,7 +21,7 @@ namespace Up2dateShared
                 case SignatureVerificationLevel.SignedByTrustedCertificate:
                     return certificate != null && IsTrustedCertificate(certificate);
                 case SignatureVerificationLevel.SignedByWhitelistedCertificate:
-                    return certificate != null && IsWhitelistedCertificate(certificate);
+                    return certificate != null && whiteListManager.IsWhitelistedCertificate(certificate);
                 default:
                     throw new InvalidOperationException($"Unsupported signature verification level {level}");
             }
@@ -47,32 +43,6 @@ namespace Up2dateShared
             return VerifySignature(certificate, level);
         }
 
-        public IList<X509Certificate2> GetWhitelistedCertificates()
-        {
-            var certs = new List<X509Certificate2>();
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-            {
-                store.Open(OpenFlags.ReadOnly);
-                X509Certificate2Enumerator enumerator = store.Certificates.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    certs.Add(enumerator.Current);
-                }
-                store.Close();
-            }
-            return certs;
-        }
-
-        public void RemoveCertificateFromWhilelist(X509Certificate2 certificate)
-        {
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-            {
-                store.Open(OpenFlags.ReadWrite);
-                store.Remove(certificate);
-                store.Close();
-            }
-        }
-
         public bool IsCertificateValidAndTrusted(string certificateFilePath)
         {
             X509Certificate2 cert;
@@ -88,40 +58,6 @@ namespace Up2dateShared
             return IsTrustedCertificate(cert);
         }
 
-        public Result AddCertificateToWhitelist(X509Certificate2 certificate)
-        {
-            try
-            {
-                using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-                {
-                    store.Open(OpenFlags.ReadWrite);
-                    store.Add(certificate);
-                    store.Close();
-                }
-            }
-            catch (Exception e)
-            {
-                return Result.Failed(e.Message);
-            }
-
-            return Result.Successful();
-        }
-
-        public Result AddCertificateToWhitelist(string certificateFilePath)
-        {
-            X509Certificate2 cert;
-            try
-            {
-                cert = new X509Certificate2(certificateFilePath);
-            }
-            catch (Exception e)
-            {
-                return Result.Failed(e.Message);
-            }
-
-            return AddCertificateToWhitelist(cert);
-        }
-
         private bool IsTrustedCertificate(X509Certificate2 certificate)
         {
             var theCertificateChain = new X509Chain();
@@ -131,18 +67,6 @@ namespace Up2dateShared
             theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
 
             return theCertificateChain.Build(certificate);
-        }
-
-        private bool IsWhitelistedCertificate(X509Certificate2 certificate)
-        {
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-            {
-                store.Open(OpenFlags.ReadOnly);
-                bool result = store.Certificates.Contains(certificate);
-                store.Close();
-
-                return result;
-            }
         }
     }
 }

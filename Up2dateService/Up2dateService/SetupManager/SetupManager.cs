@@ -11,20 +11,17 @@ namespace Up2dateService.SetupManager
     public class SetupManager : ISetupManager
     {
         private readonly Func<string> downloadLocationProvider;
-        private readonly ISignatureVerifier signatureVerifier;
         private readonly IPackageInstallerFactory installerFactory;
         private readonly EventLog eventLog;
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
-            ISignatureVerifier signatureVerifier, IPackageInstallerFactory installerFactory)
+        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, ISettingsManager settingsManager, IPackageInstallerFactory installerFactory)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.downloadLocationProvider = downloadLocationProvider ?? throw new ArgumentNullException(nameof(downloadLocationProvider));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
-            this.signatureVerifier = signatureVerifier ?? throw new ArgumentNullException(nameof(signatureVerifier));
             this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
 
             RefreshPackageList();

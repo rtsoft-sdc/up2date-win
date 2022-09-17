@@ -15,7 +15,7 @@ namespace Up2dateTests.Up2dateShared
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _signatureVerifier = new SignatureVerifier();
+            _signatureVerifier = new SignatureVerifier(new WhiteListManagerMock().Object);
         }
 
         [TestMethod]

@@ -21,7 +21,7 @@ namespace Up2dateService.Installers
         private readonly ISettingsManager settingsManager;
         private readonly ISignatureVerifier signatureVerifier;
 
-        public PackageInstallerFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier)
+        public PackageInstallerFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager)
         {
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.signatureVerifier = signatureVerifier ?? throw new ArgumentNullException(nameof(signatureVerifier));
@@ -33,7 +33,7 @@ namespace Up2dateService.Installers
             });
             installers.Add(NugetExtension, () =>
             {
-                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources, VerifyCertificate);
+                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources, settingsManager, whiteListManager);
                 return chocoInstaller;
             });
         }

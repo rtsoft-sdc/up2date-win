@@ -10,16 +10,13 @@ namespace Up2dateTests.Up2dateShared
     public class CertificateManagerTest
     {
         private static readonly string TestIssuer = "Microsoft Code Signing PCA 2011";
-        private static SettingsManagerMock _settings;
+        private static ISettingsManager _settings;
         private static CertificateManager _certificateManager;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _settings = new SettingsManagerMock
-            {
-                SelectedIssuers = new List<string> { TestIssuer }
-            };
+            _settings = new SettingsManagerMock().Object;
 
             _certificateManager = new CertificateManager(_settings, new EventLog());
         }
