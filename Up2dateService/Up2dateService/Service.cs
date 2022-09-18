@@ -33,9 +33,10 @@ namespace Up2dateService
             IWhiteListManager whiteListManager = new WhiteListManager();
             ICertificateProvider certificateProvider = new CertificateProvider(settingsManager);
             ICertificateManager certificateManager = new CertificateManager(settingsManager, EventLog);
-            ISignatureVerifier signatureVerifier = new SignatureVerifier(whiteListManager);
+            ISignatureVerifier signatureVerifier = new SignatureVerifier();
             IPackageInstallerFactory installerFactory = new PackageInstallerFactory(settingsManager, signatureVerifier, whiteListManager);
-            ISetupManager setupManager = new SetupManager.SetupManager(EventLog, GetCreatePackagesFolder, settingsManager, installerFactory);
+            IPackageValidatorFactory validatorFactory = new PackageValidatorFactory(settingsManager, signatureVerifier, whiteListManager);
+            ISetupManager setupManager = new SetupManager.SetupManager(EventLog, GetCreatePackagesFolder, settingsManager, installerFactory, validatorFactory);
 
             Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve,
                 GetCreatePackagesFolder, EventLog);

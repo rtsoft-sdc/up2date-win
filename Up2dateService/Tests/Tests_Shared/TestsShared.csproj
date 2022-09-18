@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="SettingsManagerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignatureVerifierMock.cs" />
     <Compile Include="WhiteListManagerMock.cs" />
   </ItemGroup>
   <ItemGroup>

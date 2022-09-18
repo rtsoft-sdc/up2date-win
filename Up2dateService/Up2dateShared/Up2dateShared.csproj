@@ -59,6 +59,7 @@
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="SignatureVerificationLevel.cs" />
     <Compile Include="SignatureVerifier.cs" />
     <Compile Include="SystemInfo.cs" />
     <Compile Include="WhiteListManager.cs" />

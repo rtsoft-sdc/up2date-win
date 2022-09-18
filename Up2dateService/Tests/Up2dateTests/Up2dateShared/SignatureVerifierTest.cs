@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+using Moq;
+using System.Security.Cryptography.X509Certificates;
 using Tests_Shared;
 using Up2dateShared;
 
@@ -10,19 +11,25 @@ namespace Up2dateTests.Up2dateShared
     {
         private const string TestFileValidSignature = "testData\\validSignature.testObject";
         private const string TestFileInvalidSignature = "testData\\invalidSignature.testObject";
-        private static SignatureVerifier _signatureVerifier;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            _signatureVerifier = new SignatureVerifier(new WhiteListManagerMock().Object);
-        }
 
         [TestMethod]
         public void GivenFileSignedByGoodCertificate_WhenVerifiedForSignedByAnyCertificate_ThenReturnsTrue()
         {
+            //Arrange
+            var signatureVerifier = new SignatureVerifier();
             //Act
-            var retVal = _signatureVerifier.VerifySignature(TestFileValidSignature, SignatureVerificationLevel.SignedByAnyCertificate);
+            var retVal = signatureVerifier.IsSignedbyAnyCertificate(TestFileValidSignature);
+            //Assert
+            Assert.AreEqual(true, retVal);
+        }
+
+        [TestMethod]
+        public void GivenFileSignedByBadCertificate_WhenVerifiedForSignedByAnyCertificate_ThenReturnsTrue()
+        {
+            //Arrange
+            var signatureVerifier = new SignatureVerifier();
+            //Act
+            var retVal = signatureVerifier.IsSignedbyAnyCertificate(TestFileInvalidSignature);
             //Assert
             Assert.AreEqual(true, retVal);
         }
@@ -30,26 +37,10 @@ namespace Up2dateTests.Up2dateShared
         [TestMethod]
         public void GivenFileSignedByGoodCertificate_WhenVerifiedForSignedByTrustedCertificate_ThenReturnsTrue()
         {
+            //Arrange
+            var signatureVerifier = new SignatureVerifier();
             //Act
-            var retVal = _signatureVerifier.VerifySignature(TestFileValidSignature, SignatureVerificationLevel.SignedByTrustedCertificate);
-            //Assert
-            Assert.AreEqual(true, retVal);
-        }
-
-        [TestMethod]
-        public void GivenFileSignedByGoodCertificate_WhenVerifiedForSignedByWhitelistedCertificate_ThenReturnsFalse()
-        {
-            //Act
-            var retVal = _signatureVerifier.VerifySignature(TestFileValidSignature, SignatureVerificationLevel.SignedByWhitelistedCertificate);
-            //Assert
-            Assert.AreEqual(false, retVal);
-        }
-
-        [TestMethod]
-        public void GivenFileSignedByBadCertificate_WhenVerifiedForSignedByAnyCertificate_ThenReturnsTrue()
-        {
-            //Act
-            var retVal = _signatureVerifier.VerifySignature(TestFileInvalidSignature, SignatureVerificationLevel.SignedByAnyCertificate);
+            var retVal = signatureVerifier.IsSignedbyValidAndTrustedCertificate(TestFileValidSignature);
             //Assert
             Assert.AreEqual(true, retVal);
         }
@@ -57,19 +48,42 @@ namespace Up2dateTests.Up2dateShared
         [TestMethod]
         public void GivenFileSignedByBadCertificate_WhenVerifiedForSignedByTrustedCertificate_ThenReturnsFalse()
         {
+            //Arrange
+            var signatureVerifier = new SignatureVerifier();
             //Act
-            var retVal = _signatureVerifier.VerifySignature(TestFileInvalidSignature, SignatureVerificationLevel.SignedByTrustedCertificate);
+            var retVal = signatureVerifier.IsSignedbyValidAndTrustedCertificate(TestFileInvalidSignature);
             //Assert
             Assert.AreEqual(false, retVal);
         }
 
-        [TestMethod]
-        public void GivenFileSignedByBadCertificate_WhenVerifiedForSignedByWhitelistedCertificate_ThenReturnsFalse()
+        [DataTestMethod]
+        [DataRow(TestFileValidSignature)]
+        [DataRow(TestFileInvalidSignature)]
+        public void GivenFileSignedByBadCertificate_WhenVerifiedForSignedByWhitelistedCertificate_ThenReturnsFalse(string testFile)
         {
+            //Arrange
+            var signatureVerifier = new SignatureVerifier();
+            var wlmm = new WhiteListManagerMock();
+            wlmm.Setup(o => o.IsWhitelistedCertificate(It.IsAny<X509Certificate2>())).Returns(false);
             //Act
-            var retVal = _signatureVerifier.VerifySignature(TestFileInvalidSignature, SignatureVerificationLevel.SignedByWhitelistedCertificate);
+            var retVal = signatureVerifier.IsSignedByWhitelistedCertificate(testFile, wlmm.Object);
             //Assert
             Assert.AreEqual(false, retVal);
+        }
+
+        [DataTestMethod]
+        [DataRow(TestFileValidSignature)]
+        [DataRow(TestFileInvalidSignature)]
+        public void GivenFileSignedByWhitelistedCertificate_WhenVerifiedForSignedByWhitelistedCertificate_ThenReturnsTrue(string testFile)
+        {
+            //Arrange
+            var signatureVerifier = new SignatureVerifier();
+            var wlmm = new WhiteListManagerMock();
+            wlmm.Setup(o => o.IsWhitelistedCertificate(It.IsAny<X509Certificate2>())).Returns(true);
+            //Act
+            var retVal = signatureVerifier.IsSignedByWhitelistedCertificate(testFile, wlmm.Object);
+            //Assert
+            Assert.AreEqual(true, retVal);
         }
     }
 }

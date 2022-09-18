@@ -12,17 +12,20 @@ namespace Up2dateService.SetupManager
     {
         private readonly Func<string> downloadLocationProvider;
         private readonly IPackageInstallerFactory installerFactory;
+        private readonly IPackageValidatorFactory validatorFactory;
         private readonly EventLog eventLog;
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, ISettingsManager settingsManager, IPackageInstallerFactory installerFactory)
+        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
+            IPackageInstallerFactory installerFactory, IPackageValidatorFactory validatorFactory)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
             this.downloadLocationProvider = downloadLocationProvider ?? throw new ArgumentNullException(nameof(downloadLocationProvider));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
+            this.validatorFactory = validatorFactory ?? throw new ArgumentNullException(nameof(validatorFactory));
 
             RefreshPackageList();
         }
@@ -53,7 +56,7 @@ namespace Up2dateService.SetupManager
 
         public void InstallPackages(IEnumerable<Package> packagesToInstall)
         {
-            foreach (string inPackage in packagesToInstall.Where(p => installerFactory.IsSupported(p)).Select(inPackage => inPackage.Filepath))
+            foreach (string inPackage in packagesToInstall.Where(p => installerFactory.IsInstallerAvailable(p)).Select(inPackage => inPackage.Filepath))
             {
                 var lockedPackages = SafeGetPackages();
 
@@ -94,7 +97,7 @@ namespace Up2dateService.SetupManager
 
         public bool IsFileSupported(string artifactFileName)
         {
-            return installerFactory.IsSupported(artifactFileName);
+            return installerFactory.IsInstallerAvailable(artifactFileName);
         }
 
         private InstallPackageResult InstallPackage(Package package)
@@ -113,14 +116,18 @@ namespace Up2dateService.SetupManager
                 if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
                 if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
 
-                if (!installerFactory.IsSupported(package)) return InstallPackageResult.PackageNotSupported;
+                if (!installerFactory.IsInstallerAvailable(package)) return InstallPackageResult.PackageNotSupported;
+
+                if (validatorFactory.IsValidatorAvailable(package))
+                {
+                    IPackageValidator validator = validatorFactory.GetValidator(package);
+                    if (settingsManager.CheckSignature && !validator.VerifySignature(package))
+                    {
+                        return InstallPackageResult.SignatureVerificationFailed;
+                    }
+                }
 
                 IPackageInstaller installer = installerFactory.GetInstaller(package);
-
-                if (settingsManager.CheckSignature && !installer.VerifySignature(package))
-                {
-                    return InstallPackageResult.SignatureVerificationFailed;
-                }
 
                 SetPackageInProgressFlag(package);
                 try
@@ -275,7 +282,7 @@ namespace Up2dateService.SetupManager
                 {
                     package.Filepath = file;
 
-                    if (!installerFactory.IsSupported(package)) continue;
+                    if (!installerFactory.IsInstallerAvailable(package)) continue;
 
                     IPackageInstaller installer = installerFactory.GetInstaller(package);
                     if (!installer.Initialize(ref package)) continue;

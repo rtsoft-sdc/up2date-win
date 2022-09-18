@@ -86,25 +86,18 @@ namespace Up2dateShared
 
         public bool IsWhitelistedCertificate(X509Certificate2 certificate)
         {
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-            {
-                store.Open(OpenFlags.ReadOnly);
-                bool result = store.Certificates.Contains(certificate);
-                store.Close();
-
-                return result;
-            }
+            return GetWhitelistedCertificatesSha256().Contains(GetSha256(certificate));
         }
 
-        private string GetSha256(X509Certificate2 cert)
+        private string GetSha256(X509Certificate2 certificate)
         {
             byte[] hashBytes;
             using (var hasher = new SHA256Managed())
             {
-                hashBytes = hasher.ComputeHash(cert.RawData);
+                hashBytes = hasher.ComputeHash(certificate.RawData);
             }
             string result = BitConverter.ToString(hashBytes).Replace("-", string.Empty).ToLower();
-            //string result = hashBytes.Aggregate(String.Empty, (str, hashByte) => str + hashByte.ToString("x2"))
+
             return result;
         }
     }

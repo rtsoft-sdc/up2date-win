@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using Up2dateService.Installers.Choco;
 using Up2dateService.Installers.Msi;
 using Up2dateService.Interfaces;
@@ -18,22 +17,21 @@ namespace Up2dateService.Installers
         private ChocoInstaller chocoInstaller = null;
 
         private readonly Dictionary<string, Func<IPackageInstaller>> installers = new Dictionary<string, Func<IPackageInstaller>>();
-        private readonly ISettingsManager settingsManager;
-        private readonly ISignatureVerifier signatureVerifier;
 
         public PackageInstallerFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager)
         {
-            this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
-            this.signatureVerifier = signatureVerifier ?? throw new ArgumentNullException(nameof(signatureVerifier));
+            if (settingsManager is null) throw new ArgumentNullException(nameof(settingsManager));
+            if (signatureVerifier is null) throw new ArgumentNullException(nameof(signatureVerifier));
+            if (whiteListManager is null) throw new ArgumentNullException(nameof(whiteListManager));
 
             installers.Add(MsiExtension, () =>
             {
-                if (msiInstaller == null) msiInstaller = new MsiInstaller(VerifyCertificate);
+                if (msiInstaller == null) msiInstaller = new MsiInstaller();
                 return msiInstaller;
             });
             installers.Add(NugetExtension, () =>
             {
-                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources, settingsManager, whiteListManager);
+                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources);
                 return chocoInstaller;
             });
         }
@@ -46,20 +44,15 @@ namespace Up2dateService.Installers
             return installers[key]();
         }
 
-        public bool IsSupported(Package package)
+        public bool IsInstallerAvailable(Package package)
         {
-            return IsSupported(package.Filepath);
+            return IsInstallerAvailable(package.Filepath);
         }
 
-        public bool IsSupported(string artifactFileName)
+        public bool IsInstallerAvailable(string artifactFileName)
         {
             string key = Path.GetExtension(artifactFileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             return installers.ContainsKey(key);
-        }
-
-        private bool VerifyCertificate(X509Certificate2 certificate)
-        {
-            return signatureVerifier.VerifySignature(certificate, settingsManager.SignatureVerificationLevel);
         }
     }
 }

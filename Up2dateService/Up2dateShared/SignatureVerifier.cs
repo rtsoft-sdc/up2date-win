@@ -5,44 +5,6 @@ namespace Up2dateShared
 {
     public class SignatureVerifier : ISignatureVerifier
     {
-        private readonly IWhiteListManager whiteListManager;
-
-        public SignatureVerifier(IWhiteListManager whiteListManager)
-        {
-            this.whiteListManager = whiteListManager ?? throw new ArgumentNullException(nameof(whiteListManager));
-        }
-
-        public bool VerifySignature(X509Certificate2 certificate, SignatureVerificationLevel level)
-        {
-            switch (level)
-            {
-                case SignatureVerificationLevel.SignedByAnyCertificate:
-                    return certificate != null;
-                case SignatureVerificationLevel.SignedByTrustedCertificate:
-                    return certificate != null && IsTrustedCertificate(certificate);
-                case SignatureVerificationLevel.SignedByWhitelistedCertificate:
-                    return certificate != null && whiteListManager.IsWhitelistedCertificate(certificate);
-                default:
-                    throw new InvalidOperationException($"Unsupported signature verification level {level}");
-            }
-        }
-
-        public bool VerifySignature(string file, SignatureVerificationLevel level)
-        {
-            X509Certificate2 certificate;
-            try
-            {
-                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(file);
-                certificate = new X509Certificate2(theSigner);
-            }
-            catch (Exception)
-            {
-                certificate = null;
-            }
-
-            return VerifySignature(certificate, level);
-        }
-
         public bool IsCertificateValidAndTrusted(string certificateFilePath)
         {
             X509Certificate2 cert;
@@ -56,6 +18,46 @@ namespace Up2dateShared
             }
 
             return IsTrustedCertificate(cert);
+        }
+
+        public bool IsSignedbyAnyCertificate(string filePath)
+        {
+            X509Certificate2 certificate = GetCertificateFromSignedFile(filePath);
+
+            return certificate != null;
+        }
+
+        public bool IsSignedbyValidAndTrustedCertificate(string filePath)
+        {
+            X509Certificate2 certificate = GetCertificateFromSignedFile(filePath);
+            if (certificate == null) return false;
+
+            return IsTrustedCertificate(certificate);
+        }
+
+        public bool IsSignedByWhitelistedCertificate(string filepath, IWhiteListManager whiteListManager)
+        {
+            if (whiteListManager is null) throw new ArgumentNullException(nameof(whiteListManager));
+
+            X509Certificate2 certificate = GetCertificateFromSignedFile(filepath);
+            if (certificate == null) return false;
+
+            return whiteListManager.IsWhitelistedCertificate(certificate);
+        }
+
+        private X509Certificate2 GetCertificateFromSignedFile(string signedFilePath)
+        {
+            X509Certificate2 certificate;
+            try
+            {
+                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(signedFilePath);
+                certificate = new X509Certificate2(theSigner);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return certificate;
         }
 
         private bool IsTrustedCertificate(X509Certificate2 certificate)

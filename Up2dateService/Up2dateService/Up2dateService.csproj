@@ -56,6 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Installers\Choco\ChocoValidator.cs" />
+    <Compile Include="Installers\Msi\MsiValidator.cs" />
+    <Compile Include="Installers\PackageValidatorFactory.cs" />
+    <Compile Include="Interfaces\IPackageValidator.cs" />
+    <Compile Include="Interfaces\IPackageValidatorFactory.cs" />
     <Compile Include="IWcfService.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
