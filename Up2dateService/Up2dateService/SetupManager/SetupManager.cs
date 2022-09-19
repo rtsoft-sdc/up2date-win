@@ -52,7 +52,7 @@ namespace Up2dateService.SetupManager
         public InstallPackageResult InstallPackage(string packageFile)
         {
             var package = FindPackage(packageFile);
-            var result = InstallPackage(ref package);
+            var result = InstallPackage(package);
             UpdatePackageStatus(ref package, result);
             SafeUpdatePackage(package);
             RefreshPackageList();
@@ -74,7 +74,7 @@ namespace Up2dateService.SetupManager
 
                 SafeUpdatePackage(package);
 
-                var result = InstallPackage(ref package);
+                var result = InstallPackage(package);
                 UpdatePackageStatus(ref package, result);
                 SafeUpdatePackage(package);
                 RefreshPackageList();
@@ -106,7 +106,7 @@ namespace Up2dateService.SetupManager
             return installerFactory.IsInstallerAvailable(artifactFileName);
         }
 
-        private InstallPackageResult InstallPackage(ref Package package)
+        private InstallPackageResult InstallPackage(Package package)
         {
             try
             {
@@ -146,11 +146,7 @@ namespace Up2dateService.SetupManager
 
                         while (!p.WaitForExit(checkPeriodMs)) ;
 
-                        if (p.ExitCode == ExitCodeSuccess)
-                        {
-                            installer.UpdatePackageInfo(ref package);
-                            return InstallPackageResult.Success;
-                        }
+                        if (p.ExitCode == ExitCodeSuccess) return InstallPackageResult.Success;
                         if (p.ExitCode == MsiExitCodeRestartNeeded) return InstallPackageResult.RestartNeeded;
                         return InstallPackageResult.GeneralInstallationError;
                     }
