@@ -82,6 +82,7 @@ namespace Up2dateConsole
 
             AvailablePackages = new ObservableCollection<PackageItem>();
 
+            timer.AutoReset = false;
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
         }
@@ -164,11 +165,11 @@ namespace Up2dateConsole
             {
                 timer.Interval = RefreshInterval;
             }
-
             if (!OperationInProgress)
             {
                 await ExecuteRefresh();
             }
+            timer.Start();
         }
 
         private async Task ExecuteRequestCertificateAsync()
@@ -239,8 +240,6 @@ namespace Up2dateConsole
 
         private bool CanInstall(object _)
         {
-            if (ServiceState != ServiceState.Active) return false;
-
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
             return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded || p.Package.Status == PackageStatus.Failed);
         }
