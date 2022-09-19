@@ -51,7 +51,13 @@ namespace Up2dateService.SetupManager
 
         public InstallPackageResult InstallPackage(string packageFile)
         {
-            return InstallPackage(FindPackage(packageFile));
+            var package = FindPackage(packageFile);
+            var result = InstallPackage(ref package);
+            UpdatePackageStatus(ref package, result);
+            SafeUpdatePackage(package);
+            RefreshPackageList();
+
+            return result;
         }
 
         public void InstallPackages(IEnumerable<Package> packagesToInstall)
@@ -68,12 +74,12 @@ namespace Up2dateService.SetupManager
 
                 SafeUpdatePackage(package);
 
-                var result = InstallPackage(package);
-
+                var result = InstallPackage(ref package);
                 UpdatePackageStatus(ref package, result);
-                eventLog.WriteEntry($"{Path.GetFileName(package.Filepath)} installation finished with result: {package.Status}");
-
                 SafeUpdatePackage(package);
+                RefreshPackageList();
+
+                eventLog.WriteEntry($"{Path.GetFileName(package.Filepath)} installation finished with result: {result}");
             }
         }
 
@@ -100,7 +106,7 @@ namespace Up2dateService.SetupManager
             return installerFactory.IsInstallerAvailable(artifactFileName);
         }
 
-        private InstallPackageResult InstallPackage(Package package)
+        private InstallPackageResult InstallPackage(ref Package package)
         {
             try
             {
@@ -140,7 +146,11 @@ namespace Up2dateService.SetupManager
 
                         while (!p.WaitForExit(checkPeriodMs)) ;
 
-                        if (p.ExitCode == ExitCodeSuccess) return InstallPackageResult.Success;
+                        if (p.ExitCode == ExitCodeSuccess)
+                        {
+                            installer.UpdatePackageInfo(ref package);
+                            return InstallPackageResult.Success;
+                        }
                         if (p.ExitCode == MsiExitCodeRestartNeeded) return InstallPackageResult.RestartNeeded;
                         return InstallPackageResult.GeneralInstallationError;
                     }
@@ -159,10 +169,6 @@ namespace Up2dateService.SetupManager
             {
                 WriteLogEntry(exception);
                 return InstallPackageResult.GeneralInstallationError;
-            }
-            finally
-            {
-                RefreshPackageList();
             }
         }
 
@@ -292,15 +298,22 @@ namespace Up2dateService.SetupManager
                 }
             }
 
-            ProductInstallationChecker installationChecker = new ProductInstallationChecker(installerFactory, lockedPackages);
+            RefreshinstallersProductList(lockedPackages);
 
             for (int i = 0; i < lockedPackages.Count; i++)
             {
                 Package updatedPackage = lockedPackages[i];
-                if (installationChecker.IsPackageInstalled(updatedPackage))
+
+                if (!installerFactory.IsInstallerAvailable(updatedPackage)) continue;
+
+                var installer = installerFactory.GetInstaller(updatedPackage);
+                if (installer.IsPackageInstalled(updatedPackage))
                 {
-                    installationChecker.UpdateInfo(ref updatedPackage);
-                    updatedPackage.Status = PackageStatus.Installed;
+                    if (updatedPackage.Status != PackageStatus.Installed)
+                    {
+                        installer.UpdatePackageInfo(ref updatedPackage);
+                        updatedPackage.Status = PackageStatus.Installed;
+                    }
                 }
                 else
                 {
@@ -309,7 +322,9 @@ namespace Up2dateService.SetupManager
                     updatedPackage.InstallDate = null;
                     updatedPackage.EstimatedSize = null;
                     updatedPackage.UrlInfoAbout = null;
-                    if (updatedPackage.Status != PackageStatus.Downloading && updatedPackage.Status != PackageStatus.Installing)
+                    if (updatedPackage.Status != PackageStatus.Downloading 
+                        && updatedPackage.Status != PackageStatus.Installing 
+                        && updatedPackage.Status != PackageStatus.Failed)
                     {
                         updatedPackage.Status = PackageStatus.Downloaded;
                     }
@@ -319,6 +334,18 @@ namespace Up2dateService.SetupManager
             }
 
             SafeUpdatePackages(lockedPackages);
+        }
+
+        private void RefreshinstallersProductList(IEnumerable<Package> packages)
+        {
+            var installers = new List<IPackageInstaller>();
+            foreach (IPackageInstaller installer in packages
+                .Where(p => installerFactory.IsInstallerAvailable(p))
+                .Select(p => installerFactory.GetInstaller(p))
+                .Distinct())
+            {
+                installer.Refresh();
+            }
         }
 
         private void WriteLogEntry(Exception error)
