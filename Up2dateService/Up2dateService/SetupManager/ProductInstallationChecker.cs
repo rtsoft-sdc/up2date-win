@@ -19,7 +19,7 @@ namespace Up2dateService.SetupManager
 
         public bool IsPackageInstalled(Package package)
         {
-            if (!installerFactory.IsSupported(package)) return false;
+            if (!installerFactory.IsInstallerAvailable(package)) return false;
 
             var installer = installerFactory.GetInstaller(package);
             return installer.IsPackageInstalled(package);
@@ -27,7 +27,7 @@ namespace Up2dateService.SetupManager
 
         public void UpdateInfo(ref Package package)
         {
-            if (!installerFactory.IsSupported(package)) return;
+            if (!installerFactory.IsInstallerAvailable(package)) return;
 
             var installer = installerFactory.GetInstaller(package);
             installer.UpdatePackageInfo(ref package);
@@ -38,7 +38,7 @@ namespace Up2dateService.SetupManager
             var installers = new List<IPackageInstaller>();
             foreach(Package package in packages)
             {
-                if (!installerFactory.IsSupported(package)) continue;
+                if (!installerFactory.IsInstallerAvailable(package)) continue;
 
                 var installer = installerFactory.GetInstaller(package);
                 if (!installers.Contains(installer))
