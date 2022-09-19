@@ -173,8 +173,7 @@ namespace Up2dateClient
                         break;
                     case InstallPackageResult.SignatureVerificationFailed:
                         additionalMessage = "Signature verification for the package is failed. " + 
-                            $"Requesed level: {settingsManager.SignatureVerificationLevel}. Deployment rejected";
-                        File.Delete(filePath);
+                            $"Requested level: {settingsManager.SignatureVerificationLevel}. Deployment rejected";
                         break;
                     case InstallPackageResult.PackageNotSupported:
                         additionalMessage = "Package of this type is not supported";
