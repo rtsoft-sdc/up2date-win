@@ -29,7 +29,6 @@ namespace Up2dateConsole
         CertificateNotAvailable,
         NewPackageAvailable,
         NewPackageInstalled,
-        PackageInstallationFailed,
         ClientUnaccessible,
         NoCertificate,
         ServerUnaccessible,
@@ -242,7 +241,7 @@ namespace Up2dateConsole
             if (ServiceState != ServiceState.Active) return false;
 
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
-            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded || p.Package.Status == PackageStatus.Failed);
+            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded);
         }
 
         private async void ExecuteInstall(object _)
@@ -251,7 +250,7 @@ namespace Up2dateConsole
             IWcfService service = null;
 
             Package[] selectedPackages = AvailablePackages
-                .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded || p.Package.Status == PackageStatus.Failed))
+                .Where(p => p.IsSelected && p.Package.Status == PackageStatus.Downloaded)
                 .Select(p => p.Package)
                 .ToArray();
             try
@@ -425,36 +424,24 @@ namespace Up2dateConsole
 
         private void NotifyAboutChanges(IReadOnlyList<PackageItem> oldList, IReadOnlyList<PackageItem> newList)
         {
-            var changes = new List<(PackageStatus oldStatus, PackageStatus newStatus, PackageItem item)>();
-            foreach (var newListItem in newList)
+            IEnumerable<PackageItem> GetNewItemsWithStatus(PackageStatus status)
             {
-                var oldStatus = oldList.FirstOrDefault(pi => pi.Package.Filepath.Equals(newListItem.Package.Filepath, StringComparison.InvariantCultureIgnoreCase))?.Package.Status ?? PackageStatus.Unavailable;
-                if (oldStatus == newListItem.Package.Status) continue;
-                changes.Add((oldStatus, newListItem.Package.Status, newListItem));
+                return newList.Where(p => p.Package.Status == status && !oldList
+                                .Any(pi => pi.Package.Status == status
+                                    && pi.Package.Filepath.Equals(p.Package.Filepath, StringComparison.InvariantCultureIgnoreCase)));
             }
 
-            IList<PackageItem> SelectChangedItems(Func<PackageStatus, bool> oldStatusCondition, Func<PackageStatus, bool> newStatusCondition)
-                => changes.Where(p => oldStatusCondition(p.oldStatus) && newStatusCondition(p.newStatus)).Select(p => p.item).ToList();
-
-            var downloaded = SelectChangedItems(s => s == PackageStatus.Unavailable || s == PackageStatus.Downloading,
-                                                s => s == PackageStatus.Downloaded);
-            if (downloaded.Any())
+            var newDownloaded = GetNewItemsWithStatus(PackageStatus.Downloaded).ToList();
+            if (newDownloaded.Any())
             {
-                TryShowToastNotification(GetText(Texts.NewPackageAvailable), downloaded.Select(p => p.ProductName));
+                TryShowToastNotification(GetText(Texts.NewPackageAvailable), newDownloaded.Select(p => p.ProductName));
             }
 
-            var failed = SelectChangedItems(s => s != PackageStatus.Failed,
-                                            s => s == PackageStatus.Failed);
-            if (failed.Any())
+            var newInstalled = GetNewItemsWithStatus(PackageStatus.Installed).ToList();
+            if (newInstalled.Any())
             {
-                TryShowToastNotification(GetText(Texts.PackageInstallationFailed), failed.Select(p => p.ProductName));
-            }
+                TryShowToastNotification(GetText(Texts.NewPackageInstalled), newInstalled.Select(p => p.ProductName));
 
-            var installed = SelectChangedItems(s => s != PackageStatus.Installed,
-                                               s => s == PackageStatus.Installed);
-            if (installed.Any())
-            {
-                TryShowToastNotification(GetText(Texts.NewPackageInstalled), installed.Select(p => p.ProductName));
             }
         }
 

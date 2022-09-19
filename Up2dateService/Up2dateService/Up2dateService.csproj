@@ -75,6 +75,7 @@
     <Compile Include="Installers\Msi\MsiInfo.cs" />
     <Compile Include="Installers\Msi\MsiInstaller.cs" />
     <Compile Include="Installers\PackageInstallerFactory.cs" />
+    <Compile Include="SetupManager\ProductInstallationChecker.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -137,7 +137,6 @@ Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_8:System.String.$Con
 Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_9:System.String.$Content,None,True,True,,Сертификат авторизации не найден.,Authorization certificate is not available.,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_10:System.String.$Content,None,True,True,,Новый программный пакет доступен для установки:,New software available for installation:,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_11:System.String.$Content,None,True,True,,Новый программный пакет установлен:,New software installed:,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_31:System.String.$Content,None,True,True,,Запрос на установку программного пакета не выполнен:,Software installation failed:,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_12:System.String.$Content,None,True,True,,Агент не доступен или не запущен,Agent is not running or inaccessible,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_13:System.String.$Content,None,True,True,,Сертификат авторизации не найден,Authorization certificate is not available,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,clr:String_14:System.String.$Content,None,True,True,,Нет доступа к серверу,Cannot access server,

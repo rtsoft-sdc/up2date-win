@@ -51,13 +51,7 @@ namespace Up2dateService.SetupManager
 
         public InstallPackageResult InstallPackage(string packageFile)
         {
-            var package = FindPackage(packageFile);
-            var result = InstallPackage(package);
-            UpdatePackageStatus(ref package, result);
-            SafeUpdatePackage(package);
-            RefreshPackageList();
-
-            return result;
+            return InstallPackage(FindPackage(packageFile));
         }
 
         public void InstallPackages(IEnumerable<Package> packagesToInstall)
@@ -75,11 +69,11 @@ namespace Up2dateService.SetupManager
                 SafeUpdatePackage(package);
 
                 var result = InstallPackage(package);
-                UpdatePackageStatus(ref package, result);
-                SafeUpdatePackage(package);
-                RefreshPackageList();
 
-                eventLog.WriteEntry($"{Path.GetFileName(package.Filepath)} installation finished with result: {result}");
+                UpdatePackageStatus(ref package, result);
+                eventLog.WriteEntry($"{Path.GetFileName(package.Filepath)} installation finished with result: {package.Status}");
+
+                SafeUpdatePackage(package);
             }
         }
 
@@ -165,6 +159,10 @@ namespace Up2dateService.SetupManager
             {
                 WriteLogEntry(exception);
                 return InstallPackageResult.GeneralInstallationError;
+            }
+            finally
+            {
+                RefreshPackageList();
             }
         }
 
@@ -294,22 +292,15 @@ namespace Up2dateService.SetupManager
                 }
             }
 
-            RefreshinstallersProductList(lockedPackages);
+            ProductInstallationChecker installationChecker = new ProductInstallationChecker(installerFactory, lockedPackages);
 
             for (int i = 0; i < lockedPackages.Count; i++)
             {
                 Package updatedPackage = lockedPackages[i];
-
-                if (!installerFactory.IsInstallerAvailable(updatedPackage)) continue;
-
-                var installer = installerFactory.GetInstaller(updatedPackage);
-                if (installer.IsPackageInstalled(updatedPackage))
+                if (installationChecker.IsPackageInstalled(updatedPackage))
                 {
-                    if (updatedPackage.Status != PackageStatus.Installed)
-                    {
-                        installer.UpdatePackageInfo(ref updatedPackage);
-                        updatedPackage.Status = PackageStatus.Installed;
-                    }
+                    installationChecker.UpdateInfo(ref updatedPackage);
+                    updatedPackage.Status = PackageStatus.Installed;
                 }
                 else
                 {
@@ -318,9 +309,7 @@ namespace Up2dateService.SetupManager
                     updatedPackage.InstallDate = null;
                     updatedPackage.EstimatedSize = null;
                     updatedPackage.UrlInfoAbout = null;
-                    if (updatedPackage.Status != PackageStatus.Downloading 
-                        && updatedPackage.Status != PackageStatus.Installing 
-                        && updatedPackage.Status != PackageStatus.Failed)
+                    if (updatedPackage.Status != PackageStatus.Downloading && updatedPackage.Status != PackageStatus.Installing)
                     {
                         updatedPackage.Status = PackageStatus.Downloaded;
                     }
@@ -330,18 +319,6 @@ namespace Up2dateService.SetupManager
             }
 
             SafeUpdatePackages(lockedPackages);
-        }
-
-        private void RefreshinstallersProductList(IEnumerable<Package> packages)
-        {
-            var installers = new List<IPackageInstaller>();
-            foreach (IPackageInstaller installer in packages
-                .Where(p => installerFactory.IsInstallerAvailable(p))
-                .Select(p => installerFactory.GetInstaller(p))
-                .Distinct())
-            {
-                installer.Refresh();
-            }
         }
 
         private void WriteLogEntry(Exception error)
