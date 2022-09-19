@@ -253,4 +253,8 @@
     <PostBuildEvent>"$(ProjectDir)Localization\CheckAndGenerate.cmd" ru-RU $(TargetDir) $(TargetName) $(ProjectDir) $(ProjectName)
 </PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://RTSoft.Ritms.Up2date.win" elementFormDefault="qualified" targetNamespace="http://RTSoft.Ritms.Up2date.win" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Up2dateShared" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/System" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Up2dateShared" />
   <xs:complexType name="ArrayOfPackage">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Package" type="tns:Package" />
@@ -18,7 +18,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DisplayVersion" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ErrorCode" type="xs:int" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="ErrorCode" type="q1:InstallPackageResult" />
       <xs:element minOccurs="0" name="EstimatedSize" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Filepath" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InstallDate" nillable="true" type="xs:string" />
@@ -53,9 +53,9 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Is64Bit" type="xs:boolean" />
       <xs:element minOccurs="0" name="MachineName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="PlatformID" type="q1:PlatformID" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="PlatformID" type="q2:PlatformID" />
       <xs:element minOccurs="0" name="ServicePack" nillable="true" type="xs:string" />
-      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="Version" nillable="true" type="q2:Version" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="Version" nillable="true" type="q3:Version" />
       <xs:element minOccurs="0" name="VersionString" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -68,7 +68,7 @@
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" name="LastError" nillable="true" type="xs:string" />
-      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="Status" type="q3:ClientStatus" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="Status" type="q4:ClientStatus" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ClientState" nillable="true" type="tns:ClientState" />

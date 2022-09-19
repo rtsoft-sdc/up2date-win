@@ -440,26 +440,27 @@ namespace Up2dateConsole
                                                 s => s == PackageStatus.Downloaded);
             if (downloaded.Any())
             {
-                TryShowToastNotification(GetText(Texts.NewPackageAvailable), downloaded.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => p.ProductName));
             }
 
             var failed = SelectChangedItems(s => s != PackageStatus.Failed,
                                             s => s == PackageStatus.Failed);
             if (failed.Any())
             {
-                TryShowToastNotification(GetText(Texts.PackageInstallationFailed), failed.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{p.ProductName}\n(ErrorCode: {p.Package.ErrorCode})"));
             }
 
             var installed = SelectChangedItems(s => s != PackageStatus.Installed,
                                                s => s == PackageStatus.Installed);
             if (installed.Any())
             {
-                TryShowToastNotification(GetText(Texts.NewPackageInstalled), installed.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageInstalled, installed.Select(p => p.ProductName));
             }
         }
 
-        private void TryShowToastNotification(string title, IEnumerable<string> details = null)
+        private void TryShowToastNotification(Texts titleId, IEnumerable<string> details = null)
         {
+            string title = GetText(titleId);
             try
             {
                 ToastContentBuilder builder = new ToastContentBuilder().AddText(title);

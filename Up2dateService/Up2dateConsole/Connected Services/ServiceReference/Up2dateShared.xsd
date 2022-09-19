@@ -1,5 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Up2dateShared" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Up2dateShared" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="InstallPackageResult">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="PackageNotSupported" />
+      <xs:enumeration value="PackageUnavailable" />
+      <xs:enumeration value="FailedToInstallChocoPackage" />
+      <xs:enumeration value="GeneralInstallationError" />
+      <xs:enumeration value="ChocoNotInstalled" />
+      <xs:enumeration value="SignatureVerificationFailed" />
+      <xs:enumeration value="RestartNeeded" />
+      <xs:enumeration value="CannotStartInstaller" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="InstallPackageResult" nillable="true" type="tns:InstallPackageResult" />
   <xs:simpleType name="ClientStatus">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Stopped" />

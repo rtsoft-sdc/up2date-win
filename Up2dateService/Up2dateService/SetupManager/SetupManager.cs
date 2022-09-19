@@ -69,7 +69,7 @@ namespace Up2dateService.SetupManager
                 Package package = lockedPackages.FirstOrDefault(p => p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
                 if (package.Status == PackageStatus.Unavailable) continue;
 
-                package.ErrorCode = 0;
+                package.ErrorCode = InstallPackageResult.Success;
                 package.Status = PackageStatus.Installing;
 
                 SafeUpdatePackage(package);
@@ -265,7 +265,7 @@ namespace Up2dateService.SetupManager
                     package.Status = PackageStatus.Failed;
                     break;
             }
-            package.ErrorCode = (int)result;
+            package.ErrorCode = result;
         }
 
         private void RefreshPackageList()
