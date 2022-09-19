@@ -435,25 +435,25 @@ namespace Up2dateConsole
             IList<PackageItem> SelectChangedItems(Func<PackageStatus, bool> oldStatusCondition, Func<PackageStatus, bool> newStatusCondition)
                 => changes.Where(p => oldStatusCondition(p.oldStatus) && newStatusCondition(p.newStatus)).Select(p => p.item).ToList();
 
-            var downloaded = SelectChangedItems(s => s == PackageStatus.Unavailable || s == PackageStatus.Downloading,
-                                                s => s == PackageStatus.Downloaded);
+            var downloaded = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading,
+                                                newStatus => newStatus == PackageStatus.Downloaded);
             if (downloaded.Any())
             {
                 TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => p.ProductName));
             }
 
-            var failed = SelectChangedItems(s => s != PackageStatus.Failed,
-                                            s => s == PackageStatus.Failed);
+            var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,
+                                            newStatus => newStatus == PackageStatus.Failed);
             if (failed.Any())
             {
                 TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{p.ProductName}\n(ErrorCode: {p.Package.ErrorCode})"));
             }
 
-            var installed = SelectChangedItems(s => s != PackageStatus.Installed,
-                                               s => s == PackageStatus.Installed);
+            var installed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Installed,
+                                               newStatus => newStatus == PackageStatus.Installed);
             if (installed.Any())
             {
-                TryShowToastNotification(Texts.NewPackageInstalled, installed.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageInstalled, installed.Select(p => p.ProductName).Distinct());
             }
         }
 
