@@ -4,20 +4,16 @@ using System.Windows.Data;
 
 namespace Up2dateConsole.Helpers
 {
-    public class BoolToVisibilityConverter : IValueConverter
+    public class NullToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is bool boolean && boolean)
-            {
-                return Visibility.Visible;
-            }
-            return Visibility.Collapsed;
+            return value is null ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value is Visibility visibility && visibility == Visibility.Visible;
+            throw new NotImplementedException();
         }
     }
 }

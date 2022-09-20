@@ -33,7 +33,7 @@ namespace Up2dateShared
         [DataMember]
         public PackageStatus Status { get; set; }
         [DataMember]
-        public int ErrorCode { get; set; }
+        public InstallPackageResult ErrorCode { get; set; }
     }
 
     [DataContract(Namespace = "http://RTSoft.Ritms.Up2date.win")]
