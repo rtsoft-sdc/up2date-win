@@ -7,6 +7,7 @@
         xmlns:clr="clr-namespace:System;assembly=mscorlib"
         xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
+        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers"
         mc:Ignorable="d"
         ShowInTaskbar="True"
         Icon="Images/Logo.ico"
@@ -28,6 +29,7 @@
             </Style>
 
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
+            <helpers:NullToVisibilityConverter x:Uid="helpers:NullToVisibilityConverter_1" x:Key="NullToVisibilityConverter"/>
 
             <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' is acquired but there is still problem establishing connection to the server. Please check if acquired certificate is valid.</clr:String>
             <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' successfully acquired.</clr:String>
@@ -138,7 +140,20 @@
                     <DataGridTextColumn x:Uid="DataGridTextColumn_4" Header="Version" Binding="{Binding Version}" MinWidth="80"/>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_5" Header="Size (MB)" Binding="{Binding SizeMb}" MinWidth="60"/>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_6" Header="Installed" Binding="{Binding InstallDate}" MinWidth="80"/>
-                    <DataGridTextColumn x:Uid="DataGridTextColumn_7" Header="Status" Binding="{Binding Status}" MinWidth="80"/>
+                    <DataGridTemplateColumn x:Uid="DataGridTextColumn_7" Header="Status" MinWidth="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Uid="DataTemplate_1">
+                                <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
+                                    <TextBlock x:Uid="TextBlock_8" Text="{Binding Status}"/>
+                                    <TextBlock x:Uid="TextBlock_9" Margin="8,0,0,0" 
+                                               Style="{StaticResource AwesomeIcon}" Foreground="SteelBlue" FontSize="14"
+                                               Text="{StaticResource InfoCircleIcon}" 
+                                               Visibility="{Binding ExtraInfo, Converter={StaticResource NullToVisibilityConverter}}"
+                                               ToolTip="{Binding ExtraInfo}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 <DataGrid.Resources>
                     <Style x:Uid="Style_2" TargetType="DataGridCell">

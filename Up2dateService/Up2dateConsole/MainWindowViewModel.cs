@@ -18,39 +18,6 @@ using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
 {
-    public enum Texts
-    {
-        GoodCertificateMessage,
-        BadCertificateMessage,
-        CannotStartInstallation,
-        ServiceNotResponding,
-        ServiceAccessError,
-        DeviceNotInitialized,
-        CertificateNotAvailable,
-        NewPackageAvailable,
-        NewPackageInstalled,
-        PackageInstallationFailed,
-        ClientUnaccessible,
-        NoCertificate,
-        ServerUnaccessible,
-        AgentOrServerFilure,
-        PackageStatusUnavailable,
-        PackageStatusAvailable,
-        PackageStatusDownloading,
-        PackageStatusDownloaded,
-        PackageStatusInstalling,
-        PackageStatusInstalled,
-        PackageStatusRestartNeeded,
-        PackageStatusFailed,
-        PackageStatusUnknown,
-        FailedToAcquireCertificate,
-        AddCertificateToWhiteList,
-        InvalidCertificateForWhiteList,
-        NoAnyWhitelistedCertificate,
-        CertificateAddedToWhiteList,
-        FailedToAddCertificateToWhiteList
-    }
-
     public class MainWindowViewModel : NotifyPropertyChanged
     {
         private const int InitialDelay = 1000; // milliseconds
@@ -446,7 +413,7 @@ namespace Up2dateConsole
                                             newStatus => newStatus == PackageStatus.Failed);
             if (failed.Any())
             {
-                TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{p.ProductName}\n(ErrorCode: {p.Package.ErrorCode})"));
+                TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{p.ProductName}\n({p.ExtraInfo})"));
             }
 
             var installed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Installed,

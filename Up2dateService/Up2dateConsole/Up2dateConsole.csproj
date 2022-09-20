@@ -83,7 +83,7 @@
     </Compile>
     <Compile Include="Dialogs\SettingsDialogViewModel.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
-    <Compile Include="Helpers\BoolToVisibilityConverter.cs" />
+    <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
@@ -97,6 +97,7 @@
     <Compile Include="StateIndicator\StateIndicator.xaml.cs">
       <DependentUpon>StateIndicator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Texts.cs" />
     <Compile Include="ViewService\IDialogViewModel.cs" />
     <Compile Include="ViewService\IViewService.cs" />
     <Compile Include="Helpers\ThreadHelper.cs" />
