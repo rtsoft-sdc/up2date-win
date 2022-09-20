@@ -1,78 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Up2dateShared
 {
     public class SignatureVerifier : ISignatureVerifier
     {
-        private const string defaultWhiteListStoreName = "RITMS_UP2DATE_WhiteList";
-        private readonly string whiteListStoreName;
-        private readonly StoreLocation whiteListStoreLocation;
-
-        public SignatureVerifier(string whiteListStoreName = defaultWhiteListStoreName, StoreLocation whiteListStoreLocation = StoreLocation.LocalMachine)
-        {
-            this.whiteListStoreName = whiteListStoreName;
-            this.whiteListStoreLocation = whiteListStoreLocation;
-        }
-
-        public bool VerifySignature(X509Certificate2 certificate, SignatureVerificationLevel level)
-        {
-            switch (level)
-            {
-                case SignatureVerificationLevel.SignedByAnyCertificate:
-                    return certificate != null;
-                case SignatureVerificationLevel.SignedByTrustedCertificate:
-                    return certificate != null && IsTrustedCertificate(certificate);
-                case SignatureVerificationLevel.SignedByWhitelistedCertificate:
-                    return certificate != null && IsWhitelistedCertificate(certificate);
-                default:
-                    throw new InvalidOperationException($"Unsupported signature verification level {level}");
-            }
-        }
-
-        public bool VerifySignature(string file, SignatureVerificationLevel level)
-        {
-            X509Certificate2 certificate;
-            try
-            {
-                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(file);
-                certificate = new X509Certificate2(theSigner);
-            }
-            catch (Exception)
-            {
-                certificate = null;
-            }
-
-            return VerifySignature(certificate, level);
-        }
-
-        public IList<X509Certificate2> GetWhitelistedCertificates()
-        {
-            var certs = new List<X509Certificate2>();
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-            {
-                store.Open(OpenFlags.ReadOnly);
-                X509Certificate2Enumerator enumerator = store.Certificates.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    certs.Add(enumerator.Current);
-                }
-                store.Close();
-            }
-            return certs;
-        }
-
-        public void RemoveCertificateFromWhilelist(X509Certificate2 certificate)
-        {
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-            {
-                store.Open(OpenFlags.ReadWrite);
-                store.Remove(certificate);
-                store.Close();
-            }
-        }
-
         public bool IsCertificateValidAndTrusted(string certificateFilePath)
         {
             X509Certificate2 cert;
@@ -88,38 +20,44 @@ namespace Up2dateShared
             return IsTrustedCertificate(cert);
         }
 
-        public Result AddCertificateToWhitelist(X509Certificate2 certificate)
+        public bool IsSignedbyAnyCertificate(string filePath)
         {
-            try
-            {
-                using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-                {
-                    store.Open(OpenFlags.ReadWrite);
-                    store.Add(certificate);
-                    store.Close();
-                }
-            }
-            catch (Exception e)
-            {
-                return Result.Failed(e.Message);
-            }
+            X509Certificate2 certificate = GetCertificateFromSignedFile(filePath);
 
-            return Result.Successful();
+            return certificate != null;
         }
 
-        public Result AddCertificateToWhitelist(string certificateFilePath)
+        public bool IsSignedbyValidAndTrustedCertificate(string filePath)
         {
-            X509Certificate2 cert;
+            X509Certificate2 certificate = GetCertificateFromSignedFile(filePath);
+            if (certificate == null) return false;
+
+            return IsTrustedCertificate(certificate);
+        }
+
+        public bool IsSignedByWhitelistedCertificate(string filepath, IWhiteListManager whiteListManager)
+        {
+            if (whiteListManager is null) throw new ArgumentNullException(nameof(whiteListManager));
+
+            X509Certificate2 certificate = GetCertificateFromSignedFile(filepath);
+            if (certificate == null) return false;
+
+            return whiteListManager.IsWhitelistedCertificate(certificate);
+        }
+
+        private X509Certificate2 GetCertificateFromSignedFile(string signedFilePath)
+        {
+            X509Certificate2 certificate;
             try
             {
-                cert = new X509Certificate2(certificateFilePath);
+                X509Certificate theSigner = X509Certificate.CreateFromSignedFile(signedFilePath);
+                certificate = new X509Certificate2(theSigner);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return Result.Failed(e.Message);
+                return null;
             }
-
-            return AddCertificateToWhitelist(cert);
+            return certificate;
         }
 
         private bool IsTrustedCertificate(X509Certificate2 certificate)
@@ -131,18 +69,6 @@ namespace Up2dateShared
             theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
 
             return theCertificateChain.Build(certificate);
-        }
-
-        private bool IsWhitelistedCertificate(X509Certificate2 certificate)
-        {
-            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
-            {
-                store.Open(OpenFlags.ReadOnly);
-                bool result = store.Certificates.Contains(certificate);
-                store.Close();
-
-                return result;
-            }
         }
     }
 }

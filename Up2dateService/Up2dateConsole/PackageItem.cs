@@ -23,6 +23,8 @@ namespace Up2dateConsole
 
         public string Status => statusToString(Package.Status);
 
+        public string ExtraInfo => Package.ErrorCode == InstallPackageResult.Success ? null : $"ErrorCode: {Package.ErrorCode}";
+
         public string ProductName => string.IsNullOrWhiteSpace(Package.DisplayName) ? Package.ProductName : Package.DisplayName;
 
         public string Publisher => Package.Publisher;

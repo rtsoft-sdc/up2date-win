@@ -18,38 +18,6 @@ using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
 {
-    public enum Texts
-    {
-        GoodCertificateMessage,
-        BadCertificateMessage,
-        CannotStartInstallation,
-        ServiceNotResponding,
-        ServiceAccessError,
-        DeviceNotInitialized,
-        CertificateNotAvailable,
-        NewPackageAvailable,
-        NewPackageInstalled,
-        ClientUnaccessible,
-        NoCertificate,
-        ServerUnaccessible,
-        AgentOrServerFilure,
-        PackageStatusUnavailable,
-        PackageStatusAvailable,
-        PackageStatusDownloading,
-        PackageStatusDownloaded,
-        PackageStatusInstalling,
-        PackageStatusInstalled,
-        PackageStatusRestartNeeded,
-        PackageStatusFailed,
-        PackageStatusUnknown,
-        FailedToAcquireCertificate,
-        AddCertificateToWhiteList,
-        InvalidCertificateForWhiteList,
-        NoAnyWhitelistedCertificate,
-        CertificateAddedToWhiteList,
-        FailedToAddCertificateToWhiteList
-    }
-
     public class MainWindowViewModel : NotifyPropertyChanged
     {
         private const int InitialDelay = 1000; // milliseconds
@@ -81,6 +49,7 @@ namespace Up2dateConsole
 
             AvailablePackages = new ObservableCollection<PackageItem>();
 
+            timer.AutoReset = false;
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
         }
@@ -163,11 +132,11 @@ namespace Up2dateConsole
             {
                 timer.Interval = RefreshInterval;
             }
-
             if (!OperationInProgress)
             {
                 await ExecuteRefresh();
             }
+            timer.Start();
         }
 
         private async Task ExecuteRequestCertificateAsync()
@@ -238,10 +207,8 @@ namespace Up2dateConsole
 
         private bool CanInstall(object _)
         {
-            if (ServiceState != ServiceState.Active) return false;
-
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
-            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded);
+            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded || p.Package.Status == PackageStatus.Failed);
         }
 
         private async void ExecuteInstall(object _)
@@ -250,7 +217,7 @@ namespace Up2dateConsole
             IWcfService service = null;
 
             Package[] selectedPackages = AvailablePackages
-                .Where(p => p.IsSelected && p.Package.Status == PackageStatus.Downloaded)
+                .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded || p.Package.Status == PackageStatus.Failed))
                 .Select(p => p.Package)
                 .ToArray();
             try
@@ -424,29 +391,42 @@ namespace Up2dateConsole
 
         private void NotifyAboutChanges(IReadOnlyList<PackageItem> oldList, IReadOnlyList<PackageItem> newList)
         {
-            IEnumerable<PackageItem> GetNewItemsWithStatus(PackageStatus status)
+            var changes = new List<(PackageStatus oldStatus, PackageStatus newStatus, PackageItem item)>();
+            foreach (var newListItem in newList)
             {
-                return newList.Where(p => p.Package.Status == status && !oldList
-                                .Any(pi => pi.Package.Status == status
-                                    && pi.Package.Filepath.Equals(p.Package.Filepath, StringComparison.InvariantCultureIgnoreCase)));
+                var oldStatus = oldList.FirstOrDefault(pi => pi.Package.Filepath.Equals(newListItem.Package.Filepath, StringComparison.InvariantCultureIgnoreCase))?.Package.Status ?? PackageStatus.Unavailable;
+                if (oldStatus == newListItem.Package.Status) continue;
+                changes.Add((oldStatus, newListItem.Package.Status, newListItem));
             }
 
-            var newDownloaded = GetNewItemsWithStatus(PackageStatus.Downloaded).ToList();
-            if (newDownloaded.Any())
+            IList<PackageItem> SelectChangedItems(Func<PackageStatus, bool> oldStatusCondition, Func<PackageStatus, bool> newStatusCondition)
+                => changes.Where(p => oldStatusCondition(p.oldStatus) && newStatusCondition(p.newStatus)).Select(p => p.item).ToList();
+
+            var downloaded = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading,
+                                                newStatus => newStatus == PackageStatus.Downloaded);
+            if (downloaded.Any())
             {
-                TryShowToastNotification(GetText(Texts.NewPackageAvailable), newDownloaded.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => p.ProductName));
             }
 
-            var newInstalled = GetNewItemsWithStatus(PackageStatus.Installed).ToList();
-            if (newInstalled.Any())
+            var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,
+                                            newStatus => newStatus == PackageStatus.Failed);
+            if (failed.Any())
             {
-                TryShowToastNotification(GetText(Texts.NewPackageInstalled), newInstalled.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{p.ProductName}\n({p.ExtraInfo})"));
+            }
 
+            var installed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Installed,
+                                               newStatus => newStatus == PackageStatus.Installed);
+            if (installed.Any())
+            {
+                TryShowToastNotification(Texts.NewPackageInstalled, installed.Select(p => p.ProductName).Distinct());
             }
         }
 
-        private void TryShowToastNotification(string title, IEnumerable<string> details = null)
+        private void TryShowToastNotification(Texts titleId, IEnumerable<string> details = null)
         {
+            string title = GetText(titleId);
             try
             {
                 ToastContentBuilder builder = new ToastContentBuilder().AddText(title);

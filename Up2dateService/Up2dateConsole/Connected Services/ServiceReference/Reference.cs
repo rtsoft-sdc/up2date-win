@@ -29,7 +29,7 @@ namespace Up2dateConsole.ServiceReference {
         private string DisplayVersionField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ErrorCodeField;
+        private Up2dateConsole.ServiceReference.InstallPackageResult ErrorCodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> EstimatedSizeField;
@@ -94,7 +94,7 @@ namespace Up2dateConsole.ServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ErrorCode {
+        public Up2dateConsole.ServiceReference.InstallPackageResult ErrorCode {
             get {
                 return this.ErrorCodeField;
             }
@@ -231,6 +231,38 @@ namespace Up2dateConsole.ServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="InstallPackageResult", Namespace="http://schemas.datacontract.org/2004/07/Up2dateShared")]
+    public enum InstallPackageResult : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PackageNotSupported = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PackageUnavailable = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FailedToInstallChocoPackage = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        GeneralInstallationError = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChocoNotInstalled = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SignatureVerificationFailed = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RestartNeeded = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CannotStartInstaller = 8,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
