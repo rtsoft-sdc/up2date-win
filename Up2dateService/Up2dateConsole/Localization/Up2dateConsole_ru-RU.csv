@@ -316,7 +316,7 @@ Up2dateConsole.g.en-US.resources:styles.baml,DoubleAnimation_1:System.Windows.Me
 Up2dateConsole.g.en-US.resources:app.baml,Application_1:Up2dateConsole.App.$Content,None,True,True,,,,
 Up2dateConsole.g.en-US.resources:app.baml,FontFamily_1:System.Windows.Media.FontFamily.$Content,Font,True,True,,/fonts/fontawesome-webfont.ttf\#FontAwesome,/fonts/fontawesome-webfont.ttf\#FontAwesome,
 Up2dateConsole.g.en-US.resources:app.baml,Setter_1:System.Windows.Setter.Property,None,False,False,,ToolTipService.ShowDuration,ToolTipService.ShowDuration,
-Up2dateConsole.g.en-US.resources:app.baml,Setter_1:System.Windows.Setter.Value,None,False,True,,60000,60000,
+Up2dateConsole.g.en-US.resources:app.baml,Setter_1:System.Windows.Setter.Value,None,False,True,,20000,20000,
 Up2dateConsole.g.en-US.resources:app.baml,Trigger_1:System.Windows.Trigger.$Content,None,False,True,,#Setter_2;,#Setter_2;,
 Up2dateConsole.g.en-US.resources:app.baml,Trigger_1:System.Windows.Trigger.Property,None,False,False,,ContentControl.Content,ContentControl.Content,
 Up2dateConsole.g.en-US.resources:app.baml,Setter_2:System.Windows.Setter.Property,None,False,False,,UIElement.Visibility,UIElement.Visibility,
