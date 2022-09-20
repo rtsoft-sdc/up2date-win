@@ -11,7 +11,7 @@ namespace Up2dateClient
         const string ClientType = "RITMS UP2DATE for Windows";
 
         private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi",".nupkg" }; // must be lowercase
-        private readonly EventLog eventLog;
+        private readonly ILogger logger;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
         private readonly ISetupManager setupManager;
@@ -19,14 +19,14 @@ namespace Up2dateClient
         private readonly Func<string> getDownloadLocation;
         private ClientState state;
 
-        public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, EventLog eventLog = null)
+        public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, ILogger logger)
         {
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.getCertificate = getCertificate ?? throw new ArgumentNullException(nameof(getCertificate));
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
             this.getDownloadLocation = getDownloadLocation ?? throw new ArgumentNullException(nameof(getDownloadLocation));
-            this.eventLog = eventLog;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public ClientState State
@@ -231,9 +231,9 @@ namespace Up2dateClient
 
         private void WriteLogEntry(string message, DeploymentInfo? info = null)
         {
-            eventLog?.WriteEntry(info == null
-                ? $"Up2date client: {message}"
-                : $"Up2date client: {message} Artifact={info.Value.artifactFileName}");
+            logger.WriteEntry("UP2DATE Client", info == null
+                ? message
+                : $"{message} Artifact={info.Value.artifactFileName}");
         }
     }
 }

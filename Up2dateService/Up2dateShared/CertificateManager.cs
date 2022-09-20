@@ -9,7 +9,7 @@ namespace Up2dateShared
     {
         private const StoreName storeName = StoreName.TrustedPublisher;
 
-        private readonly EventLog eventLog;
+        private readonly ILogger logger;
         private readonly ISettingsManager settingsManager;
         private X509Certificate2 certificate;
 
@@ -30,10 +30,10 @@ namespace Up2dateShared
 
         public string CertificateSubjectName => GetCN(certificate?.Subject);
 
-        public CertificateManager(ISettingsManager settingsManager, EventLog eventLog)
+        public CertificateManager(ISettingsManager settingsManager, ILogger logger)
         {
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
-            this.eventLog = eventLog;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void ImportCertificate(byte[] certificateData)
@@ -46,7 +46,7 @@ namespace Up2dateShared
             }
             catch (Exception e)
             {
-                eventLog.WriteEntry($"CertificateManager: Exception importing certificate. {e}");
+                logger.WriteEntry("CertificateManager", "Exception importing certificate.", e);
                 throw;
             }
         }
@@ -76,7 +76,7 @@ namespace Up2dateShared
                 Certificate = GetCertificates(store)?.OfType<X509Certificate2>().FirstOrDefault();
             }
 
-            eventLog?.WriteEntry(Certificate != null 
+            logger.WriteEntry("CertificateManager", Certificate != null
                 ? $"Certificate found; '{Certificate.Issuer}:{Certificate.Subject}'"
                 : $"Cannot find certificate in {storeName} certificate store!");
         }
