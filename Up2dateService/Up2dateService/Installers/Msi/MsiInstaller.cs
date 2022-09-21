@@ -36,7 +36,7 @@ namespace Up2dateService.Installers.Msi
         {
             Process p = new Process();
             p.StartInfo.FileName = "msiexec.exe";
-            p.StartInfo.Arguments = $"/i \"{package.Filepath}\" ALLUSERS=1 /qn";
+            p.StartInfo.Arguments = $"/i \"{package.Filepath}\" ALLUSERS=1 /quiet /qn /norestart";
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.UseShellExecute = false;
             p.Start();
