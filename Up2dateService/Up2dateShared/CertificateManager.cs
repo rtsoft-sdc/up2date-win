@@ -43,6 +43,7 @@ namespace Up2dateShared
                 X509Certificate2 cert = new X509Certificate2(certificateData);
                 ImportCertificate(cert);
                 Certificate = cert;
+                logger.WriteEntry($"New certificate imported; '{Certificate.Issuer}:{Certificate.Subject}'");
             }
             catch (Exception e)
             {
@@ -76,9 +77,10 @@ namespace Up2dateShared
                 Certificate = GetCertificates(store)?.OfType<X509Certificate2>().FirstOrDefault();
             }
 
-            logger.WriteEntry(Certificate != null
-                ? $"Certificate found; '{Certificate.Issuer}:{Certificate.Subject}'"
-                : $"Cannot find certificate in {storeName} certificate store!");
+            if (Certificate != null)
+            {
+                logger.WriteEntry($"Certificate found; '{Certificate.Issuer}:{Certificate.Subject}'");
+            }
         }
 
         private X509Certificate2Collection GetCertificates(X509Store store)
