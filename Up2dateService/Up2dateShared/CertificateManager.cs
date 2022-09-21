@@ -46,7 +46,7 @@ namespace Up2dateShared
             }
             catch (Exception e)
             {
-                logger.WriteEntry("CertificateManager", "Exception importing certificate.", e);
+                logger.WriteEntry("Exception importing certificate.", e);
                 throw;
             }
         }
@@ -76,7 +76,7 @@ namespace Up2dateShared
                 Certificate = GetCertificates(store)?.OfType<X509Certificate2>().FirstOrDefault();
             }
 
-            logger.WriteEntry("CertificateManager", Certificate != null
+            logger.WriteEntry(Certificate != null
                 ? $"Certificate found; '{Certificate.Issuer}:{Certificate.Subject}'"
                 : $"Cannot find certificate in {storeName} certificate store!");
         }

@@ -29,18 +29,17 @@ namespace Up2dateService
             serviceHost?.Close();
             EventLog.WriteEntry($"Packages folder: '{GetCreatePackagesFolder()}'");
 
-            ILogger logger = new Logger(EventLog);
             ISettingsManager settingsManager = new SettingsManager();
             IWhiteListManager whiteListManager = new WhiteListManager();
             ICertificateProvider certificateProvider = new CertificateProvider(settingsManager);
-            ICertificateManager certificateManager = new CertificateManager(settingsManager, logger);
+            ICertificateManager certificateManager = new CertificateManager(settingsManager, new Logger(EventLog, nameof(CertificateManager)));
             ISignatureVerifier signatureVerifier = new SignatureVerifier();
-            IPackageInstallerFactory installerFactory = new PackageInstallerFactory(settingsManager, signatureVerifier, whiteListManager);
+            IPackageInstallerFactory installerFactory = new PackageInstallerFactory(settingsManager, signatureVerifier, whiteListManager, new Logger(EventLog));
             IPackageValidatorFactory validatorFactory = new PackageValidatorFactory(settingsManager, signatureVerifier, whiteListManager);
-            ISetupManager setupManager = new SetupManager.SetupManager(logger, GetCreatePackagesFolder, settingsManager, installerFactory, validatorFactory);
+            ISetupManager setupManager = new SetupManager.SetupManager(new Logger(EventLog, nameof(SetupManager)), GetCreatePackagesFolder, settingsManager, installerFactory, validatorFactory);
 
             Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve,
-                GetCreatePackagesFolder, logger);
+                GetCreatePackagesFolder, new Logger(EventLog, nameof(CertificateManager)));
 
             WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State,
                 certificateProvider, certificateManager, settingsManager, signatureVerifier, whiteListManager);

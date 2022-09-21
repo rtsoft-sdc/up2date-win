@@ -5,11 +5,16 @@ namespace SimpleClientApp
 {
     public class LoggerStub : ILogger
     {
-        public void WriteEntry(string source, string message, Exception exception = null)
+        public ILogger SubScope(string subScope)
+        {
+            return this;
+        }
+
+        public void WriteEntry(string message, Exception exception = null)
         {
         }
 
-        public void WriteEntry(string source, Exception exception)
+        public void WriteEntry(Exception exception)
         {
         }
     }

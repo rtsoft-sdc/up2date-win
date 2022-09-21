@@ -6,15 +6,23 @@ namespace Up2dateShared
     public class Logger : ILogger
     {
         private readonly EventLog eventLog;
+        private readonly string scope;
 
-        public Logger(EventLog eventLog)
+        public Logger(EventLog eventLog, string scope = null)
         {
             this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
+            this.scope = scope;
         }
 
-        public void WriteEntry(string source, string message, Exception exception = null)
+        public ILogger SubScope(string subScope)
         {
-            string entry = $"{source}: {message}";
+            var newScope = string.IsNullOrEmpty(scope) ? subScope : scope + "." + subScope;
+            return new Logger(eventLog, newScope);
+        }
+
+        public void WriteEntry(string message, Exception exception = null)
+        {
+            string entry = $"{scope}: {message}";
             if (exception != null)
             {
                 entry += $"\n{exception}";
@@ -22,9 +30,9 @@ namespace Up2dateShared
             eventLog.WriteEntry(entry);
         }
 
-        public void WriteEntry(string source, Exception exception)
+        public void WriteEntry(Exception exception)
         {
-            eventLog.WriteEntry($"{source}:\n{exception}");
+            eventLog.WriteEntry($"{scope}:\n{exception}");
         }
     }
 }

@@ -4,7 +4,8 @@ namespace Up2dateShared
 {
     public interface ILogger
     {
-        void WriteEntry(string source, string message, Exception exception = null);
-        void WriteEntry(string source, Exception exception);
+        ILogger SubScope(string subScope);
+        void WriteEntry(string message, Exception exception = null);
+        void WriteEntry(Exception exception);
     }
 }

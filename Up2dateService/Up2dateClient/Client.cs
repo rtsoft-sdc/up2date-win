@@ -231,9 +231,7 @@ namespace Up2dateClient
 
         private void WriteLogEntry(string message, DeploymentInfo? info = null)
         {
-            logger.WriteEntry("UP2DATE Client", info == null
-                ? message
-                : $"{message} Artifact={info.Value.artifactFileName}");
+            logger.WriteEntry(info == null ? message : $"{message} Artifact={info.Value.artifactFileName}");
         }
     }
 }

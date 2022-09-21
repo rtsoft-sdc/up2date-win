@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,11 +13,14 @@ namespace Up2dateService.Installers.Msi
         private const string UninstallKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
         private const string Wow6432UninstallKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
 
+        private readonly ILogger logger;
         private readonly List<string> productCodes = new List<string>();
         private readonly List<string> wow6432productCodes = new List<string>();
 
-        public MsiInstaller()
+        public MsiInstaller(ILogger logger)
         {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
             Refresh();
         }
 
@@ -32,16 +36,52 @@ namespace Up2dateService.Installers.Msi
             return true;
         }
 
-        public Process StartInstallationProcess(Package package)
+        public InstallPackageResult InstallPackage(Package package, string logFilePath)
         {
-            Process p = new Process();
-            p.StartInfo.FileName = "msiexec.exe";
-            p.StartInfo.Arguments = $"/i \"{package.Filepath}\" ALLUSERS=1 /quiet /qn /norestart";
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.UseShellExecute = false;
-            p.Start();
+            const int checkPeriodMs = 1000;
+            const int ExitCodeSuccess = 0;
+            const int MsiExitCodeRestartNeeded = 3010;
 
-            return p;
+            using (Process p = new Process())
+            {
+                p.StartInfo.FileName = "msiexec.exe";
+                p.StartInfo.Arguments = $"/i \"{package.Filepath}\" ALLUSERS=1 /quiet /qn /norestart";
+                if (!string.IsNullOrWhiteSpace(logFilePath))
+                {
+                    p.StartInfo.Arguments += $" /log \"{logFilePath}\"";
+                }
+                p.StartInfo.UseShellExecute = false;
+
+                try
+                {
+                    p.Start();
+                }
+                catch (Exception exception)
+                {
+                    logger.WriteEntry($"Failed to start installation of the package '{package.ProductName}'", exception);
+                    return InstallPackageResult.CannotStartInstaller;
+                }
+
+                try
+                {
+                    while (!p.WaitForExit(checkPeriodMs)) ;
+                }
+                catch (Exception exception)
+                {
+                    logger.WriteEntry($"Failure while waiting for installation completion of the package '{package.ProductName}'", exception);
+                    return InstallPackageResult.CannotStartInstaller;
+                }
+
+                if (p.ExitCode == MsiExitCodeRestartNeeded) return InstallPackageResult.RestartNeeded;
+
+                if (p.ExitCode != ExitCodeSuccess)
+                {
+                    logger.WriteEntry($"Installation of the package '{package.ProductName}' failed with the exit code: {p.ExitCode}");
+                    return InstallPackageResult.GeneralInstallationError;
+                }
+
+                return InstallPackageResult.Success;
+            }
         }
 
         public bool IsPackageInstalled(Package package)

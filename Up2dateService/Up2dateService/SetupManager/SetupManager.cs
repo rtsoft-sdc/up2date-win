@@ -131,38 +131,30 @@ namespace Up2dateService.SetupManager
 
             IPackageInstaller installer = installerFactory.GetInstaller(package);
 
-            SetPackageInProgressFlag(package);
+            var logsLocation = Path.Combine(downloadLocationProvider(), "Logs");
+            var logFilePath = Path.Combine(logsLocation, Path.GetFileName(package.Filepath) + ".log");
             try
             {
-                using (Process p = installer.StartInstallationProcess(package))
+                Directory.CreateDirectory(logsLocation);
+                if (File.Exists(logFilePath))
                 {
-                    const int checkPeriodMs = 1000;
-                    const int ExitCodeSuccess = 0;
-                    const int MsiExitCodeRestartNeeded = 3010;
-
-                    while (!p.WaitForExit(checkPeriodMs)) ;
-
-                    if (p.ExitCode == ExitCodeSuccess)
-                    {
-                        installer.UpdatePackageInfo(ref package);
-                        return InstallPackageResult.Success;
-                    }
-
-                    if (p.ExitCode == MsiExitCodeRestartNeeded) return InstallPackageResult.RestartNeeded;
-
-                    logger.WriteEntry(installer.GetType().Name, $"Installation of the package '{package.ProductName}' failed with the exit code: {p.ExitCode}");
-                    return InstallPackageResult.GeneralInstallationError;
+                    File.Delete(logFilePath);
                 }
             }
-            catch (Exception exception)
+            catch
             {
-                logger.WriteEntry(installer.GetType().Name, $"Unhandled exception during package '{package.ProductName}' installation", exception);
-                return InstallPackageResult.CannotStartInstaller;
+                logFilePath = null;
             }
-            finally
+
+            SetPackageInProgressFlag(package);
+            InstallPackageResult result = installer.InstallPackage(package, logFilePath);
+            if (result == InstallPackageResult.Success)
             {
-                ClearPackageInProgressFlag();
+                installer.UpdatePackageInfo(ref package);
             }
+            ClearPackageInProgressFlag();
+
+            return result;
         }
 
         private void SetPackageInProgressFlag(Package package)
