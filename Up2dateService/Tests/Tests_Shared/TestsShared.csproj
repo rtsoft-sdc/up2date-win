@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoggerMock.cs" />
     <Compile Include="SettingsManagerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignatureVerifierMock.cs" />
