@@ -81,6 +81,8 @@ namespace Up2dateService.Installers.Msi
                     return InstallPackageResult.GeneralInstallationError;
                 }
 
+                Refresh();
+
                 return InstallPackageResult.Success;
             }
         }

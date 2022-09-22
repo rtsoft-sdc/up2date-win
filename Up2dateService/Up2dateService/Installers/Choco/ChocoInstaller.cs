@@ -95,6 +95,8 @@ namespace Up2dateService.Installers.Choco
                     return InstallPackageResult.GeneralInstallationError;
                 }
 
+                Refresh();
+
                 return InstallPackageResult.Success;
             }
         }
