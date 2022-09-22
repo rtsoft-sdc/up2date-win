@@ -28,26 +28,13 @@ namespace Up2dateService.SetupManager
             this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
             this.validatorFactory = validatorFactory ?? throw new ArgumentNullException(nameof(validatorFactory));
 
-            RefreshPackageList();
+            SafeRefreshPackageList();
         }
 
         public List<Package> GetAvaliablePackages()
         {
-            RefreshPackageList();
+            SafeRefreshPackageList();
             return SafeGetPackages();
-        }
-
-        public bool IsPackageAvailable(string packageFile)
-        {
-            RefreshPackageList();
-            return FindPackage(packageFile).Status != PackageStatus.Unavailable;
-        }
-
-        public bool IsPackageInstalled(string packageFile)
-        {
-            RefreshPackageList();
-            Package package = FindPackage(packageFile);
-            return package.Status == PackageStatus.Installed || package.Status == PackageStatus.RestartNeeded;
         }
 
         public InstallPackageResult InstallPackage(string packageFile)
@@ -56,7 +43,7 @@ namespace Up2dateService.SetupManager
             var result = InstallPackage(ref package);
             UpdatePackageStatus(ref package, result);
             SafeUpdatePackage(package);
-            RefreshPackageList();
+            SafeRefreshPackageList();
 
             return result;
         }
@@ -78,7 +65,7 @@ namespace Up2dateService.SetupManager
                 var result = InstallPackage(ref package);
                 UpdatePackageStatus(ref package, result);
                 SafeUpdatePackage(package);
-                RefreshPackageList();
+                SafeRefreshPackageList();
             }
         }
 
@@ -88,7 +75,8 @@ namespace Up2dateService.SetupManager
             var package = new Package
             {
                 Status = PackageStatus.Downloading,
-                Filepath = Path.Combine(downloadLocationProvider(), artifactFileName)
+                ErrorCode = InstallPackageResult.Success,
+            Filepath = Path.Combine(downloadLocationProvider(), artifactFileName)
             };
             SafeAddOrUpdatePackage(package);
         }
@@ -97,7 +85,7 @@ namespace Up2dateService.SetupManager
         {
             // remove temporary "downloading" package item, so refresh would be able to add "downloaded" package item instead
             SafeRemovePackage(Path.Combine(downloadLocationProvider(), artifactFileName), PackageStatus.Downloading);
-            RefreshPackageList();
+            SafeRefreshPackageList();
         }
 
         public bool IsFileSupported(string artifactFileName)
@@ -188,15 +176,6 @@ namespace Up2dateService.SetupManager
             return lockedPackages;
         }
 
-        private void SafeUpdatePackages(IEnumerable<Package> newPackageList)
-        {
-            lock (packagesLock)
-            {
-                packages.Clear();
-                packages.AddRange(newPackageList);
-            };
-        }
-
         private void SafeUpdatePackage(Package package)
         {
             lock (packagesLock)
@@ -254,72 +233,73 @@ namespace Up2dateService.SetupManager
             package.ErrorCode = result;
         }
 
-        private void RefreshPackageList()
+        private void SafeRefreshPackageList()
         {
-            var lockedPackages = SafeGetPackages();
-
-            string downloadFolder = downloadLocationProvider();
-            List<string> files = Directory.GetFiles(downloadFolder).ToList();
-
-            List<Package> packagesToRemove = lockedPackages.Where(p => p.Status != PackageStatus.Downloading && !files.Any(f => p.Filepath.Equals(f, StringComparison.InvariantCultureIgnoreCase))).ToList();
-            foreach (Package package in packagesToRemove)
+            lock (packagesLock)
             {
-                _ = lockedPackages.Remove(package);
-            }
+                string downloadFolder = downloadLocationProvider();
+                List<string> files = Directory.GetFiles(downloadFolder).ToList();
 
-            foreach (string file in files)
-            {
-                Package package = lockedPackages.FirstOrDefault(p => p.Filepath.Equals(file, StringComparison.InvariantCultureIgnoreCase));
-                if (!lockedPackages.Contains(package))
+                List<Package> packagesToRemove = packages.Where(p => p.Status != PackageStatus.Downloading && !files.Any(f => p.Filepath.Equals(f, StringComparison.InvariantCultureIgnoreCase))).ToList();
+                foreach (Package package in packagesToRemove)
                 {
-                    package.Filepath = file;
-
-                    if (!installerFactory.IsInstallerAvailable(package)) continue;
-
-                    IPackageInstaller installer = installerFactory.GetInstaller(package);
-                    if (!installer.Initialize(ref package)) continue;
-
-                    package.Status = PackageStatus.Downloaded;
-                    lockedPackages.Add(package);
+                    _ = packages.Remove(package);
                 }
-            }
 
-            RefreshinstallersProductList(lockedPackages);
-
-            for (int i = 0; i < lockedPackages.Count; i++)
-            {
-                Package updatedPackage = lockedPackages[i];
-
-                if (!installerFactory.IsInstallerAvailable(updatedPackage)) continue;
-
-                var installer = installerFactory.GetInstaller(updatedPackage);
-                if (installer.IsPackageInstalled(updatedPackage))
+                foreach (string file in files)
                 {
-                    if (updatedPackage.Status != PackageStatus.Installed)
+                        Package package = packages.FirstOrDefault(p => p.Filepath.Equals(file, StringComparison.InvariantCultureIgnoreCase));
+                    if (!packages.Contains(package))
                     {
-                        installer.UpdatePackageInfo(ref updatedPackage);
-                        updatedPackage.Status = PackageStatus.Installed;
-                    }
-                }
-                else
-                {
-                    updatedPackage.DisplayName = null;
-                    updatedPackage.Publisher = null;
-                    updatedPackage.InstallDate = null;
-                    updatedPackage.EstimatedSize = null;
-                    updatedPackage.UrlInfoAbout = null;
-                    if (updatedPackage.Status != PackageStatus.Downloading 
-                        && updatedPackage.Status != PackageStatus.Installing 
-                        && updatedPackage.Status != PackageStatus.Failed)
-                    {
-                        updatedPackage.Status = PackageStatus.Downloaded;
+                        package.Filepath = file;
+
+                        if (!installerFactory.IsInstallerAvailable(package)) continue;
+
+                            IPackageInstaller installer = installerFactory.GetInstaller(package);
+                        if (!installer.Initialize(ref package)) continue;
+
+                        package.Status = PackageStatus.Downloaded;
+                        package.ErrorCode = InstallPackageResult.Success;
+                        packages.Add(package);
                     }
                 }
 
-                lockedPackages[i] = updatedPackage;
-            }
+                RefreshinstallersProductList(packages);
 
-            SafeUpdatePackages(lockedPackages);
+                for (int i = 0; i < packages.Count; i++)
+                {
+                    Package updatedPackage = packages[i];
+
+                    if (!installerFactory.IsInstallerAvailable(updatedPackage)) continue;
+
+                    var installer = installerFactory.GetInstaller(updatedPackage);
+                    if (installer.IsPackageInstalled(updatedPackage))
+                    {
+                        if (updatedPackage.Status != PackageStatus.Installed)
+                        {
+                            installer.UpdatePackageInfo(ref updatedPackage);
+                            updatedPackage.Status = PackageStatus.Installed;
+                            updatedPackage.ErrorCode = InstallPackageResult.Success;
+                        }
+                    }
+                    else
+                    {
+                        updatedPackage.DisplayName = null;
+                        updatedPackage.Publisher = null;
+                        updatedPackage.InstallDate = null;
+                        updatedPackage.EstimatedSize = null;
+                        updatedPackage.UrlInfoAbout = null;
+                        if (updatedPackage.Status != PackageStatus.Downloading 
+                            && updatedPackage.Status != PackageStatus.Installing 
+                            && updatedPackage.Status != PackageStatus.Failed)
+                        {
+                            updatedPackage.Status = PackageStatus.Downloaded;
+                        }
+                    }
+
+                    packages[i] = updatedPackage;
+                }
+            };
         }
 
         private void RefreshinstallersProductList(IEnumerable<Package> packages)
