@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
@@ -14,6 +15,7 @@ namespace Up2dateConsole.Dialogs
         private string dpsUrl;
         private bool checkSignatureStatus;
         private SignatureVerificationLevel signatureVerificationLevel;
+        private bool isWhiteListEmpty;
 
         public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
         {
@@ -24,6 +26,7 @@ namespace Up2dateConsole.Dialogs
 
             OkCommand = new RelayCommand(ExecuteOk, CanOk);
             AddCertificateCommand = new RelayCommand(ExecuteAddCertificate, CanAddCertificate);
+            LaunchCertMgrShapinCommand = new RelayCommand(ExecuteLaunchCertMgrShapin);
         }
 
         public bool IsInitialized { get; }
@@ -31,6 +34,19 @@ namespace Up2dateConsole.Dialogs
         public ICommand OkCommand { get; }
 
         public ICommand AddCertificateCommand { get; }
+
+        public ICommand LaunchCertMgrShapinCommand { get; }
+
+        public bool IsWhiteListEmpty
+        {
+            get => isWhiteListEmpty;
+            private set
+            {
+                if (isWhiteListEmpty == value) return;
+                isWhiteListEmpty = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string TokenUrl
         {
@@ -59,7 +75,7 @@ namespace Up2dateConsole.Dialogs
             get => checkSignatureStatus;
             set
             {
-                if(checkSignatureStatus == value) return;
+                if (checkSignatureStatus == value) return;
                 checkSignatureStatus = value;
                 OnPropertyChanged();
             }
@@ -73,6 +89,17 @@ namespace Up2dateConsole.Dialogs
                 if (signatureVerificationLevel == value) return;
                 signatureVerificationLevel = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private void ExecuteLaunchCertMgrShapin(object obj)
+        {
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = "mmc.exe";
+                p.StartInfo.Arguments = "WhiteList.msc";
+                p.StartInfo.UseShellExecute = false;
+                p.Start();
             }
         }
 
@@ -107,6 +134,8 @@ namespace Up2dateConsole.Dialogs
                     string message = string.Format(viewService.GetText(Texts.FailedToAddCertificateToWhiteList), result.ErrorMessage);
                     viewService.ShowMessageBox(message);
                 }
+
+                IsWhiteListEmpty = service.GetWhitelistedCertificates().Length == 0;
             }
             catch (Exception e)
             {
@@ -172,6 +201,7 @@ namespace Up2dateConsole.Dialogs
                 DpsUrl = service.GetProvisioningUrl();
                 checkSignatureStatus = service.GetCheckSignature();
                 signatureVerificationLevel = service.GetSignatureVerificationLevel();
+                IsWhiteListEmpty = service.GetWhitelistedCertificates().Length == 0;
             }
             catch (Exception e)
             {
@@ -190,6 +220,5 @@ namespace Up2dateConsole.Dialogs
 
             return true;
         }
-
     }
 }

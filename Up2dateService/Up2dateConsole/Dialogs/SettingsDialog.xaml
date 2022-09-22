@@ -27,6 +27,8 @@
 
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter" />
             <helpers:EnumToBooleanConverter x:Uid="helpers:EnumToBooleanConverter_1" x:Key="EnumToBooleanConverter" />
+            <helpers:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" />
+            <helpers:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -41,19 +43,31 @@
             <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
             <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Uid="CheckBox_1" Margin="0,15,0,5" Content="Verify package signature before installation" IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
-            <StackPanel x:Uid="StackPanel_3" Margin="20,0,0,0" Visibility="{Binding CheckSignatureStatus, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <CheckBox x:Uid="CheckBox_1" Margin="0,15,0,5" Content="Verify package signature before installation" 
+                      IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel x:Uid="StackPanel_3" Margin="20,0,0,0" 
+                        Visibility="{Binding CheckSignatureStatus, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <RadioButton x:Uid="RadioButton_1" Margin="0,5,0,5" Content="Accept packages signed by any certificate"
                              IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByAnyCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
                 <RadioButton x:Uid="RadioButton_2" Margin="0,5,0,5" Content="Accept packages signed by valid trusted certificate"
                              IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByTrustedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
-                <Grid x:Uid="Grid_2">
-                    <RadioButton x:Uid="RadioButton_3" Margin="0,5,0,5" VerticalAlignment="Center" Content="Accept only packages signed by a whitelisted certificate" 
+                <StackPanel>
+                    <Grid x:Uid="Grid_2">
+                        <RadioButton x:Uid="RadioButton_3" Margin="0,5,0,5" VerticalAlignment="Center" Content="Accept only packages signed by a whitelisted certificate" 
                                  IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
-                    <Button x:Uid="Button_3" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" 
+                        <Button x:Uid="Button_3" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" 
                             Content="Add Certificate" ToolTip="Add certificate to whitelist" 
                             Command="{Binding AddCertificateCommand}"/>
-                </Grid>
+                    </Grid>
+                    <StackPanel Margin="20,0,0,0" Visibility="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToVisibilityConverter}}">
+                        <TextBlock Visibility="{Binding IsWhiteListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Foreground="Red" Text="Warning! Currently the white list is empty."/>
+                        <TextBlock Visibility="{Binding IsWhiteListEmpty, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                            <Run Text="To view or remove whitelisted certificates use "/>
+                            <Hyperlink Command="{Binding LaunchCertMgrShapinCommand}">Certificates Snap-in</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
 
