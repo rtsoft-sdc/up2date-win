@@ -1,6 +1,4 @@
 ﻿
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using Up2dateShared;
 
 namespace Up2dateService.Interfaces
@@ -34,10 +32,11 @@ namespace Up2dateService.Interfaces
         void Refresh();
 
         /// <summary>
-        /// Starts separate process to install the Package
+        /// Installs Package synchronously; write log to specified file
         /// </summary>
-        /// <param name="package">Package</param>
-        /// <returns>started process</returns>
-        Process StartInstallationProcess(Package package);
+        /// <param name="Package">Package</param>
+        /// <param name="logFilePath">Log file path</param>
+        /// <returns></returns>
+        InstallPackageResult InstallPackage(Package package, string logFilePath);
     }
 }

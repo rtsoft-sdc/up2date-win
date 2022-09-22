@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Up2dateService.Interfaces;
@@ -13,15 +12,17 @@ namespace Up2dateService.SetupManager
         private readonly Func<string> downloadLocationProvider;
         private readonly IPackageInstallerFactory installerFactory;
         private readonly IPackageValidatorFactory validatorFactory;
-        private readonly EventLog eventLog;
+        private readonly ILogger logger;
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public SetupManager(EventLog eventLog, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
+        public IEnumerable<string> SupportedExtensions => installerFactory.SupportedExtensions;
+
+        public SetupManager(ILogger logger, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
             IPackageInstallerFactory installerFactory, IPackageValidatorFactory validatorFactory)
         {
-            this.eventLog = eventLog ?? throw new ArgumentNullException(nameof(eventLog));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.downloadLocationProvider = downloadLocationProvider ?? throw new ArgumentNullException(nameof(downloadLocationProvider));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
@@ -65,8 +66,6 @@ namespace Up2dateService.SetupManager
                 UpdatePackageStatus(ref package, result);
                 SafeUpdatePackage(package);
                 SafeRefreshPackageList();
-
-                eventLog.WriteEntry($"{Path.GetFileName(package.Filepath)} installation finished with result: {result}");
             }
         }
 
@@ -96,68 +95,55 @@ namespace Up2dateService.SetupManager
 
         private InstallPackageResult InstallPackage(ref Package package)
         {
-            try
+            if (IsSetPackageInProgressFlag(package))
             {
-                if (IsSetPackageInProgressFlag(package))
-                {
-                    ClearPackageInProgressFlag();
-                    if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
-                    if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
-                    return InstallPackageResult.GeneralInstallationError;
-                }
-
-                if (package.Status == PackageStatus.Unavailable) return InstallPackageResult.PackageUnavailable;
+                ClearPackageInProgressFlag();
                 if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
                 if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
-
-                if (!installerFactory.IsInstallerAvailable(package)) return InstallPackageResult.PackageNotSupported;
-
-                if (validatorFactory.IsValidatorAvailable(package))
-                {
-                    IPackageValidator validator = validatorFactory.GetValidator(package);
-                    if (settingsManager.CheckSignature && !validator.VerifySignature(package))
-                    {
-                        return InstallPackageResult.SignatureVerificationFailed;
-                    }
-                }
-
-                IPackageInstaller installer = installerFactory.GetInstaller(package);
-
-                SetPackageInProgressFlag(package);
-                try
-                {
-                    using (Process p = installer.StartInstallationProcess(package))
-                    {
-                        const int checkPeriodMs = 1000;
-                        const int ExitCodeSuccess = 0;
-                        const int MsiExitCodeRestartNeeded = 3010;
-
-                        while (!p.WaitForExit(checkPeriodMs)) ;
-
-                        if (p.ExitCode == ExitCodeSuccess)
-                        {
-                            installer.UpdatePackageInfo(ref package);
-                            return InstallPackageResult.Success;
-                        }
-                        if (p.ExitCode == MsiExitCodeRestartNeeded) return InstallPackageResult.RestartNeeded;
-                        return InstallPackageResult.GeneralInstallationError;
-                    }
-                }
-                catch (Exception exception)
-                {
-                    WriteLogEntry(exception);
-                    return InstallPackageResult.CannotStartInstaller;
-                }
-                finally
-                {
-                    ClearPackageInProgressFlag();
-                }
-            }
-            catch (Exception exception)
-            {
-                WriteLogEntry(exception);
                 return InstallPackageResult.GeneralInstallationError;
             }
+
+            if (package.Status == PackageStatus.Unavailable) return InstallPackageResult.PackageUnavailable;
+            if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
+            if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
+
+            if (!installerFactory.IsInstallerAvailable(package)) return InstallPackageResult.PackageNotSupported;
+
+            if (validatorFactory.IsValidatorAvailable(package))
+            {
+                IPackageValidator validator = validatorFactory.GetValidator(package);
+                if (settingsManager.CheckSignature && !validator.VerifySignature(package))
+                {
+                    return InstallPackageResult.SignatureVerificationFailed;
+                }
+            }
+
+            IPackageInstaller installer = installerFactory.GetInstaller(package);
+
+            var logsLocation = Path.Combine(downloadLocationProvider(), "Logs");
+            var logFilePath = Path.Combine(logsLocation, Path.GetFileName(package.Filepath) + ".log");
+            try
+            {
+                Directory.CreateDirectory(logsLocation);
+                if (File.Exists(logFilePath))
+                {
+                    File.Delete(logFilePath);
+                }
+            }
+            catch
+            {
+                logFilePath = null;
+            }
+
+            SetPackageInProgressFlag(package);
+            InstallPackageResult result = installer.InstallPackage(package, logFilePath);
+            if (result == InstallPackageResult.Success)
+            {
+                installer.UpdatePackageInfo(ref package);
+            }
+            ClearPackageInProgressFlag();
+
+            return result;
         }
 
         private void SetPackageInProgressFlag(Package package)
@@ -326,11 +312,6 @@ namespace Up2dateService.SetupManager
             {
                 installer.Refresh();
             }
-        }
-
-        private void WriteLogEntry(Exception error)
-        {
-            EventLog.WriteEntry("UP2DATEService", error.Message);
         }
     }
 }

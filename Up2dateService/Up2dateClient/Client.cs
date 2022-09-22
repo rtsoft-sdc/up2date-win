@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Up2dateShared;
 
 namespace Up2dateClient
@@ -10,8 +10,7 @@ namespace Up2dateClient
     {
         const string ClientType = "RITMS UP2DATE for Windows";
 
-        private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi",".nupkg" }; // must be lowercase
-        private readonly EventLog eventLog;
+        private readonly ILogger logger;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
         private readonly ISetupManager setupManager;
@@ -19,14 +18,14 @@ namespace Up2dateClient
         private readonly Func<string> getDownloadLocation;
         private ClientState state;
 
-        public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, EventLog eventLog = null)
+        public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, ILogger logger)
         {
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.getCertificate = getCertificate ?? throw new ArgumentNullException(nameof(getCertificate));
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
             this.getDownloadLocation = getDownloadLocation ?? throw new ArgumentNullException(nameof(getDownloadLocation));
-            this.eventLog = eventLog;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public ClientState State
@@ -36,7 +35,7 @@ namespace Up2dateClient
             {
                 if (state.Equals(value)) return;
                 state = value;
-                WriteLogEntry($"Status={state.Status}; {state.LastError}");
+                WriteLogEntry($"Status={state.Status} {state.LastError}");
             }
         }
 
@@ -107,7 +106,7 @@ namespace Up2dateClient
 
             if (!IsExtensionAllowed(info))
             {
-                result.Message = "Package is not allowed - deployment rejected";
+                result.Message = "package type is not allowed - deployment rejected";
                 WriteLogEntry(result.Message, info);
                 result.Success = false;
                 return;
@@ -115,7 +114,7 @@ namespace Up2dateClient
 
             if (!IsSupported(info))
             {
-                result.Message = "not supported - deployment rejected";
+                result.Message = "package type is not supported - deployment rejected";
                 WriteLogEntry(result.Message, info);
                 result.Success = false;
                 return;
@@ -155,7 +154,7 @@ namespace Up2dateClient
             var installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
             if (installPackageStatus != InstallPackageResult.Success && installPackageStatus != InstallPackageResult.RestartNeeded)
             {
-                result.Message = "Installation failed.";
+                result.Message = "installation failed.";
                 string additionalMessage;
                 switch (installPackageStatus)
                 {
@@ -206,7 +205,7 @@ namespace Up2dateClient
 
         private bool IsSupported(DeploymentInfo info)
         {
-            return supportedTypes.Contains(Path.GetExtension(info.artifactFileName).ToLowerInvariant());
+            return setupManager.SupportedExtensions.Any(ext => ext.Equals(Path.GetExtension(info.artifactFileName), StringComparison.InvariantCultureIgnoreCase));
         }
 
         private bool OnCancelAction(int stopId)
@@ -231,9 +230,7 @@ namespace Up2dateClient
 
         private void WriteLogEntry(string message, DeploymentInfo? info = null)
         {
-            eventLog?.WriteEntry(info == null
-                ? $"Up2date client: {message}"
-                : $"Up2date client: {message} Artifact={info.Value.artifactFileName}");
+            logger.WriteEntry(info == null ? message : $"{message}\nArtifact={info.Value.artifactFileName}");
         }
     }
 }
