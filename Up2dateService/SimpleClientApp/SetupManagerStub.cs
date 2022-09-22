@@ -5,6 +5,8 @@ namespace SimpleClientApp
 {
     public class SetupManagerStub : ISetupManager
     {
+        public IEnumerable<string> SupportedExtensions => new[] { ".msi", ".nuget" };
+
         public List<Package> GetAvaliablePackages()
         {
             return new List<Package>();

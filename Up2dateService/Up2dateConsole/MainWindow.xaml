@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole"
+        xmlns:service="clr-namespace:Up2dateConsole.ServiceReference"
         xmlns:clr="clr-namespace:System;assembly=mscorlib"
         xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
@@ -144,7 +145,20 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Uid="DataTemplate_1">
                                 <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
-                                    <TextBlock x:Uid="TextBlock_8" Text="{Binding Status}"/>
+                                    <TextBlock x:Uid="TextBlock_8" Text="{Binding Status}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Package.Status}" Value="{x:Static service:PackageStatus.Failed}">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Package.Status}" Value="{x:Static service:PackageStatus.Installed}">
+                                                        <Setter Property="Foreground" Value="Green"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>   
+                                    </TextBlock>
                                     <TextBlock x:Uid="TextBlock_9" Margin="8,0,0,0" 
                                                Style="{StaticResource AwesomeIcon}" Foreground="SteelBlue" FontSize="14"
                                                Text="{StaticResource InfoCircleIcon}" 

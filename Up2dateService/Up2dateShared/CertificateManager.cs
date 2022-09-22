@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -9,7 +8,7 @@ namespace Up2dateShared
     {
         private const StoreName storeName = StoreName.TrustedPublisher;
 
-        private readonly EventLog eventLog;
+        private readonly ILogger logger;
         private readonly ISettingsManager settingsManager;
         private X509Certificate2 certificate;
 
@@ -30,10 +29,10 @@ namespace Up2dateShared
 
         public string CertificateSubjectName => GetCN(certificate?.Subject);
 
-        public CertificateManager(ISettingsManager settingsManager, EventLog eventLog)
+        public CertificateManager(ISettingsManager settingsManager, ILogger logger)
         {
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
-            this.eventLog = eventLog;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void ImportCertificate(byte[] certificateData)
@@ -43,10 +42,11 @@ namespace Up2dateShared
                 X509Certificate2 cert = new X509Certificate2(certificateData);
                 ImportCertificate(cert);
                 Certificate = cert;
+                logger.WriteEntry($"New certificate imported; '{Certificate.Issuer}:{Certificate.Subject}'");
             }
             catch (Exception e)
             {
-                eventLog.WriteEntry($"CertificateManager: Exception importing certificate. {e}");
+                logger.WriteEntry("Exception importing certificate.", e);
                 throw;
             }
         }
@@ -76,9 +76,10 @@ namespace Up2dateShared
                 Certificate = GetCertificates(store)?.OfType<X509Certificate2>().FirstOrDefault();
             }
 
-            eventLog?.WriteEntry(Certificate != null 
-                ? $"Certificate found; '{Certificate.Issuer}:{Certificate.Subject}'"
-                : $"Cannot find certificate in {storeName} certificate store!");
+            if (Certificate != null)
+            {
+                logger.WriteEntry($"Communication certificate - '{Certificate.Issuer}:{Certificate.Subject}'");
+            }
         }
 
         private X509Certificate2Collection GetCertificates(X509Store store)

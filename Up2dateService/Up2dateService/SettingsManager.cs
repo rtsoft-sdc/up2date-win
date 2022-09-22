@@ -1,20 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Win32;
+using System.Text;
 using Up2dateShared;
 
 namespace Up2dateService
 {
     public class SettingsManager : ISettingsManager
     {
-        public SettingsManager()
+        private readonly ILogger logger;
+
+        public SettingsManager(ILogger logger)
         {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
             if (Properties.Settings.Default.UpgradeFlag)
             {
                 Properties.Settings.Default.Upgrade();
                 Properties.Settings.Default.UpgradeFlag = false;
                 Properties.Settings.Default.Save();
             }
+
+            WriteSettingsToLog();
         }
 
         public string ProvisioningUrl
@@ -24,6 +31,7 @@ namespace Up2dateService
             {
                 Properties.Settings.Default.ProvisioningUrl = value;
                 Properties.Settings.Default.Save();
+                WriteSettingsToLog();
             }
         }
 
@@ -39,6 +47,7 @@ namespace Up2dateService
             {
                 Properties.Settings.Default.RequestCertificateUrl = value;
                 Properties.Settings.Default.Save();
+                WriteSettingsToLog();
             }
         }
 
@@ -49,6 +58,7 @@ namespace Up2dateService
             {
                 Properties.Settings.Default.CertificateThumbprint = value;
                 Properties.Settings.Default.Save();
+                WriteSettingsToLog();
             }
         }
 
@@ -59,6 +69,7 @@ namespace Up2dateService
             {
                 Properties.Settings.Default.PackageExtensionFilterList = string.Join(":", value);
                 Properties.Settings.Default.Save();
+                WriteSettingsToLog();
             }
         }
 
@@ -69,6 +80,7 @@ namespace Up2dateService
             {
                 Properties.Settings.Default.CheckSignature = value;
                 Properties.Settings.Default.Save();
+                WriteSettingsToLog();
             }
         }
 
@@ -79,6 +91,7 @@ namespace Up2dateService
             {
                 Properties.Settings.Default.SignatureVerificationLevel = value;
                 Properties.Settings.Default.Save();
+                WriteSettingsToLog();
             }
         }
 
@@ -99,7 +112,21 @@ namespace Up2dateService
             {
                 Properties.Settings.Default.DefaultChocoSources = value;
                 Properties.Settings.Default.Save();
+                WriteSettingsToLog();
             }
+        }
+
+        private void WriteSettingsToLog()
+        {
+            StringBuilder sb = new StringBuilder("\n");
+            sb.AppendLine($"{nameof(ProvisioningUrl)} = {ProvisioningUrl}");
+            sb.AppendLine($"{nameof(RequestCertificateUrl)} = {RequestCertificateUrl}");
+            sb.AppendLine($"{nameof(CertificateThumbprint)} = {CertificateThumbprint}");
+            sb.AppendLine($"{nameof(PackageExtensionFilterList)} = {string.Join("|", PackageExtensionFilterList)}");
+            sb.AppendLine($"{nameof(CheckSignature)} = {CheckSignature}");
+            sb.AppendLine($"{nameof(SignatureVerificationLevel)} = {SignatureVerificationLevel}");
+            sb.AppendLine($"{nameof(DefaultChocoSources)} = {DefaultChocoSources}");
+            logger.WriteEntry(sb.ToString());
         }
     }
 }

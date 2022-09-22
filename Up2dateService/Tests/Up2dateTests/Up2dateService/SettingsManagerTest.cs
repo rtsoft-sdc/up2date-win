@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tests_Shared;
 using Up2dateService;
 using Up2dateShared;
 
@@ -13,7 +14,7 @@ namespace Up2dateTests.Up2dateService
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _settingsManager = new SettingsManager();
+            _settingsManager = new SettingsManager(new LoggerMock().Object);
         }
 
         [TestMethod]

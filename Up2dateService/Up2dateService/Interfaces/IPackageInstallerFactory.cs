@@ -1,4 +1,5 @@
-﻿using Up2dateShared;
+﻿using System.Collections.Generic;
+using Up2dateShared;
 
 namespace Up2dateService.Interfaces
 {
@@ -24,5 +25,10 @@ namespace Up2dateService.Interfaces
         /// <param name="artifactFileName"></param>
         /// <returns></returns>
         bool IsInstallerAvailable(string artifactFileName);
+
+        /// <summary>
+        /// Gets collection of package extensions suppoted by available installers
+        /// </summary>
+        IEnumerable<string> SupportedExtensions { get; }
     }
 }

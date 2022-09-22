@@ -18,7 +18,7 @@ namespace Up2dateService.Installers
 
         private readonly Dictionary<string, Func<IPackageInstaller>> installers = new Dictionary<string, Func<IPackageInstaller>>();
 
-        public PackageInstallerFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager)
+        public PackageInstallerFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager, ILogger logger)
         {
             if (settingsManager is null) throw new ArgumentNullException(nameof(settingsManager));
             if (signatureVerifier is null) throw new ArgumentNullException(nameof(signatureVerifier));
@@ -26,12 +26,18 @@ namespace Up2dateService.Installers
 
             installers.Add(MsiExtension, () =>
             {
-                if (msiInstaller == null) msiInstaller = new MsiInstaller();
+                if (msiInstaller == null)
+                {
+                    msiInstaller = new MsiInstaller(logger.SubScope(nameof(MsiInstaller)));
+                }
                 return msiInstaller;
             });
             installers.Add(NugetExtension, () =>
             {
-                if (chocoInstaller == null) chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources);
+                if (chocoInstaller == null)
+                {
+                    chocoInstaller = new ChocoInstaller(() => settingsManager.DefaultChocoSources, logger.SubScope(nameof(ChocoInstaller)));
+                }
                 return chocoInstaller;
             });
         }
@@ -54,5 +60,7 @@ namespace Up2dateService.Installers
             string key = Path.GetExtension(artifactFileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             return installers.ContainsKey(key);
         }
+
+        public IEnumerable<string> SupportedExtensions => installers.Keys;
     }
 }
