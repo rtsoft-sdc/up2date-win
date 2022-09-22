@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Up2dateService.Interfaces;
@@ -17,6 +16,8 @@ namespace Up2dateService.SetupManager
         private readonly List<Package> packages = new List<Package>();
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
+
+        public IEnumerable<string> SupportedExtensions => installerFactory.SupportedExtensions;
 
         public SetupManager(ILogger logger, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
             IPackageInstallerFactory installerFactory, IPackageValidatorFactory validatorFactory)

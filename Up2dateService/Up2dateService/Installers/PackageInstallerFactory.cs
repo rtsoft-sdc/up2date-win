@@ -60,5 +60,7 @@ namespace Up2dateService.Installers
             string key = Path.GetExtension(artifactFileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             return installers.ContainsKey(key);
         }
+
+        public IEnumerable<string> SupportedExtensions => installers.Keys;
     }
 }

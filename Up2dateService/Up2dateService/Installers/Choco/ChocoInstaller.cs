@@ -47,7 +47,7 @@ namespace Up2dateService.Installers.Choco
                                         $"--version {package.DisplayVersion} " +
                                         $"-s \"{location};{getDefaultSources()}\" " +
                                         "-y --no-progress";
-                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.UseShellExecute = false;
 
                 try
@@ -72,11 +72,13 @@ namespace Up2dateService.Installers.Choco
 
                 if (p.ExitCode != ExitCodeSuccess)
                 {
+                    bool logFileCreated = false;
                     if (!string.IsNullOrWhiteSpace(logFilePath))
                     {
                         try
                         {
-                            File.WriteAllText(logFilePath, p.StandardError.ReadToEnd());
+                            File.WriteAllText(logFilePath, p.StandardOutput.ReadToEnd());
+                            logFileCreated = true;
                         }
                         catch (Exception exception) 
                         {
@@ -84,7 +86,12 @@ namespace Up2dateService.Installers.Choco
                         }
                     }
 
-                    logger.WriteEntry($"Installation of the package '{package.ProductName}' failed with the exit code: {p.ExitCode}");
+                    var message = $"Installation of the package '{package.ProductName}' failed with the exit code: {p.ExitCode}.";
+                    if (logFileCreated)
+                    {
+                        message += $"\nFor details see '{logFilePath}'";
+                    }
+                    logger.WriteEntry(message);
                     return InstallPackageResult.GeneralInstallationError;
                 }
 

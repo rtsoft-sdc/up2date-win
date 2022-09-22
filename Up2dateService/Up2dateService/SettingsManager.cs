@@ -118,7 +118,7 @@ namespace Up2dateService
 
         private void WriteSettingsToLog()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder("\n");
             sb.AppendLine($"{nameof(ProvisioningUrl)} = {ProvisioningUrl}");
             sb.AppendLine($"{nameof(RequestCertificateUrl)} = {RequestCertificateUrl}");
             sb.AppendLine($"{nameof(CertificateThumbprint)} = {CertificateThumbprint}");

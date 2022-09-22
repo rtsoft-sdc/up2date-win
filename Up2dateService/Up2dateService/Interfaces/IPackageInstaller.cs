@@ -1,6 +1,4 @@
 ﻿
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using Up2dateShared;
 
 namespace Up2dateService.Interfaces

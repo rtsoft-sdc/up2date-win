@@ -76,7 +76,8 @@ namespace Up2dateService.Installers.Msi
 
                 if (p.ExitCode != ExitCodeSuccess)
                 {
-                    logger.WriteEntry($"Installation of the package '{package.ProductName}' failed with the exit code: {p.ExitCode}");
+                    logger.WriteEntry($"Installation of the package '{package.ProductName}' failed with the exit code: {p.ExitCode}." +
+                        $"\nFor details see '{logFilePath}'");
                     return InstallPackageResult.GeneralInstallationError;
                 }
 

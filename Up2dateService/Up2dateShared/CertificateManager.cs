@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -79,7 +78,7 @@ namespace Up2dateShared
 
             if (Certificate != null)
             {
-                logger.WriteEntry($"Certificate found; '{Certificate.Issuer}:{Certificate.Subject}'");
+                logger.WriteEntry($"Communication certificate - '{Certificate.Issuer}:{Certificate.Subject}'");
             }
         }
 

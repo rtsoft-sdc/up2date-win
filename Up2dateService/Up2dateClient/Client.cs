@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Up2dateShared;
 
 namespace Up2dateClient
@@ -10,7 +10,6 @@ namespace Up2dateClient
     {
         const string ClientType = "RITMS UP2DATE for Windows";
 
-        private readonly HashSet<string> supportedTypes = new HashSet<string> { ".msi",".nupkg" }; // must be lowercase
         private readonly ILogger logger;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
@@ -36,7 +35,7 @@ namespace Up2dateClient
             {
                 if (state.Equals(value)) return;
                 state = value;
-                WriteLogEntry($"Status={state.Status}; {state.LastError}");
+                WriteLogEntry($"Status={state.Status} {state.LastError}");
             }
         }
 
@@ -107,7 +106,7 @@ namespace Up2dateClient
 
             if (!IsExtensionAllowed(info))
             {
-                result.Message = "Package is not allowed - deployment rejected";
+                result.Message = "package type is not allowed - deployment rejected";
                 WriteLogEntry(result.Message, info);
                 result.Success = false;
                 return;
@@ -115,7 +114,7 @@ namespace Up2dateClient
 
             if (!IsSupported(info))
             {
-                result.Message = "not supported - deployment rejected";
+                result.Message = "package type is not supported - deployment rejected";
                 WriteLogEntry(result.Message, info);
                 result.Success = false;
                 return;
@@ -155,7 +154,7 @@ namespace Up2dateClient
             var installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
             if (installPackageStatus != InstallPackageResult.Success && installPackageStatus != InstallPackageResult.RestartNeeded)
             {
-                result.Message = "Installation failed.";
+                result.Message = "installation failed.";
                 string additionalMessage;
                 switch (installPackageStatus)
                 {
@@ -206,7 +205,7 @@ namespace Up2dateClient
 
         private bool IsSupported(DeploymentInfo info)
         {
-            return supportedTypes.Contains(Path.GetExtension(info.artifactFileName).ToLowerInvariant());
+            return setupManager.SupportedExtensions.Any(ext => ext.Equals(Path.GetExtension(info.artifactFileName), StringComparison.InvariantCultureIgnoreCase));
         }
 
         private bool OnCancelAction(int stopId)
@@ -231,7 +230,7 @@ namespace Up2dateClient
 
         private void WriteLogEntry(string message, DeploymentInfo? info = null)
         {
-            logger.WriteEntry(info == null ? message : $"{message} Artifact={info.Value.artifactFileName}");
+            logger.WriteEntry(info == null ? message : $"{message}\nArtifact={info.Value.artifactFileName}");
         }
     }
 }
