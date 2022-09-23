@@ -16,6 +16,8 @@ namespace Up2dateShared
         {
             this.whiteListStoreName = whiteListStoreName;
             this.whiteListStoreLocation = whiteListStoreLocation;
+
+            CreateStore();
         }
 
         public IList<X509Certificate2> GetWhitelistedCertificates()
@@ -99,6 +101,15 @@ namespace Up2dateShared
             string result = BitConverter.ToString(hashBytes).Replace("-", string.Empty).ToLower();
 
             return result;
+        }
+
+        private void CreateStore()
+        {
+            using (X509Store store = new X509Store(whiteListStoreName, whiteListStoreLocation))
+            {
+                store.Open(OpenFlags.ReadWrite);
+                store.Close();
+            }
         }
     }
 }
