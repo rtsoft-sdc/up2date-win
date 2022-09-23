@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Windows.Input;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
@@ -86,6 +88,7 @@ namespace Up2dateConsole.Dialogs
             {
                 p.StartInfo.FileName = "mmc.exe";
                 p.StartInfo.Arguments = "WhiteList.msc";
+                p.StartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 p.StartInfo.UseShellExecute = false;
                 p.Start();
             }
