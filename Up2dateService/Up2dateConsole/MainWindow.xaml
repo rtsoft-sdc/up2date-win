@@ -147,13 +147,13 @@
                                 <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">
                                     <TextBlock x:Uid="TextBlock_8" Text="{Binding Status}">
                                         <TextBlock.Style>
-                                            <Style TargetType="{x:Type TextBlock}">
+                                            <Style x:Uid="Style_4" TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Package.Status}" Value="{x:Static service:PackageStatus.Failed}">
-                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding Package?.Status}" Value="{x:Static service:PackageStatus.Failed}">
+                                                        <Setter x:Uid="Setter_6" Property="Foreground" Value="Red"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Package.Status}" Value="{x:Static service:PackageStatus.Installed}">
-                                                        <Setter Property="Foreground" Value="Green"/>
+                                                    <DataTrigger x:Uid="DataTrigger_2" Binding="{Binding Package?.Status}" Value="{x:Static service:PackageStatus.Installed}">
+                                                        <Setter x:Uid="Setter_7" Property="Foreground" Value="Green"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
