@@ -62,12 +62,14 @@ namespace Up2dateConsole.Dialogs
 
         private async Task ExecuteRequestAsync()
         {
+            IsInProgress = true;
+
             IWcfService service = null;
             string error = string.Empty;
             try
             {
                 service = wcfClientFactory.CreateClient();
-                ResultOfstring result = service.RequestCertificate(RemoveWhiteSpaces(OneTimeKey));
+                ResultOfstring result = await service.RequestCertificateAsync(RemoveWhiteSpaces(OneTimeKey));
                 if (!result.Success)
                 {
                     error = result.ErrorMessage;
@@ -84,6 +86,7 @@ namespace Up2dateConsole.Dialogs
             finally
             {
                 wcfClientFactory.CloseClient(service);
+                IsInProgress = false;
             }
 
             if (string.IsNullOrEmpty(error))
@@ -125,6 +128,5 @@ namespace Up2dateConsole.Dialogs
             {
             }
         }
-
     }
 }
