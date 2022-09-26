@@ -149,10 +149,10 @@
                                         <TextBlock.Style>
                                             <Style x:Uid="Style_4" TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
-                                                    <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding Package?.Status}" Value="{x:Static service:PackageStatus.Failed}">
+                                                    <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.Failed}">
                                                         <Setter x:Uid="Setter_6" Property="Foreground" Value="Red"/>
                                                     </DataTrigger>
-                                                    <DataTrigger x:Uid="DataTrigger_2" Binding="{Binding Package?.Status}" Value="{x:Static service:PackageStatus.Installed}">
+                                                    <DataTrigger x:Uid="DataTrigger_2" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.Installed}">
                                                         <Setter x:Uid="Setter_7" Property="Foreground" Value="Green"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
