@@ -1,10 +1,6 @@
 Set shell = CreateObject("WScript.Shell")
 If Session.Property("CustomActionData") <> "" Then
     MsgBox "This package can be installed only on 32-bit platform! Use special 64-bit version for this computer."
-    'MsgBox "PROCESSOR_ARCHITECTURE = " & shell.ExpandEnvironmentStrings("%PROCESSOR_ARCHITECTURE%") & "!"
-    'MsgBox "PROCESS.ProgramW6432 = " & shell.Environment("PROCESS")("ProgramW6432") & "!"
-    'MsgBox "AddressWidth = " & GetObject("winmgmts:root\cimv2:Win32_Processor='cpu0'").AddressWidth & "!"
-    'MsgBox "[VersionNT64] = " & Session.Property("CustomActionData") & "!"
     WScript.Quit -1
 End If
 
