@@ -1359,6 +1359,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2EAE6E486A1C42D0838AE8300C1127E5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2F35BD3ACA2FB341E2ADD29BB22A9F4B"
         "OwnerKey" = "8:_A0C9A0298B50A7FE35B5036875C575DC"
         "MsmSig" = "8:_UNDEFINED"
@@ -6419,20 +6425,6 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_2BB043534D01476292037783457F679C"
-            {
-            "Name" = "8:Primary output from Up2dateService (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_A892E60A46D243C58D68C48619724791"
-            "FileType" = "3:2"
-            "InstallAction" = "3:3"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_6ECB757C_CF41_4D29_9003_01802B1413C8"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_557D834D269649E487E864E54B3525E5"
             {
             "Name" = "8:Primary output from Up2dateConsole (Active)"
@@ -6442,7 +6434,7 @@
             "InstallAction" = "3:1"
             "Arguments" = "8:u"
             "EntryPoint" = "8:"
-            "Sequence" = "3:2"
+            "Sequence" = "3:3"
             "Identifier" = "8:_1D5DB66C_2D8E_4723_AE20_A71E5B5FF948"
             "InstallerClass" = "11:FALSE"
             "CustomActionData" = "8:"
@@ -6457,7 +6449,7 @@
             "InstallAction" = "3:1"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
-            "Sequence" = "3:3"
+            "Sequence" = "3:4"
             "Identifier" = "8:_07A1AE60_FB62_4E32_91CB_0B7AF5DC3FF1"
             "InstallerClass" = "11:FALSE"
             "CustomActionData" = "8:[TARGETDIR]"
@@ -6491,6 +6483,34 @@
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_986A491C1D004E1BBD851EA4C5A27F93"
+            {
+            "Name" = "8:CheckArchitecture.vbs"
+            "Condition" = "8:"
+            "Object" = "8:_2EAE6E486A1C42D0838AE8300C1127E5"
+            "FileType" = "3:4"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_095652CF_3C7F_4101_AA78_0F703C13F966"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:[VersionNT64]"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_A2205177E3674D8095C87C19A65B31B2"
+            {
+            "Name" = "8:Primary output from Up2dateService (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_A892E60A46D243C58D68C48619724791"
+            "FileType" = "3:2"
+            "InstallAction" = "3:3"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_80D7901C_A721_4134_B4F1_B8B2FFE33297"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_BA92A187BB6D456980022FA96F68622C"
             {
             "Name" = "8:Primary output from Up2dateService (Active)"
@@ -6503,7 +6523,7 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_A83BD9B9_3411_4BDD_BE87_7AA82E83A8A0"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:/CONNECTION_KEY=[EDITA1]"
+            "CustomActionData" = "8:"
             "Run64Bit" = "11:FALSE"
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_F3FF912AABDF4066B00F799DE49F194F"
@@ -7781,6 +7801,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2EAE6E486A1C42D0838AE8300C1127E5"
+            {
+            "SourcePath" = "8:..\\Script\\CheckArchitecture.vbs"
+            "TargetName" = "8:CheckArchitecture.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_AD9867C08CC3403488CAE4E6A991BCF6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2F35BD3ACA2FB341E2ADD29BB22A9F4B"
@@ -13305,7 +13345,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RITMS UP2DATE Client"
         "ProductCode" = "8:{E2D788B4-AD9B-47F9-B49A-C30B2DF9C9F5}"
-        "PackageCode" = "8:{24603705-D667-4E1C-9499-7952823C60C5}"
+        "PackageCode" = "8:{03F84DFC-D827-446A-BF12-CC959E919D71}"
         "UpgradeCode" = "8:{A4D493F8-CC2D-4DA5-A6CC-98A5D6CBD926}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
