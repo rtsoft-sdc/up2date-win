@@ -88,7 +88,7 @@ namespace Up2dateService
             }
             catch (Exception e)
             {
-                return Result<string>.Failed(e.Message);
+                return Result<string>.Failed(e);
             }
             return Result<string>.Successful(GetDeviceId());
         }

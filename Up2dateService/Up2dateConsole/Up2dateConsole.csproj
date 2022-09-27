@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Dialogs\SettingsDialogViewModel.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
+    <Compile Include="Helpers\InvertBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
@@ -160,6 +161,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="WhiteList.msc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <None Include="Connected Services\ServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
