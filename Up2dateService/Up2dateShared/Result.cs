@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
+using System.Text;
 
 namespace Up2dateShared
 {
@@ -32,6 +34,17 @@ namespace Up2dateShared
         public static Result<T> Failed(string errorMessage = null)
         {
             return new Result<T> { Success = false, ErrorMessage = errorMessage };
+        }
+
+        public static Result<T> Failed(Exception exception)
+        {
+            var msgBuilder = new StringBuilder();
+            for (var e = exception; e != null; e = e.InnerException)
+            {
+                if (e is AggregateException) continue;
+                msgBuilder.AppendLine(e.Message);
+            }
+            return new Result<T> { Success = false, ErrorMessage = msgBuilder.ToString() };
         }
 
         [DataMember]
