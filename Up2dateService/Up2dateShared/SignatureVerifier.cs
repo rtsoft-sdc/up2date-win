@@ -64,7 +64,8 @@ namespace Up2dateShared
         {
             var theCertificateChain = new X509Chain();
             theCertificateChain.ChainPolicy.RevocationFlag = X509RevocationFlag.EntireChain;
-            theCertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
+            // Relaxing the revocation check is needed to support certificates from authorities without revocation service
+            theCertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
             theCertificateChain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
             theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
 
