@@ -23,8 +23,9 @@ $packageArgs = @{
 [array]$key = Get-UninstallRegistryKey -SoftwareName $packageArgs['softwareName']
 
 if ($key.Count -eq 1) {
-  Stop-Service -Name "Up2dateService"
-  sc.exe delete Up2dateService
+	try { Stop-Process -Name "Up2dateConsole" } catch { echo "Console Was Not Closed" }  
+	try { Stop-Service -Name "Up2dateService" } catch { echo "Service Was Not Stopped" }
+	try { sc.exe delete Up2dateService } catch { echo "Service Was Not Deleted" }
 }
 
 Install-ChocolateyPackage @packageArgs

@@ -627,6 +627,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_12CBC783C2F54AEAB260E6FF9B21D5EF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_15AFF50EEE0960FFF744E34F9D72CFBE"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
@@ -2139,6 +2145,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5702ECD7DD974014AA3C3D2C3B0A9DB9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5A2668EFF9EF40E90399F7A3F2D5CF0D"
         "OwnerKey" = "8:_70B12658675E51F5E708EB4FA221D20A"
         "MsmSig" = "8:_UNDEFINED"
@@ -3219,6 +3231,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_609260BD5A9742ECB4E9739F59042681"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_60B3BCE9D4E0B8BF7D0A2DD97B588E36"
         "OwnerKey" = "8:_98C009EE76457489DC5ABE4BC13E104A"
         "MsmSig" = "8:_UNDEFINED"
@@ -3873,12 +3891,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_840A7FFF8FB2457AA288D9F5ED369D05"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8484112F6D4F654E8779AB0C5CD31D8F"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
@@ -4223,6 +4235,12 @@
         {
         "MsmKey" = "8:_B734D476758A455FB7229EF22E975D97"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B90A3DCBEECC45068C5FADB4ED61232B"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -5062,18 +5080,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5CED5F4F5F2286F00C8637E8D23BF842"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_38E5D00ED686EA0CCA10C250D588300E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_98C009EE76457489DC5ABE4BC13E104A"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -5105,6 +5111,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5CED5F4F5F2286F00C8637E8D23BF842"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_38E5D00ED686EA0CCA10C250D588300E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -6428,25 +6446,11 @@
             "InstallAction" = "3:1"
             "Arguments" = "8:u"
             "EntryPoint" = "8:"
-            "Sequence" = "3:1"
+            "Sequence" = "3:3"
             "Identifier" = "8:_1D5DB66C_2D8E_4723_AE20_A71E5B5FF948"
             "InstallerClass" = "11:FALSE"
             "CustomActionData" = "8:"
             "Run64Bit" = "11:TRUE"
-            }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_6655C1090CE94057A87EECAAA7A59E3D"
-            {
-            "Name" = "8:UpdateTrustedStore.vbs"
-            "Condition" = "8:"
-            "Object" = "8:_840A7FFF8FB2457AA288D9F5ED369D05"
-            "FileType" = "3:4"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:3"
-            "Identifier" = "8:_5025E854_F531_4FA7_909F_0F3402AABA32"
-            "InstallerClass" = "11:FALSE"
-            "CustomActionData" = "8:[TARGETDIR]"
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_7E3CBB59ED364D239B84513472082E1C"
             {
@@ -6472,7 +6476,7 @@
             "InstallAction" = "3:1"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
-            "Sequence" = "3:2"
+            "Sequence" = "3:1"
             "Identifier" = "8:_A83BD9B9_3411_4BDD_BE87_7AA82E83A8A0"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
@@ -6506,6 +6510,20 @@
             "Identifier" = "8:_3732783A_D320_4E3B_870B_2B5C38129AC5"
             "InstallerClass" = "11:FALSE"
             "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_C6DE3E7A350E4D63A8717F13A77A54F5"
+            {
+            "Name" = "8:ImportCertificates.vbs"
+            "Condition" = "8:"
+            "Object" = "8:_12CBC783C2F54AEAB260E6FF9B21D5EF"
+            "FileType" = "3:4"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_B6A6A3E9_5EE6_4765_BBC3_82EA2F6C9152"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:[TARGETDIR]"
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_DDE4CACAC1C1412B8FE8E5DE22DB407C"
             {
@@ -6977,6 +6995,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12CBC783C2F54AEAB260E6FF9B21D5EF"
+            {
+            "SourcePath" = "8:..\\Script\\ImportCertificates.vbs"
+            "TargetName" = "8:ImportCertificates.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_C816C0AAB0E04BC39744FDC550ED93C6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_15AFF50EEE0960FFF744E34F9D72CFBE"
@@ -8026,7 +8064,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_38E5D00ED686EA0CCA10C250D588300E"
@@ -8828,6 +8866,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5702ECD7DD974014AA3C3D2C3B0A9DB9"
+            {
+            "SourcePath" = "8:..\\Script\\ImportCertificates.bat"
+            "TargetName" = "8:ImportCertificates.bat"
+            "Tag" = "8:"
+            "Folder" = "8:_C816C0AAB0E04BC39744FDC550ED93C6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5A2668EFF9EF40E90399F7A3F2D5CF0D"
             {
             "AssemblyRegister" = "3:1"
@@ -8925,7 +8983,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5CED5F4F5F2286F00C8637E8D23BF842"
@@ -9074,6 +9132,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_609260BD5A9742ECB4E9739F59042681"
+            {
+            "SourcePath" = "8:..\\Script\\RTSoft GmbH RITMS Code Signing.cer"
+            "TargetName" = "8:RTSoft GmbH RITMS Code Signing.cer"
+            "Tag" = "8:"
+            "Folder" = "8:_C816C0AAB0E04BC39744FDC550ED93C6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_60B3BCE9D4E0B8BF7D0A2DD97B588E36"
@@ -9787,26 +9865,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_840A7FFF8FB2457AA288D9F5ED369D05"
-            {
-            "SourcePath" = "8:..\\Script\\UpdateTrustedStore.vbs"
-            "TargetName" = "8:UpdateTrustedStore.vbs"
-            "Tag" = "8:"
-            "Folder" = "8:_C816C0AAB0E04BC39744FDC550ED93C6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8484112F6D4F654E8779AB0C5CD31D8F"
@@ -11284,6 +11342,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B90A3DCBEECC45068C5FADB4ED61232B"
+            {
+            "SourcePath" = "8:..\\Script\\RTSoft GmbH Root CA.cer"
+            "TargetName" = "8:RTSoft GmbH Root CA.cer"
+            "Tag" = "8:"
+            "Folder" = "8:_C816C0AAB0E04BC39744FDC550ED93C6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BA0B7D9A443399B79DD5599A0FDDF390"
@@ -13307,13 +13385,13 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RITMS UP2DATE Client"
         "ProductCode" = "8:{DF27D632-9159-4AC0-BF38-8A8737A0C9B7}"
-        "PackageCode" = "8:{CCFAAE3F-F2A6-4E50-BBCA-75EA4F26849D}"
+        "PackageCode" = "8:{CD5D603F-173F-48C1-B772-BE9C7E1A21D2}"
         "UpgradeCode" = "8:{BB44110E-D2C1-4DAC-9D8C-FE9737D97AEB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "InstallAllUsers" = "11:FALSE"
+        "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:RTSoft"
         "ARPHELPTELEPHONE" = "8:"
