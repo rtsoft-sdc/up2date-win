@@ -11,6 +11,8 @@ namespace Up2dateService.Installers.Choco
 {
     public class ChocoInstaller : IPackageInstaller
     {
+        private const char productCodeSeparator = '|';
+
         private readonly ILogger logger;
         private readonly List<string> productCodes = new List<string>();
         private readonly Func<string> getDefaultSources;
@@ -28,7 +30,7 @@ namespace Up2dateService.Installers.Choco
 
             package.ProductName = info.Id;
             package.DisplayVersion = info.Version;
-            package.ProductCode = $"{info.Id} {info.Version}";
+            package.ProductCode = $"{info.Id}{productCodeSeparator}{info.Version}";
 
             return true;
         }
@@ -112,7 +114,7 @@ namespace Up2dateService.Installers.Choco
         {
             Process p = new Process();
             p.StartInfo.FileName = "choco.exe";
-            p.StartInfo.Arguments = "list -l";
+            p.StartInfo.Arguments = "list --local-only --limit-output";
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.UseShellExecute = false;
             p.Start();
@@ -120,19 +122,12 @@ namespace Up2dateService.Installers.Choco
             productCodes.Clear();
             StreamReader standardOutput = p.StandardOutput;
 
-            bool firstLineSkipped = false;
             while (!standardOutput.EndOfStream)
             {
                 string line = standardOutput.ReadLine();
-                if (!firstLineSkipped)
-                {
-                    firstLineSkipped = true;
-                    continue;
-                }
-                if (line != string.Empty)
-                {
-                    productCodes.Add(line);
-                }
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
+                productCodes.Add(line.Trim());
             }
 
             if (productCodes.Count > 0)
@@ -150,7 +145,7 @@ namespace Up2dateService.Installers.Choco
         }
 
         private string GetInstallationVerb(Package package) =>
-            productCodes.Any(item => item.Split(' ').
+            productCodes.Any(item => item.Split(productCodeSeparator).
                 First() == package.ProductName) ? "upgrade" : "install";
 
         private static bool IsChocoInstalled()
