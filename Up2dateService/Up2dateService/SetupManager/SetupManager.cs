@@ -40,32 +40,17 @@ namespace Up2dateService.SetupManager
         public InstallPackageResult InstallPackage(string packageFile)
         {
             var package = FindPackage(packageFile);
-            var result = InstallPackage(ref package);
-            UpdatePackageStatus(ref package, result);
-            SafeUpdatePackage(package);
-            SafeRefreshPackageList();
-
-            return result;
+            return InstallPackage(package);
         }
 
         public void InstallPackages(IEnumerable<Package> packagesToInstall)
         {
             foreach (string inPackage in packagesToInstall.Where(p => installerFactory.IsInstallerAvailable(p)).Select(inPackage => inPackage.Filepath))
             {
-                var lockedPackages = SafeGetPackages();
-
-                Package package = lockedPackages.FirstOrDefault(p => p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
+                Package package = SafeGetPackages().FirstOrDefault(p => p.Filepath.Equals(inPackage, StringComparison.InvariantCultureIgnoreCase));
                 if (package.Status == PackageStatus.Unavailable) continue;
 
-                package.ErrorCode = InstallPackageResult.Success;
-                package.Status = PackageStatus.Installing;
-
-                SafeUpdatePackage(package);
-
-                var result = InstallPackage(ref package);
-                UpdatePackageStatus(ref package, result);
-                SafeUpdatePackage(package);
-                SafeRefreshPackageList();
+                InstallPackage(package);
             }
         }
 
@@ -91,6 +76,21 @@ namespace Up2dateService.SetupManager
         public bool IsFileSupported(string artifactFileName)
         {
             return installerFactory.IsInstallerAvailable(artifactFileName);
+        }
+
+        private InstallPackageResult InstallPackage(Package package)
+        {
+            package.ErrorCode = InstallPackageResult.Success;
+            package.Status = PackageStatus.Installing;
+            SafeUpdatePackage(package);
+
+            var result = InstallPackage(ref package);
+
+            UpdatePackageStatus(ref package, result);
+            SafeUpdatePackage(package);
+            SafeRefreshPackageList();
+
+            return result;
         }
 
         private InstallPackageResult InstallPackage(ref Package package)
@@ -136,12 +136,19 @@ namespace Up2dateService.SetupManager
             }
 
             SetPackageInProgressFlag(package);
-            InstallPackageResult result = installer.InstallPackage(package, logFilePath);
-            if (result == InstallPackageResult.Success)
+            InstallPackageResult result;
+            try
             {
-                installer.UpdatePackageInfo(ref package);
+                result = installer.InstallPackage(package, logFilePath);
+                if (result == InstallPackageResult.Success)
+                {
+                    installer.UpdatePackageInfo(ref package);
+                }
             }
-            ClearPackageInProgressFlag();
+            finally
+            {
+                ClearPackageInProgressFlag();
+            }
 
             return result;
         }
@@ -248,14 +255,14 @@ namespace Up2dateService.SetupManager
 
                 foreach (string file in files)
                 {
-                        Package package = packages.FirstOrDefault(p => p.Filepath.Equals(file, StringComparison.InvariantCultureIgnoreCase));
+                    Package package = packages.FirstOrDefault(p => p.Filepath.Equals(file, StringComparison.InvariantCultureIgnoreCase));
                     if (!packages.Contains(package))
                     {
                         package.Filepath = file;
 
                         if (!installerFactory.IsInstallerAvailable(package)) continue;
 
-                            IPackageInstaller installer = installerFactory.GetInstaller(package);
+                        IPackageInstaller installer = installerFactory.GetInstaller(package);
                         if (!installer.Initialize(ref package)) continue;
 
                         package.Status = PackageStatus.Downloaded;
