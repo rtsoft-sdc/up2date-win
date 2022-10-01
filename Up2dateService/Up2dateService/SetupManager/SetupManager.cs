@@ -277,6 +277,10 @@ namespace Up2dateService.SetupManager
                 {
                     Package updatedPackage = packages[i];
 
+                    // Don't update package status while it is being installed - status may be invalid
+                    // (e.g. Choco reports product as installed at the very beginning of the installation process)
+                    if (IsSetPackageInProgressFlag(updatedPackage)) continue;
+
                     if (!installerFactory.IsInstallerAvailable(updatedPackage)) continue;
 
                     var installer = installerFactory.GetInstaller(updatedPackage);
