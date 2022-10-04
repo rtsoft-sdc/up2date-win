@@ -137,10 +137,10 @@ namespace Up2dateShared
         {
             const string cnPrefix = "CN=";
 
-            string cnPart = fullname.Split(' ').FirstOrDefault(p => p.StartsWith(cnPrefix));
+            string cnPart = fullname.Split(',').FirstOrDefault(p => p.StartsWith(cnPrefix)).Trim();
             if (string.IsNullOrEmpty(cnPart)) return string.Empty;
 
-            return fullname.Substring(cnPrefix.Length);
+            return cnPart.Substring(cnPrefix.Length);
         }
     }
 }
