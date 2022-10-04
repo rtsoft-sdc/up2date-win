@@ -74,6 +74,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SqueezeContentControl.cs" />
     <Compile Include="Dialogs\RequestCertificateDialogViewModel.cs" />
     <Compile Include="Dialogs\RequestCertificateDialog.xaml.cs">
       <DependentUpon>RequestCertificateDialog.xaml</DependentUpon>

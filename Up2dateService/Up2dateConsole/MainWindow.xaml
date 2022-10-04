@@ -8,13 +8,13 @@
         xmlns:clr="clr-namespace:System;assembly=mscorlib"
         xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
-        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers"
+        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers" xmlns:controls="clr-namespace:Up2dateConsole.Controls"
         mc:Ignorable="d"
         ShowInTaskbar="True"
         Icon="Images/Logo.ico"
         Title="RITMS UP2DATE Console" 
         Height="600" Width="1000"
-        MinHeight="200" MinWidth="500"
+        MinHeight="300" MinWidth="600"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
 
@@ -184,28 +184,39 @@
         </Grid>
 
         <Grid x:Uid="Grid_4" Grid.Row="1" Margin="10,0,10,10">
-            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
-                <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Width="20" Height="20" Margin="5,0" DataContext="{Binding StateIndicator}"/>
-                <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal" Margin="20,0,0,0"  VerticalAlignment="Center"
-                            Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock x:Uid="TextBlock_4" Text="RITMS UP2DATE:" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" Padding="2" IsReadOnly="True" 
-                             Text="{Binding DeviceId, Mode=OneWay}" FontFamily="Courier New"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_3"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
+            <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Grid.Column="1" Width="20" Height="20" Margin="5,0" 
+                                           DataContext="{Binding StateIndicator}"/>
+            <Grid x:Uid="Grid_5" Grid.Column="2" Margin="15,0,0,0" VerticalAlignment="Center"
+                  Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_7"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Uid="TextBlock_4" Text="RITMS UP2DATE:" VerticalAlignment="Center"/>
+                <controls:SqueezeContentControl x:Uid="controls:ModestContainer_1" Grid.Column="1" Margin="5,0,10,0" HorizontalAlignment="Left">
+                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" Padding="2,4,2,2"
+                             IsReadOnly="True" FontFamily="Courier New"
+                             Text="{Binding DeviceId, Mode=OneWay}"/>
+                </controls:SqueezeContentControl>
+            </Grid>
+            <Button x:Uid="Button_2" Grid.Column="3" ToolTip="Turns console into administration mode (requires administrator privilege)"
+                    Command="{Binding EnterAdminModeCommand}"
+                    Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
+                    <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
+                    <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
                 </StackPanel>
-            </StackPanel>
-            <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Uid="Button_2" ToolTip="Turns console into administration mode (requires administrator privilege)"
-                        Command="{Binding EnterAdminModeCommand}"
-                        Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
-                        <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
-                        <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-                <TextBlock x:Uid="TextBlock_6" Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
-                           Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            </StackPanel>
+            </Button>
+            <TextBlock x:Uid="TextBlock_6" Grid.Column="4" Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
+                        Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
     </Grid>
 </Window>
