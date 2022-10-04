@@ -22,9 +22,12 @@ namespace Up2dateConsole.Dialogs
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             ShowExplanation = showExplanation;
             RequestCommand = new RelayCommand(async (_) => await ExecuteRequestAsync(), CanRequest);
+            LoadCommand = new RelayCommand(async (_) => await ExecuteLoadAsync());
         }
 
         public ICommand RequestCommand { get; }
+
+        public ICommand LoadCommand { get; }
 
         public string OneTimeKey
         {
@@ -62,6 +65,20 @@ namespace Up2dateConsole.Dialogs
 
         private async Task ExecuteRequestAsync()
         {
+            await ImportAndApplyCertificateAsync();
+        }
+
+        private async Task ExecuteLoadAsync()
+        {
+            var certFilePath = viewService.ShowOpenDialog(viewService.GetText(Texts.LoadCertificate),
+                "X.509 certificate files|*.cer|All files|*.*");
+            if (string.IsNullOrWhiteSpace(certFilePath)) return;
+
+            await ImportAndApplyCertificateAsync(certFilePath);
+        }
+
+        private async Task ImportAndApplyCertificateAsync(string certFilePath = null)
+        {
             IsInProgress = true;
 
             IWcfService service = null;
@@ -69,7 +86,10 @@ namespace Up2dateConsole.Dialogs
             try
             {
                 service = wcfClientFactory.CreateClient();
-                ResultOfstring result = await service.RequestCertificateAsync(RemoveWhiteSpaces(OneTimeKey));
+                ResultOfstring result = string.IsNullOrEmpty(certFilePath)
+                    ? await service.RequestCertificateAsync(RemoveWhiteSpaces(OneTimeKey))
+                    : await service.ImportCertificateAsync(certFilePath);
+
                 if (!result.Success)
                 {
                     error = result.ErrorMessage;

@@ -66,6 +66,8 @@
             <clr:String x:Uid="clr:String_28" x:Key="NoAnyWhitelistedCertificate">Warning! Currently whitelist doesn't contain any certificate. Thus no any package could pass signature verification and hence could not be deployed.</clr:String>
             <clr:String x:Uid="clr:String_29" x:Key="CertificateAddedToWhiteList">Certificate sucessfully added to whitelist.</clr:String>
             <clr:String x:Uid="clr:String_30" x:Key="FailedToAddCertificateToWhiteList">Failed to add certificate to whitelist. {0}</clr:String>
+
+            <clr:String x:Uid="clr:String_32" x:Key="LoadCertificate">Load Certificate</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 

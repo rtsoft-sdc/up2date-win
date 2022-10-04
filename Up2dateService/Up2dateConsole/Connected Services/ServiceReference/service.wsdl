@@ -400,6 +400,44 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_ImportCertificate_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_ImportCertificate_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetRequestCertificateUrl_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -876,6 +914,12 @@
   <wsdl:message name="IWcfService_RequestCertificate_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequestCertificateResponse" />
   </wsdl:message>
+  <wsdl:message name="IWcfService_ImportCertificate_InputMessage">
+    <wsdl:part name="parameters" element="tns:ImportCertificate" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_ImportCertificate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ImportCertificateResponse" />
+  </wsdl:message>
   <wsdl:message name="IWcfService_GetRequestCertificateUrl_InputMessage">
     <wsdl:part name="parameters" element="tns:GetRequestCertificateUrl" />
   </wsdl:message>
@@ -974,6 +1018,10 @@
     <wsdl:operation name="RequestCertificate">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/RequestCertificate" message="tns:IWcfService_RequestCertificate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/RequestCertificateResponse" message="tns:IWcfService_RequestCertificate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportCertificate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/ImportCertificate" message="tns:IWcfService_ImportCertificate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/ImportCertificateResponse" message="tns:IWcfService_ImportCertificate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetRequestCertificateUrl">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetRequestCertificateUrl" message="tns:IWcfService_GetRequestCertificateUrl_InputMessage" />
@@ -1108,6 +1156,17 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_RequestCertificate_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportCertificate">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/ImportCertificate" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_ImportCertificate_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_ImportCertificate_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

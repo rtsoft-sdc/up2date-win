@@ -101,6 +101,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ImportCertificate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="filePath" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ImportCertificateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="ImportCertificateResult" type="q6:ResultOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetRequestCertificateUrl">
     <xs:complexType>
       <xs:sequence />
@@ -181,14 +195,14 @@
   <xs:element name="GetSignatureVerificationLevelResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="GetSignatureVerificationLevelResult" type="q6:SignatureVerificationLevel" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="GetSignatureVerificationLevelResult" type="q7:SignatureVerificationLevel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SetSignatureVerificationLevel">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="level" type="q7:SignatureVerificationLevel" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="level" type="q8:SignatureVerificationLevel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -219,7 +233,7 @@
   <xs:element name="GetWhitelistedCertificatesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetWhitelistedCertificatesResult" nillable="true" type="q8:ArrayOfstring" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetWhitelistedCertificatesResult" nillable="true" type="q9:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -233,7 +247,7 @@
   <xs:element name="AddCertificateToWhitelistResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="AddCertificateToWhitelistResult" type="q9:Result" />
+        <xs:element xmlns:q10="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="AddCertificateToWhitelistResult" type="q10:Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

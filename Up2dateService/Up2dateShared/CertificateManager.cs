@@ -51,6 +51,22 @@ namespace Up2dateShared
             }
         }
 
+        public void ImportCertificate(string filePath)
+        {
+            try
+            {
+                X509Certificate2 cert = new X509Certificate2(filePath);
+                ImportCertificate(cert);
+                Certificate = cert;
+                logger.WriteEntry($"New certificate imported; '{Certificate.Issuer}:{Certificate.Subject}'");
+            }
+            catch (Exception e)
+            {
+                logger.WriteEntry("Exception importing certificate.", e);
+                throw;
+            }
+        }
+
         public string GetCertificateString()
         {
             if (Certificate == null)

@@ -30,6 +30,7 @@
         InvalidCertificateForWhiteList,
         NoAnyWhitelistedCertificate,
         CertificateAddedToWhiteList,
-        FailedToAddCertificateToWhiteList
+        FailedToAddCertificateToWhiteList,
+        LoadCertificate
     }
 }
