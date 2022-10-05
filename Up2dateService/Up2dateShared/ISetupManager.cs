@@ -10,10 +10,5 @@ namespace Up2dateShared
         void OnDownloadStarted(string artifactFileName);
         void OnDownloadFinished(string artifactFileName);
         bool IsFileSupported(string artifactFileName);
-
-        /// <summary>
-        /// Gets collection of package extensions suppoted by SetupManager
-        /// </summary>
-        IEnumerable<string> SupportedExtensions { get; }
     }
 }

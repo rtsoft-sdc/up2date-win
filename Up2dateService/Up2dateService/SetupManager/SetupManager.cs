@@ -17,8 +17,6 @@ namespace Up2dateService.SetupManager
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public IEnumerable<string> SupportedExtensions => installerFactory.SupportedExtensions;
-
         public SetupManager(ILogger logger, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
             IPackageInstallerFactory installerFactory, IPackageValidatorFactory validatorFactory)
         {
