@@ -601,13 +601,16 @@ namespace Up2dateConsole.ServiceReference {
         Stopped = 0,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        CannotAccessServer = 1,
+        Reconnecting = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Running = 2,
+        AuthorizationError = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        NoCertificate = 3,
+        Running = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoCertificate = 4,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

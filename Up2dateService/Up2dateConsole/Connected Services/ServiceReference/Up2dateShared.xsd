@@ -17,7 +17,8 @@
   <xs:simpleType name="ClientStatus">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Stopped" />
-      <xs:enumeration value="CannotAccessServer" />
+      <xs:enumeration value="Reconnecting" />
+      <xs:enumeration value="AuthorizationError" />
       <xs:enumeration value="Running" />
       <xs:enumeration value="NoCertificate" />
     </xs:restriction>

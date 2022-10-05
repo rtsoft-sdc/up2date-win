@@ -53,7 +53,7 @@ namespace Up2dateClient
                 dispatcher = Wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
                 SetState(ClientStatus.Running);
                 Wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, dispatcher, OnAuthErrorAction);
-                SetState(ClientStatus.Stopped);
+                SetState(ClientStatus.Reconnecting);
             }
             catch (Exception e)
             {
@@ -224,7 +224,7 @@ namespace Up2dateClient
             }
             else
             {
-                SetState(ClientStatus.CannotAccessServer, errorMessage);
+                SetState(ClientStatus.AuthorizationError, errorMessage);
             }
         }
 

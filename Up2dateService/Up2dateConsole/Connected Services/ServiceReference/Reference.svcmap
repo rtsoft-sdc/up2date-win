@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="e8295d4d-ac8e-40ec-8b2a-98c6bddeeed5" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="bc90ebaf-d718-4c0f-a34e-fdc6b7865991" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,13 +22,13 @@
     <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="ffc94f92-a0f2-4052-b034-69e3ca38caf3" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="ff5f58fb-3d06-4c64-af9a-ad0deec73bb4" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="83c7650a-1156-4510-b080-af3f3d8d2261" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
-    <MetadataFile FileName="RTSoft.Ritms.Up2date.win.xsd" MetadataType="Schema" ID="063df802-5caa-4731-82f7-a2737d314fa5" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
-    <MetadataFile FileName="Up2dateShared.xsd" MetadataType="Schema" ID="72ddbc66-778e-4642-a1ab-9971602d1aec" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
-    <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="3069b556-6ef0-47ce-a877-4da1b7599970" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
-    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="4efe4dbd-068a-4a9f-8e10-151d43464992" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="c96c394c-cfb6-490e-99dc-2f3ef98ffcba" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="38aea215-afa7-492a-8de8-4347d9d83979" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="8fde5aff-3b3f-413d-94c8-3fe5022a6c81" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
+    <MetadataFile FileName="RTSoft.Ritms.Up2date.win.xsd" MetadataType="Schema" ID="db1c18dc-0d89-42d6-967d-821221bf074b" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
+    <MetadataFile FileName="Up2dateShared.xsd" MetadataType="Schema" ID="7285f211-c697-44e0-8882-3544b6891391" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
+    <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="0aa74543-a462-4060-ab2a-8d788a439ac7" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="24f7ad93-314e-462a-9297-d52c05771b18" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/Up2dateService/WcfService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

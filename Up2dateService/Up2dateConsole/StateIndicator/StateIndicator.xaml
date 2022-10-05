@@ -15,13 +15,13 @@
             </ResourceDictionary.MergedDictionaries>
 
             <helpers:EnumToVisibilityConverter x:Uid="helpers:EnumToVisibilityConverter_1" x:Key="EnumToVisibilityConverter"/>
-            <helpers:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter"/>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <helpers:InvertBooleanToVisibilityConverter x:Uid="helpers:InvertBooleanToVisibilityConverter_1" x:Key="InvertBooleanToVisibilityConverter"/>
+            <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid x:Uid="Grid_1">
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+        <Grid x:Uid="Grid_2" Visibility="{Binding IsBusy, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
             <TextBlock x:Uid="TextBlock_1" Style="{StaticResource StateIcon}" Text="{StaticResource CheckCircleIcon}" Foreground="Green"
                             Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.Active}, Converter={StaticResource EnumToVisibilityConverter}}"/>
             <TextBlock x:Uid="TextBlock_2" Style="{StaticResource StateIcon}" Text="{StaticResource ExclamationTriangleIcon}" Foreground="DarkOrange"
@@ -31,7 +31,7 @@
             <TextBlock x:Uid="TextBlock_4" Style="{StaticResource StateIcon}" Text="{StaticResource KeyIcon}" Foreground="DarkOrange"
                             Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.NoCertificate}, Converter={StaticResource EnumToVisibilityConverter}}"/>
             <TextBlock x:Uid="TextBlock_5" Style="{StaticResource StateIcon}" Text="{StaticResource KeyIcon}" Foreground="DarkOrange"
-                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.ServerUnaccessible}, Converter={StaticResource EnumToVisibilityConverter}}"/>
+                            Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.AuthorizationError}, Converter={StaticResource EnumToVisibilityConverter}}"/>
             <TextBlock x:Uid="TextBlock_6" Style="{StaticResource StateIcon}" Text="{StaticResource QuestionIcon}" Foreground="Gray"
                             Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.Unknown}, Converter={StaticResource EnumToVisibilityConverter}}"/>
             <TextBlock x:Uid="TextBlock_7" Style="{StaticResource RotatingStateIcon}" Text="{StaticResource SpinnerIcon}" Foreground="Gray"

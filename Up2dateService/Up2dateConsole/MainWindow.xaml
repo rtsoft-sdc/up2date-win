@@ -41,12 +41,14 @@
             <clr:String x:Uid="clr:String_7" x:Key="AgentInternalError">Agent internal error.</clr:String>
             <clr:String x:Uid="clr:String_8" x:Key="CannotAccessServer">Cannot access server.</clr:String>
             <clr:String x:Uid="clr:String_9" x:Key="CertificateNotAvailable">Authorization certificate is not available.</clr:String>
+            <clr:String x:Uid="clr:String_33" x:Key="AuthorizationError">Authorization failure.</clr:String>
+            <clr:String x:Uid="clr:String_34" x:Key="Reconnecting">Agent is reconnecting to the server.</clr:String>
+            <clr:String x:Uid="clr:String_35" x:Key="UnexpectedStop">Agent stopped unexpectedly.</clr:String>
             <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
             <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
             <clr:String x:Uid="clr:String_31" x:Key="PackageInstallationFailed">Software installation failed:</clr:String>
             <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>
             <clr:String x:Uid="clr:String_13" x:Key="NoCertificate">Authorization certificate is not available</clr:String>
-            <clr:String x:Uid="clr:String_14" x:Key="ServerUnaccessible">Cannot access server</clr:String>
             <clr:String x:Uid="clr:String_15" x:Key="AgentOrServerFilure">Agent or server failure</clr:String>
 
             <clr:String x:Uid="clr:String_16" x:Key="PackageStatusUnavailable">Unavailable</clr:String>
@@ -58,6 +60,7 @@
             <clr:String x:Uid="clr:String_22" x:Key="PackageStatusRestartNeeded">RestartNeeded</clr:String>
             <clr:String x:Uid="clr:String_23" x:Key="PackageStatusFailed">Failed</clr:String>
             <clr:String x:Uid="clr:String_24" x:Key="PackageStatusUnknown">Unknown</clr:String>
+            <clr:String x:Uid="clr:String_36" x:Key="Active">Active</clr:String>
 
             <clr:String x:Uid="clr:String_25" x:Key="FailedToAcquireCertificate">Failed to acquire certificate</clr:String>
 
