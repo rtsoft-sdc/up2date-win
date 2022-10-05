@@ -7,7 +7,6 @@
         NoCertificate,
         ClientUnaccessible,
         ServerUnaccessible,
-        Error,
-        Accessing
+        Error
     }
 }

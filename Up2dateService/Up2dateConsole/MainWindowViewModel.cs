@@ -78,6 +78,7 @@ namespace Up2dateConsole
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TaskbarIcon));
                 OnPropertyChanged(nameof(TaskbarIconText));
+                OnPropertyChanged(nameof(IsDeviceIdAvailable));
                 StateIndicator.SetState(value);
                 ThreadHelper.SafeInvoke(CommandManager.InvalidateRequerySuggested);
             }
@@ -96,7 +97,7 @@ namespace Up2dateConsole
             }
         }
 
-        public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId);
+        public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId) && ServiceState == ServiceState.Active;
 
         public string MsiFolder
         {
@@ -117,10 +118,7 @@ namespace Up2dateConsole
                 if (operationInProgress == value) return;
                 operationInProgress = value;
                 OnPropertyChanged();
-                if (operationInProgress)
-                {
-                    ServiceState = ServiceState.Accessing;
-                }
+                StateIndicator.IsBusy = operationInProgress;
             }
         }
 
@@ -454,7 +452,6 @@ namespace Up2dateConsole
                 {
                     case ServiceState.Active:
                     case ServiceState.Unknown:
-                    case ServiceState.Accessing:
                         iconPath = "/Images/Active.ico";
                         break;
                     case ServiceState.ClientUnaccessible:
