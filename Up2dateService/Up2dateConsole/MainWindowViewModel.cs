@@ -78,6 +78,7 @@ namespace Up2dateConsole
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TaskbarIcon));
                 OnPropertyChanged(nameof(TaskbarIconText));
+                OnPropertyChanged(nameof(IsDeviceIdAvailable));
                 StateIndicator.SetState(value);
                 ThreadHelper.SafeInvoke(CommandManager.InvalidateRequerySuggested);
             }
@@ -96,7 +97,7 @@ namespace Up2dateConsole
             }
         }
 
-        public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId);
+        public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId) && ServiceState == ServiceState.Active;
 
         public string MsiFolder
         {
@@ -117,10 +118,7 @@ namespace Up2dateConsole
                 if (operationInProgress == value) return;
                 operationInProgress = value;
                 OnPropertyChanged();
-                if (operationInProgress)
-                {
-                    ServiceState = ServiceState.Accessing;
-                }
+                StateIndicator.IsBusy = operationInProgress;
             }
         }
 
@@ -151,7 +149,7 @@ namespace Up2dateConsole
             if (success)
             {
                 await ExecuteRefresh();
-                if (ServiceState == ServiceState.ServerUnaccessible)
+                if (ServiceState == ServiceState.AuthorizationError)
                 {
                     string message = string.Format(GetText(Texts.BadCertificateMessage), vm.DeviceId);
                     viewService.ShowMessageBox(message);
@@ -225,6 +223,7 @@ namespace Up2dateConsole
                 service = wcfClientFactory.CreateClient();
                 await service.StartInstallationAsync(selectedPackages);
                 ServiceState = ServiceState.Active;
+                StateIndicator.SetInfo($"{GetText(Texts.Active)}");
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
@@ -371,14 +370,19 @@ namespace Up2dateConsole
             {
                 case ClientStatus.Running:
                     ServiceState = ServiceState.Active;
+                    StateIndicator.SetInfo($"{GetText(Texts.Active)}");
                     break;
                 case ClientStatus.Stopped:
                     ServiceState = ServiceState.Error;
-                    StateIndicator.SetInfo($"{GetText(Texts.CertificateNotAvailable)} {clientState.LastError}");
+                    StateIndicator.SetInfo($"{GetText(Texts.UnexpectedStop)} {clientState.LastError}");
                     break;
-                case ClientStatus.CannotAccessServer:
-                    ServiceState = ServiceState.ServerUnaccessible;
-                    StateIndicator.SetInfo($"{GetText(Texts.CertificateNotAvailable)} {clientState.LastError}");
+                case ClientStatus.Reconnecting:
+                    ServiceState = ServiceState.Error;
+                    StateIndicator.SetInfo($"{GetText(Texts.Reconnecting)}");
+                    break;
+                case ClientStatus.AuthorizationError:
+                    ServiceState = ServiceState.AuthorizationError;
+                    StateIndicator.SetInfo($"{GetText(Texts.AuthorizationError)} {clientState.LastError}");
                     break;
                 case ClientStatus.NoCertificate:
                     ServiceState = ServiceState.NoCertificate;
@@ -454,14 +458,13 @@ namespace Up2dateConsole
                 {
                     case ServiceState.Active:
                     case ServiceState.Unknown:
-                    case ServiceState.Accessing:
                         iconPath = "/Images/Active.ico";
                         break;
                     case ServiceState.ClientUnaccessible:
                         iconPath = "/Images/ClientUnaccessible.ico";
                         break;
                     case ServiceState.NoCertificate:
-                    case ServiceState.ServerUnaccessible:
+                    case ServiceState.AuthorizationError:
                         iconPath = "/Images/ServerUnaccessible.ico";
                         break;
                     case ServiceState.Error:
@@ -485,8 +488,8 @@ namespace Up2dateConsole
                     case ServiceState.NoCertificate:
                         extraText = GetText(Texts.NoCertificate);
                         break;
-                    case ServiceState.ServerUnaccessible:
-                        extraText = GetText(Texts.ServerUnaccessible);
+                    case ServiceState.AuthorizationError:
+                        extraText = GetText(Texts.AuthorizationError);
                         break;
                     case ServiceState.Error:
                         extraText = GetText(Texts.AgentOrServerFilure);

@@ -14,7 +14,7 @@
         PackageInstallationFailed,
         ClientUnaccessible,
         NoCertificate,
-        ServerUnaccessible,
+        AuthorizationError,
         AgentOrServerFilure,
         PackageStatusUnavailable,
         PackageStatusAvailable,
@@ -30,6 +30,10 @@
         InvalidCertificateForWhiteList,
         NoAnyWhitelistedCertificate,
         CertificateAddedToWhiteList,
-        FailedToAddCertificateToWhiteList
+        FailedToAddCertificateToWhiteList,
+        LoadCertificate,
+        Reconnecting,
+        UnexpectedStop,
+        Active
     }
 }

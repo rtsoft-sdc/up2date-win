@@ -51,6 +51,22 @@ namespace Up2dateShared
             }
         }
 
+        public void ImportCertificate(string filePath)
+        {
+            try
+            {
+                X509Certificate2 cert = new X509Certificate2(filePath);
+                ImportCertificate(cert);
+                Certificate = cert;
+                logger.WriteEntry($"New certificate imported; '{Certificate.Issuer}:{Certificate.Subject}'");
+            }
+            catch (Exception e)
+            {
+                logger.WriteEntry("Exception importing certificate.", e);
+                throw;
+            }
+        }
+
         public string GetCertificateString()
         {
             if (Certificate == null)
@@ -121,10 +137,10 @@ namespace Up2dateShared
         {
             const string cnPrefix = "CN=";
 
-            string cnPart = fullname.Split(' ').FirstOrDefault(p => p.StartsWith(cnPrefix));
+            string cnPart = fullname.Split(',').FirstOrDefault(p => p.StartsWith(cnPrefix)).Trim();
             if (string.IsNullOrEmpty(cnPart)) return string.Empty;
 
-            return fullname.Substring(cnPrefix.Length);
+            return cnPart.Substring(cnPrefix.Length);
         }
     }
 }

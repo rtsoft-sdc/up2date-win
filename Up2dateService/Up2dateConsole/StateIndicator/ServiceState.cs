@@ -6,8 +6,7 @@
         Active,
         NoCertificate,
         ClientUnaccessible,
-        ServerUnaccessible,
-        Error,
-        Accessing
+        AuthorizationError,
+        Error
     }
 }

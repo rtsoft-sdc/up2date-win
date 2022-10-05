@@ -93,6 +93,21 @@ namespace Up2dateService
             return Result<string>.Successful(GetDeviceId());
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public Result<string> ImportCertificate(string filePath)
+        {
+            try
+            {
+                certificateManager.ImportCertificate(filePath);
+            }
+            catch (Exception e)
+            {
+                return Result<string>.Failed(e);
+            }
+            return Result<string>.Successful(GetDeviceId());
+        }
+
         public string GetRequestCertificateUrl()
         {
             return settingsManager.RequestCertificateUrl;

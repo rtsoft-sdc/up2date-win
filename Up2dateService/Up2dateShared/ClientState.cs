@@ -5,7 +5,8 @@ namespace Up2dateShared
     public enum ClientStatus
     {
         Stopped,
-        CannotAccessServer,
+        Reconnecting,
+        AuthorizationError,
         Running,
         NoCertificate
     }

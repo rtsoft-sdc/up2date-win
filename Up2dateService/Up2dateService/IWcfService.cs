@@ -32,6 +32,9 @@ namespace Up2dateService
         Result<string> RequestCertificate(string oneTimeKey);
 
         [OperationContract]
+        Result<string> ImportCertificate(string filePath);
+
+        [OperationContract]
         string GetRequestCertificateUrl();
 
         [OperationContract]
