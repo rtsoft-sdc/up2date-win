@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel x:Uid="StackPanel_1" Width="550" Margin="5,5,5,20">
-            <TextBlock x:Uid="TextBlock_1" Margin="0,5,0,5" Text="Certificate request URL:"/>
+            <TextBlock x:Uid="TextBlock_1" Margin="0,5,0,5" Text="URL for getting authorization certificate by one-time key:"/>
             <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
             <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>

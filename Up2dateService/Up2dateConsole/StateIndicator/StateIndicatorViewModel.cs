@@ -6,10 +6,22 @@ namespace Up2dateConsole.StateIndicator
     {
         private ServiceState state;
         private string info;
+        private bool isBusy;
 
         public StateIndicatorViewModel()
         {
             SetState(ServiceState.Unknown);
+        }
+
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                if (isBusy == value) return;
+                isBusy = value;
+                OnPropertyChanged();
+            }
         }
 
         public ServiceState State

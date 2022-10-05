@@ -8,13 +8,13 @@
         xmlns:clr="clr-namespace:System;assembly=mscorlib"
         xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
-        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers"
+        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers" xmlns:controls="clr-namespace:Up2dateConsole.Controls"
         mc:Ignorable="d"
         ShowInTaskbar="True"
         Icon="Images/Logo.ico"
         Title="RITMS UP2DATE Console" 
         Height="600" Width="1000"
-        MinHeight="200" MinWidth="500"
+        MinHeight="300" MinWidth="600"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
 
@@ -32,21 +32,23 @@
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
             <helpers:NullToVisibilityConverter x:Uid="helpers:NullToVisibilityConverter_1" x:Key="NullToVisibilityConverter"/>
 
-            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' is acquired but there is still problem establishing connection to the server. Please check if acquired certificate is valid.</clr:String>
-            <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Communication certificate for RITMS UP2DATE '{0}' successfully acquired.</clr:String>
+            <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Certificate '{0}' is loaded but there is a problem establishing connection to RITMS UP2DATE server. Please check if the loaded certificate is valid.</clr:String>
+            <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Authorization certificate for RITMS UP2DATE '{0}' successfully loaded.</clr:String>
             <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
             <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
             <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
-            <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should provide a certification key. Note that this action requires administrative privileges.</clr:String>
+            <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should enter one-time key or directly load authorization certificate. Note that this action requires administrative privileges.</clr:String>
             <clr:String x:Uid="clr:String_7" x:Key="AgentInternalError">Agent internal error.</clr:String>
             <clr:String x:Uid="clr:String_8" x:Key="CannotAccessServer">Cannot access server.</clr:String>
             <clr:String x:Uid="clr:String_9" x:Key="CertificateNotAvailable">Authorization certificate is not available.</clr:String>
+            <clr:String x:Uid="clr:String_33" x:Key="AuthorizationError">Authorization failure.</clr:String>
+            <clr:String x:Uid="clr:String_34" x:Key="Reconnecting">Agent is reconnecting to the server.</clr:String>
+            <clr:String x:Uid="clr:String_35" x:Key="UnexpectedStop">Agent stopped unexpectedly.</clr:String>
             <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
             <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
             <clr:String x:Uid="clr:String_31" x:Key="PackageInstallationFailed">Software installation failed:</clr:String>
             <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>
             <clr:String x:Uid="clr:String_13" x:Key="NoCertificate">Authorization certificate is not available</clr:String>
-            <clr:String x:Uid="clr:String_14" x:Key="ServerUnaccessible">Cannot access server</clr:String>
             <clr:String x:Uid="clr:String_15" x:Key="AgentOrServerFilure">Agent or server failure</clr:String>
 
             <clr:String x:Uid="clr:String_16" x:Key="PackageStatusUnavailable">Unavailable</clr:String>
@@ -58,6 +60,7 @@
             <clr:String x:Uid="clr:String_22" x:Key="PackageStatusRestartNeeded">RestartNeeded</clr:String>
             <clr:String x:Uid="clr:String_23" x:Key="PackageStatusFailed">Failed</clr:String>
             <clr:String x:Uid="clr:String_24" x:Key="PackageStatusUnknown">Unknown</clr:String>
+            <clr:String x:Uid="clr:String_36" x:Key="Active">Active</clr:String>
 
             <clr:String x:Uid="clr:String_25" x:Key="FailedToAcquireCertificate">Failed to acquire certificate</clr:String>
 
@@ -66,6 +69,8 @@
             <clr:String x:Uid="clr:String_28" x:Key="NoAnyWhitelistedCertificate">Warning! Currently whitelist doesn't contain any certificate. Thus no any package could pass signature verification and hence could not be deployed.</clr:String>
             <clr:String x:Uid="clr:String_29" x:Key="CertificateAddedToWhiteList">Certificate sucessfully added to whitelist.</clr:String>
             <clr:String x:Uid="clr:String_30" x:Key="FailedToAddCertificateToWhiteList">Failed to add certificate to whitelist. {0}</clr:String>
+
+            <clr:String x:Uid="clr:String_32" x:Key="LoadCertificate">Load Certificate</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -182,28 +187,39 @@
         </Grid>
 
         <Grid x:Uid="Grid_4" Grid.Row="1" Margin="10,0,10,10">
-            <StackPanel x:Uid="StackPanel_3" Orientation="Horizontal">
-                <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
-                <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Width="20" Height="20" Margin="5,0" DataContext="{Binding StateIndicator}"/>
-                <StackPanel x:Uid="StackPanel_4" Orientation="Horizontal" Margin="20,0,0,0"  VerticalAlignment="Center"
-                            Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock x:Uid="TextBlock_4" Text="RITMS UP2DATE:" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" Padding="2" IsReadOnly="True" 
-                             Text="{Binding DeviceId, Mode=OneWay}" FontFamily="Courier New"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_3"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
+            <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Grid.Column="1" Width="20" Height="20" Margin="5,0" 
+                                           DataContext="{Binding StateIndicator}"/>
+            <Grid x:Uid="Grid_5" Grid.Column="2" Margin="15,0,0,0" VerticalAlignment="Center"
+                  Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
+                    <ColumnDefinition x:Uid="ColumnDefinition_7"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Uid="TextBlock_4" Text="RITMS UP2DATE:" VerticalAlignment="Center"/>
+                <controls:SqueezeContentControl x:Uid="controls:ModestContainer_1" Grid.Column="1" Margin="5,0,10,0" HorizontalAlignment="Left">
+                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" Padding="2,4,2,2"
+                             IsReadOnly="True" FontFamily="Courier New"
+                             Text="{Binding DeviceId, Mode=OneWay}"/>
+                </controls:SqueezeContentControl>
+            </Grid>
+            <Button x:Uid="Button_2" Grid.Column="3" ToolTip="Turns console into administration mode (requires administrator privilege)"
+                    Command="{Binding EnterAdminModeCommand}"
+                    Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
+                    <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
+                    <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
                 </StackPanel>
-            </StackPanel>
-            <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Uid="Button_2" ToolTip="Turns console into administration mode (requires administrator privilege)"
-                        Command="{Binding EnterAdminModeCommand}"
-                        Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
-                        <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
-                        <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-                <TextBlock x:Uid="TextBlock_6" Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
-                           Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            </StackPanel>
+            </Button>
+            <TextBlock x:Uid="TextBlock_6" Grid.Column="4" Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
+                        Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
     </Grid>
 </Window>
