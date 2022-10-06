@@ -71,6 +71,10 @@ namespace HkbClient {
             builder->addDetail(s);
         }
 
+        if (execution == Response::Execution::CLOSED) {
+            builder->setIgnoreSleep();
+        }
+
         return builder
             ->setExecution(execution)
             ->setFinished(finished)

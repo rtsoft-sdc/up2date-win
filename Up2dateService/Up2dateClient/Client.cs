@@ -17,6 +17,7 @@ namespace Up2dateClient
         private readonly Func<SystemInfo> getSysInfo;
         private readonly Func<string> getDownloadLocation;
         private ClientState state;
+        private int lastStopID = -1;
 
         public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, ILogger logger)
         {
@@ -40,8 +41,7 @@ namespace Up2dateClient
         }
 
         public void Run()
-        {
-            IntPtr dispatcher = IntPtr.Zero;
+        {            IntPtr dispatcher = IntPtr.Zero;
             try
             {
                 string cert = getCertificate();
@@ -130,6 +130,14 @@ namespace Up2dateClient
                 return;
             }
 
+            if (lastStopID == info.id)
+            {
+                LogMessage("Deployment action is cancelled.");
+                result = MakeResult(Finished.NONE, Execution.CANCELED);
+                lastStopID = -1;
+                return;
+            }
+
             if (setupManager.IsFileDownloaded(info.artifactFileName, info.artifactFileHashMd5))
             {
                 LogMessage("File has been already downloaded.");
@@ -188,30 +196,30 @@ namespace Up2dateClient
             InstallPackageResult installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
             if (installPackageStatus != InstallPackageResult.Success && installPackageStatus != InstallPackageResult.RestartNeeded)
             {
-                string message = "installation failed.";
+                string message = "Installation failed. ";
                 switch (installPackageStatus)
                 {
                     case InstallPackageResult.PackageUnavailable:
-                        message += "\nPackage unavailable or unusable";
+                        message += "Package unavailable or unusable";
                         break;
                     case InstallPackageResult.FailedToInstallChocoPackage:
-                        message += "\nFailed to install Choco package";
+                        message += "Failed to install Choco package";
                         break;
                     case InstallPackageResult.ChocoNotInstalled:
-                        message += "\nChocolatey is not installed";
+                        message += "Chocolatey is not installed";
                         break;
                     case InstallPackageResult.GeneralInstallationError:
-                        message += "\nGeneral installation error";
+                        message += "General installation error";
                         break;
                     case InstallPackageResult.SignatureVerificationFailed:
-                        message += "\nSignature verification for the package is failed. " +
+                        message += "Signature verification for the package is failed. " +
                             $"Requested level: {settingsManager.SignatureVerificationLevel}. Deployment rejected";
                         break;
                     case InstallPackageResult.PackageNotSupported:
-                        message += "\nPackage of this type is not supported";
+                        message += "Package of this type is not supported";
                         break;
                     case InstallPackageResult.CannotStartInstaller:
-                        message += "\nFailed to start installer process";
+                        message += "Failed to start installer process";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -222,7 +230,7 @@ namespace Up2dateClient
             }
             else
             {
-                LogMessage("Installation finished.");
+                LogMessage("Installation completed.");
                 result = MakeResult(Finished.SUCCESS, Execution.CLOSED);
             }
         }
@@ -239,10 +247,8 @@ namespace Up2dateClient
 
         private bool OnCancelAction(int stopId)
         {
-            WriteLogEntry("cancel requested; unsupported");
-
-            // todo
-            return false;
+            lastStopID = stopId;
+            return true;
         }
 
         private void OnAuthErrorAction(string errorMessage)
