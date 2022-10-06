@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include "ddi.hpp"
 #include "CallbackDispatcher.hpp"
@@ -24,7 +25,6 @@ namespace HkbClient {
 
     std::unique_ptr<Response> CallbackDispatcher::onDeploymentAction(std::unique_ptr<DeploymentBase> dp) {
         auto builder = ResponseBuilder::newInstance();
-        builder->addDetail("Deployment started");
 
         DEPLOYMENTINFO info;
         info.id = dp->getId();
@@ -32,8 +32,9 @@ namespace HkbClient {
         info.downloadType = dp->getDownloadType();
         info.isInMaintenanceWindow = dp->isInMaintenanceWindow();
 
-        bool anyFailed = false;
-
+        Response::Execution execution = Response::Execution::CLOSED;
+        Response::Finished finished = Response::Finished::SUCCESS;
+        std::string message;
         for (const auto& chunk : dp->getChunks()) {
             try
             {
@@ -41,63 +42,48 @@ namespace HkbClient {
                 info.chunkPart = chunk->getPart();
                 info.chunkVersion = chunk->getVersion();
                 for (const auto& artifact : chunk->getArtifacts()) {
-                    builder->addDetail("Attribute deployment started " + artifact->getFilename());
-
                     info.artifactFileName = artifact->getFilename();
                     info.artifactFileHashMd5 = artifact->getFileHashes().md5;
                     info.artifactFileHashSha1 = artifact->getFileHashes().sha1;
                     info.artifactFileHashSha256 = artifact->getFileHashes().sha256;
                     ClientResult result;
                     DeployArtifact(artifact, info, result);
-                    bool attrDeployed = result.result;
-                    std::cout << result.result << std::endl;
-                    std::cout << result.message << std::endl;
-                    anyFailed |= !attrDeployed;
-                    
-                    if (attrDeployed)
-                    {
-                        builder->addDetail("Attribute deployment completed " + artifact->getFilename());
-                    }
-                    else
-                    {
-                        builder->addDetail("Attribute deployment failed " + artifact->getFilename());
-                    }
+                    execution = result.execution;
+                    finished = result.finished;
+                    message = std::string(result.message);
 
-                    if (!attrDeployed)
-                    {
-                        std::string message = result.message;
-                        builder->addDetail("Message: " + message);
-                    }
+                    break; // so far only single artifact in the chunk is supported
                 }
             }
-            catch(std::exception& error)
+            catch(std::exception& e)
             {
-                anyFailed = true;
-                std::string errorMessage = std::string(error.what());
-                builder->addDetail("Internal Exception Occured: " + errorMessage);
+                execution = Response::Execution::CLOSED;
+                finished = Response::Finished::FAILURE;
+                message = "Internal exception occured: " + std::string(e.what());
             }
+
+            break; // so far only single chunk is supported
         }
 
-        if (!anyFailed) {
-            builder->setIgnoreSleep();
+        std::istringstream strm(message);
+        std::string s;
+        while (std::getline(strm, s)) {
+            builder->addDetail(s);
         }
 
-        return builder->addDetail("Work done. Sending response")
-                ->setExecution(Response::CLOSED)
-                ->setFinished(anyFailed ? Response::FAILURE : Response::SUCCESS)
-                ->setResponseDeliveryListener(std::shared_ptr<ResponseDeliveryListener>(new DeploymentBaseFeedbackDeliveryListener()))
-                ->build();
+        return builder
+            ->setExecution(execution)
+            ->setFinished(finished)
+            ->setResponseDeliveryListener(std::shared_ptr<ResponseDeliveryListener>(new DeploymentBaseFeedbackDeliveryListener()))
+            ->build();
     }
 
     std::unique_ptr<Response> CallbackDispatcher::onCancelAction(std::unique_ptr<CancelAction> action) {
         bool cancelled = cancelAction(action->getStopId());
         
         return ResponseBuilder::newInstance()
-                ->setExecution(ddi::Response::CLOSED)
-                ->setFinished(cancelled ? ddi::Response::SUCCESS : ddi::Response::FAILURE)
-                ->addDetail("Some feedback")
-                ->addDetail("One more feedback")
-                ->addDetail("Really important feedback")
+                ->setExecution(Response::Execution::CLOSED)
+                ->setFinished(cancelled ? Response::Finished::SUCCESS : Response::Finished::FAILURE)
                 ->setResponseDeliveryListener(
                         std::shared_ptr<ResponseDeliveryListener>(new CancelActionFeedbackDeliveryListener()))
                 ->setIgnoreSleep()

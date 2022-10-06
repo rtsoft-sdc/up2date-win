@@ -76,6 +76,21 @@ namespace Up2dateService.SetupManager
             return installerFactory.IsInstallerAvailable(artifactFileName);
         }
 
+        public bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5)
+        {
+            // todo - check file hash
+            SafeRefreshPackageList();
+            return SafeGetPackages().Any(p => string.Equals(Path.GetFileName(p.Filepath), artifactFileName, StringComparison.InvariantCultureIgnoreCase)
+                                     && p.Status != PackageStatus.Unavailable && p.Status != PackageStatus.Downloading);
+        }
+
+        public bool IsPackageInstalled(string artifactFileName)
+        {
+            SafeRefreshPackageList();
+            return SafeGetPackages().Any(p => string.Equals(Path.GetFileName(p.Filepath), artifactFileName, StringComparison.InvariantCultureIgnoreCase)
+                                     && p.Status == PackageStatus.Installed);
+        }
+
         private InstallPackageResult InstallPackage(Package package)
         {
             package.ErrorCode = InstallPackageResult.Success;

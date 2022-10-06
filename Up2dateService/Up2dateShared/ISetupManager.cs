@@ -10,5 +10,7 @@ namespace Up2dateShared
         void OnDownloadStarted(string artifactFileName);
         void OnDownloadFinished(string artifactFileName);
         bool IsFileSupported(string artifactFileName);
+        bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5);
+        bool IsPackageInstalled(string artifactFileName);
     }
 }
