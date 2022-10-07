@@ -91,6 +91,17 @@ namespace Up2dateService.SetupManager
                                      && p.Status == PackageStatus.Installed);
         }
 
+        public void MarkPackageAsSuggested(string artifactFileName)
+        {
+            Package package = SafeGetPackages().FirstOrDefault(p => string.Equals(Path.GetFileName(p.Filepath), artifactFileName, StringComparison.InvariantCultureIgnoreCase)
+                                     && p.Status == PackageStatus.Downloaded);
+            if (package.Status != PackageStatus.Unavailable)
+            {
+                package.Status = PackageStatus.SuggestedToInstall;
+                SafeUpdatePackage(package);
+            }
+        }
+
         private InstallPackageResult InstallPackage(Package package)
         {
             package.ErrorCode = InstallPackageResult.Success;
@@ -314,7 +325,8 @@ namespace Up2dateService.SetupManager
                         updatedPackage.EstimatedSize = null;
                         updatedPackage.UrlInfoAbout = null;
                         if (updatedPackage.Status != PackageStatus.Downloading 
-                            && updatedPackage.Status != PackageStatus.Installing 
+                            && updatedPackage.Status != PackageStatus.Installing
+                            && updatedPackage.Status != PackageStatus.SuggestedToInstall
                             && updatedPackage.Status != PackageStatus.Failed)
                         {
                             updatedPackage.Status = PackageStatus.Downloaded;

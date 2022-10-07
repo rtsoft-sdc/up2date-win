@@ -12,5 +12,6 @@ namespace Up2dateShared
         bool IsFileSupported(string artifactFileName);
         bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5);
         bool IsPackageInstalled(string artifactFileName);
+        void MarkPackageAsSuggested(string artifactFileName);
     }
 }

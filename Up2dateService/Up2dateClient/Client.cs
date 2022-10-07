@@ -180,6 +180,7 @@ namespace Up2dateClient
                     return;
                 case "attempt":
                     LogMessage("Installation is not forced.");
+                    setupManager.MarkPackageAsSuggested(info.artifactFileName);
                     result = MakeResult(Finished.NONE, Execution.SCHEDULED);
                     return;
                 case "forced":

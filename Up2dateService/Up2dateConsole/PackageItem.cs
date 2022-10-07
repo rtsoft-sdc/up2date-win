@@ -1,20 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
+using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
 {
     public class PackageItem : NotifyPropertyChanged
     {
-        private readonly Func<PackageStatus, string> statusToString;
+        private readonly IViewService viewService;
         private bool isSelected;
 
-        public PackageItem(Package package, Func<PackageStatus, string> statusToString)
+        public PackageItem(Package package, IViewService viewService)
         {
             Package = package;
-            this.statusToString = statusToString ?? throw new ArgumentNullException(nameof(statusToString));
+            this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
         }
 
         public Package Package { get; }
@@ -23,9 +25,11 @@ namespace Up2dateConsole
 
         public PackageStatus PackageStatus => Package.Status;
 
-        public string Status => statusToString(Package.Status);
+        public string Status => ConvertToString(Package.Status);
 
-        public string ExtraInfo => Package.ErrorCode == InstallPackageResult.Success ? null : $"ErrorCode: {Package.ErrorCode}";
+        public string ExtraInfo => Package.Status == PackageStatus.SuggestedToInstall
+                    ? viewService.GetText(Texts.SuggestedForInstallation)
+                    : ConvertToString(Package.ErrorCode);
 
         public string ProductName => string.IsNullOrWhiteSpace(Package.DisplayName) ? Package.ProductName : Package.DisplayName;
 
@@ -58,6 +62,42 @@ namespace Up2dateConsole
                 isSelected = value;
                 OnPropertyChanged();
             }
+        }
+
+        private Dictionary<InstallPackageResult, Texts> resultToText = new Dictionary<InstallPackageResult, Texts> {
+            { InstallPackageResult.PackageNotSupported, Texts.PackageNotSupported },
+            { InstallPackageResult.PackageUnavailable, Texts.PackageUnavailable },
+            { InstallPackageResult.FailedToInstallChocoPackage, Texts.FailedToInstallChocoPackage },
+            { InstallPackageResult.GeneralInstallationError, Texts.GeneralInstallationError },
+            { InstallPackageResult.ChocoNotInstalled, Texts.ChocoNotInstalled },
+            { InstallPackageResult.SignatureVerificationFailed, Texts.SignatureVerificationFailed },
+            { InstallPackageResult.RestartNeeded, Texts.RestartNeeded },
+            { InstallPackageResult.CannotStartInstaller, Texts.CannotStartInstaller }
+        };
+
+        private string ConvertToString(InstallPackageResult result)
+        {
+            return result == InstallPackageResult.Success
+                ? null
+                : viewService.GetText(resultToText.ContainsKey(result) ? resultToText[result] : Texts.InstallationErrorUnknown);
+        }
+
+        private Dictionary<PackageStatus, Texts> statusToText = new Dictionary<PackageStatus, Texts>
+        {
+                { PackageStatus.Unavailable, Texts.PackageStatusUnavailable },
+                { PackageStatus.Available, Texts.PackageStatusAvailable },
+                { PackageStatus.Downloading, Texts.PackageStatusDownloading },
+                { PackageStatus.Downloaded, Texts.PackageStatusDownloaded },
+                { PackageStatus.SuggestedToInstall, Texts.PackageStatusDownloaded },
+                { PackageStatus.Installing, Texts.PackageStatusInstalling },
+                { PackageStatus.Installed, Texts.PackageStatusInstalled },
+                { PackageStatus.RestartNeeded, Texts.PackageStatusRestartNeeded },
+                { PackageStatus.Failed, Texts.PackageStatusFailed }
+        };
+
+        private string ConvertToString(PackageStatus status)
+        {
+            return viewService.GetText(statusToText.ContainsKey(status) ? statusToText[status] : Texts.PackageStatusUnknown);
         }
     }
 }
