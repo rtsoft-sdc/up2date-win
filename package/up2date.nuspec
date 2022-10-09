@@ -20,8 +20,8 @@
     <summary>Up2Date Client</summary>
     <description>RITMS UP2DATE is a cloud ready solution for unified software and firmware management. Use this for implementing lifecycle management for the full stack of drivers and firmware of connected devices.</description>
     <dependencies>
-      <dependency id="dotnetfx" />
-      <dependency id="vcredist140" />
+      <dependency id="dotnetfx" version="4.7.2.0"/>
+      <dependency id="vcredist140" version="14.32.31326"/>
     </dependencies>
   </metadata>
   <files>
