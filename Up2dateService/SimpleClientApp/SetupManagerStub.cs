@@ -22,6 +22,11 @@ namespace SimpleClientApp
             throw new System.NotImplementedException();
         }
 
+        public bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5)
+        {
+            return true;
+        }
+
         public bool IsFileSupported(string artifactFileName)
         {
             throw new System.NotImplementedException();
@@ -35,6 +40,10 @@ namespace SimpleClientApp
         public bool IsPackageInstalled(string packageFile)
         {
             return false;
+        }
+
+        public void MarkPackageAsSuggested(string artifactFileName)
+        {
         }
 
         public void OnDownloadFinished(string artifactFileName)
