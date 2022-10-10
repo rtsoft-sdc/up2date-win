@@ -175,8 +175,16 @@ namespace Up2dateClient
             switch (info.updateType)
             {
                 case "skip":
-                    LogMessage("Installation is not requested.");
-                    result = MakeResult(Finished.SUCCESS, Execution.CLOSED);
+                    if (info.isInMaintenanceWindow)
+                    {
+                        LogMessage("Only download is requested.");
+                        result = MakeResult(Finished.SUCCESS, Execution.CLOSED);
+                    }
+                    else
+                    {
+                        LogMessage("Waiting for maintenance window to start installation.");
+                        result = MakeResult(Finished.NONE, Execution.SCHEDULED);
+                    }
                     return;
                 case "attempt":
                     LogMessage("Installation is not forced.");
