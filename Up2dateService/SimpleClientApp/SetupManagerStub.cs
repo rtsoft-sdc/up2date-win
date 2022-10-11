@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Up2dateShared;
 
 namespace SimpleClientApp
@@ -7,9 +8,24 @@ namespace SimpleClientApp
     {
         public IEnumerable<string> SupportedExtensions => new[] { ".msi", ".nuget" };
 
+        public Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact)
+        {
+            return Result.Successful();
+        }
+
         public List<Package> GetAvaliablePackages()
         {
             return new List<Package>();
+        }
+
+        public InstallPackageResult GetInstallPackageResult(string artifactFileName)
+        {
+            return InstallPackageResult.Success;
+        }
+
+        public PackageStatus GetStatus(string artifactFileName)
+        {
+            return PackageStatus.Unavailable;
         }
 
         public InstallPackageResult InstallPackage(string packageFile)
@@ -29,7 +45,7 @@ namespace SimpleClientApp
 
         public bool IsFileSupported(string artifactFileName)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public bool IsPackageAvailable(string packageFile)
@@ -43,14 +59,6 @@ namespace SimpleClientApp
         }
 
         public void MarkPackageAsSuggested(string artifactFileName)
-        {
-        }
-
-        public void OnDownloadFinished(string artifactFileName)
-        {
-        }
-
-        public void OnDownloadStarted(string artifactFileName)
         {
         }
     }

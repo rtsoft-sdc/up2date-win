@@ -15,17 +15,15 @@ namespace Up2dateClient
         private readonly Func<string> getCertificate;
         private readonly ISetupManager setupManager;
         private readonly Func<SystemInfo> getSysInfo;
-        private readonly Func<string> getDownloadLocation;
         private ClientState state;
         private int lastStopID = -1;
 
-        public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, ILogger logger)
+        public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, ILogger logger)
         {
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.getCertificate = getCertificate ?? throw new ArgumentNullException(nameof(getCertificate));
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
-            this.getDownloadLocation = getDownloadLocation ?? throw new ArgumentNullException(nameof(getDownloadLocation));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
