@@ -45,12 +45,14 @@
             <clr:String x:Uid="clr:String_34" x:Key="Reconnecting">Agent is reconnecting to the server.</clr:String>
             <clr:String x:Uid="clr:String_35" x:Key="UnexpectedStop">Agent stopped unexpectedly.</clr:String>
             <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
+            <clr:String x:Uid="clr:String_37" x:Key="NewPackageSuggested">New software available and recommended for installation:</clr:String>
             <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
             <clr:String x:Uid="clr:String_31" x:Key="PackageInstallationFailed">Software installation failed:</clr:String>
             <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>
             <clr:String x:Uid="clr:String_13" x:Key="NoCertificate">Authorization certificate is not available</clr:String>
             <clr:String x:Uid="clr:String_15" x:Key="AgentOrServerFilure">Agent or server failure</clr:String>
 
+            <clr:String x:Uid="clr:String_38" x:Key="SuggestedForInstallation">Suggested for installation</clr:String>
             <clr:String x:Uid="clr:String_16" x:Key="PackageStatusUnavailable">Unavailable</clr:String>
             <clr:String x:Uid="clr:String_17" x:Key="PackageStatusAvailable">Available</clr:String>
             <clr:String x:Uid="clr:String_18" x:Key="PackageStatusDownloading">Downloading</clr:String>
@@ -71,6 +73,16 @@
             <clr:String x:Uid="clr:String_30" x:Key="FailedToAddCertificateToWhiteList">Failed to add certificate to whitelist. {0}</clr:String>
 
             <clr:String x:Uid="clr:String_32" x:Key="LoadCertificate">Load Certificate</clr:String>
+
+            <clr:String x:Uid="clr:String_39" x:Key="PackageNotSupported">The package type is not supported</clr:String>
+            <clr:String x:Uid="clr:String_40" x:Key="PackageUnavailable">The package does not exist</clr:String>
+            <clr:String x:Uid="clr:String_41" x:Key="FailedToInstallChocoPackage">Failed to install chocolatey package</clr:String>
+            <clr:String x:Uid="clr:String_42" x:Key="GeneralInstallationError">General installation error</clr:String>
+            <clr:String x:Uid="clr:String_43" x:Key="ChocoNotInstalled">Chocolatey is not available</clr:String>
+            <clr:String x:Uid="clr:String_44" x:Key="SignatureVerificationFailed">Verification of package signature failed</clr:String>
+            <clr:String x:Uid="clr:String_45" x:Key="RestartNeeded">System restart needed</clr:String>
+            <clr:String x:Uid="clr:String_46" x:Key="CannotStartInstaller">Cannot start installer process</clr:String>
+            <clr:String x:Uid="clr:String_47" x:Key="InstallationErrorUnknown">Uknown installation error</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -154,6 +166,9 @@
                                         <TextBlock.Style>
                                             <Style x:Uid="Style_4" TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
+                                                    <DataTrigger x:Uid="DataTrigger_3" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.SuggestedToInstall}">
+                                                        <Setter x:Uid="Setter_8" Property="Foreground" Value="Orange"/>
+                                                    </DataTrigger>
                                                     <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.Failed}">
                                                         <Setter x:Uid="Setter_6" Property="Foreground" Value="Red"/>
                                                     </DataTrigger>

@@ -206,7 +206,9 @@ namespace Up2dateConsole
         private bool CanInstall(object _)
         {
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
-            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded || p.Package.Status == PackageStatus.Failed);
+            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded
+                                                    || p.Package.Status == PackageStatus.SuggestedToInstall
+                                                    || p.Package.Status == PackageStatus.Failed);
         }
 
         private async void ExecuteInstall(object _)
@@ -215,7 +217,9 @@ namespace Up2dateConsole
             IWcfService service = null;
 
             Package[] selectedPackages = AvailablePackages
-                .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded || p.Package.Status == PackageStatus.Failed))
+                .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded
+                                            || p.Package.Status == PackageStatus.SuggestedToInstall
+                                            || p.Package.Status == PackageStatus.Failed))
                 .Select(p => p.Package)
                 .ToArray();
             try
@@ -273,7 +277,7 @@ namespace Up2dateConsole
             catch (Exception e)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                StateIndicator.SetInfo($"GetText(Texts.ServiceAccessError)\n{e.Message}\n\n{e.StackTrace}");
+                StateIndicator.SetInfo($"{GetText(Texts.ServiceAccessError)}\n{e.Message}\n\n{e.StackTrace}");
                 DeviceId = null;
                 OperationInProgress = false;
                 return;
@@ -289,7 +293,7 @@ namespace Up2dateConsole
             foreach (Package p in packages)
             {
                 bool wasSelected = selected.Any(s => s.Filepath.Equals(p.Filepath, StringComparison.InvariantCultureIgnoreCase));
-                packageItems.Add(new PackageItem(p, ConvertToString) { IsSelected = wasSelected });
+                packageItems.Add(new PackageItem(p, viewService) { IsSelected = wasSelected });
             }
 
             if (!firstTimeRefresh)
@@ -315,31 +319,6 @@ namespace Up2dateConsole
             }
 
             OperationInProgress = false;
-        }
-
-        private string ConvertToString(PackageStatus status)
-        {
-            switch (status)
-            {
-                case PackageStatus.Unavailable:
-                    return GetText(Texts.PackageStatusUnavailable);
-                case PackageStatus.Available:
-                    return GetText(Texts.PackageStatusAvailable);
-                case PackageStatus.Downloading:
-                    return GetText(Texts.PackageStatusDownloading);
-                case PackageStatus.Downloaded:
-                    return GetText(Texts.PackageStatusDownloaded);
-                case PackageStatus.Installing:
-                    return GetText(Texts.PackageStatusInstalling);
-                case PackageStatus.Installed:
-                    return GetText(Texts.PackageStatusInstalled);
-                case PackageStatus.RestartNeeded:
-                    return GetText(Texts.PackageStatusRestartNeeded);
-                case PackageStatus.Failed:
-                    return GetText(Texts.PackageStatusFailed);
-                default:
-                    return GetText(Texts.PackageStatusUnknown);
-            }
         }
 
         private void PromptIfCertificateNotAvailable()
@@ -411,6 +390,13 @@ namespace Up2dateConsole
             if (downloaded.Any())
             {
                 TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => p.ProductName));
+            }
+
+            var suggested = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading || oldStatus == PackageStatus.Downloaded,
+                                                newStatus => newStatus == PackageStatus.SuggestedToInstall);
+            if (suggested.Any())
+            {
+                TryShowToastNotification(Texts.NewPackageSuggested, suggested.Select(p => p.ProductName));
             }
 
             var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,

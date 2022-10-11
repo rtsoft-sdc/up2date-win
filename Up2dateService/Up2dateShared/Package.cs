@@ -48,6 +48,8 @@ namespace Up2dateShared
         [EnumMember]
         Downloaded,
         [EnumMember]
+        SuggestedToInstall,
+        [EnumMember]
         Installing,
         [EnumMember]
         Installed,
