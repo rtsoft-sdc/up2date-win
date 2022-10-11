@@ -145,22 +145,12 @@ namespace Up2dateClient
             else
             {
                 LogMessage("Download started.");
-
-                setupManager.OnDownloadStarted(info.artifactFileName);
-                try
+                Result downloadResult = setupManager.DownloadPackage(info.artifactFileName, info.artifactFileHashMd5, location => Wrapper.DownloadArtifact(artifact, location));
+                if (!downloadResult.Success)
                 {
-                    Wrapper.DownloadArtifact(artifact, getDownloadLocation());
-                }
-                catch (Exception)
-                {
-                    result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, "Download failed");
+                    result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, $"Download failed. {downloadResult.ErrorMessage}");
                     return;
                 }
-                finally
-                {
-                    setupManager.OnDownloadFinished(info.artifactFileName);
-                }
-
                 LogMessage("Download completed.");
             }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using Up2dateService.Interfaces;
 using Up2dateShared;
 
@@ -52,25 +53,6 @@ namespace Up2dateService.SetupManager
             }
         }
 
-        public void OnDownloadStarted(string artifactFileName)
-        {
-            // add temporary "downloading" package item
-            var package = new Package
-            {
-                Status = PackageStatus.Downloading,
-                ErrorCode = InstallPackageResult.Success,
-            Filepath = Path.Combine(downloadLocationProvider(), artifactFileName)
-            };
-            SafeAddOrUpdatePackage(package);
-        }
-
-        public void OnDownloadFinished(string artifactFileName)
-        {
-            // remove temporary "downloading" package item, so refresh would be able to add "downloaded" package item instead
-            SafeRemovePackage(Path.Combine(downloadLocationProvider(), artifactFileName), PackageStatus.Downloading);
-            SafeRefreshPackageList();
-        }
-
         public bool IsFileSupported(string artifactFileName)
         {
             return installerFactory.IsInstallerAvailable(artifactFileName);
@@ -78,10 +60,13 @@ namespace Up2dateService.SetupManager
 
         public bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5)
         {
-            // todo - check file hash
             SafeRefreshPackageList();
             Package package = SafeFindPackage(artifactFileName);
-            return package.Status != PackageStatus.Unavailable && package.Status != PackageStatus.Downloading;
+            if (package.Status == PackageStatus.Unavailable || package.Status == PackageStatus.Downloading) return false;
+
+            bool isMd5OK = CheckMD5(package.Filepath, artifactFileHashMd5).Success;
+
+            return isMd5OK;
         }
 
         public bool IsPackageInstalled(string artifactFileName)
@@ -110,6 +95,63 @@ namespace Up2dateService.SetupManager
         {
             SafeRefreshPackageList();
             return SafeFindPackage(artifactFileName).ErrorCode;
+        }
+
+        public Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact)
+        {
+            // add temporary "downloading" package item
+            var package = new Package
+            {
+                Status = PackageStatus.Downloading,
+                ErrorCode = InstallPackageResult.Success,
+                Filepath = Path.Combine(downloadLocationProvider(), artifactFileName)
+            };
+            SafeAddOrUpdatePackage(package);
+
+            try
+            {
+                downloadArtifact(downloadLocationProvider());
+                Result checkResult = CheckMD5(package.Filepath, artifactFileHashMd5);
+                if (!checkResult.Success)
+                {
+                    return Result.Failed($"MD5 verification failed. {checkResult.ErrorMessage}");
+                }
+            }
+            catch (Exception e)
+            {
+                return Result.Failed(e.Message);
+            }
+            finally
+            {
+                // remove temporary "downloading" package item, so refresh would be able to add "downloaded" package item instead
+                SafeRemovePackage(Path.Combine(downloadLocationProvider(), artifactFileName), PackageStatus.Downloading);
+                SafeRefreshPackageList();
+            }
+
+            return Result.Successful();
+        }
+
+        static private Result CheckMD5(string filename, string md5hex)
+        {
+            using (var md5 = MD5.Create())
+            {
+                try
+                {
+                    using (var stream = File.OpenRead(filename))
+                    {
+                        var hash = md5.ComputeHash(stream);
+                        if (BitConverter.ToString(hash).Replace("-", "").Equals(md5hex, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            return Result.Successful();
+                        }
+                        return Result.Failed();
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Result.Failed(e.Message);
+                }
+            }
         }
 
         private InstallPackageResult InstallPackage(Package package)
