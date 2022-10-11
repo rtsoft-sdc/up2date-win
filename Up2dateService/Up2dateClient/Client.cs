@@ -41,7 +41,8 @@ namespace Up2dateClient
         }
 
         public void Run()
-        {            IntPtr dispatcher = IntPtr.Zero;
+        {            
+            IntPtr dispatcher = IntPtr.Zero;
             try
             {
                 string cert = getCertificate();
@@ -104,8 +105,10 @@ namespace Up2dateClient
                 WriteLogEntry(message, info);
             }
 
-            ClientResult MakeResult(Finished finished, Execution execution)
+            ClientResult LogAndMakeResult(Finished finished, Execution execution, string message)
             {
+                LogMessage(message);
+
                 return new ClientResult
                 {
                     Message = messageBuilder.ToString(),
@@ -118,22 +121,19 @@ namespace Up2dateClient
 
             if (!IsExtensionAllowed(info))
             {
-                LogMessage("Package type is not allowed - deployment rejected.");
-                result = MakeResult(Finished.FAILURE, Execution.CLOSED);
+                result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, "Package type is not allowed - deployment rejected.");
                 return;
             }
 
             if (!IsSupported(info))
             {
-                LogMessage("Package type is not supported - deployment rejected.");
-                result = MakeResult(Finished.FAILURE, Execution.CLOSED);
+                result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED , "Package type is not allowed - deployment rejected.");
                 return;
             }
 
             if (lastStopID == info.id)
             {
-                LogMessage("Deployment action is cancelled.");
-                result = MakeResult(Finished.NONE, Execution.CANCELED);
+                result = LogAndMakeResult(Finished.NONE, Execution.CANCELED, "Deployment action is cancelled.");
                 lastStopID = -1;
                 return;
             }
@@ -153,8 +153,7 @@ namespace Up2dateClient
                 }
                 catch (Exception)
                 {
-                    LogMessage("Download failed");
-                    result = MakeResult(Finished.FAILURE, Execution.CLOSED);
+                    result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, "Download failed");
                     return;
                 }
                 finally
@@ -167,81 +166,82 @@ namespace Up2dateClient
 
             if (setupManager.IsPackageInstalled(info.artifactFileName))
             {
-                LogMessage("Package has been already installed.");
-                result = MakeResult(Finished.SUCCESS, Execution.CLOSED);
+                result = LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Package has been already installed.");
                 return;
             }
 
             switch (info.updateType)
             {
                 case "skip":
-                    if (info.isInMaintenanceWindow)
-                    {
-                        LogMessage("Only download is requested.");
-                        result = MakeResult(Finished.SUCCESS, Execution.CLOSED);
-                    }
-                    else
-                    {
-                        LogMessage("Waiting for maintenance window to start installation.");
-                        result = MakeResult(Finished.NONE, Execution.SCHEDULED);
-                    }
+                    result = info.isInMaintenanceWindow 
+                        ? LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Only download is requested.")
+                        : LogAndMakeResult(Finished.NONE, Execution.SCHEDULED, "Waiting for maintenance window to start installation.");
                     return;
                 case "attempt":
-                    LogMessage("Installation is not forced.");
-                    setupManager.MarkPackageAsSuggested(info.artifactFileName);
-                    result = MakeResult(Finished.NONE, Execution.SCHEDULED);
-                    return;
+                    {
+                        PackageStatus status = setupManager.GetStatus(info.artifactFileName);
+                        if (status == PackageStatus.Failed)
+                        {
+                            InstallPackageResult installPackageResult = setupManager.GetInstallPackageResult(info.artifactFileName);
+                            result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
+                            return;
+                        }
+                        setupManager.MarkPackageAsSuggested(info.artifactFileName);
+                        result = LogAndMakeResult(Finished.NONE, Execution.SCHEDULED, "Installation is not forced; suggested to user.");
+                        return;
+                    }
                 case "forced":
-                    LogMessage("Installation is forced.");
+                    {
+                        LogMessage("Forced installation started.");
+                        setupManager.InstallPackage(info.artifactFileName);
+                        PackageStatus status = setupManager.GetStatus(info.artifactFileName);
+                        if (status == PackageStatus.Failed)
+                        {
+                            InstallPackageResult installPackageResult = setupManager.GetInstallPackageResult(info.artifactFileName);
+                            result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
+                            return;
+                        }
+                        result = LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Installation completed.");
+                        return;
+                    }
+                default:
+                    result = LogAndMakeResult(Finished.FAILURE, Execution.REJECTED, $"Unsupported update type: {info.updateType}, request rejected.");
+                    return;
+            }
+        }
+
+        private string ResultToMessage(InstallPackageResult installPackageStatus)
+        {
+            string message = "Installation failed. ";
+            switch (installPackageStatus)
+            {
+                case InstallPackageResult.PackageUnavailable:
+                    message += "Package unavailable or unusable";
+                    break;
+                case InstallPackageResult.FailedToInstallChocoPackage:
+                    message += "Failed to install Choco package";
+                    break;
+                case InstallPackageResult.ChocoNotInstalled:
+                    message += "Chocolatey is not installed";
+                    break;
+                case InstallPackageResult.GeneralInstallationError:
+                    message += "General installation error";
+                    break;
+                case InstallPackageResult.SignatureVerificationFailed:
+                    message += "Signature verification for the package is failed. " +
+                        $"Requested level: {settingsManager.SignatureVerificationLevel}. Deployment rejected";
+                    break;
+                case InstallPackageResult.PackageNotSupported:
+                    message += "Package of this type is not supported";
+                    break;
+                case InstallPackageResult.CannotStartInstaller:
+                    message += "Failed to start installer process";
                     break;
                 default:
-                    LogMessage($"Unsupported update type: {info.updateType}, request rejected.");
-                    result = MakeResult(Finished.FAILURE, Execution.REJECTED);
-                    return;
+                    throw new ArgumentOutOfRangeException();
             }
 
-            LogMessage("Installation started.");
-
-            InstallPackageResult installPackageStatus = setupManager.InstallPackage(info.artifactFileName);
-            if (installPackageStatus != InstallPackageResult.Success && installPackageStatus != InstallPackageResult.RestartNeeded)
-            {
-                string message = "Installation failed. ";
-                switch (installPackageStatus)
-                {
-                    case InstallPackageResult.PackageUnavailable:
-                        message += "Package unavailable or unusable";
-                        break;
-                    case InstallPackageResult.FailedToInstallChocoPackage:
-                        message += "Failed to install Choco package";
-                        break;
-                    case InstallPackageResult.ChocoNotInstalled:
-                        message += "Chocolatey is not installed";
-                        break;
-                    case InstallPackageResult.GeneralInstallationError:
-                        message += "General installation error";
-                        break;
-                    case InstallPackageResult.SignatureVerificationFailed:
-                        message += "Signature verification for the package is failed. " +
-                            $"Requested level: {settingsManager.SignatureVerificationLevel}. Deployment rejected";
-                        break;
-                    case InstallPackageResult.PackageNotSupported:
-                        message += "Package of this type is not supported";
-                        break;
-                    case InstallPackageResult.CannotStartInstaller:
-                        message += "Failed to start installer process";
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                LogMessage(message);
-                result = MakeResult(Finished.FAILURE, Execution.CLOSED);
-            }
-            else
-            {
-                LogMessage("Installation completed.");
-                result = MakeResult(Finished.SUCCESS, Execution.CLOSED);
-            }
+            return message;
         }
 
         private bool IsExtensionAllowed(DeploymentInfo info)
