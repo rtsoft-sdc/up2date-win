@@ -181,7 +181,7 @@ namespace Up2dateClient
                 case "attempt":
                     LogMessage("Installation is not forced.");
                     setupManager.MarkPackageAsSuggested(info.artifactFileName);
-                    result = MakeResult(Finished.NONE, Execution.SCHEDULED);
+                    result = MakeResult(Finished.NONE, Execution.DOWNLOADED);
                     return;
                 case "forced":
                     LogMessage("Installation is forced.");

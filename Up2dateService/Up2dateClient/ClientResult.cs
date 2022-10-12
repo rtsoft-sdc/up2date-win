@@ -14,7 +14,9 @@
         CANCELED,
         SCHEDULED,
         REJECTED,
-        RESUMED
+        RESUMED,
+        DOWNLOAD,
+        DOWNLOADED
     };
 
     public struct ClientResult
