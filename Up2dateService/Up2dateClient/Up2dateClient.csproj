@@ -55,19 +55,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cppclient\bin-x64\libcrypto-1_1-x64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="cppclient\bin-x64\libssl-1_1-x64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="cppclient\bin-x64\wrapperdll.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="cppclient\bin-x86\libcrypto-1_1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="cppclient\bin-x86\libssl-1_1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="cppclient\bin-x86\wrapperdll.dll">

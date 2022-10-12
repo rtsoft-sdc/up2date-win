@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Up2dateService.Installers.Choco;
 using Up2dateService.Installers.Msi;
 using Up2dateService.Interfaces;
@@ -57,8 +58,8 @@ namespace Up2dateService.Installers
 
         public bool IsInstallerAvailable(string artifactFileName)
         {
-            string key = Path.GetExtension(artifactFileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
-            return installers.ContainsKey(key);
+            string extension = Path.GetExtension(artifactFileName);
+            return installers.Keys.Any(key => key.Equals(extension, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public IEnumerable<string> SupportedExtensions => installers.Keys;

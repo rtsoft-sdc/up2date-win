@@ -1,11 +1,14 @@
-﻿namespace Up2dateClient
+﻿using System.Runtime.InteropServices;
+
+namespace Up2dateClient
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct DeploymentInfo
     {
         public int id;
         public string updateType;
         public string downloadType;
-        public bool isInMaintenanceWindow;
+        [MarshalAs(UnmanagedType.I1)] public bool isInMaintenanceWindow;
         public string chunkPart;
         public string chunkName;
         public string chunkVersion;

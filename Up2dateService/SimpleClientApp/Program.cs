@@ -13,7 +13,7 @@ namespace SimpleClientApp
 
         static void Main(string[] args)
         {
-            var client = new Client(new SettingsManagerStub(), GetCertificate, new SetupManagerStub(), SystemInfo.Retrieve, GetCreatePackagesFolder, new LoggerStub("Client"));
+            var client = new Client(new SettingsManagerStub(), GetCertificate, new SetupManagerStub(), SystemInfo.Retrieve, new LoggerStub("Client"));
             client.Run();
         }
 

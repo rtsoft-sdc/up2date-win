@@ -41,7 +41,8 @@ namespace HkbClient {
 
     typedef struct
     {
-        bool result;
+        Response::Finished finished;
+        Response::Execution execution;
         const char* message;
     } ClientResult;
 
