@@ -163,7 +163,7 @@ namespace Up2dateClient
                 case "skip":
                     result = info.isInMaintenanceWindow 
                         ? LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Only download is requested.")
-                        : LogAndMakeResult(Finished.NONE, Execution.SCHEDULED, "Waiting for maintenance window to start installation.");
+                        : LogAndMakeResult(Finished.NONE, Execution.DOWNLOADED, "Waiting for maintenance window to start installation.");
                     return;
                 case "attempt":
                     {
@@ -175,7 +175,7 @@ namespace Up2dateClient
                             return;
                         }
                         setupManager.MarkPackageAsSuggested(info.artifactFileName);
-                        result = LogAndMakeResult(Finished.NONE, Execution.SCHEDULED, "Installation is not forced; suggested to user.");
+                        result = LogAndMakeResult(Finished.NONE, Execution.DOWNLOADED, "Installation is not forced; suggested to user.");
                         return;
                     }
                 case "forced":
