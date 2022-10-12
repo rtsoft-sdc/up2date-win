@@ -282,16 +282,19 @@ namespace Up2dateConsole.ServiceReference {
         Downloaded = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installing = 4,
+        SuggestedToInstall = 4,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installed = 5,
+        Installing = 5,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        RestartNeeded = 6,
+        Installed = 6,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Failed = 7,
+        RestartNeeded = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Failed = 8,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
