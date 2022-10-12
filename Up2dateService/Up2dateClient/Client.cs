@@ -47,32 +47,37 @@ namespace Up2dateClient
         {
             while (true)
             {
-                IntPtr dispatcher = IntPtr.Zero;
-                try
-                {
-                    string cert = getCertificate();
-                    if (string.IsNullOrEmpty(cert))
-                    {
-                        SetState(ClientStatus.NoCertificate);
-                        return;
-                    }
-                    dispatcher = wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
-                    SetState(ClientStatus.Running);
-                    wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, dispatcher, OnAuthErrorAction);
-                    SetState(ClientStatus.Reconnecting);
-                }
-                catch (Exception e)
-                {
-                    SetState(ClientStatus.Reconnecting, e.Message);
-                }
-                finally
-                {
-                    if (dispatcher != IntPtr.Zero)
-                    {
-                        wrapper.DeleteDispatcher(dispatcher);
-                    }
-                }
+                RunOnce();
                 Thread.Sleep(clientStartRertyPeriodMs);
+            }
+        }
+
+        private void RunOnce()
+        {
+            IntPtr dispatcher = IntPtr.Zero;
+            try
+            {
+                string cert = getCertificate();
+                if (string.IsNullOrEmpty(cert))
+                {
+                    SetState(ClientStatus.NoCertificate);
+                    return;
+                }
+                dispatcher = wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
+                SetState(ClientStatus.Running);
+                wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, dispatcher, OnAuthErrorAction);
+                SetState(ClientStatus.Reconnecting);
+            }
+            catch (Exception e)
+            {
+                SetState(ClientStatus.Reconnecting, e.Message);
+            }
+            finally
+            {
+                if (dispatcher != IntPtr.Zero)
+                {
+                    wrapper.DeleteDispatcher(dispatcher);
+                }
             }
         }
 
