@@ -72,26 +72,26 @@
     <NMakeIncludeSearchPath>$(SolutionDir)wrapperdll\up2date-cpp\dps\include;$(SolutionDir)wrapperdll\up2date-cpp\ddi\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>build.bat $(Configuration)</NMakeBuildCommandLine>
     <NMakeOutput>wrapperdll.dll</NMakeOutput>
-    <NMakeCleanCommandLine>rm -r build_$(PlatformShortName)</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>RMDIR /S /Q build_$(PlatformShortName)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>build.bat $(Configuration)</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeIncludeSearchPath>$(SolutionDir)wrapperdll\up2date-cpp\dps\include;$(SolutionDir)wrapperdll\up2date-cpp\ddi\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>build.bat $(Configuration)</NMakeBuildCommandLine>
     <NMakeOutput>wrapperdll.dll</NMakeOutput>
-    <NMakeCleanCommandLine>rm -r build_$(PlatformShortName)</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>RMDIR /S /Q build_$(PlatformShortName)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>build.bat $(Configuration)</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeIncludeSearchPath>$(SolutionDir)wrapperdll\up2date-cpp\dps\include;$(SolutionDir)wrapperdll\up2date-cpp\ddi\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <NMakeBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>build.bat $(Configuration)</NMakeBuildCommandLine>
     <NMakeOutput>wrapperdll.dll</NMakeOutput>
-    <NMakeCleanCommandLine>rm -r build_$(PlatformShortName)</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>build.bat $(Configuration) $(PlatformShortName)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>RMDIR /S /Q build_$(PlatformShortName)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>build.bat $(Configuration)</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeIncludeSearchPath>$(SolutionDir)wrapperdll\up2date-cpp\dps\include;$(SolutionDir)wrapperdll\up2date-cpp\ddi\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
   </PropertyGroup>
