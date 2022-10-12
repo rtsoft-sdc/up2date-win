@@ -17,8 +17,6 @@ namespace Up2dateService.SetupManager
         private readonly object packagesLock = new object();
         private readonly ISettingsManager settingsManager;
 
-        public IEnumerable<string> SupportedExtensions => installerFactory.SupportedExtensions;
-
         public SetupManager(ILogger logger, Func<string> downloadLocationProvider, ISettingsManager settingsManager,
             IPackageInstallerFactory installerFactory, IPackageValidatorFactory validatorFactory)
         {
@@ -76,6 +74,32 @@ namespace Up2dateService.SetupManager
         public bool IsFileSupported(string artifactFileName)
         {
             return installerFactory.IsInstallerAvailable(artifactFileName);
+        }
+
+        public bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5)
+        {
+            // todo - check file hash
+            SafeRefreshPackageList();
+            return SafeGetPackages().Any(p => string.Equals(Path.GetFileName(p.Filepath), artifactFileName, StringComparison.InvariantCultureIgnoreCase)
+                                     && p.Status != PackageStatus.Unavailable && p.Status != PackageStatus.Downloading);
+        }
+
+        public bool IsPackageInstalled(string artifactFileName)
+        {
+            SafeRefreshPackageList();
+            return SafeGetPackages().Any(p => string.Equals(Path.GetFileName(p.Filepath), artifactFileName, StringComparison.InvariantCultureIgnoreCase)
+                                     && p.Status == PackageStatus.Installed);
+        }
+
+        public void MarkPackageAsSuggested(string artifactFileName)
+        {
+            Package package = SafeGetPackages().FirstOrDefault(p => string.Equals(Path.GetFileName(p.Filepath), artifactFileName, StringComparison.InvariantCultureIgnoreCase)
+                                     && p.Status == PackageStatus.Downloaded);
+            if (package.Status != PackageStatus.Unavailable)
+            {
+                package.Status = PackageStatus.SuggestedToInstall;
+                SafeUpdatePackage(package);
+            }
         }
 
         private InstallPackageResult InstallPackage(Package package)
@@ -301,7 +325,8 @@ namespace Up2dateService.SetupManager
                         updatedPackage.EstimatedSize = null;
                         updatedPackage.UrlInfoAbout = null;
                         if (updatedPackage.Status != PackageStatus.Downloading 
-                            && updatedPackage.Status != PackageStatus.Installing 
+                            && updatedPackage.Status != PackageStatus.Installing
+                            && updatedPackage.Status != PackageStatus.SuggestedToInstall
                             && updatedPackage.Status != PackageStatus.Failed)
                         {
                             updatedPackage.Status = PackageStatus.Downloaded;
