@@ -9,6 +9,10 @@ namespace Tests_Shared
         {
             SetupProperty(o => o.CheckSignature);
             SetupProperty(o => o.SignatureVerificationLevel);
+            SetupProperty(o => o.ProvisioningUrl);
+
+            Object.ProvisioningUrl = "provisioningUrl";
+            SetupGet(o => o.XApigToken).Returns("XApigToken");
         }
     }
 }
