@@ -13,3 +13,5 @@ The issue that comes with checking a hash from a website is that it doesn't dete
 
 checksum      = 'ECBF4D47B610A6F83C2D07AE937BD8E6644B89839149FE833D93B61CAE804CC1'
 checksum64    = '65744F1E7910F73EC8B8E390E9D8908C8824F89996E717C403417B52628DF6BD'
+
+You can download up2date v1.1.0 using github: https://github.com/rtsoft-gmbh/up2date-win/releases/tag/v1.1.0
