@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading;
 using Up2dateShared;
 
 namespace Up2dateClient
 {
     public class Client
     {
-        const int clientStartRertyPeriodMs = 30000;
-
         private const string ClientType = "RITMS UP2DATE for Windows";
 
         private readonly ILogger logger;
@@ -44,15 +41,6 @@ namespace Up2dateClient
         }
 
         public void Run()
-        {
-            while (true)
-            {
-                RunOnce();
-                Thread.Sleep(clientStartRertyPeriodMs);
-            }
-        }
-
-        private void RunOnce()
         {
             IntPtr dispatcher = IntPtr.Zero;
             try

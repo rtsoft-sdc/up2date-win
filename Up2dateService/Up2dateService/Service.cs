@@ -2,6 +2,7 @@
 using System.IO;
 using System.ServiceModel;
 using System.ServiceProcess;
+using System.Threading;
 using System.Threading.Tasks;
 using Up2dateClient;
 using Up2dateService.Installers;
@@ -21,6 +22,8 @@ namespace Up2dateService
 
         protected override void OnStart(string[] args)
         {
+            const int clientStartRertyPeriodMs = 30000;
+
             //System.Diagnostics.Debugger.Launch(); //todo: remove!
 
             serviceHost?.Close();
@@ -42,7 +45,14 @@ namespace Up2dateService
             serviceHost = new ServiceHost(wcfService);
             serviceHost.Open();
 
-            Task.Run(client.Run);
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    client.Run();
+                    Thread.Sleep(clientStartRertyPeriodMs);
+                }
+            });
         }
 
         protected override void OnStop()
