@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using Up2dateShared;
 
 namespace Up2dateClient
 {
     public class Client
     {
+        const int clientStartRertyPeriodMs = 30000;
+
         private const string ClientType = "RITMS UP2DATE for Windows";
 
         private readonly ILogger logger;
+        private readonly IWrapper wrapper;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
         private readonly ISetupManager setupManager;
@@ -18,8 +22,9 @@ namespace Up2dateClient
         private ClientState state;
         private int lastStopID = -1;
 
-        public Client(ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, ILogger logger)
+        public Client(IWrapper wrapper, ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, ILogger logger)
         {
+            this.wrapper = wrapper ?? throw new ArgumentNullException(nameof(wrapper));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.getCertificate = getCertificate ?? throw new ArgumentNullException(nameof(getCertificate));
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
@@ -39,31 +44,35 @@ namespace Up2dateClient
         }
 
         public void Run()
-        {            
-            IntPtr dispatcher = IntPtr.Zero;
-            try
+        {
+            while (true)
             {
-                string cert = getCertificate();
-                if (string.IsNullOrEmpty(cert))
+                IntPtr dispatcher = IntPtr.Zero;
+                try
                 {
-                    SetState(ClientStatus.NoCertificate);
-                    return;
+                    string cert = getCertificate();
+                    if (string.IsNullOrEmpty(cert))
+                    {
+                        SetState(ClientStatus.NoCertificate);
+                        return;
+                    }
+                    dispatcher = wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
+                    SetState(ClientStatus.Running);
+                    wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, dispatcher, OnAuthErrorAction);
+                    SetState(ClientStatus.Reconnecting);
                 }
-                dispatcher = Wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
-                SetState(ClientStatus.Running);
-                Wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, dispatcher, OnAuthErrorAction);
-                SetState(ClientStatus.Reconnecting);
-            }
-            catch (Exception e)
-            {
-                SetState(ClientStatus.Stopped, e.Message);
-            }
-            finally
-            {
-                if (dispatcher != IntPtr.Zero)
+                catch (Exception e)
                 {
-                    Wrapper.DeleteDispatcher(dispatcher);
+                    SetState(ClientStatus.Reconnecting, e.Message);
                 }
+                finally
+                {
+                    if (dispatcher != IntPtr.Zero)
+                    {
+                        wrapper.DeleteDispatcher(dispatcher);
+                    }
+                }
+                Thread.Sleep(clientStartRertyPeriodMs);
             }
         }
 
@@ -89,7 +98,7 @@ namespace Up2dateClient
 
             foreach (var attribute in GetSystemInfo())
             {
-                Wrapper.AddConfigAttribute(responseBuilder, attribute.Key, attribute.Value);
+                wrapper.AddConfigAttribute(responseBuilder, attribute.Key, attribute.Value);
             }
         }
 
@@ -143,7 +152,7 @@ namespace Up2dateClient
             else
             {
                 LogMessage("Download started.");
-                Result downloadResult = setupManager.DownloadPackage(info.artifactFileName, info.artifactFileHashMd5, location => Wrapper.DownloadArtifact(artifact, location));
+                Result downloadResult = setupManager.DownloadPackage(info.artifactFileName, info.artifactFileHashMd5, location => wrapper.DownloadArtifact(artifact, location));
                 if (!downloadResult.Success)
                 {
                     result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, $"Download failed. {downloadResult.ErrorMessage}");

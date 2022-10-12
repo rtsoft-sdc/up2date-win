@@ -2,7 +2,6 @@
 using System.IO;
 using System.ServiceModel;
 using System.ServiceProcess;
-using System.Threading;
 using System.Threading.Tasks;
 using Up2dateClient;
 using Up2dateService.Installers;
@@ -22,8 +21,6 @@ namespace Up2dateService
 
         protected override void OnStart(string[] args)
         {
-            const int clientStartRertyPeriodMs = 30000;
-
             //System.Diagnostics.Debugger.Launch(); //todo: remove!
 
             serviceHost?.Close();
@@ -38,21 +35,14 @@ namespace Up2dateService
             IPackageValidatorFactory validatorFactory = new PackageValidatorFactory(settingsManager, signatureVerifier, whiteListManager);
             ISetupManager setupManager = new SetupManager.SetupManager(new Logger(EventLog, nameof(SetupManager)), GetCreatePackagesFolder, settingsManager, installerFactory, validatorFactory);
 
-            Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)));
+            Client client = new Client(new Wrapper(), settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)));
 
             WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State,
                 certificateProvider, certificateManager, settingsManager, signatureVerifier, whiteListManager);
             serviceHost = new ServiceHost(wcfService);
             serviceHost.Open();
 
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    client.Run();
-                    Thread.Sleep(clientStartRertyPeriodMs);
-                }
-            });
+            Task.Run(client.Run);
         }
 
         protected override void OnStop()
