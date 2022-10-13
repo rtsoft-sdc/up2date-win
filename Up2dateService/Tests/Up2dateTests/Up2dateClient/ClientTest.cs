@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Tests_Shared;
 using Up2dateClient;
 using Up2dateShared;
@@ -15,6 +17,12 @@ namespace Up2dateTests.Up2dateClient
         private SetupManagerMock setupManagerMock;
         private LoggerMock loggerMock;
         private string certificate;
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            wrapperMock.ExitRun();
+        }
 
         [TestMethod]
         public void WhenCreated_ClientStatusIsStopped()
@@ -53,7 +61,7 @@ namespace Up2dateTests.Up2dateClient
             Client client = CreateClient();
 
             // act
-            client.Run();
+            StartClient(client);
 
             // assert
             wrapperMock.Verify(m => m.RunClient(certificate, settingsManagerMock.Object.ProvisioningUrl, settingsManagerMock.Object.XApigToken,
@@ -61,13 +69,15 @@ namespace Up2dateTests.Up2dateClient
         }
 
         [TestMethod]
-        public void GivenWrapperClientRunExited_WhenRun_ThenStatusIsReconnectingWithoutMessage_AndDispatcherIsDeleted()
+        public void GivenClientRunning_WhenWrapperClientRunExited_ThenStatusIsReconnectingWithoutMessage_AndDispatcherIsDeleted()
         {
             // arrange
             Client client = CreateClient();
+            StartClient(client);
 
             // act
-            client.Run();
+            wrapperMock.ExitRun();
+            Thread.Sleep(100);
 
             // assert
             Assert.AreEqual(ClientStatus.Reconnecting, client.State.Status);
@@ -76,7 +86,7 @@ namespace Up2dateTests.Up2dateClient
         }
 
         [TestMethod]
-        public void GivenWrapperClientThrewException_WhenRun_ThenStatusIsReconnectingWithMessage_AndDispatcherIsDeleted()
+        public void GivenClientRunning_WhenWrapperClientThrewException_ThenStatusIsReconnectingWithMessage_AndDispatcherIsDeleted()
         {
             // arrange
             Client client = CreateClient();
@@ -91,6 +101,42 @@ namespace Up2dateTests.Up2dateClient
             Assert.AreEqual(ClientStatus.Reconnecting, client.State.Status);
             Assert.AreEqual(message, client.State.LastError);
             wrapperMock.Verify(m => m.DeleteDispatcher(wrapperMock.Dispatcher));
+        }
+
+        [TestMethod]
+        public void WhenRun_ThenStatusIsRunning()
+        {
+            // arrange
+            Client client = CreateClient();
+
+            // act
+            StartClient(client);
+
+            // assert
+            Assert.AreEqual(ClientStatus.Running, client.State.Status);
+            Assert.IsTrue(string.IsNullOrEmpty(client.State.LastError));
+        }
+
+        [TestMethod]
+        public void GivenClientRunning_WhenAuthErrorActionBringsErrorMessage_ThenStatusIsAuthorizationError()
+        {
+            // arrange
+            Client client = CreateClient();
+            string message = "Authorization Error message";
+            StartClient(client);
+
+            // act
+            wrapperMock.AuthErrorCallback(message);
+
+            // assert
+            Assert.AreEqual(ClientStatus.AuthorizationError, client.State.Status);
+            Assert.AreEqual(message, client.State.LastError);
+        }
+
+        private void StartClient(Client client)
+        {
+            Task.Run(client.Run);
+            Thread.Sleep(100);
         }
 
         private Client CreateClient()
