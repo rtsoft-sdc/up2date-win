@@ -10,9 +10,9 @@ $packageArgs = @{
 
   softwareName  = 'RITMS UP2DATE Client'
 
-  checksum      = '2CE42C49EDA71DA2311AAB9A773BD88FDD306FBF697F56ED243C0F930261E77E'
+  checksum      = 'ECBF4D47B610A6F83C2D07AE937BD8E6644B89839149FE833D93B61CAE804CC1'
   checksumType  = 'sha256'
-  checksum64    = '66E87B1D287293998AF7BAE927ADB27C975CAEF584060A87434D305A0DD70BCF'
+  checksum64    = '65744F1E7910F73EC8B8E390E9D8908C8824F89996E717C403417B52628DF6BD'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`""
@@ -29,6 +29,15 @@ if ($key.Count -eq 1) {
 }
 
 Install-ChocolateyPackage @packageArgs
+
+
+
+
+
+
+
+
+
 
 
 

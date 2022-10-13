@@ -480,10 +480,13 @@ namespace Up2dateConsole
                     case ServiceState.Error:
                         extraText = GetText(Texts.AgentOrServerFilure);
                         break;
+                    case ServiceState.Unknown:
+                    case ServiceState.Active:
                     default:
                         break;
                 }
-                return "RITMS UP2DATE" + (string.IsNullOrEmpty(extraText) ? string.Empty : "\n" + extraText);
+                System.Version v = Assembly.GetEntryAssembly().GetName().Version;
+                return $"RITMS UP2DATE v{v.Major}.{v.Minor}.{v.Build}" + (string.IsNullOrEmpty(extraText) ? string.Empty : "\n" + extraText);
             }
         }
 
