@@ -42,7 +42,7 @@ namespace Up2dateConsole
             QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
-            RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh());
+            RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh(), o => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             RequestCertificateCommand = new RelayCommand(async (_) => await ExecuteRequestCertificateAsync());
             SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
@@ -119,6 +119,7 @@ namespace Up2dateConsole
                 operationInProgress = value;
                 OnPropertyChanged();
                 StateIndicator.IsBusy = operationInProgress;
+                CommandManager.InvalidateRequerySuggested();
             }
         }
 
