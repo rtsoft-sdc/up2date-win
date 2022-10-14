@@ -16,11 +16,14 @@ namespace Up2dateService.Installers.Choco
         private readonly ILogger logger;
         private readonly List<string> productCodes = new List<string>();
         private readonly Func<string> getDefaultSources;
+        private bool isChocoInstalled;
 
         public ChocoInstaller(Func<string> getDefaultSources, ILogger logger)
         {
             this.getDefaultSources = getDefaultSources ?? throw new ArgumentNullException(nameof(getDefaultSources));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            Refresh();
         }
 
         public bool Initialize(ref Package package)
@@ -105,9 +108,12 @@ namespace Up2dateService.Installers.Choco
 
         public bool IsPackageInstalled(Package package)
         {
-            if (package.ProductCode == string.Empty || !IsChocoInstalled()) return false;
+            if (package.ProductCode == string.Empty || !isChocoInstalled) return false;
 
-            return productCodes.Contains(package.ProductCode);
+            lock (productCodes)
+            {
+                return productCodes.Contains(package.ProductCode);
+            }
         }
 
         public void Refresh()
@@ -117,22 +123,31 @@ namespace Up2dateService.Installers.Choco
             p.StartInfo.Arguments = "list --local-only --limit-output";
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.UseShellExecute = false;
-            p.Start();
-            p.WaitForExit();
-            productCodes.Clear();
-            StreamReader standardOutput = p.StandardOutput;
-
-            while (!standardOutput.EndOfStream)
+            try
             {
-                string line = standardOutput.ReadLine();
-                if (string.IsNullOrWhiteSpace(line)) continue;
-
-                productCodes.Add(line.Trim());
+                p.Start();
+                isChocoInstalled = true;
+                p.WaitForExit();
+            }
+            catch
+            {
+                isChocoInstalled = false;
             }
 
-            if (productCodes.Count > 0)
+            lock (productCodes)
             {
-                productCodes.RemoveAt(productCodes.Count - 1);
+                productCodes.Clear();
+                if (isChocoInstalled)
+                {
+                    StreamReader standardOutput = p.StandardOutput;
+                    while (!standardOutput.EndOfStream)
+                    {
+                        string line = standardOutput.ReadLine();
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        productCodes.Add(line.Trim());
+                    }
+                }
             }
         }
 
@@ -144,25 +159,11 @@ namespace Up2dateService.Installers.Choco
             package.Publisher = info.Publisher;
         }
 
-        private string GetInstallationVerb(Package package) =>
-            productCodes.Any(item => item.Split(productCodeSeparator).
-                First() == package.ProductName) ? "upgrade" : "install";
-
-        private static bool IsChocoInstalled()
+        private string GetInstallationVerb(Package package)
         {
-            try
+            lock (productCodes)
             {
-                Process p = new Process();
-                p.StartInfo.FileName = "choco.exe";
-                p.StartInfo.Arguments = "--version";
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.UseShellExecute = false;
-                p.Start();
-                return true;
-            }
-            catch
-            {
-                return false;
+                return productCodes.Any(item => item.Split(productCodeSeparator).First() == package.ProductName) ? "upgrade" : "install";
             }
         }
     }
