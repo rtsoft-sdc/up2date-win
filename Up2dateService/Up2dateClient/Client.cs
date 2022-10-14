@@ -227,6 +227,12 @@ namespace Up2dateClient
                 case InstallPackageResult.CannotStartInstaller:
                     message += "Failed to start installer process";
                     break;
+                case InstallPackageResult.Success:
+                    message = string.Empty;
+                    break;
+                case InstallPackageResult.RestartNeeded:
+                    message = "To complete installation system restart is needed.";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
