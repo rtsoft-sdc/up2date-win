@@ -34,10 +34,9 @@
                             Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.AuthorizationError}, Converter={StaticResource EnumToVisibilityConverter}}"/>
             <TextBlock x:Uid="TextBlock_6" Style="{StaticResource StateIcon}" Text="{StaticResource QuestionIcon}" Foreground="Gray"
                             Visibility="{Binding State, ConverterParameter={x:Static local:ServiceState.Unknown}, Converter={StaticResource EnumToVisibilityConverter}}"/>
-            <TextBlock x:Uid="TextBlock_7" Style="{StaticResource RotatingStateIcon}" Text="{StaticResource SpinnerIcon}" Foreground="Gray"
-                            Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
-
+        <TextBlock x:Uid="TextBlock_7" Style="{StaticResource RotatingStateIcon}" Text="{StaticResource SpinnerIcon}" Foreground="Gray"
+                            Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <Grid.ToolTip>
             <TextBlock x:Uid="TextBlock_8" Text="{Binding Info}" MaxWidth="400" TextWrapping="Wrap"/>
         </Grid.ToolTip>

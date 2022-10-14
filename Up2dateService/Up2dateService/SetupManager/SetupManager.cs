@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using Up2dateService.Interfaces;
 using Up2dateShared;
 
@@ -64,9 +65,9 @@ namespace Up2dateService.SetupManager
             Package package = SafeFindPackage(artifactFileName);
             if (package.Status == PackageStatus.Unavailable || package.Status == PackageStatus.Downloading) return false;
 
-            bool isMd5OK = CheckMD5(package.Filepath, artifactFileHashMd5).Success;
+            var checkResult = CheckMD5(package.Filepath, artifactFileHashMd5);
 
-            return isMd5OK;
+            return checkResult.Success && checkResult.Value == true;
         }
 
         public bool IsPackageInstalled(string artifactFileName)
@@ -111,15 +112,19 @@ namespace Up2dateService.SetupManager
             try
             {
                 downloadArtifact(downloadLocationProvider());
-                Result checkResult = CheckMD5(package.Filepath, artifactFileHashMd5);
+                Result<bool> checkResult = CheckMD5(package.Filepath, artifactFileHashMd5);
                 if (!checkResult.Success)
                 {
-                    return Result.Failed($"MD5 verification failed. {checkResult.ErrorMessage}");
+                    return Result.Failed($"Cannot verify MD5 checksum. {checkResult.ErrorMessage}");
+                }
+                else if (checkResult.Value != true)
+                {
+                    return Result.Failed($"MD5 checksum doesn't match.");
                 }
             }
             catch (Exception e)
             {
-                return Result.Failed(e.Message);
+                return Result.Failed($"Exception during download. {e.Message}");
             }
             finally
             {
@@ -131,26 +136,33 @@ namespace Up2dateService.SetupManager
             return Result.Successful();
         }
 
-        static private Result CheckMD5(string filename, string md5hex)
+        private Result<bool> CheckMD5(string filename, string expectedMd5hex)
         {
+            const int maxAttempts = 10; // max attemts to read the file in case it is blocked by another process
+            const int retryIntervalMs = 2000; // interval between attempts (2 sec)
+
             using (var md5 = MD5.Create())
             {
-                try
+                Exception lastException = null;
+                for (int i = 0; i < maxAttempts; i++)
                 {
-                    using (var stream = File.OpenRead(filename))
+                    try
                     {
-                        var hash = md5.ComputeHash(stream);
-                        if (BitConverter.ToString(hash).Replace("-", "").Equals(md5hex, StringComparison.InvariantCultureIgnoreCase))
+                        using (var stream = File.OpenRead(filename))
                         {
-                            return Result.Successful();
+                            string actualMd5hex = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "");
+                            return Result<bool>.Successful(string.Equals(actualMd5hex, expectedMd5hex, StringComparison.InvariantCultureIgnoreCase));
                         }
-                        return Result.Failed();
                     }
+                    catch (Exception e)
+                    {
+                        logger.WriteEntry("Exception on attempt to calculate MD5. ", e);
+                        if (!(e is IOException)) return Result<bool>.Failed(e.Message);
+                        lastException = e;
+                    }
+                    Thread.Sleep(retryIntervalMs);
                 }
-                catch (Exception e)
-                {
-                    return Result.Failed(e.Message);
-                }
+                return Result<bool>.Failed(lastException?.Message);
             }
         }
 
