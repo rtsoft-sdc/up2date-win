@@ -1,4 +1,5 @@
 ﻿using Moq;
+using System.Collections.Generic;
 using Up2dateShared;
 
 namespace Tests_Shared
@@ -9,6 +10,11 @@ namespace Tests_Shared
         {
             SetupProperty(o => o.CheckSignature);
             SetupProperty(o => o.SignatureVerificationLevel);
+            SetupProperty(o => o.ProvisioningUrl);
+
+            Object.ProvisioningUrl = "provisioningUrl";
+            SetupGet(o => o.XApigToken).Returns("XApigToken");
+            SetupGet(m => m.PackageExtensionFilterList).Returns(new List<string> { ".nuget", ".msi" });
         }
     }
 }

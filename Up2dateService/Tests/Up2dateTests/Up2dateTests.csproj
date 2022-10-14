@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Up2dateClient\ClientTest.cs" />
     <Compile Include="Up2dateService\SettingsManagerTest.cs" />
     <Compile Include="Up2dateShared\SignatureVerifierTest.cs" />
   </ItemGroup>
