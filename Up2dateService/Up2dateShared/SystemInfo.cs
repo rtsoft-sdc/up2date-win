@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Runtime.Serialization;
 
 namespace Up2dateShared
@@ -15,7 +16,8 @@ namespace Up2dateShared
                 Version = Environment.OSVersion.Version,
                 ServicePack = Environment.OSVersion.ServicePack,
                 PlatformID = Environment.OSVersion.Platform,
-                VersionString = Environment.OSVersion.VersionString
+                VersionString = Environment.OSVersion.VersionString,
+                MachineGuid = GetMachineGuid()
             };
         }
 
@@ -31,5 +33,22 @@ namespace Up2dateShared
         public PlatformID PlatformID { get; private set; }
         [DataMember]
         public string VersionString { get; private set; }
+        [DataMember]
+        public string MachineGuid { get; private set; }
+
+        private static string GetMachineGuid()
+        {
+            const string keyName = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography";
+            string machineGuid;
+            try
+            {
+                machineGuid = (string)Registry.GetValue(keyName, "MachineGuid", string.Empty);
+            }
+            catch (Exception)
+            {
+                machineGuid = string.Empty;
+            }
+            return machineGuid;
+        }
     }
 }
