@@ -79,6 +79,7 @@ namespace Up2dateClient
             SystemInfo sysInfo = getSysInfo();
             yield return new KeyValuePair("client", ClientType);
             yield return new KeyValuePair("computer", sysInfo.MachineName);
+            yield return new KeyValuePair("machine GUID", sysInfo.MachineGuid);
             yield return new KeyValuePair("platform", sysInfo.PlatformID.ToString());
             yield return new KeyValuePair("OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit");
             yield return new KeyValuePair("version", sysInfo.VersionString);
