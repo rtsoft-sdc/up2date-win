@@ -38,7 +38,7 @@ namespace Up2dateService
             IPackageValidatorFactory validatorFactory = new PackageValidatorFactory(settingsManager, signatureVerifier, whiteListManager);
             ISetupManager setupManager = new SetupManager.SetupManager(new Logger(EventLog, nameof(SetupManager)), GetCreatePackagesFolder, settingsManager, installerFactory, validatorFactory);
 
-            Client client = new Client(settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)));
+            Client client = new Client(new Wrapper(), settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)));
 
             WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State,
                 certificateProvider, certificateManager, settingsManager, signatureVerifier, whiteListManager);
