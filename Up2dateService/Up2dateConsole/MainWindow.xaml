@@ -38,6 +38,7 @@
             <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
             <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
             <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should enter one-time key or directly load authorization certificate. Note that this action requires administrative privileges.</clr:String>
+            <clr:String x:Uid="clr:String_48" x:Key="MachineGuidHint">Requesting one-time key from RITMS UP2DATE administartor you should provide your machine GUID, which you can find and copy at the bottom of the authorization window. Click OK to proceed.</clr:String>
             <clr:String x:Uid="clr:String_7" x:Key="AgentInternalError">Agent internal error.</clr:String>
             <clr:String x:Uid="clr:String_8" x:Key="CannotAccessServer">Cannot access server.</clr:String>
             <clr:String x:Uid="clr:String_9" x:Key="CertificateNotAvailable">Authorization certificate is not available.</clr:String>
@@ -220,8 +221,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Uid="TextBlock_4" Text="RITMS UP2DATE:" VerticalAlignment="Center"/>
                 <controls:SqueezeContentControl x:Uid="controls:ModestContainer_1" Grid.Column="1" Margin="5,0,10,0" HorizontalAlignment="Left">
-                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" Padding="2,4,2,2"
-                             IsReadOnly="True" FontFamily="Courier New"
+                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" 
+                             Style="{StaticResource ReadOnlyInfoField}"
                              Text="{Binding DeviceId, Mode=OneWay}"/>
                 </controls:SqueezeContentControl>
             </Grid>

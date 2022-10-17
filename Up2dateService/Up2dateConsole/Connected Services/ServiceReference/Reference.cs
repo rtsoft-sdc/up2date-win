@@ -310,6 +310,9 @@ namespace Up2dateConsole.ServiceReference {
         private bool Is64BitField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MachineGuidField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MachineNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -342,6 +345,19 @@ namespace Up2dateConsole.ServiceReference {
                 if ((this.Is64BitField.Equals(value) != true)) {
                     this.Is64BitField = value;
                     this.RaisePropertyChanged("Is64Bit");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MachineGuid {
+            get {
+                return this.MachineGuidField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MachineGuidField, value) != true)) {
+                    this.MachineGuidField = value;
+                    this.RaisePropertyChanged("MachineGuid");
                 }
             }
         }

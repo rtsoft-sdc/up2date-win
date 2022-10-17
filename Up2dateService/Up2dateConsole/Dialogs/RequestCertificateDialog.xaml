@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole.Dialogs"
-        xmlns:clr="clr-namespace:System;assembly=mscorlib"
+        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers"
         mc:Ignorable="d"
         Title="Authorization" 
         WindowStartupLocation="CenterOwner"
@@ -26,6 +26,7 @@
             </Style>
             
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
+            <helpers:NullToVisibilityConverter x:Uid="helpers:NullToVisibilityConverter_1" x:Key="NullToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -45,12 +46,20 @@
                                Visibility="{Binding ShowExplanation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBlock x:Uid="TextBlock_3" Text="Enter one-time key to automatically acquire authorization certificate"/>
                     <TextBox x:Uid="TextBox_1" Margin="0,10,0,5" Height="100" Width="500" FontSize="9" Text="{Binding OneTimeKey, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
-                    <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal" Margin="0,0,0,20" >
+                    <StackPanel x:Uid="StackPanel_5" Orientation="Horizontal" Margin="0,0,0,20">
                         <TextBlock x:Uid="TextBlock_5" Text="or load the authorization certificate directly from file:" VerticalAlignment="Center"/>
                         <Button x:Uid="Button_3" Margin="10,0,0,0" Padding="5,4" MinWidth="0" VerticalAlignment="Center"
                                 Command="{Binding LoadCommand}" ToolTip="Load certificate from file">
                             <TextBlock x:Uid="TextBlock_6" Text="{StaticResource FolderOpenIcon}" Style="{StaticResource ButtonIcon}"/>
                         </Button>
+                    </StackPanel>
+                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10"
+                                Visibility="{Binding MachineGuid, Converter={StaticResource NullToVisibilityConverter}}">
+                        <TextBlock x:Uid="TextBlock_7" VerticalAlignment="Center" Text="Machine GUID:"/>
+                        <TextBox x:Uid="TextBox_2" VerticalAlignment="Center" Margin="5,0"
+                                 Style="{StaticResource ReadOnlyInfoField}"
+                                 Text="{Binding MachineGuid, Mode=OneWay}"
+                                 ToolTip="RITMS UP2DATE service administartor may ask you for this Machine GUID when you request one-time key for client authorization."/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
