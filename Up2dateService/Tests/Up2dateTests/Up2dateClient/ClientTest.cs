@@ -165,9 +165,10 @@ namespace Up2dateTests.Up2dateClient
             wrapperMock.ConfigRequestFunc(responseBuilder);
 
             // assert
-            Assert.AreEqual(6, callSequence.Count);
+            Assert.AreEqual(7, callSequence.Count);
             CollectionAssert.Contains(callSequence, (responseBuilder, "client", "RITMS UP2DATE for Windows"));
             CollectionAssert.Contains(callSequence, (responseBuilder, "computer", sysInfo.MachineName));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "machine GUID", sysInfo.MachineGuid));
             CollectionAssert.Contains(callSequence, (responseBuilder, "platform", sysInfo.PlatformID.ToString()));
             CollectionAssert.Contains(callSequence, (responseBuilder, "OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit"));
             CollectionAssert.Contains(callSequence, (responseBuilder, "version", sysInfo.VersionString));

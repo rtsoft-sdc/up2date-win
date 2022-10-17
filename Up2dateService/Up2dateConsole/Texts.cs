@@ -45,6 +45,7 @@
         SignatureVerificationFailed,
         RestartNeeded,
         CannotStartInstaller,
-        InstallationErrorUnknown
+        InstallationErrorUnknown,
+        MachineGuidHint
     }
 }

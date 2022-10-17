@@ -53,6 +53,7 @@
     </xs:annotation>
     <xs:sequence>
       <xs:element minOccurs="0" name="Is64Bit" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MachineGuid" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MachineName" nillable="true" type="xs:string" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="PlatformID" type="q2:PlatformID" />
       <xs:element minOccurs="0" name="ServicePack" nillable="true" type="xs:string" />
