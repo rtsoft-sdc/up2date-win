@@ -99,6 +99,21 @@ namespace Up2dateConsole
 
         public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId) && ServiceState == ServiceState.Active;
 
+        private SystemInfo? systemInfo;
+        public SystemInfo SystemInfo
+        {
+            get
+            {
+                if (!systemInfo.HasValue)
+                {
+                    IWcfService service = wcfClientFactory.CreateClient();
+                    systemInfo = service.GetSystemInfo();
+                    wcfClientFactory.CloseClient(service);
+                }
+                return systemInfo.Value;
+            }
+        }
+
         public string MsiFolder
         {
             get => msiFolder;
@@ -145,7 +160,7 @@ namespace Up2dateConsole
 
         private async Task RequestCertificateAsync(bool showExplanation)
         {
-            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation);
+            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation, SystemInfo.MachineGuid);
             bool success = viewService.ShowDialog(vm);
             if (success)
             {
@@ -334,7 +349,8 @@ namespace Up2dateConsole
                     }
                     else
                     {
-                        MessageBoxResult r = viewService.ShowMessageBox(GetText(Texts.DeviceNotInitialized), buttons: MessageBoxButton.OKCancel);
+                        string message = $"{GetText(Texts.DeviceNotInitialized)}\n\n{GetText(Texts.MachineGuidHint)}";
+                        MessageBoxResult r = viewService.ShowMessageBox(message, buttons: MessageBoxButton.OKCancel);
                         if (r == MessageBoxResult.OK)
                         {
                             ExecuteEnterAdminMode(null);

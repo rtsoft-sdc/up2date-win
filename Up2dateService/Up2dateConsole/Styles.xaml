@@ -46,4 +46,10 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Uid="Style_5" x:Key="ReadOnlyInfoField" TargetType="{x:Type TextBox}">
+        <Setter x:Uid="Setter_9" Property="Padding" Value="2,4,2,2"/>
+        <Setter x:Uid="Setter_10" Property="FontFamily" Value="Courier New"/>
+        <Setter x:Uid="Setter_11" Property="IsReadOnly" Value="True"/>
+    </Style>
+
 </ResourceDictionary>

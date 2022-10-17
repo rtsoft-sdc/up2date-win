@@ -16,11 +16,13 @@ namespace Up2dateConsole.Dialogs
         private string oneTimeKey;
         private bool isInProgress;
 
-        public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation)
+        public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation, string machineGuid)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             ShowExplanation = showExplanation;
+            MachineGuid = string.IsNullOrEmpty(machineGuid) ? null : machineGuid;
+
             RequestCommand = new RelayCommand(async (_) => await ExecuteRequestAsync(), CanRequest);
             LoadCommand = new RelayCommand(async (_) => await ExecuteLoadAsync());
         }
@@ -28,6 +30,8 @@ namespace Up2dateConsole.Dialogs
         public ICommand RequestCommand { get; }
 
         public ICommand LoadCommand { get; }
+
+        public string MachineGuid { get; }
 
         public string OneTimeKey
         {
