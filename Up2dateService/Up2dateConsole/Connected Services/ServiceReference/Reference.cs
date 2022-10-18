@@ -882,6 +882,18 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/SetCheckSignatureResponse")]
         System.Threading.Tasks.Task SetCheckSignatureAsync(bool newState);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/GetConfirmBeforeInstallationResponse")]
+        bool GetConfirmBeforeInstallation();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/GetConfirmBeforeInstallationResponse")]
+        System.Threading.Tasks.Task<bool> GetConfirmBeforeInstallationAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/SetConfirmBeforeInstallationResponse")]
+        void SetConfirmBeforeInstallation(bool newState);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/SetConfirmBeforeInstallationResponse")]
+        System.Threading.Tasks.Task SetConfirmBeforeInstallationAsync(bool newState);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSignatureVerificationLevel", ReplyAction="http://tempuri.org/IWcfService/GetSignatureVerificationLevelResponse")]
         Up2dateConsole.ServiceReference.SignatureVerificationLevel GetSignatureVerificationLevel();
         
@@ -1058,6 +1070,22 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task SetCheckSignatureAsync(bool newState) {
             return base.Channel.SetCheckSignatureAsync(newState);
+        }
+        
+        public bool GetConfirmBeforeInstallation() {
+            return base.Channel.GetConfirmBeforeInstallation();
+        }
+        
+        public System.Threading.Tasks.Task<bool> GetConfirmBeforeInstallationAsync() {
+            return base.Channel.GetConfirmBeforeInstallationAsync();
+        }
+        
+        public void SetConfirmBeforeInstallation(bool newState) {
+            base.Channel.SetConfirmBeforeInstallation(newState);
+        }
+        
+        public System.Threading.Tasks.Task SetConfirmBeforeInstallationAsync(bool newState) {
+            return base.Channel.SetConfirmBeforeInstallationAsync(newState);
         }
         
         public Up2dateConsole.ServiceReference.SignatureVerificationLevel GetSignatureVerificationLevel() {

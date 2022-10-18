@@ -138,6 +138,16 @@ namespace Up2dateService
             settingsManager.CheckSignature = newState;
         }
 
+        public bool GetConfirmBeforeInstallation()
+        {
+            return settingsManager.RequiresConfirmationBeforeInstall;
+        }
+
+        public void SetConfirmBeforeInstallation(bool newState)
+        {
+            settingsManager.RequiresConfirmationBeforeInstall = newState;
+        }
+
         public SignatureVerificationLevel GetSignatureVerificationLevel()
         {
             return settingsManager.SignatureVerificationLevel;
