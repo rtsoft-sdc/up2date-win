@@ -50,6 +50,10 @@ namespace Up2dateShared
         [EnumMember]
         SuggestedToInstall,
         [EnumMember]
+        WaitingForConfirmation,
+        [EnumMember]
+        Rejected,
+        [EnumMember]
         Installing,
         [EnumMember]
         Installed,

@@ -153,7 +153,8 @@ namespace Up2dateClient
             else
             {
                 LogMessage("Download started.");
-                Result downloadResult = setupManager.DownloadPackage(info.artifactFileName, info.artifactFileHashMd5, location => wrapper.DownloadArtifact(artifact, location));
+                Result downloadResult = setupManager.DownloadPackage(info.artifactFileName, info.artifactFileHashMd5,
+                    location => wrapper.DownloadArtifact(artifact, location));
                 if (!downloadResult.Success)
                 {
                     result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, $"Download failed. {downloadResult.ErrorMessage}");
@@ -190,8 +191,15 @@ namespace Up2dateClient
                     }
                 case "forced":
                     {
-                        LogMessage("Forced installation started.");
-                        setupManager.InstallPackage(info.artifactFileName);
+                        if (settingsManager.RequiresConfirmationBeforeInstall)
+                        {
+                            LogMessage("Forced installation requested but client settings require user confirmation.");
+                        }
+                        else
+                        {
+                            LogMessage("Forced installation started.");
+                            setupManager.InstallPackage(info.artifactFileName);
+                        }
                         PackageStatus status = setupManager.GetStatus(info.artifactFileName);
                         if (status == PackageStatus.Failed)
                         {
@@ -199,7 +207,15 @@ namespace Up2dateClient
                             result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
                             return;
                         }
-                        result = LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Installation completed.");
+                        if (settingsManager.RequiresConfirmationBeforeInstall)
+                        {
+                            setupManager.MarkPackageAsWaiting(info.artifactFileName);
+                            result = LogAndMakeResult(Finished.NONE, Execution.DOWNLOADED, "Installation is waiting for user confirmation.");
+                        }
+                        else
+                        {
+                            result = LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Installation completed.");
+                        }
                         return;
                     }
                 default:

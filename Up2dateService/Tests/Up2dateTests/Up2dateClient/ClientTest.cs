@@ -440,6 +440,35 @@ namespace Up2dateTests.Up2dateClient
         [DataTestMethod]
         [DataRow(true)]
         [DataRow(false)]
+        public void GivenForcedUpdate_AndRequiresConfirmationBeforeInstallIsSet_WhenDeploymentRequested_ThenDownloadIsExecuted_AndInstallationIsNotExecuted_AndPackageIsSuggested_AndResultIsDownloaded(
+            bool inMaintenanceWindow)
+        {
+            // arrange
+            Client client = CreateClient();
+            IntPtr artifact = new IntPtr(-1);
+            const string fileName = "name.msi";
+            StartClient(client);
+            settingsManagerMock.Object.RequiresConfirmationBeforeInstall = true;
+            setupManagerMock.PackageStatus = PackageStatus.Downloaded;
+
+            // act
+            wrapperMock.DeploymentActionFunc(artifact, new DeploymentInfo
+            {
+                artifactFileName = fileName,
+                isInMaintenanceWindow = inMaintenanceWindow,
+                updateType = "forced"
+            }, out ClientResult result);
+
+            // assert
+            setupManagerMock.VerifyExecution(fileName, download: true, install: false);
+            setupManagerMock.Verify(m => m.MarkPackageAsWaiting(fileName), Times.AtLeastOnce);
+            Assert.AreEqual(Execution.DOWNLOADED, result.Execution);
+            Assert.AreEqual(Finished.NONE, result.Finished);
+        }
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
         public void GivenForcedUpdateAndPackageStatusIsFailed_WhenDeploymentRequested_ThenDownloadIsExecuted_AndInstallationIsExecuted_AndResultIsFailed(
             bool inMaintenanceWindow)
         {

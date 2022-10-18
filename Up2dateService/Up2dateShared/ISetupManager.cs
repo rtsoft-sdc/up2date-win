@@ -15,5 +15,6 @@ namespace Up2dateShared
         PackageStatus GetStatus(string artifactFileName);
         InstallPackageResult GetInstallPackageResult(string artifactFileName);
         Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact);
+        void MarkPackageAsWaiting(string artifactFileName);
     }
 }

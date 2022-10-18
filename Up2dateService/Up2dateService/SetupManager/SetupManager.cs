@@ -79,9 +79,19 @@ namespace Up2dateService.SetupManager
         public void MarkPackageAsSuggested(string artifactFileName)
         {
             Package package = SafeFindPackage(artifactFileName);
-            if (package.Status == PackageStatus.Downloaded)
+            if (package.Status == PackageStatus.Downloaded || package.Status == PackageStatus.WaitingForConfirmation)
             {
                 package.Status = PackageStatus.SuggestedToInstall;
+                SafeUpdatePackage(package);
+            }
+        }
+
+        public void MarkPackageAsWaiting(string artifactFileName)
+        {
+            Package package = SafeFindPackage(artifactFileName);
+            if (package.Status == PackageStatus.Downloaded || package.Status == PackageStatus.SuggestedToInstall)
+            {
+                package.Status = PackageStatus.WaitingForConfirmation;
                 SafeUpdatePackage(package);
             }
         }
@@ -396,6 +406,8 @@ namespace Up2dateService.SetupManager
                         if (updatedPackage.Status != PackageStatus.Downloading 
                             && updatedPackage.Status != PackageStatus.Installing
                             && updatedPackage.Status != PackageStatus.SuggestedToInstall
+                            && updatedPackage.Status != PackageStatus.WaitingForConfirmation
+                            && updatedPackage.Status != PackageStatus.Rejected
                             && updatedPackage.Status != PackageStatus.Failed)
                         {
                             updatedPackage.Status = PackageStatus.Downloaded;
