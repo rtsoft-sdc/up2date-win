@@ -285,16 +285,22 @@ namespace Up2dateConsole.ServiceReference {
         SuggestedToInstall = 4,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installing = 5,
+        ForcedWaitingForConfirmation = 5,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installed = 6,
+        Rejected = 6,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        RestartNeeded = 7,
+        Installing = 7,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Failed = 8,
+        Installed = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RestartNeeded = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Failed = 10,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

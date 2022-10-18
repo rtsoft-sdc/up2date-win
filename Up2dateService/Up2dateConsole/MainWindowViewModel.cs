@@ -224,6 +224,8 @@ namespace Up2dateConsole
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
             return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded
                                                     || p.Package.Status == PackageStatus.SuggestedToInstall
+                                                    || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation
+                                                    || p.Package.Status == PackageStatus.Rejected
                                                     || p.Package.Status == PackageStatus.Failed);
         }
 
@@ -235,6 +237,8 @@ namespace Up2dateConsole
             Package[] selectedPackages = AvailablePackages
                 .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded
                                             || p.Package.Status == PackageStatus.SuggestedToInstall
+                                            || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation
+                                            || p.Package.Status == PackageStatus.Rejected
                                             || p.Package.Status == PackageStatus.Failed))
                 .Select(p => p.Package)
                 .ToArray();
@@ -414,6 +418,13 @@ namespace Up2dateConsole
             if (suggested.Any())
             {
                 TryShowToastNotification(Texts.NewPackageSuggested, suggested.Select(p => p.ProductName));
+            }
+
+            var waiting = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading || oldStatus == PackageStatus.Downloaded || oldStatus == PackageStatus.SuggestedToInstall,
+                                                newStatus => newStatus == PackageStatus.ForcedWaitingForConfirmation);
+            if (waiting.Any())
+            {
+                TryShowToastNotification(Texts.NewPackageWaiting, suggested.Select(p => p.ProductName));
             }
 
             var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,

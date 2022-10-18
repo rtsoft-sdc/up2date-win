@@ -38,6 +38,8 @@
       <xs:enumeration value="Downloading" />
       <xs:enumeration value="Downloaded" />
       <xs:enumeration value="SuggestedToInstall" />
+      <xs:enumeration value="ForcedWaitingForConfirmation" />
+      <xs:enumeration value="Rejected" />
       <xs:enumeration value="Installing" />
       <xs:enumeration value="Installed" />
       <xs:enumeration value="RestartNeeded" />
