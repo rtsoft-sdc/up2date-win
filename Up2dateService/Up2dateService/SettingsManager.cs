@@ -116,6 +116,17 @@ namespace Up2dateService
             }
         }
 
+        public bool RequiresConfirmationBeforeInstall
+        {
+            get => Properties.Settings.Default.RequiresConfirmationBeforeInstall;
+            set
+            {
+                Properties.Settings.Default.RequiresConfirmationBeforeInstall = value;
+                Properties.Settings.Default.Save();
+                WriteSettingsToLog();
+            }
+        }
+
         private void WriteSettingsToLog()
         {
             StringBuilder sb = new StringBuilder("\n");

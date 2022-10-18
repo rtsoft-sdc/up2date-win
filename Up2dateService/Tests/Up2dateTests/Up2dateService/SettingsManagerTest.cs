@@ -71,5 +71,14 @@ namespace Up2dateTests.Up2dateService
             //Assert
             Assert.AreEqual("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", xApigToken);
         }
+
+        [TestMethod]
+        public void IsForcedDeploymentEnabled_Test_CheckWorkability()
+        {
+            //Act
+            var isForcedDeploymentEnabled = _settingsManager.RequiresConfirmationBeforeInstall;
+            //Assert
+            Assert.IsTrue(isForcedDeploymentEnabled);
+        }
     }
 }

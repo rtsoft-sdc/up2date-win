@@ -8,10 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Up2dateService.Properties
-{
-
-
+namespace Up2dateService.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
@@ -141,6 +140,18 @@ namespace Up2dateService.Properties
             }
             set {
                 this["CertificateThumbprint"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RequiresConfirmationBeforeInstall {
+            get {
+                return ((bool)(this["RequiresConfirmationBeforeInstall"]));
+            }
+            set {
+                this["RequiresConfirmationBeforeInstall"] = value;
             }
         }
     }
