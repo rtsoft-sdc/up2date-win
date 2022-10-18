@@ -150,8 +150,12 @@ namespace Up2dateTests.Up2dateClient
         //  Config request callback tests
         //
 
-        [TestMethod]
-        public void WhenConfigRequested_ThenAddConfigAttributeIsCalledSupplyingSysInfoValues()
+        [DataTestMethod]
+        [DataRow(false, SignatureVerificationLevel.SignedByAnyCertificate)]
+        [DataRow(true, SignatureVerificationLevel.SignedByAnyCertificate)]
+        [DataRow(true, SignatureVerificationLevel.SignedByTrustedCertificate)]
+        [DataRow(true, SignatureVerificationLevel.SignedByWhitelistedCertificate)]
+        public void WhenConfigRequested_ThenAddConfigAttributeIsCalledSupplyingSysInfoValues(bool checkSignature, SignatureVerificationLevel signatureVerificationLevel)
         {
             // arrange
             Client client = CreateClient();
@@ -159,20 +163,37 @@ namespace Up2dateTests.Up2dateClient
             var callSequence = new List<(IntPtr ptr, string key, string value)>();
             wrapperMock.Setup(m => m.AddConfigAttribute(It.IsAny<IntPtr>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Callback<IntPtr, string, string>((ptr, key, value) => { callSequence.Add((ptr, key, value)); });
+            settingsManagerMock.Object.CheckSignature = checkSignature;
+            settingsManagerMock.Object.SignatureVerificationLevel = signatureVerificationLevel;
             StartClient(client);
 
             // act
             wrapperMock.ConfigRequestFunc(responseBuilder);
 
             // assert
-            Assert.AreEqual(7, callSequence.Count);
+            int expectedCount = 0;
             CollectionAssert.Contains(callSequence, (responseBuilder, "client", "RITMS UP2DATE for Windows"));
+            expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "computer", sysInfo.MachineName));
+            expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "machine GUID", sysInfo.MachineGuid));
+            expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "platform", sysInfo.PlatformID.ToString()));
+            expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit"));
+            expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "version", sysInfo.VersionString));
+            expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "service pack", sysInfo.ServicePack));
+            expectedCount++;
+            CollectionAssert.Contains(callSequence, (responseBuilder, "settings.requires_confirmation_before_update",
+                settingsManagerMock.Object.RequiresConfirmationBeforeInstall ? "yes" : "no"));
+            expectedCount++;
+            CollectionAssert.Contains(callSequence, (responseBuilder, "settings.signature_verification_level",
+                settingsManagerMock.Object.CheckSignature ? settingsManagerMock.Object.SignatureVerificationLevel.ToString() : "off"));
+            expectedCount++;
+
+            Assert.AreEqual(expectedCount, callSequence.Count);
         }
 
 
