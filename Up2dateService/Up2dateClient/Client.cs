@@ -178,11 +178,10 @@ namespace Up2dateClient
                     return;
                 case "attempt":
                     {
-                        PackageStatus status = setupManager.GetStatus(info.artifactFileName);
-                        if (status == PackageStatus.Failed)
+                        ClientResult? res = null;
+                        if (CheckPackageFailedOrRejected(info.artifactFileName, (finished, execution, message) => { res = LogAndMakeResult(finished, execution, message); }))
                         {
-                            InstallPackageResult installPackageResult = setupManager.GetInstallPackageResult(info.artifactFileName);
-                            result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
+                            result = res.Value;
                             return;
                         }
                         setupManager.MarkPackageAsSuggested(info.artifactFileName);
@@ -200,11 +199,10 @@ namespace Up2dateClient
                             LogMessage("Forced installation started.");
                             setupManager.InstallPackage(info.artifactFileName);
                         }
-                        PackageStatus status = setupManager.GetStatus(info.artifactFileName);
-                        if (status == PackageStatus.Failed)
+                        ClientResult? res = null;
+                        if (CheckPackageFailedOrRejected(info.artifactFileName, (finished, execution, message) => { res = LogAndMakeResult(finished, execution, message); }))
                         {
-                            InstallPackageResult installPackageResult = setupManager.GetInstallPackageResult(info.artifactFileName);
-                            result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
+                            result = res.Value;
                             return;
                         }
                         if (settingsManager.RequiresConfirmationBeforeInstall)
@@ -222,6 +220,23 @@ namespace Up2dateClient
                     result = LogAndMakeResult(Finished.FAILURE, Execution.REJECTED, $"Unsupported update type: {info.updateType}, request rejected.");
                     return;
             }
+        }
+
+        private bool CheckPackageFailedOrRejected(string artifactFileName, Action<Finished, Execution, string> makeResult)
+        {
+            PackageStatus status = setupManager.GetStatus(artifactFileName);
+            if (status == PackageStatus.Failed)
+            {
+                InstallPackageResult installPackageResult = setupManager.GetInstallPackageResult(artifactFileName);
+                makeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
+                return true;
+            }
+            if (status == PackageStatus.Rejected)
+            {
+                makeResult(Finished.FAILURE, Execution.REJECTED, "Installation rejected by user.");
+                return true;
+            }
+            return false;
         }
 
         private string ResultToMessage(InstallPackageResult installPackageStatus)
