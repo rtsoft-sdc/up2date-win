@@ -73,12 +73,12 @@ namespace Up2dateTests.Up2dateService
         }
 
         [TestMethod]
-        public void IsForcedDeploymentEnabled_Test_CheckWorkability()
+        public void RequiresConfirmationBeforeInstall_Test_CheckWorkability()
         {
             //Act
-            var isForcedDeploymentEnabled = _settingsManager.RequiresConfirmationBeforeInstall;
+            var requiresConfirmationBeforeInstall = _settingsManager.RequiresConfirmationBeforeInstall;
             //Assert
-            Assert.IsTrue(isForcedDeploymentEnabled);
+            Assert.IsFalse(requiresConfirmationBeforeInstall);
         }
     }
 }
