@@ -49,6 +49,7 @@
         MachineGuidHint,
         PackageStatusRejected,
         NewPackageWaiting,
-        StronglyRecommended
+        StronglyRecommended,
+        CannotRejectInstallation
     }
 }

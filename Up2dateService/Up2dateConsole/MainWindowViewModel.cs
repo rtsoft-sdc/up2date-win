@@ -44,6 +44,7 @@ namespace Up2dateConsole
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
             RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh(), o => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
+            RejectCommand = new RelayCommand(ExecuteReject, CanReject);
             RequestCertificateCommand = new RelayCommand(async (_) => await ExecuteRequestCertificateAsync());
             SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
 
@@ -57,6 +58,7 @@ namespace Up2dateConsole
         public ICommand EnterAdminModeCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand InstallCommand { get; }
+        public ICommand RejectCommand { get; }
         public ICommand ShowConsoleCommand { get; }
         public ICommand QuitCommand { get; }
         public ICommand RequestCertificateCommand { get; }
@@ -217,6 +219,54 @@ namespace Up2dateConsole
             if (!vm.IsInitialized) return;
 
             viewService.ShowDialog(vm);
+        }
+
+        private bool CanReject(object _)
+        {
+            List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
+            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.SuggestedToInstall
+                                                    || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation);
+        }
+
+        private async void ExecuteReject(object _)
+        {
+            OperationInProgress = true;
+            IWcfService service = null;
+
+            Package[] selectedPackages = AvailablePackages
+                .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.SuggestedToInstall
+                                          || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation))
+                .Select(p => p.Package)
+                .ToArray();
+
+            try
+            {
+                service = wcfClientFactory.CreateClient();
+                await service.RejectInstallationAsync(selectedPackages);
+                ServiceState = ServiceState.Active;
+                StateIndicator.SetInfo($"{GetText(Texts.Active)}");
+            }
+            catch (System.ServiceModel.EndpointNotFoundException)
+            {
+                ServiceState = ServiceState.ClientUnaccessible;
+                var message = GetText(Texts.CannotRejectInstallation);
+                StateIndicator.SetInfo(message);
+                viewService.ShowMessageBox($"{GetText(Texts.CannotRejectInstallation)}\n{message}");
+            }
+            catch (Exception e)
+            {
+                ServiceState = ServiceState.ClientUnaccessible;
+                var message = e.Message;
+                StateIndicator.SetInfo(message);
+                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}\n\n{e.StackTrace}");
+            }
+            finally
+            {
+                wcfClientFactory.CloseClient(service);
+                OperationInProgress = false;
+            }
+
+            await ExecuteRefresh();
         }
 
         private bool CanInstall(object _)

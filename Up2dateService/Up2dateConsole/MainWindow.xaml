@@ -36,6 +36,7 @@
             <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Authorization certificate for RITMS UP2DATE '{0}' successfully loaded.</clr:String>
             <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
             <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
+            <clr:String x:Uid="clr:String_52" x:Key="CannotRejectInstallation">Cannot reject installation:</clr:String>
             <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
             <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should enter one-time key or directly load authorization certificate. Note that this action requires administrative privileges.</clr:String>
             <clr:String x:Uid="clr:String_48" x:Key="MachineGuidHint">Requesting one-time key from RITMS UP2DATE administartor you should provide your machine GUID, which you can find and copy at the bottom of the authorization window. Click OK to proceed.</clr:String>
@@ -128,9 +129,13 @@
                             <TextBlock x:Uid="TextBlock1" Margin="5,0,0,0" Text="Authorization..." VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Uid="Button2" Width="100" 
-                            Content="Install selected" 
+                    <Button x:Uid="Button2" Width="100"
+                            Content="Install" 
                             Command="{Binding InstallCommand}"
+                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button x:Uid="Button_4" Width="100"
+                            Content="Reject" 
+                            Command="{Binding RejectCommand}"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -171,7 +176,10 @@
                                             <Style x:Uid="Style_4" TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger x:Uid="DataTrigger_3" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.SuggestedToInstall}">
-                                                        <Setter x:Uid="Setter_8" Property="Foreground" Value="Orange"/>
+                                                        <Setter x:Uid="Setter_8" Property="Foreground" Value="DarkOrange"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger x:Uid="DataTrigger_4" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.ForcedWaitingForConfirmation}">
+                                                        <Setter x:Uid="Setter_9" Property="Foreground" Value="DarkOrange"/>
                                                     </DataTrigger>
                                                     <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.Failed}">
                                                         <Setter x:Uid="Setter_6" Property="Foreground" Value="Red"/>

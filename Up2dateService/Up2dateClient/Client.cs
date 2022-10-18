@@ -217,7 +217,7 @@ namespace Up2dateClient
                         return;
                     }
                 default:
-                    result = LogAndMakeResult(Finished.FAILURE, Execution.REJECTED, $"Unsupported update type: {info.updateType}, request rejected.");
+                    result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, $"Unsupported update type: {info.updateType}, request rejected.");
                     return;
             }
         }
@@ -233,7 +233,7 @@ namespace Up2dateClient
             }
             if (status == PackageStatus.Rejected)
             {
-                makeResult(Finished.FAILURE, Execution.REJECTED, "Installation rejected by user.");
+                makeResult(Finished.FAILURE, Execution.CLOSED, "Installation rejected by user.");
                 return true;
             }
             return false;

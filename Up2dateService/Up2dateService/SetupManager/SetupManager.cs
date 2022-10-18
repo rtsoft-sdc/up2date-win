@@ -54,6 +54,18 @@ namespace Up2dateService.SetupManager
             }
         }
 
+        public void RejectPackages(IEnumerable<Package> packagesToInstall)
+        {
+            foreach (string inPackage in packagesToInstall.Select(inPackage => inPackage.Filepath))
+            {
+                Package package = SafeFindPackage(inPackage);
+                if (package.Status == PackageStatus.Unavailable) continue;
+
+                package.Status = PackageStatus.Rejected;
+                SafeUpdatePackage(package);
+            }
+        }
+
         public bool IsFileSupported(string artifactFileName)
         {
             return installerFactory.IsInstallerAvailable(artifactFileName);

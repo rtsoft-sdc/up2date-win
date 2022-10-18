@@ -14,6 +14,9 @@ namespace Up2dateService
         void StartInstallation(IEnumerable<Package> packages);
 
         [OperationContract]
+        void RejectInstallation(IEnumerable<Package> packages);
+
+        [OperationContract]
         SystemInfo GetSystemInfo();
 
         [OperationContract]

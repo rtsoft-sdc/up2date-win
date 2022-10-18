@@ -53,6 +53,11 @@ namespace Up2dateService
         {
             Task.Run(() => setupManager.InstallPackages(packages));
         }
+     
+        public void RejectInstallation(IEnumerable<Package> packages)
+        {
+            setupManager.RejectPackages(packages);
+        }
 
         public string GetMsiFolder()
         {

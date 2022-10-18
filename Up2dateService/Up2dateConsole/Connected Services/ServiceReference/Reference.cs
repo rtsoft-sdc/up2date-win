@@ -804,6 +804,12 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/StartInstallation", ReplyAction="http://tempuri.org/IWcfService/StartInstallationResponse")]
         System.Threading.Tasks.Task StartInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RejectInstallation", ReplyAction="http://tempuri.org/IWcfService/RejectInstallationResponse")]
+        void RejectInstallation(Up2dateConsole.ServiceReference.Package[] packages);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RejectInstallation", ReplyAction="http://tempuri.org/IWcfService/RejectInstallationResponse")]
+        System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSystemInfo", ReplyAction="http://tempuri.org/IWcfService/GetSystemInfoResponse")]
         Up2dateConsole.ServiceReference.SystemInfo GetSystemInfo();
         
@@ -966,6 +972,14 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task StartInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages) {
             return base.Channel.StartInstallationAsync(packages);
+        }
+        
+        public void RejectInstallation(Up2dateConsole.ServiceReference.Package[] packages) {
+            base.Channel.RejectInstallation(packages);
+        }
+        
+        public System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages) {
+            return base.Channel.RejectInstallationAsync(packages);
         }
         
         public Up2dateConsole.ServiceReference.SystemInfo GetSystemInfo() {
