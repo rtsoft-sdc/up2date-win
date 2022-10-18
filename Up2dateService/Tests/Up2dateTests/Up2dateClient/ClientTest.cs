@@ -384,17 +384,19 @@ namespace Up2dateTests.Up2dateClient
         }
 
         [DataTestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
+        [DataRow(true, PackageStatus.Failed)]
+        [DataRow(false, PackageStatus.Failed)]
+        [DataRow(true, PackageStatus.Rejected)]
+        [DataRow(false, PackageStatus.Rejected)]
         public void GivenAttemptUpdateAndPackageStatusIsFailed_WhenDeploymentRequested_ThenDownloadIsExecuted_AndInstallationIsNotExecuted_AndResultIsFailed(
-            bool inMaintenanceWindow)
+            bool inMaintenanceWindow, PackageStatus packageStatus)
         {
             // arrange
             Client client = CreateClient();
             IntPtr artifact = new IntPtr(-1);
             const string fileName = "name.msi";
             StartClient(client);
-            setupManagerMock.PackageStatus = PackageStatus.Failed;
+            setupManagerMock.PackageStatus = packageStatus;
 
             // act
             wrapperMock.DeploymentActionFunc(artifact, new DeploymentInfo
@@ -407,33 +409,6 @@ namespace Up2dateTests.Up2dateClient
             // assert
             setupManagerMock.VerifyExecution(fileName, download: true, install: false);
             Assert.AreEqual(Execution.CLOSED, result.Execution);
-            Assert.AreEqual(Finished.FAILURE, result.Finished);
-        }
-
-        [DataTestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
-        public void GivenAttemptUpdateAndPackageStatusIsRejected_WhenDeploymentRequested_ThenDownloadIsExecuted_AndInstallationIsNotExecuted_AndResultIsRejected(
-            bool inMaintenanceWindow)
-        {
-            // arrange
-            Client client = CreateClient();
-            IntPtr artifact = new IntPtr(-1);
-            const string fileName = "name.msi";
-            StartClient(client);
-            setupManagerMock.PackageStatus = PackageStatus.Rejected;
-
-            // act
-            wrapperMock.DeploymentActionFunc(artifact, new DeploymentInfo
-            {
-                artifactFileName = fileName,
-                isInMaintenanceWindow = inMaintenanceWindow,
-                updateType = "attempt"
-            }, out ClientResult result);
-
-            // assert
-            setupManagerMock.VerifyExecution(fileName, download: true, install: false);
-            Assert.AreEqual(Execution.REJECTED, result.Execution);
             Assert.AreEqual(Finished.FAILURE, result.Finished);
         }
 
@@ -494,17 +469,19 @@ namespace Up2dateTests.Up2dateClient
         }
 
         [DataTestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
-        public void GivenForcedUpdateAndPackageStatusIsFailed_WhenDeploymentRequested_ThenDownloadIsExecuted_AndInstallationIsExecuted_AndResultIsFailed(
-            bool inMaintenanceWindow)
+        [DataRow(true, PackageStatus.Failed)]
+        [DataRow(false, PackageStatus.Failed)]
+        [DataRow(true, PackageStatus.Rejected)]
+        [DataRow(false, PackageStatus.Rejected)]
+        public void GivenForcedUpdateAndPackageStatusIsFailedOrRejected_WhenDeploymentRequested_ThenDownloadIsExecuted_AndInstallationIsExecuted_AndResultIsFailed(
+            bool inMaintenanceWindow, PackageStatus packageStatus)
         {
             // arrange
             Client client = CreateClient();
             IntPtr artifact = new IntPtr(-1);
             const string fileName = "name.msi";
             StartClient(client);
-            setupManagerMock.PackageStatus = PackageStatus.Failed;
+            setupManagerMock.PackageStatus = packageStatus;
 
             // act
             wrapperMock.DeploymentActionFunc(artifact, new DeploymentInfo
@@ -520,35 +497,8 @@ namespace Up2dateTests.Up2dateClient
             Assert.AreEqual(Finished.FAILURE, result.Finished);
         }
 
-        [DataTestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
-        public void GivenForcedUpdateAndPackageStatusIsRejected_WhenDeploymentRequested_ThenDownloadIsExecuted_AndInstallationIsExecuted_AndResultIsRejected(
-            bool inMaintenanceWindow)
-        {
-            // arrange
-            Client client = CreateClient();
-            IntPtr artifact = new IntPtr(-1);
-            const string fileName = "name.msi";
-            StartClient(client);
-            setupManagerMock.PackageStatus = PackageStatus.Rejected;
-
-            // act
-            wrapperMock.DeploymentActionFunc(artifact, new DeploymentInfo
-            {
-                artifactFileName = fileName,
-                isInMaintenanceWindow = inMaintenanceWindow,
-                updateType = "forced"
-            }, out ClientResult result);
-
-            // assert
-            setupManagerMock.VerifyExecution(fileName, download: true, install: true);
-            Assert.AreEqual(Execution.REJECTED, result.Execution);
-            Assert.AreEqual(Finished.FAILURE, result.Finished);
-        }
-
         [TestMethod]
-        public void GivenUnknownUpdateMode_WhenDeploymentRequested_ResultIsRejected()
+        public void GivenUnknownUpdateMode_WhenDeploymentRequested_ResultIsFailed()
         {
             // arrange
             Client client = CreateClient();
@@ -564,7 +514,7 @@ namespace Up2dateTests.Up2dateClient
             }, out ClientResult result);
 
             // assert
-            Assert.AreEqual(Execution.REJECTED, result.Execution);
+            Assert.AreEqual(Execution.CLOSED, result.Execution);
             Assert.AreEqual(Finished.FAILURE, result.Finished);
         }
 
