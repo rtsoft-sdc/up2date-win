@@ -84,18 +84,23 @@ namespace Up2dateClient
             yield return new KeyValuePair("OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit");
             yield return new KeyValuePair("version", sysInfo.VersionString);
             yield return new KeyValuePair("service pack", sysInfo.ServicePack);
-            yield return new KeyValuePair("settings.requires_confirmation_before_update", settingsManager.RequiresConfirmationBeforeInstall ? "yes" : "no");
-            yield return new KeyValuePair("settings.signature_verification_level", settingsManager.CheckSignature ? settingsManager.SignatureVerificationLevel.ToString() : "off");
         }
 
         private void OnConfigRequest(IntPtr responseBuilder)
         {
             WriteLogEntry("configuration requested.");
 
+            // system info
             foreach (var attribute in GetSystemInfo())
             {
                 wrapper.AddConfigAttribute(responseBuilder, attribute.Key, attribute.Value);
             }
+
+            // settings
+            wrapper.AddConfigAttribute(responseBuilder, "settings.requires_confirmation_before_update",
+                settingsManager.RequiresConfirmationBeforeInstall ? "yes" : "no");
+            wrapper.AddConfigAttribute(responseBuilder, "settings.signature_verification_level",
+                settingsManager.CheckSignature ? settingsManager.SignatureVerificationLevel.ToString() : "off");
         }
 
         private void OnDeploymentAction(IntPtr artifact, DeploymentInfo info, out ClientResult result)
