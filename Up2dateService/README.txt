@@ -6,17 +6,16 @@ Introduction
 
 see  https://github.com/rtsoft-gmbh/up2date-win/blob/master/README.md
 
-
 Installation
 ------------
 
 Unzip and Run Setup.exe
 
-Contact Details
+Contacts
 ---------------
 
+Web:   http://up2date.ritms.online
 Email: info@rtsoft.de
-Web:   http://rtsoft.de http://ritms.online
 
 RTSoft GmbH
 (C) 2022
