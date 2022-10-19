@@ -30,7 +30,7 @@
   <xs:element name="RejectInstallation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="packages" nillable="true" type="q3:ArrayOfPackage" />
+        <xs:element xmlns:q3="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="package" type="q3:Package" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

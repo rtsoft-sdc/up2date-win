@@ -54,16 +54,13 @@ namespace Up2dateService.SetupManager
             }
         }
 
-        public void RejectPackages(IEnumerable<Package> packagesToInstall)
+        public void RejectPackage(Package package)
         {
-            foreach (string inPackage in packagesToInstall.Select(inPackage => inPackage.Filepath))
-            {
-                Package package = SafeFindPackage(inPackage);
-                if (package.Status == PackageStatus.Unavailable) continue;
+            Package packageToReject = SafeFindPackage(package.Filepath);
+            if (packageToReject.Status == PackageStatus.Unavailable) return;
 
-                package.Status = PackageStatus.Rejected;
-                SafeUpdatePackage(package);
-            }
+            packageToReject.Status = PackageStatus.Rejected;
+            SafeUpdatePackage(packageToReject);
         }
 
         public bool IsFileSupported(string artifactFileName)

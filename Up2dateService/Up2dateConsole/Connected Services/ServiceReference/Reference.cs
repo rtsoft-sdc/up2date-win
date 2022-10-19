@@ -805,10 +805,10 @@ namespace Up2dateConsole.ServiceReference {
         System.Threading.Tasks.Task StartInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RejectInstallation", ReplyAction="http://tempuri.org/IWcfService/RejectInstallationResponse")]
-        void RejectInstallation(Up2dateConsole.ServiceReference.Package[] packages);
+        void RejectInstallation(Up2dateConsole.ServiceReference.Package package);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RejectInstallation", ReplyAction="http://tempuri.org/IWcfService/RejectInstallationResponse")]
-        System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages);
+        System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package package);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSystemInfo", ReplyAction="http://tempuri.org/IWcfService/GetSystemInfoResponse")]
         Up2dateConsole.ServiceReference.SystemInfo GetSystemInfo();
@@ -974,12 +974,12 @@ namespace Up2dateConsole.ServiceReference {
             return base.Channel.StartInstallationAsync(packages);
         }
         
-        public void RejectInstallation(Up2dateConsole.ServiceReference.Package[] packages) {
-            base.Channel.RejectInstallation(packages);
+        public void RejectInstallation(Up2dateConsole.ServiceReference.Package package) {
+            base.Channel.RejectInstallation(package);
         }
         
-        public System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages) {
-            return base.Channel.RejectInstallationAsync(packages);
+        public System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package package) {
+            return base.Channel.RejectInstallationAsync(package);
         }
         
         public Up2dateConsole.ServiceReference.SystemInfo GetSystemInfo() {

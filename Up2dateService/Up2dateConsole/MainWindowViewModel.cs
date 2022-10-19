@@ -223,26 +223,27 @@ namespace Up2dateConsole
 
         private bool CanReject(object _)
         {
-            List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
-            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.SuggestedToInstall
-                                                    || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation);
+            IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList() ;
+            if (selectedItems.Count != 1) return false;
+
+            Package package = selectedItems.First().Package;
+            return package.Status == PackageStatus.SuggestedToInstall || package.Status == PackageStatus.ForcedWaitingForConfirmation;
         }
 
         private async void ExecuteReject(object _)
         {
+            IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
+            if (selectedItems.Count != 1) return;
+
             OperationInProgress = true;
             IWcfService service = null;
 
-            Package[] selectedPackages = AvailablePackages
-                .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.SuggestedToInstall
-                                          || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation))
-                .Select(p => p.Package)
-                .ToArray();
+            Package package = selectedItems.First().Package;
 
             try
             {
                 service = wcfClientFactory.CreateClient();
-                await service.RejectInstallationAsync(selectedPackages);
+                await service.RejectInstallationAsync(package);
                 ServiceState = ServiceState.Active;
                 StateIndicator.SetInfo($"{GetText(Texts.Active)}");
             }
