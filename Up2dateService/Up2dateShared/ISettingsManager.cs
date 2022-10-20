@@ -13,5 +13,6 @@ namespace Up2dateShared
         SignatureVerificationLevel SignatureVerificationLevel { get; set; }
         string PackageInProgress { get; set; }
         string DefaultChocoSources { get; set; }
+        bool RequiresConfirmationBeforeInstall { get; set; }
     }
 }

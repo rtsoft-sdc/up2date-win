@@ -36,6 +36,7 @@
             <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Authorization certificate for RITMS UP2DATE '{0}' successfully loaded.</clr:String>
             <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
             <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
+            <clr:String x:Uid="clr:String_52" x:Key="CannotRejectInstallation">Cannot reject installation:</clr:String>
             <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
             <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should enter one-time key or directly load authorization certificate. Note that this action requires administrative privileges.</clr:String>
             <clr:String x:Uid="clr:String_48" x:Key="MachineGuidHint">Requesting one-time key from RITMS UP2DATE administartor you should provide your machine GUID, which you can find and copy at the bottom of the authorization window. Click OK to proceed.</clr:String>
@@ -46,18 +47,21 @@
             <clr:String x:Uid="clr:String_34" x:Key="Reconnecting">Agent is reconnecting to the server.</clr:String>
             <clr:String x:Uid="clr:String_35" x:Key="UnexpectedStop">Agent stopped unexpectedly.</clr:String>
             <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
-            <clr:String x:Uid="clr:String_37" x:Key="NewPackageSuggested">New software available and recommended for installation:</clr:String>
+            <clr:String x:Uid="clr:String_37" x:Key="NewPackageSuggested">New software available. Please, confirm or reject installation.</clr:String>
+            <clr:String x:Uid="clr:String_49" x:Key="NewPackageWaiting">New strongly recommnded software available. Please, confirm or reject installation.</clr:String>
             <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
             <clr:String x:Uid="clr:String_31" x:Key="PackageInstallationFailed">Software installation failed:</clr:String>
             <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>
             <clr:String x:Uid="clr:String_13" x:Key="NoCertificate">Authorization certificate is not available</clr:String>
             <clr:String x:Uid="clr:String_15" x:Key="AgentOrServerFilure">Agent or server failure</clr:String>
 
-            <clr:String x:Uid="clr:String_38" x:Key="SuggestedForInstallation">Suggested for installation</clr:String>
+            <clr:String x:Uid="clr:String_38" x:Key="SuggestedForInstallation">Waiting for confirmation. Please, confirm or reject installation.</clr:String>
+            <clr:String x:Uid="clr:String_50" x:Key="StronglyRecommended">Waiting for confirmation. Please, confirm or reject installation.</clr:String>
             <clr:String x:Uid="clr:String_16" x:Key="PackageStatusUnavailable">Unavailable</clr:String>
             <clr:String x:Uid="clr:String_17" x:Key="PackageStatusAvailable">Available</clr:String>
             <clr:String x:Uid="clr:String_18" x:Key="PackageStatusDownloading">Downloading</clr:String>
             <clr:String x:Uid="clr:String_19" x:Key="PackageStatusDownloaded">Downloaded</clr:String>
+            <clr:String x:Uid="clr:String_51" x:Key="PackageStatusRejected">Rejected</clr:String>
             <clr:String x:Uid="clr:String_20" x:Key="PackageStatusInstalling">Installing</clr:String>
             <clr:String x:Uid="clr:String_21" x:Key="PackageStatusInstalled">Installed</clr:String>
             <clr:String x:Uid="clr:String_22" x:Key="PackageStatusRestartNeeded">RestartNeeded</clr:String>
@@ -125,9 +129,13 @@
                             <TextBlock x:Uid="TextBlock1" Margin="5,0,0,0" Text="Authorization..." VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Uid="Button2" Width="100" 
-                            Content="Install selected" 
+                    <Button x:Uid="Button2" Width="100"
+                            Content="Install" 
                             Command="{Binding InstallCommand}"
+                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button x:Uid="Button_4" Width="100"
+                            Content="Reject" 
+                            Command="{Binding RejectCommand}"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings"
                             Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -168,7 +176,10 @@
                                             <Style x:Uid="Style_4" TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger x:Uid="DataTrigger_3" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.SuggestedToInstall}">
-                                                        <Setter x:Uid="Setter_8" Property="Foreground" Value="Orange"/>
+                                                        <Setter x:Uid="Setter_8" Property="Foreground" Value="DarkOrange"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger x:Uid="DataTrigger_4" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.ForcedWaitingForConfirmation}">
+                                                        <Setter x:Uid="Setter_9" Property="Foreground" Value="DarkOrange"/>
                                                     </DataTrigger>
                                                     <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.Failed}">
                                                         <Setter x:Uid="Setter_6" Property="Foreground" Value="Red"/>

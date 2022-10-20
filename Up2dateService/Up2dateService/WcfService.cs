@@ -53,6 +53,11 @@ namespace Up2dateService
         {
             Task.Run(() => setupManager.InstallPackages(packages));
         }
+     
+        public void RejectInstallation(Package package)
+        {
+            setupManager.RejectPackage(package);
+        }
 
         public string GetMsiFolder()
         {
@@ -136,6 +141,16 @@ namespace Up2dateService
         public void SetCheckSignature(bool newState)
         {
             settingsManager.CheckSignature = newState;
+        }
+
+        public bool GetConfirmBeforeInstallation()
+        {
+            return settingsManager.RequiresConfirmationBeforeInstall;
+        }
+
+        public void SetConfirmBeforeInstallation(bool newState)
+        {
+            settingsManager.RequiresConfirmationBeforeInstall = newState;
         }
 
         public SignatureVerificationLevel GetSignatureVerificationLevel()

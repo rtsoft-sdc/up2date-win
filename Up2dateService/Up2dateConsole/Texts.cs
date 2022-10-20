@@ -46,6 +46,10 @@
         RestartNeeded,
         CannotStartInstaller,
         InstallationErrorUnknown,
-        MachineGuidHint
+        MachineGuidHint,
+        PackageStatusRejected,
+        NewPackageWaiting,
+        StronglyRecommended,
+        CannotRejectInstallation
     }
 }

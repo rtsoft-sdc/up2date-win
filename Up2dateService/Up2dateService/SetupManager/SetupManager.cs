@@ -54,6 +54,15 @@ namespace Up2dateService.SetupManager
             }
         }
 
+        public void RejectPackage(Package package)
+        {
+            Package packageToReject = SafeFindPackage(package.Filepath);
+            if (packageToReject.Status == PackageStatus.Unavailable) return;
+
+            packageToReject.Status = PackageStatus.Rejected;
+            SafeUpdatePackage(packageToReject);
+        }
+
         public bool IsFileSupported(string artifactFileName)
         {
             return installerFactory.IsInstallerAvailable(artifactFileName);
@@ -79,9 +88,19 @@ namespace Up2dateService.SetupManager
         public void MarkPackageAsSuggested(string artifactFileName)
         {
             Package package = SafeFindPackage(artifactFileName);
-            if (package.Status == PackageStatus.Downloaded)
+            if (package.Status == PackageStatus.Downloaded || package.Status == PackageStatus.ForcedWaitingForConfirmation)
             {
                 package.Status = PackageStatus.SuggestedToInstall;
+                SafeUpdatePackage(package);
+            }
+        }
+
+        public void MarkPackageAsWaiting(string artifactFileName)
+        {
+            Package package = SafeFindPackage(artifactFileName);
+            if (package.Status == PackageStatus.Downloaded || package.Status == PackageStatus.SuggestedToInstall)
+            {
+                package.Status = PackageStatus.ForcedWaitingForConfirmation;
                 SafeUpdatePackage(package);
             }
         }
@@ -396,6 +415,8 @@ namespace Up2dateService.SetupManager
                         if (updatedPackage.Status != PackageStatus.Downloading 
                             && updatedPackage.Status != PackageStatus.Installing
                             && updatedPackage.Status != PackageStatus.SuggestedToInstall
+                            && updatedPackage.Status != PackageStatus.ForcedWaitingForConfirmation
+                            && updatedPackage.Status != PackageStatus.Rejected
                             && updatedPackage.Status != PackageStatus.Failed)
                         {
                             updatedPackage.Status = PackageStatus.Downloaded;

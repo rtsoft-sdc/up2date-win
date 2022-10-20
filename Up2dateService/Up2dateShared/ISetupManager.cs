@@ -8,6 +8,7 @@ namespace Up2dateShared
         List<Package> GetAvaliablePackages();
         InstallPackageResult InstallPackage(string packageFile);
         void InstallPackages(IEnumerable<Package> packages);
+        void RejectPackage(Package package);
         bool IsFileSupported(string artifactFileName);
         bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5);
         bool IsPackageInstalled(string artifactFileName);
@@ -15,5 +16,6 @@ namespace Up2dateShared
         PackageStatus GetStatus(string artifactFileName);
         InstallPackageResult GetInstallPackageResult(string artifactFileName);
         Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact);
+        void MarkPackageAsWaiting(string artifactFileName);
     }
 }

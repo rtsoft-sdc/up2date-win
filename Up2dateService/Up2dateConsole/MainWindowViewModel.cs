@@ -44,6 +44,7 @@ namespace Up2dateConsole
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
             RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh(), o => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
+            RejectCommand = new RelayCommand(ExecuteReject, CanReject);
             RequestCertificateCommand = new RelayCommand(async (_) => await ExecuteRequestCertificateAsync());
             SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
 
@@ -57,6 +58,7 @@ namespace Up2dateConsole
         public ICommand EnterAdminModeCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand InstallCommand { get; }
+        public ICommand RejectCommand { get; }
         public ICommand ShowConsoleCommand { get; }
         public ICommand QuitCommand { get; }
         public ICommand RequestCertificateCommand { get; }
@@ -219,11 +221,62 @@ namespace Up2dateConsole
             viewService.ShowDialog(vm);
         }
 
+        private bool CanReject(object _)
+        {
+            IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList() ;
+            if (selectedItems.Count != 1) return false;
+
+            Package package = selectedItems.First().Package;
+            return package.Status == PackageStatus.SuggestedToInstall || package.Status == PackageStatus.ForcedWaitingForConfirmation;
+        }
+
+        private async void ExecuteReject(object _)
+        {
+            IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
+            if (selectedItems.Count != 1) return;
+
+            OperationInProgress = true;
+            IWcfService service = null;
+
+            Package package = selectedItems.First().Package;
+
+            try
+            {
+                service = wcfClientFactory.CreateClient();
+                await service.RejectInstallationAsync(package);
+                ServiceState = ServiceState.Active;
+                StateIndicator.SetInfo($"{GetText(Texts.Active)}");
+            }
+            catch (System.ServiceModel.EndpointNotFoundException)
+            {
+                ServiceState = ServiceState.ClientUnaccessible;
+                var message = GetText(Texts.CannotRejectInstallation);
+                StateIndicator.SetInfo(message);
+                viewService.ShowMessageBox($"{GetText(Texts.CannotRejectInstallation)}\n{message}");
+            }
+            catch (Exception e)
+            {
+                ServiceState = ServiceState.ClientUnaccessible;
+                var message = e.Message;
+                StateIndicator.SetInfo(message);
+                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}\n\n{e.StackTrace}");
+            }
+            finally
+            {
+                wcfClientFactory.CloseClient(service);
+                OperationInProgress = false;
+            }
+
+            await ExecuteRefresh();
+        }
+
         private bool CanInstall(object _)
         {
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
             return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded
                                                     || p.Package.Status == PackageStatus.SuggestedToInstall
+                                                    || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation
+                                                    || p.Package.Status == PackageStatus.Rejected
                                                     || p.Package.Status == PackageStatus.Failed);
         }
 
@@ -235,6 +288,8 @@ namespace Up2dateConsole
             Package[] selectedPackages = AvailablePackages
                 .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded
                                             || p.Package.Status == PackageStatus.SuggestedToInstall
+                                            || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation
+                                            || p.Package.Status == PackageStatus.Rejected
                                             || p.Package.Status == PackageStatus.Failed))
                 .Select(p => p.Package)
                 .ToArray();
@@ -414,6 +469,13 @@ namespace Up2dateConsole
             if (suggested.Any())
             {
                 TryShowToastNotification(Texts.NewPackageSuggested, suggested.Select(p => p.ProductName));
+            }
+
+            var waiting = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading || oldStatus == PackageStatus.Downloaded || oldStatus == PackageStatus.SuggestedToInstall,
+                                                newStatus => newStatus == PackageStatus.ForcedWaitingForConfirmation);
+            if (waiting.Any())
+            {
+                TryShowToastNotification(Texts.NewPackageWaiting, suggested.Select(p => p.ProductName));
             }
 
             var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,

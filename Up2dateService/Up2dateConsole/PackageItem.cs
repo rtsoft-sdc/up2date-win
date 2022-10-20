@@ -29,6 +29,8 @@ namespace Up2dateConsole
 
         public string ExtraInfo => Package.Status == PackageStatus.SuggestedToInstall
                     ? viewService.GetText(Texts.SuggestedForInstallation)
+                    : Package.Status == PackageStatus.ForcedWaitingForConfirmation
+                    ? viewService.GetText(Texts.StronglyRecommended)
                     : ConvertToString(Package.ErrorCode);
 
         public string ProductName => string.IsNullOrWhiteSpace(Package.DisplayName) ? Package.ProductName : Package.DisplayName;
@@ -89,6 +91,8 @@ namespace Up2dateConsole
                 { PackageStatus.Downloading, Texts.PackageStatusDownloading },
                 { PackageStatus.Downloaded, Texts.PackageStatusDownloaded },
                 { PackageStatus.SuggestedToInstall, Texts.PackageStatusDownloaded },
+                { PackageStatus.ForcedWaitingForConfirmation, Texts.PackageStatusDownloaded },
+                { PackageStatus.Rejected, Texts.PackageStatusRejected },
                 { PackageStatus.Installing, Texts.PackageStatusInstalling },
                 { PackageStatus.Installed, Texts.PackageStatusInstalled },
                 { PackageStatus.RestartNeeded, Texts.PackageStatusRestartNeeded },

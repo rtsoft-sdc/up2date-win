@@ -61,5 +61,13 @@ namespace SimpleClientApp
         public void MarkPackageAsSuggested(string artifactFileName)
         {
         }
+
+        public void MarkPackageAsWaiting(string artifactFileName)
+        {
+        }
+
+        public void RejectPackage(Package package)
+        {
+        }
     }
 }
