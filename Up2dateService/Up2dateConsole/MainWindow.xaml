@@ -31,6 +31,7 @@
 
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
             <helpers:NullToVisibilityConverter x:Uid="helpers:NullToVisibilityConverter_1" x:Key="NullToVisibilityConverter"/>
+            <helpers:InvertBooleanToVisibilityConverter x:Uid="helpers:InvertBooleanToVisibilityConverter_1" x:Key="InvertBooleanToVisibilityConverter"/>
 
             <clr:String x:Uid="clr:String_1" x:Key="BadCertificateMessage">Certificate '{0}' is loaded but there is a problem establishing connection to RITMS UP2DATE server. Please check if the loaded certificate is valid.</clr:String>
             <clr:String x:Uid="clr:String_2" x:Key="GoodCertificateMessage">Authorization certificate for RITMS UP2DATE '{0}' successfully loaded.</clr:String>
@@ -47,8 +48,8 @@
             <clr:String x:Uid="clr:String_34" x:Key="Reconnecting">Agent is reconnecting to the server.</clr:String>
             <clr:String x:Uid="clr:String_35" x:Key="UnexpectedStop">Agent stopped unexpectedly.</clr:String>
             <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
-            <clr:String x:Uid="clr:String_37" x:Key="NewPackageSuggested">New software available. Please, confirm or reject installation.</clr:String>
-            <clr:String x:Uid="clr:String_49" x:Key="NewPackageWaiting">New strongly recommnded software available. Please, confirm or reject installation.</clr:String>
+            <clr:String x:Uid="clr:String_37" x:Key="NewPackageWaitingForConfirmation">Please, confirm or reject installation of the new available software.</clr:String>
+            <clr:String x:Uid="clr:String_49" x:Key="NewPackageWaitingForConfirmationForced">Please, confirm or reject installation of the new recommended software.</clr:String>
             <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
             <clr:String x:Uid="clr:String_31" x:Key="PackageInstallationFailed">Software installation failed:</clr:String>
             <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>
@@ -66,6 +67,10 @@
             <clr:String x:Uid="clr:String_21" x:Key="PackageStatusInstalled">Installed</clr:String>
             <clr:String x:Uid="clr:String_22" x:Key="PackageStatusRestartNeeded">RestartNeeded</clr:String>
             <clr:String x:Uid="clr:String_23" x:Key="PackageStatusFailed">Failed</clr:String>
+            <clr:String x:Uid="clr:String_53" x:Key="PackageStatusWaiting">Waiting</clr:String>
+            <clr:String x:Uid="clr:String_54" x:Key="PackageStatusWaitingForced">Waiting</clr:String>
+            <clr:String x:Uid="clr:String_55" x:Key="PackageStatusAccepting">Accepting</clr:String>
+            <clr:String x:Uid="clr:String_56" x:Key="PackageStatusRejecting">Rejecting</clr:String>
             <clr:String x:Uid="clr:String_24" x:Key="PackageStatusUnknown">Unknown</clr:String>
             <clr:String x:Uid="clr:String_36" x:Key="Active">Active</clr:String>
 
@@ -120,27 +125,29 @@
             </Grid.RowDefinitions>
             <Grid x:Uid="Grid_3" Margin="10,5" >
                 <TextBlock x:Uid="TextBlock_1" VerticalAlignment="Center" Text="Software packages:"/>
-                <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                    <Button x:Uid="Button1" ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
-                            Command="{Binding RequestCertificateCommand}"
-                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
-                            <TextBlock x:Uid="TextBlock_2" Text="{StaticResource KeyIcon}" Foreground="DarkOrange" Style="{StaticResource ButtonIcon}"/>
-                            <TextBlock x:Uid="TextBlock1" Margin="5,0,0,0" Text="Authorization..." VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Uid="Button2" Width="100"
-                            Content="Install" 
-                            Command="{Binding InstallCommand}"
-                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button x:Uid="Button_4" Width="100"
-                            Content="Reject" 
-                            Command="{Binding RejectCommand}"
-                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings"
-                            Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock x:Uid="TextBlock_7" Text="{StaticResource wrenchIcon}" Style="{StaticResource ButtonIcon}"/>
-                    </Button>
+                <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal" VerticalAlignment="Center"
+                                Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Button x:Uid="Button1" ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
+                            Command="{Binding RequestCertificateCommand}">
+                            <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
+                                <TextBlock x:Uid="TextBlock_2" Text="{StaticResource KeyIcon}" Foreground="DarkOrange" Style="{StaticResource ButtonIcon}"/>
+                                <TextBlock x:Uid="TextBlock1" Margin="5,0,0,0" Text="Authorization..." VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Uid="Button2" Width="100" Content="Install" Command="{Binding InstallCommand}"
+                                ToolTip="Install selected package"
+                                Visibility="{Binding CanAcceptReject, Converter={StaticResource InvertBooleanToVisibilityConverter}}"/>
+                        <Button x:Uid="Button_5" Width="100" Content="Accept" Command="{Binding AcceptCommand}"
+                                ToolTip="Accept installation of the selected package. Installation will start automatically soon after acceptance."
+                                Visibility="{Binding CanAcceptReject, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Button x:Uid="Button_4" Width="100" Content="Reject" Command="{Binding RejectCommand}"
+                                ToolTip="Reject installation of the selected package."
+                                Visibility="{Binding CanAcceptReject, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings">
+                            <TextBlock x:Uid="TextBlock_7" Text="{StaticResource wrenchIcon}" Style="{StaticResource ButtonIcon}"/>
+                        </Button>
+                    </StackPanel>
                     <Button x:Uid="Button_1" Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages">
                         <TextBlock x:Uid="TextBlock_3" Text="{StaticResource RefreshIcon}" Style="{StaticResource ButtonIcon}"/>
                     </Button>
@@ -159,6 +166,7 @@
                         CanUserResizeRows="False"
                         RowHeaderWidth="0"
                         IsReadOnly="True"
+                        IsSynchronizedWithCurrentItem="True"
                         ItemsSource="{Binding AvailablePackages}">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_1" Header="Package" Binding="{Binding Filename}" Width="2*"/>
@@ -175,10 +183,10 @@
                                         <TextBlock.Style>
                                             <Style x:Uid="Style_4" TargetType="{x:Type TextBlock}">
                                                 <Style.Triggers>
-                                                    <DataTrigger x:Uid="DataTrigger_3" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.SuggestedToInstall}">
+                                                    <DataTrigger x:Uid="DataTrigger_3" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.WaitingForConfirmation}">
                                                         <Setter x:Uid="Setter_8" Property="Foreground" Value="DarkOrange"/>
                                                     </DataTrigger>
-                                                    <DataTrigger x:Uid="DataTrigger_4" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.ForcedWaitingForConfirmation}">
+                                                    <DataTrigger x:Uid="DataTrigger_4" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.WaitingForConfirmationForced}">
                                                         <Setter x:Uid="Setter_9" Property="Foreground" Value="DarkOrange"/>
                                                     </DataTrigger>
                                                     <DataTrigger x:Uid="DataTrigger_1" Binding="{Binding PackageStatus}" Value="{x:Static service:PackageStatus.Failed}">

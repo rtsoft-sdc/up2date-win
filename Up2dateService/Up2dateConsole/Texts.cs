@@ -35,7 +35,7 @@
         Reconnecting,
         UnexpectedStop,
         Active,
-        NewPackageSuggested,
+        NewPackageWaitingForConfirmation,
         SuggestedForInstallation,
         PackageNotSupported,
         PackageUnavailable,
@@ -48,8 +48,12 @@
         InstallationErrorUnknown,
         MachineGuidHint,
         PackageStatusRejected,
-        NewPackageWaiting,
+        NewPackageWaitingForConfirmationForced,
         StronglyRecommended,
-        CannotRejectInstallation
+        CannotRejectInstallation,
+        PackageStatusWaiting,
+        PackageStatusWaitingForced,
+        PackageStatusAccepting,
+        PackageStatusRejecting
     }
 }

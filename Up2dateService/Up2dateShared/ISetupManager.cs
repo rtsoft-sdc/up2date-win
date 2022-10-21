@@ -8,14 +8,17 @@ namespace Up2dateShared
         List<Package> GetAvaliablePackages();
         InstallPackageResult InstallPackage(string packageFile);
         void InstallPackages(IEnumerable<Package> packages);
+        void AcceptPackage(Package package);
         void RejectPackage(Package package);
         bool IsFileSupported(string artifactFileName);
         bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5);
         bool IsPackageInstalled(string artifactFileName);
-        void MarkPackageAsSuggested(string artifactFileName);
+        void MarkPackageWaitingForConfirmation(string artifactFileName, bool forced);
+        void MarkPackageRejected(string artifactFileName);
         PackageStatus GetStatus(string artifactFileName);
         InstallPackageResult GetInstallPackageResult(string artifactFileName);
         Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact);
-        void MarkPackageAsWaiting(string artifactFileName);
+        bool Cancel(int actionId);
+        void CreateOrUpdatePackage(string artifactFileName, int id);
     }
 }

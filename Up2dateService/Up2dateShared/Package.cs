@@ -5,6 +5,9 @@ namespace Up2dateShared
     [DataContract(Namespace = "http://RTSoft.Ritms.Up2date.win")]
     public struct Package
     {
+        [DataMember]
+        public int DeploymentActionID { get; set; }
+
         // informartion from MSI file
         [DataMember]
         public string Filepath { get; set; }
@@ -48,9 +51,13 @@ namespace Up2dateShared
         [EnumMember]
         Downloaded,
         [EnumMember]
-        SuggestedToInstall,
+        WaitingForConfirmation,
         [EnumMember]
-        ForcedWaitingForConfirmation,
+        WaitingForConfirmationForced,
+        [EnumMember]
+        AcceptPending,
+        [EnumMember]
+        RejectPending,
         [EnumMember]
         Rejected,
         [EnumMember]
