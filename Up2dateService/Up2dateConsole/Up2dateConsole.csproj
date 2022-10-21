@@ -88,6 +88,7 @@
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
+    <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="IWcfClientFactory.cs" />
     <Compile Include="Properties\Resources.ru-RU.Designer.cs">

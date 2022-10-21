@@ -54,6 +54,8 @@
         PackageStatusWaiting,
         PackageStatusWaitingForced,
         PackageStatusAccepting,
-        PackageStatusRejecting
+        PackageStatusRejecting,
+        CannotStopService,
+        CannotStartService
     }
 }

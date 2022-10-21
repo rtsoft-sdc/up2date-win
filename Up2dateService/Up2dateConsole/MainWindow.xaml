@@ -93,6 +93,8 @@
             <clr:String x:Uid="clr:String_45" x:Key="RestartNeeded">System restart needed</clr:String>
             <clr:String x:Uid="clr:String_46" x:Key="CannotStartInstaller">Cannot start installer process</clr:String>
             <clr:String x:Uid="clr:String_47" x:Key="InstallationErrorUnknown">Uknown installation error</clr:String>
+            <clr:String x:Uid="clr:String_57" x:Key="CannotStopService">Failed to stop service.</clr:String>
+            <clr:String x:Uid="clr:String_58" x:Key="CannotStartService">Failed to start service.</clr:String>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -111,12 +113,12 @@
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu x:Uid="ContextMenu_1">
                     <MenuItem x:Uid="MenuItem_1" Header="Show console" Command="{Binding ShowConsoleCommand}"/>
-                    <Separator Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <MenuItem Header="Start service" Command="{Binding StartServiceCommand}"
+                    <Separator x:Uid="Separator_2" Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <MenuItem x:Uid="MenuItem_3" Header="Start service" Command="{Binding StartServiceCommand}"
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <MenuItem Header="Stop service" Command="{Binding StopServiceCommand}"
+                    <MenuItem x:Uid="MenuItem_4" Header="Stop service" Command="{Binding StopServiceCommand}"
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <MenuItem Header="Settings..." Command="{Binding SettingsCommand}"
+                    <MenuItem x:Uid="MenuItem_5" Header="Settings..." Command="{Binding SettingsCommand}"
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Separator x:Uid="Separator_1"/>
                     <MenuItem x:Uid="MenuItem_2" Header="Quit" Command="{Binding QuitCommand}"/>

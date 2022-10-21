@@ -65,26 +65,42 @@ namespace Up2dateConsole
 
         private async Task ExecuteStopService()
         {
-            using (ServiceController sc = new ServiceController(ServiceName))
+            try
             {
-                if (!sc.Status.Equals(ServiceControllerStatus.Stopped) && !sc.Status.Equals(ServiceControllerStatus.StopPending))
+                using (ServiceController sc = new ServiceController(ServiceName))
                 {
-                    sc.Stop();
-                    await ExecuteRefresh();
+                    if (!sc.Status.Equals(ServiceControllerStatus.Stopped) && !sc.Status.Equals(ServiceControllerStatus.StopPending))
+                    {
+                        sc.Stop();
+                        ServiceHelper.ChangeStartMode(sc, ServiceStartMode.Manual);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                viewService.ShowMessageBox(viewService.GetText(Texts.CannotStopService) + "\n" + e.Message);
+            }
+            await ExecuteRefresh();
         }
 
         private async Task ExecuteStartService()
         {
-            using (ServiceController sc = new ServiceController(ServiceName))
+            try
             {
-                if (!sc.Status.Equals(ServiceControllerStatus.Running) && !sc.Status.Equals(ServiceControllerStatus.StartPending))
+                using (ServiceController sc = new ServiceController(ServiceName))
                 {
-                    sc.Start();
-                    await ExecuteRefresh();
+                    if (!sc.Status.Equals(ServiceControllerStatus.Running) && !sc.Status.Equals(ServiceControllerStatus.StartPending))
+                    {
+                        ServiceHelper.ChangeStartMode(sc, ServiceStartMode.Automatic);
+                        sc.Start();
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                viewService.ShowMessageBox(viewService.GetText(Texts.CannotStartService) + "\n" + e.Message);
+            }
+            await ExecuteRefresh();
         }
 
         public ICommand EnterAdminModeCommand { get; }
@@ -404,6 +420,7 @@ namespace Up2dateConsole
             finally
             {
                 wcfClientFactory.CloseClient(service);
+                ThreadHelper.SafeInvoke(AvailablePackages.Clear); // collection view can be updated only from UI thread!
             }
 
             List<Package> selected = AvailablePackages.Where(p => p.IsSelected).Select(p => p.Package).ToList();
@@ -422,8 +439,7 @@ namespace Up2dateConsole
 
             ThreadHelper.SafeInvoke(() => // collection view can be updated only from UI thread!
             {
-                AvailablePackages.Clear();
-                foreach (var pi in packageItems)
+                foreach (PackageItem pi in packageItems)
                 {
                     AvailablePackages.Add(pi);
                 }
