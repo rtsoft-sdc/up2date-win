@@ -50,6 +50,10 @@
         PackageStatusRejected,
         NewPackageWaiting,
         StronglyRecommended,
-        CannotRejectInstallation
+        CannotRejectInstallation,
+        PackageStatusWaiting,
+        PackageStatusWaitingForced,
+        PackageStatusAccepting,
+        PackageStatusRejecting
     }
 }

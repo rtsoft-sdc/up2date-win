@@ -53,7 +53,12 @@ namespace Up2dateService
         {
             Task.Run(() => setupManager.InstallPackages(packages));
         }
-     
+
+        public void AcceptInstallation(Package package)
+        {
+            setupManager.AcceptPackage(package);
+        }
+
         public void RejectInstallation(Package package)
         {
             setupManager.RejectPackage(package);

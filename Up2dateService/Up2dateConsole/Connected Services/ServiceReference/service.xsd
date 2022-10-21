@@ -27,10 +27,22 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="RejectInstallation">
+  <xs:element name="AcceptInstallation">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q3="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="package" type="q3:Package" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AcceptInstallationResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RejectInstallation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="package" type="q4:Package" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -47,7 +59,7 @@
   <xs:element name="GetSystemInfoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="GetSystemInfoResult" type="q4:SystemInfo" />
+        <xs:element xmlns:q5="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="GetSystemInfoResult" type="q5:SystemInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -71,7 +83,7 @@
   <xs:element name="GetClientStateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="GetClientStateResult" type="q5:ClientState" />
+        <xs:element xmlns:q6="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="GetClientStateResult" type="q6:ClientState" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -109,7 +121,7 @@
   <xs:element name="RequestCertificateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="RequestCertificateResult" type="q6:ResultOfstring" />
+        <xs:element xmlns:q7="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="RequestCertificateResult" type="q7:ResultOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -123,7 +135,7 @@
   <xs:element name="ImportCertificateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="ImportCertificateResult" type="q7:ResultOfstring" />
+        <xs:element xmlns:q8="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="ImportCertificateResult" type="q8:ResultOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -231,14 +243,14 @@
   <xs:element name="GetSignatureVerificationLevelResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="GetSignatureVerificationLevelResult" type="q8:SignatureVerificationLevel" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="GetSignatureVerificationLevelResult" type="q9:SignatureVerificationLevel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SetSignatureVerificationLevel">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="level" type="q9:SignatureVerificationLevel" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="level" type="q10:SignatureVerificationLevel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -269,7 +281,7 @@
   <xs:element name="GetWhitelistedCertificatesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetWhitelistedCertificatesResult" nillable="true" type="q10:ArrayOfstring" />
+        <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetWhitelistedCertificatesResult" nillable="true" type="q11:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -283,7 +295,7 @@
   <xs:element name="AddCertificateToWhitelistResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="AddCertificateToWhitelistResult" type="q11:Result" />
+        <xs:element xmlns:q12="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="AddCertificateToWhitelistResult" type="q12:Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

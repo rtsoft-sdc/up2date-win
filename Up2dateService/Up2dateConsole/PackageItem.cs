@@ -27,9 +27,9 @@ namespace Up2dateConsole
 
         public string Status => ConvertToString(Package.Status);
 
-        public string ExtraInfo => Package.Status == PackageStatus.SuggestedToInstall
+        public string ExtraInfo => Package.Status == PackageStatus.WaitingForConfirmation
                     ? viewService.GetText(Texts.SuggestedForInstallation)
-                    : Package.Status == PackageStatus.ForcedWaitingForConfirmation
+                    : Package.Status == PackageStatus.WaitingForConfirmationForced
                     ? viewService.GetText(Texts.StronglyRecommended)
                     : ConvertToString(Package.ErrorCode);
 
@@ -90,8 +90,10 @@ namespace Up2dateConsole
                 { PackageStatus.Available, Texts.PackageStatusAvailable },
                 { PackageStatus.Downloading, Texts.PackageStatusDownloading },
                 { PackageStatus.Downloaded, Texts.PackageStatusDownloaded },
-                { PackageStatus.SuggestedToInstall, Texts.PackageStatusDownloaded },
-                { PackageStatus.ForcedWaitingForConfirmation, Texts.PackageStatusDownloaded },
+                { PackageStatus.WaitingForConfirmation, Texts.PackageStatusWaiting },
+                { PackageStatus.WaitingForConfirmationForced, Texts.PackageStatusWaitingForced },
+                { PackageStatus.AcceptPending, Texts.PackageStatusAccepting },
+                { PackageStatus.RejectPending, Texts.PackageStatusRejecting },
                 { PackageStatus.Rejected, Texts.PackageStatusRejected },
                 { PackageStatus.Installing, Texts.PackageStatusInstalling },
                 { PackageStatus.Installed, Texts.PackageStatusInstalled },

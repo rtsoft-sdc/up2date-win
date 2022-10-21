@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Up2dateConsole.Dialogs;
 using Up2dateConsole.Helpers;
@@ -44,11 +45,13 @@ namespace Up2dateConsole
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
             RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh(), o => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
-            RejectCommand = new RelayCommand(ExecuteReject, CanReject);
+            AcceptCommand = new RelayCommand(async (_) => await Accept(true), (_) => CanAcceptReject);
+            RejectCommand = new RelayCommand(async (_) => await Accept(false), (_) => CanAcceptReject);
             RequestCertificateCommand = new RelayCommand(async (_) => await ExecuteRequestCertificateAsync());
             SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
 
             AvailablePackages = new ObservableCollection<PackageItem>();
+            CollectionViewSource.GetDefaultView(AvailablePackages).CurrentChanged += (o, e) => OnPropertyChanged(nameof(CanAcceptReject));
 
             timer.AutoReset = false;
             timer.Start();
@@ -58,6 +61,7 @@ namespace Up2dateConsole
         public ICommand EnterAdminModeCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand InstallCommand { get; }
+        public ICommand AcceptCommand { get; }
         public ICommand RejectCommand { get; }
         public ICommand ShowConsoleCommand { get; }
         public ICommand QuitCommand { get; }
@@ -142,6 +146,19 @@ namespace Up2dateConsole
 
         public ObservableCollection<PackageItem> AvailablePackages { get; }
 
+        public bool CanAcceptReject
+        {
+            get
+            {
+                IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
+                if (selectedItems.Count != 1) return false;
+
+                Package package = selectedItems.First().Package;
+                return package.Status == PackageStatus.WaitingForConfirmation
+                    || package.Status == PackageStatus.WaitingForConfirmationForced;
+            }
+        }
+
         private async Task Timer_Elapsed()
         {
             if (timer.Interval == InitialDelay)
@@ -221,16 +238,7 @@ namespace Up2dateConsole
             viewService.ShowDialog(vm);
         }
 
-        private bool CanReject(object _)
-        {
-            IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList() ;
-            if (selectedItems.Count != 1) return false;
-
-            Package package = selectedItems.First().Package;
-            return package.Status == PackageStatus.SuggestedToInstall || package.Status == PackageStatus.ForcedWaitingForConfirmation;
-        }
-
-        private async void ExecuteReject(object _)
+        private async Task Accept(bool accept)
         {
             IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
             if (selectedItems.Count != 1) return;
@@ -243,7 +251,14 @@ namespace Up2dateConsole
             try
             {
                 service = wcfClientFactory.CreateClient();
-                await service.RejectInstallationAsync(package);
+                if (accept)
+                {
+                    await service.AcceptInstallationAsync(package);
+                }
+                else
+                {
+                    await service.RejectInstallationAsync(package);
+                }
                 ServiceState = ServiceState.Active;
                 StateIndicator.SetInfo($"{GetText(Texts.Active)}");
             }
@@ -274,8 +289,6 @@ namespace Up2dateConsole
         {
             List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
             return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded
-                                                    || p.Package.Status == PackageStatus.SuggestedToInstall
-                                                    || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation
                                                     || p.Package.Status == PackageStatus.Rejected
                                                     || p.Package.Status == PackageStatus.Failed);
         }
@@ -287,10 +300,8 @@ namespace Up2dateConsole
 
             Package[] selectedPackages = AvailablePackages
                 .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded
-                                            || p.Package.Status == PackageStatus.SuggestedToInstall
-                                            || p.Package.Status == PackageStatus.ForcedWaitingForConfirmation
-                                            || p.Package.Status == PackageStatus.Rejected
-                                            || p.Package.Status == PackageStatus.Failed))
+                                         || p.Package.Status == PackageStatus.Rejected
+                                         || p.Package.Status == PackageStatus.Failed))
                 .Select(p => p.Package)
                 .ToArray();
             try
@@ -390,6 +401,8 @@ namespace Up2dateConsole
             }
 
             OperationInProgress = false;
+
+            OnPropertyChanged(nameof(CanAcceptReject));
         }
 
         private void PromptIfCertificateNotAvailable()
@@ -464,18 +477,18 @@ namespace Up2dateConsole
                 TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => p.ProductName));
             }
 
-            var suggested = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading || oldStatus == PackageStatus.Downloaded,
-                                                newStatus => newStatus == PackageStatus.SuggestedToInstall);
-            if (suggested.Any())
-            {
-                TryShowToastNotification(Texts.NewPackageSuggested, suggested.Select(p => p.ProductName));
-            }
-
-            var waiting = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading || oldStatus == PackageStatus.Downloaded || oldStatus == PackageStatus.SuggestedToInstall,
-                                                newStatus => newStatus == PackageStatus.ForcedWaitingForConfirmation);
+            var waiting = SelectChangedItems(oldStatus => oldStatus != PackageStatus.WaitingForConfirmation,
+                                                newStatus => newStatus == PackageStatus.WaitingForConfirmation);
             if (waiting.Any())
             {
-                TryShowToastNotification(Texts.NewPackageWaiting, suggested.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageSuggested, waiting.Select(p => p.ProductName));
+            }
+
+            var waitingForced = SelectChangedItems(oldStatus => oldStatus != PackageStatus.WaitingForConfirmationForced,
+                                                newStatus => newStatus == PackageStatus.WaitingForConfirmationForced);
+            if (waitingForced.Any())
+            {
+                TryShowToastNotification(Texts.NewPackageWaiting, waitingForced.Select(p => p.ProductName));
             }
 
             var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,

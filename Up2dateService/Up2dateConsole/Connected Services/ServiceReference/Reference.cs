@@ -23,6 +23,9 @@ namespace Up2dateConsole.ServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int DeploymentActionIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DisplayNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -64,6 +67,19 @@ namespace Up2dateConsole.ServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int DeploymentActionID {
+            get {
+                return this.DeploymentActionIDField;
+            }
+            set {
+                if ((this.DeploymentActionIDField.Equals(value) != true)) {
+                    this.DeploymentActionIDField = value;
+                    this.RaisePropertyChanged("DeploymentActionID");
+                }
             }
         }
         
@@ -282,25 +298,31 @@ namespace Up2dateConsole.ServiceReference {
         Downloaded = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        SuggestedToInstall = 4,
+        WaitingForConfirmation = 4,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        ForcedWaitingForConfirmation = 5,
+        WaitingForConfirmationForced = 5,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Rejected = 6,
+        AcceptPending = 6,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installing = 7,
+        RejectPending = 7,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installed = 8,
+        Rejected = 8,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        RestartNeeded = 9,
+        Installing = 9,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Failed = 10,
+        Installed = 10,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RestartNeeded = 11,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Failed = 12,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -804,6 +826,12 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/StartInstallation", ReplyAction="http://tempuri.org/IWcfService/StartInstallationResponse")]
         System.Threading.Tasks.Task StartInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/AcceptInstallation", ReplyAction="http://tempuri.org/IWcfService/AcceptInstallationResponse")]
+        void AcceptInstallation(Up2dateConsole.ServiceReference.Package package);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/AcceptInstallation", ReplyAction="http://tempuri.org/IWcfService/AcceptInstallationResponse")]
+        System.Threading.Tasks.Task AcceptInstallationAsync(Up2dateConsole.ServiceReference.Package package);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RejectInstallation", ReplyAction="http://tempuri.org/IWcfService/RejectInstallationResponse")]
         void RejectInstallation(Up2dateConsole.ServiceReference.Package package);
         
@@ -972,6 +1000,14 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task StartInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages) {
             return base.Channel.StartInstallationAsync(packages);
+        }
+        
+        public void AcceptInstallation(Up2dateConsole.ServiceReference.Package package) {
+            base.Channel.AcceptInstallation(package);
+        }
+        
+        public System.Threading.Tasks.Task AcceptInstallationAsync(Up2dateConsole.ServiceReference.Package package) {
+            return base.Channel.AcceptInstallationAsync(package);
         }
         
         public void RejectInstallation(Up2dateConsole.ServiceReference.Package package) {
