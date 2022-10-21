@@ -48,8 +48,8 @@
             <clr:String x:Uid="clr:String_34" x:Key="Reconnecting">Agent is reconnecting to the server.</clr:String>
             <clr:String x:Uid="clr:String_35" x:Key="UnexpectedStop">Agent stopped unexpectedly.</clr:String>
             <clr:String x:Uid="clr:String_10" x:Key="NewPackageAvailable">New software available for installation:</clr:String>
-            <clr:String x:Uid="clr:String_37" x:Key="NewPackageSuggested">New software available. Please, confirm or reject installation.</clr:String>
-            <clr:String x:Uid="clr:String_49" x:Key="NewPackageWaiting">New strongly recommnded software available. Please, confirm or reject installation.</clr:String>
+            <clr:String x:Uid="clr:String_37" x:Key="NewPackageWaitingForConfirmation">Please, confirm or reject installation of the new available software.</clr:String>
+            <clr:String x:Uid="clr:String_49" x:Key="NewPackageWaitingForConfirmationForced">Please, confirm or reject installation of the new recommended software.</clr:String>
             <clr:String x:Uid="clr:String_11" x:Key="NewPackageInstalled">New software installed:</clr:String>
             <clr:String x:Uid="clr:String_31" x:Key="PackageInstallationFailed">Software installation failed:</clr:String>
             <clr:String x:Uid="clr:String_12" x:Key="ClientUnaccessible">Agent is not running or inaccessible</clr:String>

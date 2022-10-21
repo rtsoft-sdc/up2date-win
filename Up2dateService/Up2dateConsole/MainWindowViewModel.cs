@@ -468,42 +468,49 @@ namespace Up2dateConsole
             }
 
             IList<PackageItem> SelectChangedItems(Func<PackageStatus, bool> oldStatusCondition, Func<PackageStatus, bool> newStatusCondition)
-                => changes.Where(p => oldStatusCondition(p.oldStatus) && newStatusCondition(p.newStatus)).Select(p => p.item).ToList();
+            {
+                return changes.Where(p => oldStatusCondition(p.oldStatus) && newStatusCondition(p.newStatus)).Select(p => p.item).ToList();
+            }
 
             var downloaded = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading,
                                                 newStatus => newStatus == PackageStatus.Downloaded);
             if (downloaded.Any())
             {
-                TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => GetProductNameAndVersion(p)).Distinct());
             }
 
             var waiting = SelectChangedItems(oldStatus => oldStatus != PackageStatus.WaitingForConfirmation,
                                                 newStatus => newStatus == PackageStatus.WaitingForConfirmation);
             if (waiting.Any())
             {
-                TryShowToastNotification(Texts.NewPackageSuggested, waiting.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageWaitingForConfirmation, waiting.Select(p => GetProductNameAndVersion(p)).Distinct());
             }
 
             var waitingForced = SelectChangedItems(oldStatus => oldStatus != PackageStatus.WaitingForConfirmationForced,
                                                 newStatus => newStatus == PackageStatus.WaitingForConfirmationForced);
             if (waitingForced.Any())
             {
-                TryShowToastNotification(Texts.NewPackageWaiting, waitingForced.Select(p => p.ProductName));
+                TryShowToastNotification(Texts.NewPackageWaitingForConfirmationForced, waitingForced.Select(p => GetProductNameAndVersion(p)).Distinct());
             }
 
             var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,
                                             newStatus => newStatus == PackageStatus.Failed);
             if (failed.Any())
             {
-                TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{p.ProductName}\n({p.ExtraInfo})"));
+                TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{GetProductNameAndVersion(p)}\n({p.ExtraInfo})").Distinct());
             }
 
             var installed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Installed,
                                                newStatus => newStatus == PackageStatus.Installed);
             if (installed.Any())
             {
-                TryShowToastNotification(Texts.NewPackageInstalled, installed.Select(p => p.ProductName).Distinct());
+                TryShowToastNotification(Texts.NewPackageInstalled, installed.Select(p => GetProductNameAndVersion(p)).Distinct());
             }
+        }
+
+        private string GetProductNameAndVersion(PackageItem item)
+        {
+            return $"{item.ProductName} {item.Version}";
         }
 
         private void TryShowToastNotification(Texts titleId, IEnumerable<string> details = null)
