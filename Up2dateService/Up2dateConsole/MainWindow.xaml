@@ -111,7 +111,13 @@
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu x:Uid="ContextMenu_1">
                     <MenuItem x:Uid="MenuItem_1" Header="Show console" Command="{Binding ShowConsoleCommand}"/>
-                    <!--<MenuItem Header="Settings..."/>-->
+                    <Separator Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <MenuItem Header="Start service" Command="{Binding StartServiceCommand}"
+                              Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <MenuItem Header="Stop service" Command="{Binding StopServiceCommand}"
+                              Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <MenuItem Header="Settings..." Command="{Binding SettingsCommand}"
+                              Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <Separator x:Uid="Separator_1"/>
                     <MenuItem x:Uid="MenuItem_2" Header="Quit" Command="{Binding QuitCommand}"/>
                 </ContextMenu>

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
+using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -33,6 +34,8 @@ namespace Up2dateConsole
         private readonly Timer timer = new Timer(InitialDelay);
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
+        private readonly string ServiceName = "Up2dateService";
+        private bool IsSettingsDialogActive = false;
 
         public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
         {
@@ -43,12 +46,14 @@ namespace Up2dateConsole
             QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
-            RefreshCommand = new RelayCommand(async (_) => await ExecuteRefresh(), o => !OperationInProgress);
+            RefreshCommand = new RelayCommand(async _ => await ExecuteRefresh(), _ => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
-            AcceptCommand = new RelayCommand(async (_) => await Accept(true), (_) => CanAcceptReject);
-            RejectCommand = new RelayCommand(async (_) => await Accept(false), (_) => CanAcceptReject);
-            RequestCertificateCommand = new RelayCommand(async (_) => await ExecuteRequestCertificateAsync());
+            AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
+            RejectCommand = new RelayCommand(async _ => await Accept(false), _ => CanAcceptReject);
+            RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync());
             SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
+            StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
+            StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
 
             AvailablePackages = new ObservableCollection<PackageItem>();
             CollectionViewSource.GetDefaultView(AvailablePackages).CurrentChanged += (o, e) => OnPropertyChanged(nameof(CanAcceptReject));
@@ -58,12 +63,38 @@ namespace Up2dateConsole
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
         }
 
+        private async Task ExecuteStopService()
+        {
+            using (ServiceController sc = new ServiceController(ServiceName))
+            {
+                if (!sc.Status.Equals(ServiceControllerStatus.Stopped) && !sc.Status.Equals(ServiceControllerStatus.StopPending))
+                {
+                    sc.Stop();
+                    await ExecuteRefresh();
+                }
+            }
+        }
+
+        private async Task ExecuteStartService()
+        {
+            using (ServiceController sc = new ServiceController(ServiceName))
+            {
+                if (!sc.Status.Equals(ServiceControllerStatus.Running) && !sc.Status.Equals(ServiceControllerStatus.StartPending))
+                {
+                    sc.Start();
+                    await ExecuteRefresh();
+                }
+            }
+        }
+
         public ICommand EnterAdminModeCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand InstallCommand { get; }
         public ICommand AcceptCommand { get; }
         public ICommand RejectCommand { get; }
         public ICommand ShowConsoleCommand { get; }
+        public ICommand StartServiceCommand { get; }
+        public ICommand StopServiceCommand { get; }
         public ICommand QuitCommand { get; }
         public ICommand RequestCertificateCommand { get; }
         public ICommand SettingsCommand { get; }
@@ -232,10 +263,16 @@ namespace Up2dateConsole
 
         private void ExecuteSettings(object obj)
         {
+            viewService.ShowMainWindow(); // needed for calling the command from tray
+
+            if (IsSettingsDialogActive) return;
+
             SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory);
             if (!vm.IsInitialized) return;
 
+            IsSettingsDialogActive = true;
             viewService.ShowDialog(vm);
+            IsSettingsDialogActive = false;
         }
 
         private async Task Accept(bool accept)
@@ -586,6 +623,17 @@ namespace Up2dateConsole
                 }
                 System.Version v = Assembly.GetEntryAssembly().GetName().Version;
                 return $"RITMS UP2DATE v{v.Major}.{v.Minor}.{v.Build}" + (string.IsNullOrEmpty(extraText) ? string.Empty : "\n" + extraText);
+            }
+        }
+
+        public bool IsServiceRunning
+        {
+            get
+            {
+                using (ServiceController sc = new ServiceController(ServiceName))
+                {
+                    return sc.Status.Equals(ServiceControllerStatus.Running);
+                }
             }
         }
 
