@@ -16,6 +16,7 @@
       </xs:appinfo>
     </xs:annotation>
     <xs:sequence>
+      <xs:element minOccurs="0" name="DeploymentActionID" type="xs:int" />
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DisplayVersion" nillable="true" type="xs:string" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Up2dateShared" minOccurs="0" name="ErrorCode" type="q1:InstallPackageResult" />
@@ -37,7 +38,11 @@
       <xs:enumeration value="Available" />
       <xs:enumeration value="Downloading" />
       <xs:enumeration value="Downloaded" />
-      <xs:enumeration value="SuggestedToInstall" />
+      <xs:enumeration value="WaitingForConfirmation" />
+      <xs:enumeration value="WaitingForConfirmationForced" />
+      <xs:enumeration value="AcceptPending" />
+      <xs:enumeration value="RejectPending" />
+      <xs:enumeration value="Rejected" />
       <xs:enumeration value="Installing" />
       <xs:enumeration value="Installed" />
       <xs:enumeration value="RestartNeeded" />

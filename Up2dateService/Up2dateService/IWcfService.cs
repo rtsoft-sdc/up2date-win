@@ -14,6 +14,12 @@ namespace Up2dateService
         void StartInstallation(IEnumerable<Package> packages);
 
         [OperationContract]
+        void AcceptInstallation(Package package);
+
+        [OperationContract]
+        void RejectInstallation(Package package);
+
+        [OperationContract]
         SystemInfo GetSystemInfo();
 
         [OperationContract]
@@ -51,6 +57,12 @@ namespace Up2dateService
 
         [OperationContract]
         void SetCheckSignature(bool newState);
+
+        [OperationContract]
+        bool GetConfirmBeforeInstallation();
+
+        [OperationContract]
+        void SetConfirmBeforeInstallation(bool newState);
 
         [OperationContract]
         SignatureVerificationLevel GetSignatureVerificationLevel();

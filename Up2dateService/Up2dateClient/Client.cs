@@ -90,10 +90,17 @@ namespace Up2dateClient
         {
             WriteLogEntry("configuration requested.");
 
+            // system info
             foreach (var attribute in GetSystemInfo())
             {
                 wrapper.AddConfigAttribute(responseBuilder, attribute.Key, attribute.Value);
             }
+
+            // settings
+            wrapper.AddConfigAttribute(responseBuilder, "settings.requires_confirmation_before_update",
+                settingsManager.RequiresConfirmationBeforeInstall ? "yes" : "no");
+            wrapper.AddConfigAttribute(responseBuilder, "settings.signature_verification_level",
+                settingsManager.CheckSignature ? settingsManager.SignatureVerificationLevel.ToString() : "off");
         }
 
         private void OnDeploymentAction(IntPtr artifact, DeploymentInfo info, out ClientResult result)
@@ -106,7 +113,7 @@ namespace Up2dateClient
                 WriteLogEntry(message, info);
             }
 
-            ClientResult LogAndMakeResult(Finished finished, Execution execution, string message)
+            ClientResult CompleteExecution(Finished finished, Execution execution, string message)
             {
                 LogMessage(message);
 
@@ -122,22 +129,24 @@ namespace Up2dateClient
 
             if (!IsExtensionAllowed(info))
             {
-                result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, "Package type is not allowed - deployment rejected.");
+                result = CompleteExecution(Finished.FAILURE, Execution.CLOSED, "Package type is not allowed - deployment rejected.");
                 return;
             }
 
             if (!IsSupported(info))
             {
-                result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED , "Package type is not allowed - deployment rejected.");
+                result = CompleteExecution(Finished.FAILURE, Execution.CLOSED , "Package type is not allowed - deployment rejected.");
                 return;
             }
 
             if (lastStopID == info.id)
             {
-                result = LogAndMakeResult(Finished.NONE, Execution.CANCELED, "Deployment action is cancelled.");
+                result = CompleteExecution(Finished.NONE, Execution.CANCELED, "Deployment action is cancelled.");
                 lastStopID = -1;
                 return;
             }
+
+            setupManager.CreateOrUpdatePackage(info.artifactFileName, info.id);
 
             if (setupManager.IsFileDownloaded(info.artifactFileName, info.artifactFileHashMd5))
             {
@@ -146,10 +155,11 @@ namespace Up2dateClient
             else
             {
                 LogMessage("Download started.");
-                Result downloadResult = setupManager.DownloadPackage(info.artifactFileName, info.artifactFileHashMd5, location => wrapper.DownloadArtifact(artifact, location));
+                Result downloadResult = setupManager.DownloadPackage(info.artifactFileName, info.artifactFileHashMd5,
+                    location => wrapper.DownloadArtifact(artifact, location));
                 if (!downloadResult.Success)
                 {
-                    result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, $"Download failed. {downloadResult.ErrorMessage}");
+                    result = CompleteExecution(Finished.FAILURE, Execution.CLOSED, $"Download failed. {downloadResult.ErrorMessage}");
                     return;
                 }
                 LogMessage("Download completed.");
@@ -157,48 +167,63 @@ namespace Up2dateClient
 
             if (setupManager.IsPackageInstalled(info.artifactFileName))
             {
-                result = LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Package has been already installed.");
+                result = CompleteExecution(Finished.SUCCESS, Execution.CLOSED, "Package has been already installed.");
                 return;
             }
 
             switch (info.updateType)
             {
                 case "skip":
-                    result = info.isInMaintenanceWindow 
-                        ? LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Only download is requested.")
-                        : LogAndMakeResult(Finished.NONE, Execution.DOWNLOADED, "Waiting for maintenance window to start installation.");
+                    result = info.isInMaintenanceWindow
+                        ? CompleteExecution(Finished.SUCCESS, Execution.CLOSED, "Only download is requested.")
+                        : CompleteExecution(Finished.NONE, Execution.DOWNLOADED, "Waiting for maintenance window to start installation.");
                     return;
                 case "attempt":
-                    {
-                        PackageStatus status = setupManager.GetStatus(info.artifactFileName);
-                        if (status == PackageStatus.Failed)
-                        {
-                            InstallPackageResult installPackageResult = setupManager.GetInstallPackageResult(info.artifactFileName);
-                            result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
-                            return;
-                        }
-                        setupManager.MarkPackageAsSuggested(info.artifactFileName);
-                        result = LogAndMakeResult(Finished.NONE, Execution.DOWNLOADED, "Installation is not forced; suggested to user.");
-                        return;
-                    }
+                    result = CheckUserFeedbackToCompleteInstallation(info.artifactFileName, CompleteExecution, LogMessage);
+                    return;
                 case "forced":
+                    if (settingsManager.RequiresConfirmationBeforeInstall)
                     {
-                        LogMessage("Forced installation started.");
-                        setupManager.InstallPackage(info.artifactFileName);
-                        PackageStatus status = setupManager.GetStatus(info.artifactFileName);
-                        if (status == PackageStatus.Failed)
-                        {
-                            InstallPackageResult installPackageResult = setupManager.GetInstallPackageResult(info.artifactFileName);
-                            result = LogAndMakeResult(Finished.FAILURE, Execution.CLOSED, ResultToMessage(installPackageResult));
-                            return;
-                        }
-                        result = LogAndMakeResult(Finished.SUCCESS, Execution.CLOSED, "Installation completed.");
+                        result = CheckUserFeedbackToCompleteInstallation(info.artifactFileName, CompleteExecution, LogMessage, forced: true);
                         return;
                     }
+                    LogMessage("Forced installation started.");
+                    result = InstallPackage(info.artifactFileName, CompleteExecution);
+                    return;
                 default:
-                    result = LogAndMakeResult(Finished.FAILURE, Execution.REJECTED, $"Unsupported update type: {info.updateType}, request rejected.");
+                    result = CompleteExecution(Finished.FAILURE, Execution.CLOSED, $"Unsupported update type: {info.updateType}, request rejected.");
                     return;
             }
+        }
+
+        private ClientResult CheckUserFeedbackToCompleteInstallation(string artifactFileName,
+            Func<Finished, Execution, string, ClientResult> completeExecution,
+            Action<string> logMessage,
+            bool forced = false)
+        {
+            PackageStatus status = setupManager.GetStatus(artifactFileName);
+            if (status == PackageStatus.AcceptPending)
+            {
+                logMessage("Installation is accepted by user.");
+                return InstallPackage(artifactFileName, completeExecution);
+            }
+            if (status == PackageStatus.RejectPending)
+            {
+                setupManager.MarkPackageRejected(artifactFileName);
+                return completeExecution(Finished.FAILURE, Execution.CLOSED, "Installation is rejected by user.");
+            }
+
+            setupManager.MarkPackageWaitingForConfirmation(artifactFileName, forced);
+
+            return completeExecution(Finished.NONE, Execution.DOWNLOADED,
+                "Installation pending - waiting for user confirmation.");
+        }
+
+        private ClientResult InstallPackage(string artifactFileName, Func<Finished, Execution, string, ClientResult> completeExecution)
+        {
+            InstallPackageResult installPackageResult = setupManager.InstallPackage(artifactFileName);
+            Finished finished = installPackageResult == InstallPackageResult.Success || installPackageResult == InstallPackageResult.RestartNeeded ? Finished.SUCCESS : Finished.FAILURE;
+            return completeExecution(finished, Execution.CLOSED, ResultToMessage(installPackageResult));
         }
 
         private string ResultToMessage(InstallPackageResult installPackageStatus)
@@ -254,6 +279,7 @@ namespace Up2dateClient
         private bool OnCancelAction(int stopId)
         {
             lastStopID = stopId;
+            setupManager.Cancel(stopId);
             return true;
         }
 

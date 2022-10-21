@@ -172,6 +172,82 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_AcceptInstallation_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_AcceptInstallation_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_RejectInstallation_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_RejectInstallation_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetSystemInfo_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -666,6 +742,82 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetConfirmBeforeInstallation_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetConfirmBeforeInstallation_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_SetConfirmBeforeInstallation_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_SetConfirmBeforeInstallation_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetSignatureVerificationLevel_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -878,6 +1030,18 @@
   <wsdl:message name="IWcfService_StartInstallation_OutputMessage">
     <wsdl:part name="parameters" element="tns:StartInstallationResponse" />
   </wsdl:message>
+  <wsdl:message name="IWcfService_AcceptInstallation_InputMessage">
+    <wsdl:part name="parameters" element="tns:AcceptInstallation" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_AcceptInstallation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AcceptInstallationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_RejectInstallation_InputMessage">
+    <wsdl:part name="parameters" element="tns:RejectInstallation" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_RejectInstallation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RejectInstallationResponse" />
+  </wsdl:message>
   <wsdl:message name="IWcfService_GetSystemInfo_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSystemInfo" />
   </wsdl:message>
@@ -956,6 +1120,18 @@
   <wsdl:message name="IWcfService_SetCheckSignature_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetCheckSignatureResponse" />
   </wsdl:message>
+  <wsdl:message name="IWcfService_GetConfirmBeforeInstallation_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfirmBeforeInstallation" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetConfirmBeforeInstallation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfirmBeforeInstallationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SetConfirmBeforeInstallation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetConfirmBeforeInstallation" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SetConfirmBeforeInstallation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetConfirmBeforeInstallationResponse" />
+  </wsdl:message>
   <wsdl:message name="IWcfService_GetSignatureVerificationLevel_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSignatureVerificationLevel" />
   </wsdl:message>
@@ -994,6 +1170,14 @@
     <wsdl:operation name="StartInstallation">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/StartInstallation" message="tns:IWcfService_StartInstallation_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/StartInstallationResponse" message="tns:IWcfService_StartInstallation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AcceptInstallation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/AcceptInstallation" message="tns:IWcfService_AcceptInstallation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/AcceptInstallationResponse" message="tns:IWcfService_AcceptInstallation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RejectInstallation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/RejectInstallation" message="tns:IWcfService_RejectInstallation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/RejectInstallationResponse" message="tns:IWcfService_RejectInstallation_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetSystemInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetSystemInfo" message="tns:IWcfService_GetSystemInfo_InputMessage" />
@@ -1047,6 +1231,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SetCheckSignature" message="tns:IWcfService_SetCheckSignature_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SetCheckSignatureResponse" message="tns:IWcfService_SetCheckSignature_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetConfirmBeforeInstallation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetConfirmBeforeInstallation" message="tns:IWcfService_GetConfirmBeforeInstallation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetConfirmBeforeInstallationResponse" message="tns:IWcfService_GetConfirmBeforeInstallation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetConfirmBeforeInstallation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SetConfirmBeforeInstallation" message="tns:IWcfService_SetConfirmBeforeInstallation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SetConfirmBeforeInstallationResponse" message="tns:IWcfService_SetConfirmBeforeInstallation_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetSignatureVerificationLevel">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetSignatureVerificationLevel" message="tns:IWcfService_GetSignatureVerificationLevel_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetSignatureVerificationLevelResponse" message="tns:IWcfService_GetSignatureVerificationLevel_OutputMessage" />
@@ -1090,6 +1282,28 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_StartInstallation_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AcceptInstallation">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/AcceptInstallation" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_AcceptInstallation_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_AcceptInstallation_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RejectInstallation">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/RejectInstallation" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_RejectInstallation_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_RejectInstallation_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
@@ -1233,6 +1447,28 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_SetCheckSignature_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfirmBeforeInstallation">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/GetConfirmBeforeInstallation" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetConfirmBeforeInstallation_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetConfirmBeforeInstallation_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetConfirmBeforeInstallation">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/SetConfirmBeforeInstallation" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_SetConfirmBeforeInstallation_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_SetConfirmBeforeInstallation_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

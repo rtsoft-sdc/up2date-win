@@ -6,7 +6,18 @@ namespace SimpleClientApp
 {
     public class SetupManagerStub : ISetupManager
     {
-        public IEnumerable<string> SupportedExtensions => new[] { ".msi", ".nuget" };
+        public void AcceptPackage(Package package)
+        {
+        }
+
+        public bool Cancel(int actionId)
+        {
+            return true;
+        }
+
+        public void CreateOrUpdatePackage(string artifactFileName, int id)
+        {
+        }
 
         public Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact)
         {
@@ -35,7 +46,6 @@ namespace SimpleClientApp
 
         public void InstallPackages(IEnumerable<Package> packages)
         {
-            throw new System.NotImplementedException();
         }
 
         public bool IsFileDownloaded(string artifactFileName, string artifactFileHashMd5)
@@ -48,17 +58,20 @@ namespace SimpleClientApp
             return true;
         }
 
-        public bool IsPackageAvailable(string packageFile)
-        {
-            return false;
-        }
-
         public bool IsPackageInstalled(string packageFile)
         {
             return false;
         }
 
-        public void MarkPackageAsSuggested(string artifactFileName)
+        public void MarkPackageRejected(string artifactFileName)
+        {
+        }
+
+        public void MarkPackageWaitingForConfirmation(string artifactFileName, bool forced)
+        {
+        }
+
+        public void RejectPackage(Package package)
         {
         }
     }

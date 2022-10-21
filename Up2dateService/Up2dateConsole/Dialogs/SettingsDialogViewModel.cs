@@ -16,6 +16,7 @@ namespace Up2dateConsole.Dialogs
         private string tokenUrl;
         private string dpsUrl;
         private bool checkSignatureStatus;
+        private bool confirmBeforeInstallation;
         private SignatureVerificationLevel signatureVerificationLevel;
 
         public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
@@ -67,6 +68,17 @@ namespace Up2dateConsole.Dialogs
             {
                 if (checkSignatureStatus == value) return;
                 checkSignatureStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ConfirmBeforeInstallation
+        {
+            get => confirmBeforeInstallation;
+            set
+            {
+                if (confirmBeforeInstallation == value) return;
+                confirmBeforeInstallation = value;
                 OnPropertyChanged();
             }
         }
@@ -158,8 +170,9 @@ namespace Up2dateConsole.Dialogs
 
                 service.SetRequestCertificateUrl(TokenUrl);
                 service.SetProvisioningUrl(DpsUrl);
-                service.SetCheckSignature(checkSignatureStatus);
-                service.SetSignatureVerificationLevel(signatureVerificationLevel);
+                service.SetCheckSignature(CheckSignatureStatus);
+                service.SetSignatureVerificationLevel(SignatureVerificationLevel);
+                service.SetConfirmBeforeInstallation(ConfirmBeforeInstallation);
             }
             catch (Exception e)
             {
@@ -190,6 +203,7 @@ namespace Up2dateConsole.Dialogs
                 DpsUrl = service.GetProvisioningUrl();
                 checkSignatureStatus = service.GetCheckSignature();
                 signatureVerificationLevel = service.GetSignatureVerificationLevel();
+                confirmBeforeInstallation = service.GetConfirmBeforeInstallation();
             }
             catch (Exception e)
             {

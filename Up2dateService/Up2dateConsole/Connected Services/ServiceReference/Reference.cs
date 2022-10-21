@@ -23,6 +23,9 @@ namespace Up2dateConsole.ServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int DeploymentActionIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DisplayNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -64,6 +67,19 @@ namespace Up2dateConsole.ServiceReference {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int DeploymentActionID {
+            get {
+                return this.DeploymentActionIDField;
+            }
+            set {
+                if ((this.DeploymentActionIDField.Equals(value) != true)) {
+                    this.DeploymentActionIDField = value;
+                    this.RaisePropertyChanged("DeploymentActionID");
+                }
             }
         }
         
@@ -282,19 +298,31 @@ namespace Up2dateConsole.ServiceReference {
         Downloaded = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        SuggestedToInstall = 4,
+        WaitingForConfirmation = 4,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installing = 5,
+        WaitingForConfirmationForced = 5,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Installed = 6,
+        AcceptPending = 6,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        RestartNeeded = 7,
+        RejectPending = 7,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Failed = 8,
+        Rejected = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Installing = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Installed = 10,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RestartNeeded = 11,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Failed = 12,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -798,6 +826,18 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/StartInstallation", ReplyAction="http://tempuri.org/IWcfService/StartInstallationResponse")]
         System.Threading.Tasks.Task StartInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/AcceptInstallation", ReplyAction="http://tempuri.org/IWcfService/AcceptInstallationResponse")]
+        void AcceptInstallation(Up2dateConsole.ServiceReference.Package package);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/AcceptInstallation", ReplyAction="http://tempuri.org/IWcfService/AcceptInstallationResponse")]
+        System.Threading.Tasks.Task AcceptInstallationAsync(Up2dateConsole.ServiceReference.Package package);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RejectInstallation", ReplyAction="http://tempuri.org/IWcfService/RejectInstallationResponse")]
+        void RejectInstallation(Up2dateConsole.ServiceReference.Package package);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RejectInstallation", ReplyAction="http://tempuri.org/IWcfService/RejectInstallationResponse")]
+        System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package package);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSystemInfo", ReplyAction="http://tempuri.org/IWcfService/GetSystemInfoResponse")]
         Up2dateConsole.ServiceReference.SystemInfo GetSystemInfo();
         
@@ -876,6 +916,18 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/SetCheckSignatureResponse")]
         System.Threading.Tasks.Task SetCheckSignatureAsync(bool newState);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/GetConfirmBeforeInstallationResponse")]
+        bool GetConfirmBeforeInstallation();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/GetConfirmBeforeInstallationResponse")]
+        System.Threading.Tasks.Task<bool> GetConfirmBeforeInstallationAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/SetConfirmBeforeInstallationResponse")]
+        void SetConfirmBeforeInstallation(bool newState);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetConfirmBeforeInstallation", ReplyAction="http://tempuri.org/IWcfService/SetConfirmBeforeInstallationResponse")]
+        System.Threading.Tasks.Task SetConfirmBeforeInstallationAsync(bool newState);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetSignatureVerificationLevel", ReplyAction="http://tempuri.org/IWcfService/GetSignatureVerificationLevelResponse")]
         Up2dateConsole.ServiceReference.SignatureVerificationLevel GetSignatureVerificationLevel();
         
@@ -948,6 +1000,22 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task StartInstallationAsync(Up2dateConsole.ServiceReference.Package[] packages) {
             return base.Channel.StartInstallationAsync(packages);
+        }
+        
+        public void AcceptInstallation(Up2dateConsole.ServiceReference.Package package) {
+            base.Channel.AcceptInstallation(package);
+        }
+        
+        public System.Threading.Tasks.Task AcceptInstallationAsync(Up2dateConsole.ServiceReference.Package package) {
+            return base.Channel.AcceptInstallationAsync(package);
+        }
+        
+        public void RejectInstallation(Up2dateConsole.ServiceReference.Package package) {
+            base.Channel.RejectInstallation(package);
+        }
+        
+        public System.Threading.Tasks.Task RejectInstallationAsync(Up2dateConsole.ServiceReference.Package package) {
+            return base.Channel.RejectInstallationAsync(package);
         }
         
         public Up2dateConsole.ServiceReference.SystemInfo GetSystemInfo() {
@@ -1052,6 +1120,22 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task SetCheckSignatureAsync(bool newState) {
             return base.Channel.SetCheckSignatureAsync(newState);
+        }
+        
+        public bool GetConfirmBeforeInstallation() {
+            return base.Channel.GetConfirmBeforeInstallation();
+        }
+        
+        public System.Threading.Tasks.Task<bool> GetConfirmBeforeInstallationAsync() {
+            return base.Channel.GetConfirmBeforeInstallationAsync();
+        }
+        
+        public void SetConfirmBeforeInstallation(bool newState) {
+            base.Channel.SetConfirmBeforeInstallation(newState);
+        }
+        
+        public System.Threading.Tasks.Task SetConfirmBeforeInstallationAsync(bool newState) {
+            return base.Channel.SetConfirmBeforeInstallationAsync(newState);
         }
         
         public Up2dateConsole.ServiceReference.SignatureVerificationLevel GetSignatureVerificationLevel() {

@@ -71,5 +71,14 @@ namespace Up2dateTests.Up2dateService
             //Assert
             Assert.AreEqual("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", xApigToken);
         }
+
+        [TestMethod]
+        public void RequiresConfirmationBeforeInstall_Test_CheckWorkability()
+        {
+            //Act
+            var requiresConfirmationBeforeInstall = _settingsManager.RequiresConfirmationBeforeInstall;
+            //Assert
+            Assert.IsFalse(requiresConfirmationBeforeInstall);
+        }
     }
 }
