@@ -62,7 +62,7 @@ namespace Up2dateService.Installers.Choco
                 }
                 catch (Win32Exception exception)
                 {
-                    logger.WriteEntry($"Failed to start installation of the package, perhaps Chocolatey is not available '{package.ProductName}'", exception);
+                    logger.WriteEntry("Failed to start choco.exe process, perhaps Chocolatey is not installed.", exception);
                     return InstallPackageResult.ChocoNotInstalled;
                 }
                 catch (Exception exception)
