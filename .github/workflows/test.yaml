@@ -11,19 +11,19 @@ jobs:
     
     steps:        
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Make download folder
         shell: bash
         run: mkdir artifacts
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9782bd6a9848b53b110e712e20e42d89988822b7
         with:
           name: Test
           path: .\Test\
           
       - name: vstest-action
-        uses: microsoft/vstest-action@v1.0.0
+        uses: microsoft/vstest-action@6ef4755ea07a3144e3da36f10d76187086eee5e6
         with:
           testAssembly: "Test\\Up2dateTests.dll"
