@@ -10,44 +10,44 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Make download folder
         shell: bash
         run: mkdir artifacts
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9782bd6a9848b53b110e712e20e42d89988822b7
         with:
           path: .\artifacts\
 
       - name: Build x64 deploy archive
-        uses: vimtor/action-zip@v1
+        uses: vimtor/action-zip@5f1c4aa587ea41db1110df6a99981dbe19cee310
         with:
           files: .\artifacts\x64\ .\LICENSE .\Up2dateService\README.txt
           dest: .\up2date.windows-x64.zip
 
       - name: Upload x64 deploy archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
         with:
           name: x64.zip
           path: .\up2date.windows-x64.zip
 
       - name: Build x86 deploy archive
-        uses: vimtor/action-zip@v1
+        uses: vimtor/action-zip@5f1c4aa587ea41db1110df6a99981dbe19cee310
         with:
           files: .\artifacts\x86\ .\LICENSE .\Up2dateService\README.txt
           dest: .\up2date.windows-x86.zip
 
       - name: Upload x86 deploy archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
         with:
           name: x86.zip
           path: .\up2date.windows-x86.zip
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -60,7 +60,7 @@ jobs:
           prerelease: false
 
       - name: Upload up2date.windows-x64.zip
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -70,7 +70,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload up2date.windows-x86.zip
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -80,7 +80,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload LICENCE
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -90,7 +90,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Upload README.txt
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
