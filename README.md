@@ -3,6 +3,9 @@
 ![GitHub release](https://img.shields.io/github/v/release/rtsoft-gmbh/up2date-win)
 ![GitHub Release Date](https://img.shields.io/github/release-date/rtsoft-gmbh/up2date-win)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/rtsoft-gmbh/up2date-win)
+[![OpenSSF Scorecard]
+(https://api.securityscorecards.dev/projects/github.com/rtsoft-gmbh/up2date-win/badge)]
+(https://api.securityscorecards.dev/projects/github.com/rtsoft-gmbh/up2date-win)
 # UP2DATE CLIENT for Windows
 
 ## INTRODUCTION
