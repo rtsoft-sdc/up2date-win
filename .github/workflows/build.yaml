@@ -16,11 +16,11 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           submodules: recursive
 
-      - uses: suisei-cn/actions-download-file@v1.0.1
+      - uses: suisei-cn/actions-download-file@53dee21adad18cae56ed5697616485a7068f1e1a
         name: Download locbaml
         with:
           url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
@@ -38,15 +38,15 @@ jobs:
           echo "VCPKG_ROOT=$(pwd)\vcpkg" >> $env:GITHUB_ENV
 
       - name: Install .NET Core
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@a351d9ea84bc76ec7508debf02a39d88f8b6c0c0
         with:
           dotnet-version: 6.0.x
 
       - name: Setup MSBuild.exe
-        uses: microsoft/setup-msbuild@v1.0.2
-      - uses: seanmiddleditch/gha-setup-vsdevenv@v4
+        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
+      - uses: seanmiddleditch/gha-setup-vsdevenv@adf16e54e207da0da148c8901a98a34d7aa3eb7a
 
-      - uses: nuget/setup-nuget@v1
+      - uses: nuget/setup-nuget@fd9fffd6ca4541cf4152a9565835ca1a88a6eb37
 
       - name: Disable Out of Process Building
         run: .\DisableOutOfProcBuild.exe
@@ -61,19 +61,19 @@ jobs:
         run: devenv "%SLN_PATH%" /build "Release"
 
       - name: Upload x64 artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
         with:
           name: x64
           path: ${{ env.ARTIFACTS_PATH_X64 }}
 
       - name: Upload x86 artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
         with:
           name: x86
           path: ${{ env.ARTIFACTS_PATH_X32 }}
 
       - name: Upload Test artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
         with:
           name: Test
           path: ${{ env.ARTIFACTS_PATH_TESTS }}
