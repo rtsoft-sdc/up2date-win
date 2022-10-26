@@ -3,11 +3,14 @@
 ![GitHub release](https://img.shields.io/github/v/release/rtsoft-gmbh/up2date-win)
 ![GitHub Release Date](https://img.shields.io/github/release-date/rtsoft-gmbh/up2date-win)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/rtsoft-gmbh/up2date-win)
+
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/rtsoft-gmbh/up2date-win/badge)](https://api.securityscorecards.dev/projects/github.com/rtsoft-gmbh/up2date-win)
+
 # UP2DATE CLIENT for Windows
 
 ## INTRODUCTION
 
-[RITMS UP2DATE](https://ritms.online) is a cloud ready solution for unified software and firmware management. Use this for implementing lifecycle management for the full stack of drivers and firmware of connected devices.
+[RITMS UP2DATE](https://up2date.ritms.online) is a cloud ready solution for unified software and firmware management. Use this for implementing lifecycle management for the full stack of drivers and firmware of connected devices.
 
 RITMS UP2DATE is based on open and worldwide adopted building blocks, the most important is [Eclipse Hawkbit](https://www.eclipse.org/ddi/) which provides open and flexible Direct Device Integration (DDI) API and Management API.
 
