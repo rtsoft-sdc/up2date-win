@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Up2dateClient\Up2dateClient.csproj">
-      <Project>{940F99A8-1B35-4FF9-877A-852D161EF371}</Project>
+      <Project>{adee0fe0-364f-4f37-ba76-57dd948e99fd}</Project>
       <Name>Up2dateClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Up2dateService\Up2dateService.csproj">
