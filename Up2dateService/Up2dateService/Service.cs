@@ -5,6 +5,7 @@ using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using Up2dateClient;
+using Up2dateDotNet;
 using Up2dateService.Installers;
 using Up2dateService.Interfaces;
 using Up2dateShared;

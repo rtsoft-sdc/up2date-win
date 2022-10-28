@@ -42,6 +42,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Up2dateDotNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\rtsoft.ritms.up2date.net.1.0.0-alpha\lib\net472\Up2dateDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoggerStub.cs" />
@@ -52,10 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Up2dateClient\Up2dateClient.csproj">
-      <Project>{940f99a8-1b35-4ff9-877a-852d161ef371}</Project>
+      <Project>{adee0fe0-364f-4f37-ba76-57dd948e99fd}</Project>
       <Name>Up2dateClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Up2dateShared\Up2dateShared.csproj">
