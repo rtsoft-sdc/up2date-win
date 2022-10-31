@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using Up2dateConsole.Dialogs;
 using Up2dateConsole.Helpers;
+using Up2dateConsole.Helpers.InactivityMonitor;
 using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
@@ -20,7 +21,7 @@ namespace Up2dateConsole
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
 
-            DataContext = new MainWindowViewModel(viewService, wcfClientFactory);
+            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false));
 
             if (!CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
             {

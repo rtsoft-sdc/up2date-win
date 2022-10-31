@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Up2dateConsole.Dialogs;
 using Up2dateConsole.Helpers;
+using Up2dateConsole.Helpers.InactivityMonitor;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.StateIndicator;
 using Up2dateConsole.ViewService;
@@ -34,14 +35,15 @@ namespace Up2dateConsole
         private readonly Timer timer = new Timer(InitialDelay);
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
+        private readonly IInactivityMonitor inactivityMonitor;
         private readonly string ServiceName = "Up2dateService";
         private bool IsSettingsDialogActive = false;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, IInactivityMonitor inactivityMonitor)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
-
+            this.inactivityMonitor = inactivityMonitor ?? throw new ArgumentNullException(nameof(inactivityMonitor));
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
             QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
@@ -62,6 +64,21 @@ namespace Up2dateConsole
             timer.AutoReset = false;
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
+
+            inactivityMonitor.Enabled = IsAdminMode;
+            inactivityMonitor.Interval = Properties.Settings.Default.LeaveAdminOnIdleTimeout * 1000;
+            inactivityMonitor.MonitorKeyboardEvents = true;
+            inactivityMonitor.MonitorMouseEvents = true;
+            inactivityMonitor.Elapsed += InactivityMonitor_Elapsed;
+        }
+
+        private void InactivityMonitor_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (IsAdminMode)
+            {
+                ExecuteLeaveAdminMode(null);
+            }
+            inactivityMonitor.Reset();
         }
 
         private async Task ExecuteStopService()
@@ -250,8 +267,11 @@ namespace Up2dateConsole
         {
             if (!IsAdminMode) return;
 
-            Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
-            Application.Current.Shutdown();
+            ThreadHelper.SafeInvoke(() =>
+            {
+                Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
+                Application.Current.Shutdown();
+            });
             return;
         }
 

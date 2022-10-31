@@ -84,6 +84,11 @@
     </Compile>
     <Compile Include="Dialogs\SettingsDialogViewModel.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
+    <Compile Include="Helpers\InactivityMonitor\IInactivityMonitor.cs" />
+    <Compile Include="Helpers\InactivityMonitor\HookMonitor.cs" />
+    <Compile Include="Helpers\InactivityMonitor\MonitorBase.cs" />
+    <Compile Include="Helpers\InactivityMonitor\User32.cs" />
+    <Compile Include="Helpers\InactivityMonitor\Win32Hook.cs" />
     <Compile Include="Helpers\InvertBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
