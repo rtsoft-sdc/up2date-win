@@ -57,6 +57,8 @@
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <MenuItem x:Uid="MenuItem_5" Header="Settings..." Command="{Binding SettingsCommand}"
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <MenuItem x:Uid="MenuItem_7" Header="Leave admin mode" Command="{Binding LeaveAdminModeCommand}"
+                              Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <MenuItem x:Uid="MenuItem_6" Header="To admin mode..." Command="{Binding EnterAdminModeCommand}"
                               Visibility="{Binding IsAdminMode, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
                         <MenuItem.Icon>

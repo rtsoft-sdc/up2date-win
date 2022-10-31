@@ -30,10 +30,10 @@ namespace Up2dateConsole
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if ((DataContext as MainWindowViewModel).IsAdminMode)
+            var viewModel = DataContext as MainWindowViewModel;
+            if (viewModel != null && viewModel.IsAdminMode)
             {
-                Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
-                Application.Current.Shutdown();
+                viewModel.LeaveAdminModeCommand.Execute(this);
                 return;
             }
 

@@ -46,6 +46,7 @@ namespace Up2dateConsole
             QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
+            LeaveAdminModeCommand = new RelayCommand(ExecuteLeaveAdminMode);
             RefreshCommand = new RelayCommand(async _ => await ExecuteRefresh(), _ => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
@@ -104,6 +105,7 @@ namespace Up2dateConsole
         }
 
         public ICommand EnterAdminModeCommand { get; }
+        public ICommand LeaveAdminModeCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand InstallCommand { get; }
         public ICommand AcceptCommand { get; }
@@ -242,6 +244,15 @@ namespace Up2dateConsole
                     viewService.ShowMessageBox(message);
                 }
             }
+        }
+
+        private void ExecuteLeaveAdminMode(object _)
+        {
+            if (!IsAdminMode) return;
+
+            Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
+            Application.Current.Shutdown();
+            return;
         }
 
         private void ExecuteEnterAdminMode(object _)
