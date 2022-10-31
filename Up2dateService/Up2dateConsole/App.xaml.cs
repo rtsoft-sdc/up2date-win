@@ -12,6 +12,13 @@ namespace Up2dateConsole
         {
             //Debugger.Launch(); // todo remove for production
 
+            if (Up2dateConsole.Properties.Settings.Default.UpgradeFlag)
+            {
+                Up2dateConsole.Properties.Settings.Default.Upgrade();
+                Up2dateConsole.Properties.Settings.Default.UpgradeFlag = false;
+                Up2dateConsole.Properties.Settings.Default.Save();
+            }
+
             if (CommandLineHelper.IsPresent(CommandLineHelper.StartUnelevatedCommand))
             {
                 Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
