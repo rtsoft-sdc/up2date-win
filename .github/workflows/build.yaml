@@ -25,17 +25,10 @@ jobs:
         with:
           url: "https://github.com/vchaplinski/locbaml/raw/master/bin/Release/locbaml.exe"
           target: .\locbaml
-          
-      - name: Clone vcpkg
-        shell: cmd
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git 
-          .\vcpkg\bootstrap-vcpkg.bat
 
-      - name: Set locbaml and vcpkg path
+      - name: Set locbaml path
         run: |
           echo "locbaml=$(pwd)\locbaml\locbaml.exe" >> $env:GITHUB_ENV
-          echo "VCPKG_ROOT=$(pwd)\vcpkg" >> $env:GITHUB_ENV
 
       - name: Install .NET Core
         uses: actions/setup-dotnet@a351d9ea84bc76ec7508debf02a39d88f8b6c0c0

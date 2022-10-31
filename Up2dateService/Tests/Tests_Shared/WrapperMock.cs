@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using Up2dateClient;
+using Up2dateDotNet;
 
 namespace Tests_Shared
 {

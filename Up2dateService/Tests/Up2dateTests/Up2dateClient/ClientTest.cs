@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tests_Shared;
 using Up2dateClient;
+using Up2dateDotNet;
 using Up2dateShared;
 
 namespace Up2dateTests.Up2dateClient

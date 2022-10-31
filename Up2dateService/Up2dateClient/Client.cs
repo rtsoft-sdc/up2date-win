@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Up2dateDotNet;
 using Up2dateShared;
 
 namespace Up2dateClient

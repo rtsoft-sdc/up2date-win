@@ -198,6 +198,7 @@ PublishScripts/
 
 # NuGet Packages
 *.nupkg
+!**/nuget.local/*.nupkg
 # NuGet Symbol Packages
 *.snupkg
 # The packages folder can be ignored because of Package Restore
@@ -374,3 +375,4 @@ Up2dateService/wrapperdll/up2date-cpp
 *.lib
 *.exp
 Up2dateService/wrapperdll/vcpkg.json
+

@@ -420,7 +420,6 @@ namespace Up2dateConsole
             finally
             {
                 wcfClientFactory.CloseClient(service);
-                ThreadHelper.SafeInvoke(AvailablePackages.Clear); // collection view can be updated only from UI thread!
             }
 
             List<Package> selected = AvailablePackages.Where(p => p.IsSelected).Select(p => p.Package).ToList();
@@ -439,6 +438,7 @@ namespace Up2dateConsole
 
             ThreadHelper.SafeInvoke(() => // collection view can be updated only from UI thread!
             {
+                AvailablePackages.Clear();
                 foreach (PackageItem pi in packageItems)
                 {
                     AvailablePackages.Add(pi);

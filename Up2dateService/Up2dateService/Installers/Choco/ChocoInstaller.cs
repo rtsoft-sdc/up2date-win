@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -58,6 +59,11 @@ namespace Up2dateService.Installers.Choco
                 try
                 {
                     p.Start();
+                }
+                catch (Win32Exception exception)
+                {
+                    logger.WriteEntry("Failed to start choco.exe process, perhaps Chocolatey is not installed.", exception);
+                    return InstallPackageResult.ChocoNotInstalled;
                 }
                 catch (Exception exception)
                 {

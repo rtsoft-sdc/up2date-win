@@ -60,6 +60,9 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Up2dateDotNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\rtsoft.ritms.up2date.net.1.0.0\lib\net472\Up2dateDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Up2dateClient\Up2dateClient.csproj">
-      <Project>{940F99A8-1B35-4FF9-877A-852D161EF371}</Project>
+      <Project>{adee0fe0-364f-4f37-ba76-57dd948e99fd}</Project>
       <Name>Up2dateClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Up2dateService\Up2dateService.csproj">
@@ -93,7 +96,6 @@
       <Name>TestsShared</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="testData\validSignature.testObject">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
