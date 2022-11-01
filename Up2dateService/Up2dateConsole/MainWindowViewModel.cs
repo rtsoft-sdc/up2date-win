@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Up2dateConsole.Dialogs;
+using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
 using Up2dateConsole.ServiceReference;
@@ -70,7 +71,7 @@ namespace Up2dateConsole
                 inactivityMonitor.MonitorKeyboardEvents = true;
                 inactivityMonitor.MonitorMouseEvents = true;
                 inactivityMonitor.Elapsed += InactivityMonitor_Elapsed;
-                SetInactivityMonitor(Properties.Settings.Default.LeaveAdminModeOnInactivity, Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout);
+                UpdateInactivityMonitor();
             }
         }
 
@@ -325,15 +326,15 @@ namespace Up2dateConsole
 
             if (IsAdminMode)
             {
-                SetInactivityMonitor(vm.LeaveAdminModeOnInactivity, vm.LeaveAdminModeOnInactivityTimeout);
+                UpdateInactivityMonitor();
             }
         }
 
-        private void SetInactivityMonitor(bool on, uint timeoutSeconds)
+        private void UpdateInactivityMonitor()
         {
-            const int Miliseconds = 1000;
-            inactivityMonitor.Enabled = on;
-            inactivityMonitor.Interval = timeoutSeconds * Miliseconds;
+            const int MillisecondsInSecond = 1000;
+            inactivityMonitor.Enabled = Properties.Settings.Default.LeaveAdminModeOnInactivity;
+            inactivityMonitor.Interval = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout * MillisecondsInSecond;
         }
 
         private async Task Accept(bool accept)

@@ -56,6 +56,9 @@
         PackageStatusAccepting,
         PackageStatusRejecting,
         CannotStopService,
-        CannotStartService
+        CannotStartService,
+        ServerConnection,
+        InstallationPolicy,
+        ConsoleSecurity
     }
 }

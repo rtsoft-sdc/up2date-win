@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
-using System.Windows;
 using Up2dateConsole.Dialogs;
+using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
 using Up2dateConsole.ViewService;

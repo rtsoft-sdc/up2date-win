@@ -7,7 +7,7 @@ using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.ViewService;
 
-namespace Up2dateConsole.Dialogs
+namespace Up2dateConsole.Dialogs.Settings
 {
     public class RequestCertificateDialogViewModel : DialogViewModelBase
     {
