@@ -12,6 +12,10 @@ namespace Up2dateConsole.Dialogs.Settings
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
         private bool isServiceAvailable;
+        private ServerConnectionTabViewModel serverConnectionTab;
+        private InstallationPolicyTabViewModel installationPolicyTab;
+        private ConsoleSecurityTabViewModel consoleSecurityTab;
+
 
         public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool isServiceAvailable)
         {
@@ -23,24 +27,18 @@ namespace Up2dateConsole.Dialogs.Settings
 
             if (isServiceAvailable)
             {
-                ServerConnectionTab = new ServerConnectionTabViewModel(viewService.GetText(Texts.ServerConnection));
-                InstallationPolicyTab = new InstallationPolicyTabViewModel(viewService.GetText(Texts.InstallationPolicy), viewService, wcfClientFactory);
-                Tabs.Add(ServerConnectionTab);
-                Tabs.Add(InstallationPolicyTab);
+                serverConnectionTab = new ServerConnectionTabViewModel(viewService.GetText(Texts.ServerConnection));
+                installationPolicyTab = new InstallationPolicyTabViewModel(viewService.GetText(Texts.InstallationPolicy), viewService, wcfClientFactory);
+                Tabs.Add(serverConnectionTab);
+                Tabs.Add(installationPolicyTab);
             }
-            ConsoleSecurityTab = new ConsoleSecurityTabViewModel(viewService.GetText(Texts.ConsoleSecurity));
-            Tabs.Add(ConsoleSecurityTab);
+            consoleSecurityTab = new ConsoleSecurityTabViewModel(viewService.GetText(Texts.ConsoleSecurity));
+            Tabs.Add(consoleSecurityTab);
 
             IsInitialized = Initialize();
         }
 
         public ObservableCollection<object> Tabs { get; } = new ObservableCollection<object>();
-
-        public ServerConnectionTabViewModel ServerConnectionTab { get; }
-
-        public InstallationPolicyTabViewModel InstallationPolicyTab { get; }
-
-        public ConsoleSecurityTabViewModel ConsoleSecurityTab { get; }
 
         public bool IsInitialized { get; }
 
@@ -48,17 +46,17 @@ namespace Up2dateConsole.Dialogs.Settings
 
         private bool CanOk(object obj)
         {
-            var isValid = ConsoleSecurityTab.IsValid;
+            var isValid = consoleSecurityTab.IsValid;
             if (isServiceAvailable)
             {
-                isValid = isValid && ServerConnectionTab.IsValid && InstallationPolicyTab.IsValid;
+                isValid = isValid && serverConnectionTab.IsValid && installationPolicyTab.IsValid;
             }
             return isValid;
         }
 
         private void ExecuteOk(object obj)
         {
-            if (!ConsoleSecurityTab.Apply()) return;
+            if (!consoleSecurityTab.Apply()) return;
 
             if (!isServiceAvailable)
             {
@@ -72,8 +70,8 @@ namespace Up2dateConsole.Dialogs.Settings
             {
                 service = wcfClientFactory.CreateClient();
 
-                if (!ServerConnectionTab.Apply(service)) return;
-                if (!InstallationPolicyTab.Apply(service)) return;
+                if (!serverConnectionTab.Apply(service)) return;
+                if (!installationPolicyTab.Apply(service)) return;
             }
             catch (Exception e)
             {
@@ -95,7 +93,7 @@ namespace Up2dateConsole.Dialogs.Settings
 
         private bool Initialize()
         {
-            ConsoleSecurityTab.Initialize();
+            consoleSecurityTab.Initialize();
             if (!isServiceAvailable) return true;
 
             IWcfService service = null;
@@ -103,8 +101,8 @@ namespace Up2dateConsole.Dialogs.Settings
             try
             {
                 service = wcfClientFactory.CreateClient();
-                ServerConnectionTab.Initialize(service);
-                InstallationPolicyTab.Initialize(service);
+                serverConnectionTab.Initialize(service);
+                installationPolicyTab.Initialize(service);
             }
             catch (Exception e)
             {
