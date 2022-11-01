@@ -42,6 +42,8 @@ namespace Up2dateConsole.Dialogs.Settings
 
         public bool Apply(IWcfService service)
         {
+            if (!IsValid) return false;
+
             if (SignatureVerificationLevel == SignatureVerificationLevel.SignedByWhitelistedCertificate
                 && service.GetWhitelistedCertificates().Length == 0)
             {

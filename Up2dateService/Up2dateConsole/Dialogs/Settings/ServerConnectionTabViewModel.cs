@@ -26,6 +26,8 @@ namespace Up2dateConsole.Dialogs.Settings
 
         public bool Apply(ServiceReference.IWcfService service)
         {
+            if (!IsValid) return false;
+
             service.SetRequestCertificateUrl(TokenUrl);
             service.SetProvisioningUrl(DpsUrl);
 

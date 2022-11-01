@@ -12,7 +12,6 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Up2dateConsole.Dialogs;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
@@ -333,8 +332,15 @@ namespace Up2dateConsole
         private void UpdateInactivityMonitor()
         {
             const int MillisecondsInSecond = 1000;
+            const int MinTimeoutSec = 5;
+
             inactivityMonitor.Enabled = Properties.Settings.Default.LeaveAdminModeOnInactivity;
-            inactivityMonitor.Interval = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout * MillisecondsInSecond;
+            var timeout = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout;
+            if (timeout < MinTimeoutSec)
+            {
+                timeout = MinTimeoutSec;
+            }
+            inactivityMonitor.Interval = timeout * MillisecondsInSecond;
         }
 
         private async Task Accept(bool accept)

@@ -29,10 +29,12 @@ namespace Up2dateConsole.Dialogs.Settings
             return true;
         }
 
-        public bool IsValid => true;
+        public bool IsValid => LeaveAdminModeOnInactivityTimeout > 0;
 
         public bool Apply()
         {
+            if (!IsValid) return false;
+
             Properties.Settings.Default.LeaveAdminModeOnClose = LeaveAdminModeOnClose;
             Properties.Settings.Default.LeaveAdminModeOnInactivity = LeaveAdminModeOnInactivity;
             Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout = LeaveAdminModeOnInactivityTimeout;
