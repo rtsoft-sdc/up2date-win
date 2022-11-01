@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole.Dialogs"
         xmlns:helpers="clr-namespace:Up2dateConsole.Helpers"
-        xmlns:service="clr-namespace:Up2dateConsole.ServiceReference"
+        xmlns:s="clr-namespace:Up2dateConsole.ServiceReference"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize" 
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Width"
+        Height="300"
         ShowInTaskbar="False"
         Title="Settings"
         d:DataContext="{d:DesignInstance local:SettingsDialogViewModel}">
@@ -34,42 +35,65 @@
 
     <Grid x:Uid="Grid_1" Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition x:Uid="RowDefinition_1" Height="Auto"/>
+            <RowDefinition x:Uid="RowDefinition_1" Height="*"/>
             <RowDefinition x:Uid="RowDefinition_2" Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel x:Uid="StackPanel_1" Width="550" Margin="5,5,5,20">
-            <TextBlock x:Uid="TextBlock_1" Margin="0,5,0,5" Text="URL for getting authorization certificate by one-time key:"/>
-            <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
-            <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Uid="CheckBox_1" Margin="0,15,0,5" Content="Install package only after confirmation" 
-                      IsChecked="{Binding ConfirmBeforeInstallation, UpdateSourceTrigger=PropertyChanged}"/>
-            <CheckBox x:Uid="CheckBox_2" Margin="0,10,0,5" Content="Verify package signature before installation" 
-                      IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
-            <StackPanel x:Uid="StackPanel_3" Margin="20,0,0,0" 
-                        Visibility="{Binding CheckSignatureStatus, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <RadioButton x:Uid="RadioButton_1" Margin="0,5,0,5" Content="Accept packages signed by any certificate"
-                             IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByAnyCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
-                <RadioButton x:Uid="RadioButton_2" Margin="0,5,0,5" Content="Accept packages signed by valid trusted certificate"
-                             IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByTrustedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
-                <StackPanel x:Uid="StackPanel_4">
-                    <Grid x:Uid="Grid_2">
-                        <RadioButton x:Uid="RadioButton_3" Margin="0,5,0,5" VerticalAlignment="Center" Content="Accept only packages signed by a whitelisted certificate" 
-                                     IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
-                        <Button x:Uid="Button_3" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center"
-                                Content="Add Certificate" ToolTip="Add certificate to whitelist"
-                                Command="{Binding AddCertificateCommand}"/>
-                    </Grid>
-                    <TextBlock x:Uid="TextBlock_4" Margin="20,0,0,0" 
-                               Visibility="{Binding SignatureVerificationLevel, ConverterParameter={x:Static service:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToVisibilityConverter}}">
-                        <Run x:Uid="Run_1" Text="To view and modify the white list you can use "/>
-                        <Hyperlink x:Uid="Hyperlink_1" Command="{Binding LaunchCertMgrShapinCommand}">Certificates Snap-in</Hyperlink>
-                    </TextBlock>
+        <TabControl x:Uid="TabControl_1" Width="550" Margin="0,0,0,20">
+            <TabItem x:Uid="TabItem_1" Header="Console Security">
+                <StackPanel x:Uid="StackPanel_7" Margin="5">
+                    <CheckBox x:Uid="CheckBox_3" Margin="0,15,0,5" Content="Leave administrative mode on console close" 
+                              IsChecked="{Binding LeaveAdminModeOnClose, UpdateSourceTrigger=PropertyChanged}"/>
+                    <CheckBox x:Uid="CheckBox_4" Margin="0,10,0,5" Content="Leave administrative mode when console is not used for" 
+                              IsChecked="{Binding LeaveAdminModeOnInactivity, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel x:Uid="StackPanel_8" Margin="20,0,0,5" Orientation="Horizontal">
+                        <TextBox x:Uid="TextBox_3" Width="40" HorizontalAlignment="Left" Text="{Binding LeaveAdminModeOnInactivityTimeout, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding LeaveAdminModeOnInactivity}"/>
+                        <TextBlock x:Uid="TextBlock_5" Margin="8,0" Text="seconds"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </StackPanel>
-
+            </TabItem>
+            <TabItem x:Uid="TabItem_2" Header="Server Connection"
+                     Visibility="{Binding IsServiceAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel x:Uid="StackPanel_5" Margin="5">
+                    <TextBlock x:Uid="TextBlock_1" Margin="0,5,0,5" Text="URL for getting authorization certificate by one-time key:"/>
+                    <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
+                    <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem x:Uid="TabItem_3" Header="Instllation Policy"
+                     Visibility="{Binding IsServiceAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel x:Uid="StackPanel_6" Margin="5">
+                    <CheckBox x:Uid="CheckBox_1" Margin="0,15,0,5" Content="Install package only after confirmation" 
+                              IsChecked="{Binding ConfirmBeforeInstallation, UpdateSourceTrigger=PropertyChanged}"/>
+                    <CheckBox x:Uid="CheckBox_2" Margin="0,10,0,5" Content="Verify package signature before installation" 
+                              IsChecked="{Binding CheckSignatureStatus, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel x:Uid="StackPanel_3" Margin="20,0,0,0" 
+                                Visibility="{Binding CheckSignatureStatus, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <RadioButton x:Uid="RadioButton_1" Margin="0,5,0,5" Content="Accept packages signed by any certificate"
+                                     IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static s:SignatureVerificationLevel.SignedByAnyCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
+                        <RadioButton x:Uid="RadioButton_2" Margin="0,5,0,5" Content="Accept packages signed by valid trusted certificate"
+                                     IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static s:SignatureVerificationLevel.SignedByTrustedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
+                        <StackPanel x:Uid="StackPanel_4">
+                            <Grid x:Uid="Grid_2">
+                                <RadioButton x:Uid="RadioButton_3" Margin="0,5,0,5" VerticalAlignment="Center" Content="Accept only packages signed by a whitelisted certificate"
+                                             IsChecked="{Binding SignatureVerificationLevel, ConverterParameter={x:Static s:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToBooleanConverter}}"/>
+                                <Button x:Uid="Button_3" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center"
+                                        Content="Add Certificate" ToolTip="Add certificate to whitelist"
+                                        Command="{Binding AddCertificateCommand}"/>
+                            </Grid>
+                            <TextBlock x:Uid="TextBlock_4" Margin="20,0,0,0"
+                                       Visibility="{Binding SignatureVerificationLevel, ConverterParameter={x:Static s:SignatureVerificationLevel.SignedByWhitelistedCertificate}, Converter={StaticResource EnumToVisibilityConverter}}">
+                                <Run x:Uid="Run_1" Text="To view and modify the white list you can use "/>
+                                <Hyperlink x:Uid="Hyperlink_1" Command="{Binding LaunchCertMgrShapinCommand}">Certificates Snap-in</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        
         <StackPanel x:Uid="StackPanel_2" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
             <Button x:Uid="Button_1" Content="OK" IsDefault="True" Command="{Binding OkCommand}"/>
             <Button x:Uid="Button_2" Content="Cancel" IsCancel="True"/>

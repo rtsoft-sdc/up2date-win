@@ -5,11 +5,14 @@
     <Setting Name="UpgradeFlag" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="LeaveAdminOnIdleTimeout" Type="System.Int32" Scope="User">
+    <Setting Name="LeaveAdminModeOnInactivityTimeout" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="LeaveAdminOnClose" Type="System.Boolean" Scope="User">
+    <Setting Name="LeaveAdminModeOnClose" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LeaveAdminModeOnInactivity" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

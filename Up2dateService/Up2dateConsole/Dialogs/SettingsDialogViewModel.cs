@@ -18,11 +18,16 @@ namespace Up2dateConsole.Dialogs
         private bool checkSignatureStatus;
         private bool confirmBeforeInstallation;
         private SignatureVerificationLevel signatureVerificationLevel;
+        private bool leaveAdminModeOnClose;
+        private bool leaveAdminModeOnInactivity;
+        private uint leaveAdminModeOnInactivityTimeout;
+        private bool isServiceAvailable;
 
-        public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
+        public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool isServiceAvailable)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
+            this.isServiceAvailable = isServiceAvailable;
 
             IsInitialized = Initialize();
 
@@ -94,6 +99,39 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
+        public bool LeaveAdminModeOnClose
+        {
+            get => leaveAdminModeOnClose;
+            set
+            {
+                if (leaveAdminModeOnClose == value) return;
+                leaveAdminModeOnClose = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool LeaveAdminModeOnInactivity
+        {
+            get => leaveAdminModeOnInactivity;
+            set
+            {
+                if (leaveAdminModeOnInactivity == value) return;
+                leaveAdminModeOnInactivity = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public uint LeaveAdminModeOnInactivityTimeout
+        {
+            get => leaveAdminModeOnInactivityTimeout;
+            set
+            {
+                if (leaveAdminModeOnInactivityTimeout == value) return;
+                leaveAdminModeOnInactivityTimeout = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void ExecuteLaunchCertMgrShapin(object obj)
         {
             using (var p = new Process())
@@ -151,11 +189,22 @@ namespace Up2dateConsole.Dialogs
 
         private bool CanOk(object obj)
         {
-            return !string.IsNullOrWhiteSpace(TokenUrl) && !string.IsNullOrWhiteSpace(DpsUrl);
+            return !string.IsNullOrWhiteSpace(TokenUrl) && !string.IsNullOrWhiteSpace(DpsUrl) || !isServiceAvailable;
         }
 
         private void ExecuteOk(object obj)
         {
+            Properties.Settings.Default.LeaveAdminModeOnClose = LeaveAdminModeOnClose;
+            Properties.Settings.Default.LeaveAdminModeOnInactivity = LeaveAdminModeOnInactivity;
+            Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout = LeaveAdminModeOnInactivityTimeout;
+            Properties.Settings.Default.Save();
+
+            if (!isServiceAvailable)
+            {
+                Close(true);
+                return;
+            }
+
             IWcfService service = null;
             string error = string.Empty;
             try
@@ -194,6 +243,12 @@ namespace Up2dateConsole.Dialogs
 
         private bool Initialize()
         {
+            leaveAdminModeOnClose = Properties.Settings.Default.LeaveAdminModeOnClose;
+            leaveAdminModeOnInactivity = Properties.Settings.Default.LeaveAdminModeOnInactivity;
+            leaveAdminModeOnInactivityTimeout = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout;
+
+            if (!isServiceAvailable) return true;
+
             IWcfService service = null;
             string error = string.Empty;
             try

@@ -32,7 +32,7 @@ namespace Up2dateConsole
         protected override void OnClosing(CancelEventArgs e)
         {
             var viewModel = DataContext as MainWindowViewModel;
-            if (viewModel != null && viewModel.IsAdminMode && Properties.Settings.Default.LeaveAdminOnClose)
+            if (viewModel != null && viewModel.IsAdminMode && Properties.Settings.Default.LeaveAdminModeOnClose)
             {
                 viewModel.LeaveAdminModeCommand.Execute(this);
                 return;

@@ -38,24 +38,36 @@ namespace Up2dateConsole.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("60")]
-        public int LeaveAdminOnIdleTimeout {
+        public uint LeaveAdminModeOnInactivityTimeout {
             get {
-                return ((int)(this["LeaveAdminOnIdleTimeout"]));
+                return ((uint)(this["LeaveAdminModeOnInactivityTimeout"]));
             }
             set {
-                this["LeaveAdminOnIdleTimeout"] = value;
+                this["LeaveAdminModeOnInactivityTimeout"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool LeaveAdminOnClose {
+        public bool LeaveAdminModeOnClose {
             get {
-                return ((bool)(this["LeaveAdminOnClose"]));
+                return ((bool)(this["LeaveAdminModeOnClose"]));
             }
             set {
-                this["LeaveAdminOnClose"] = value;
+                this["LeaveAdminModeOnClose"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LeaveAdminModeOnInactivity {
+            get {
+                return ((bool)(this["LeaveAdminModeOnInactivity"]));
+            }
+            set {
+                this["LeaveAdminModeOnInactivity"] = value;
             }
         }
     }

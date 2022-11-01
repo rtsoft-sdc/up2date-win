@@ -65,11 +65,13 @@ namespace Up2dateConsole
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
 
-            inactivityMonitor.Enabled = IsAdminMode;
-            inactivityMonitor.Interval = Properties.Settings.Default.LeaveAdminOnIdleTimeout * 1000;
-            inactivityMonitor.MonitorKeyboardEvents = true;
-            inactivityMonitor.MonitorMouseEvents = true;
-            inactivityMonitor.Elapsed += InactivityMonitor_Elapsed;
+            if (IsAdminMode)
+            {
+                inactivityMonitor.MonitorKeyboardEvents = true;
+                inactivityMonitor.MonitorMouseEvents = true;
+                inactivityMonitor.Elapsed += InactivityMonitor_Elapsed;
+                SetInactivityMonitor(Properties.Settings.Default.LeaveAdminModeOnInactivity, Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout);
+            }
         }
 
         private void InactivityMonitor_Elapsed(object sender, ElapsedEventArgs e)
@@ -314,12 +316,24 @@ namespace Up2dateConsole
 
             if (IsSettingsDialogActive) return;
 
-            SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory);
+            SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory, IsServiceRunning);
             if (!vm.IsInitialized) return;
 
             IsSettingsDialogActive = true;
             viewService.ShowDialog(vm);
             IsSettingsDialogActive = false;
+
+            if (IsAdminMode)
+            {
+                SetInactivityMonitor(vm.LeaveAdminModeOnInactivity, vm.LeaveAdminModeOnInactivityTimeout);
+            }
+        }
+
+        private void SetInactivityMonitor(bool on, uint timeoutSeconds)
+        {
+            const int Miliseconds = 1000;
+            inactivityMonitor.Enabled = on;
+            inactivityMonitor.Interval = timeoutSeconds * Miliseconds;
         }
 
         private async Task Accept(bool accept)
