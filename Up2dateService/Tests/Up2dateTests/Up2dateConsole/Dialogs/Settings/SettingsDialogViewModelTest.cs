@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests_Shared;
 using Up2dateConsole.Dialogs.Settings;
-using Up2dateConsole.ViewService;
 
 namespace Up2dateTests.Up2dateConsole.Dialogs.Settings
 {
@@ -10,6 +9,7 @@ namespace Up2dateTests.Up2dateConsole.Dialogs.Settings
     {
         private ViewServiceMock viewServiceMock;
         private WcfClientFactoryMock wcfClientFactoryMock;
+        private SettingsMock settingsMock;
 
         [TestMethod]
         public void WhenCreated_ThenViewModelIsCorrectlyInitialized()
@@ -44,11 +44,17 @@ namespace Up2dateTests.Up2dateConsole.Dialogs.Settings
         }
 
         [TestMethod]
-        public void GivenServiceIsNotRunning_WhenCreated_ThenOkCommandIsDisabled()
+        public void GivenServerUrlsAreNotEmpty_AndInactivityTimeoutIsNotZero_WhenCreated_ThenOkCommandIsEnabled()
         {
             // arrange
+            var wcfClientFactoryMock = new WcfClientFactoryMock();
+            wcfClientFactoryMock.WcfServiceMock.ProvisioningUrl = "some URL";
+            wcfClientFactoryMock.WcfServiceMock.RequestCertificateUrl = "some other URL";
+            var settingsMock = new SettingsMock();
+            settingsMock.Object.LeaveAdminModeOnInactivityTimeout = 60;
+
             // act
-            var vm = CreateViewModel(isServiceAvailable: false);
+            var vm = CreateViewModel(wcfClientFactoryMock: wcfClientFactoryMock, settingsMock: settingsMock);
 
             // assert
             Assert.IsTrue(vm.OkCommand.CanExecute(null));
@@ -58,33 +64,43 @@ namespace Up2dateTests.Up2dateConsole.Dialogs.Settings
         public void GivenServerUrlsAreEmpty_WhenCreated_ThenOkCommandIsDisabled()
         {
             // arrange
+            var wcfClientFactoryMock = new WcfClientFactoryMock();
+            wcfClientFactoryMock.WcfServiceMock.ProvisioningUrl = "";
+            wcfClientFactoryMock.WcfServiceMock.RequestCertificateUrl = "";
+            var settingsMock = new SettingsMock();
+            settingsMock.Object.LeaveAdminModeOnInactivityTimeout = 60;
+
             // act
-            var vm = CreateViewModel();
+            var vm = CreateViewModel(wcfClientFactoryMock: wcfClientFactoryMock, settingsMock: settingsMock);
 
             // assert
             Assert.IsFalse(vm.OkCommand.CanExecute(null));
         }
 
         [TestMethod]
-        public void GivenServerUrlsAreNotEmpty_WhenCreated_ThenOkCommandIsEnabled()
+        public void GivenInactivityTimeoutIsZero_WhenCreated_ThenOkCommandIsDisabled()
         {
             // arrange
             var wcfClientFactoryMock = new WcfClientFactoryMock();
             wcfClientFactoryMock.WcfServiceMock.ProvisioningUrl = "some URL";
             wcfClientFactoryMock.WcfServiceMock.RequestCertificateUrl = "some other URL";
+            var settingsMock = new SettingsMock();
+            settingsMock.Object.LeaveAdminModeOnInactivityTimeout = 0;
 
             // act
-            var vm = CreateViewModel(wcfClientFactoryMock: wcfClientFactoryMock);
+            var vm = CreateViewModel(wcfClientFactoryMock: wcfClientFactoryMock, settingsMock: settingsMock);
 
             // assert
-            Assert.IsTrue(vm.OkCommand.CanExecute(null));
+            Assert.IsFalse(vm.OkCommand.CanExecute(null));
         }
 
         [TestMethod]
         public void GivenServiceIsNotRunning_WhenPressedOk_ThenDialogClosedWithSuccess()
         {
             // arrange
-            var vm = CreateViewModel(isServiceAvailable: false);
+            var settingsMock = new SettingsMock();
+            settingsMock.Object.LeaveAdminModeOnInactivityTimeout = 60;
+            var vm = CreateViewModel(isServiceAvailable: false, settingsMock: settingsMock);
             bool success = false;
             vm.CloseDialog += (sender, args) => success = args;
 
@@ -96,11 +112,15 @@ namespace Up2dateTests.Up2dateConsole.Dialogs.Settings
         }
 
         private SettingsDialogViewModel CreateViewModel(bool isServiceAvailable = true, 
-            WcfClientFactoryMock wcfClientFactoryMock = null, ViewServiceMock viewServiceMock=null)
+            WcfClientFactoryMock wcfClientFactoryMock = null, ViewServiceMock viewServiceMock = null, SettingsMock settingsMock = null)
         {
             this.viewServiceMock = viewServiceMock ?? new ViewServiceMock();
             this.wcfClientFactoryMock = wcfClientFactoryMock ?? new WcfClientFactoryMock();
-            SettingsDialogViewModel vm = new SettingsDialogViewModel(this.viewServiceMock.Object, this.wcfClientFactoryMock.Object, isServiceAvailable);
+            this.settingsMock = settingsMock ?? new SettingsMock();
+            SettingsDialogViewModel vm = new SettingsDialogViewModel(
+                this.viewServiceMock.Object,
+                this.wcfClientFactoryMock.Object,
+                this.settingsMock.Object, isServiceAvailable);
             return vm;
         }
     }

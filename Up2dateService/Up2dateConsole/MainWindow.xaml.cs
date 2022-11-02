@@ -18,8 +18,8 @@ namespace Up2dateConsole
             viewService.RegisterDialog(typeof(SettingsDialogViewModel), typeof(SettingsDialog));
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
-
-            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false));
+            ISettings settings = new Settings();
+            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false), settings);
 
             if (!CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
             {

@@ -17,10 +17,11 @@ namespace Up2dateConsole.Dialogs.Settings
         private ConsoleSecurityTabViewModel consoleSecurityTab;
 
 
-        public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool isServiceAvailable)
+        public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, bool isServiceAvailable)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
+            if (settings is null) throw new ArgumentNullException(nameof(settings));
             this.isServiceAvailable = isServiceAvailable;
 
             OkCommand = new RelayCommand(ExecuteOk, CanOk);
@@ -32,7 +33,7 @@ namespace Up2dateConsole.Dialogs.Settings
                 Tabs.Add(serverConnectionTab);
                 Tabs.Add(installationPolicyTab);
             }
-            consoleSecurityTab = new ConsoleSecurityTabViewModel(viewService.GetText(Texts.ConsoleSecurity));
+            consoleSecurityTab = new ConsoleSecurityTabViewModel(viewService.GetText(Texts.ConsoleSecurity), settings);
             Tabs.Add(consoleSecurityTab);
 
             IsInitialized = Initialize();

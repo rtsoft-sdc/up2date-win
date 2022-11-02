@@ -36,14 +36,18 @@ namespace Up2dateConsole
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
         private readonly IInactivityMonitor inactivityMonitor;
+        private readonly ISettings settings;
         private readonly string ServiceName = "Up2dateService";
         private bool IsSettingsDialogActive = false;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, IInactivityMonitor inactivityMonitor)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory,
+            IInactivityMonitor inactivityMonitor, ISettings settings)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             this.inactivityMonitor = inactivityMonitor ?? throw new ArgumentNullException(nameof(inactivityMonitor));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
+
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
             QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
@@ -316,7 +320,7 @@ namespace Up2dateConsole
 
             if (IsSettingsDialogActive) return;
 
-            SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory, IsServiceRunning);
+            SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory, settings, IsServiceRunning);
             if (!vm.IsInitialized) return;
 
             IsSettingsDialogActive = true;

@@ -7,19 +7,21 @@ namespace Up2dateConsole.Dialogs.Settings
         private bool leaveAdminModeOnClose;
         private bool leaveAdminModeOnInactivity;
         private uint leaveAdminModeOnInactivityTimeout;
+        private readonly ISettings settings;
 
-        public ConsoleSecurityTabViewModel(string header)
+        public ConsoleSecurityTabViewModel(string header, ISettings settings)
         {
             Header = header;
+            this.settings = settings ?? throw new System.ArgumentNullException(nameof(settings));
         }
 
         public string Header { get; }
 
         public bool Initialize()
         {
-            leaveAdminModeOnClose = Properties.Settings.Default.LeaveAdminModeOnClose;
-            leaveAdminModeOnInactivity = Properties.Settings.Default.LeaveAdminModeOnInactivity;
-            leaveAdminModeOnInactivityTimeout = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout;
+            leaveAdminModeOnClose = settings.LeaveAdminModeOnClose;
+            leaveAdminModeOnInactivity = settings.LeaveAdminModeOnInactivity;
+            leaveAdminModeOnInactivityTimeout = settings.LeaveAdminModeOnInactivityTimeout;
 
             return true;
         }
@@ -30,10 +32,10 @@ namespace Up2dateConsole.Dialogs.Settings
         {
             if (!IsValid) return false;
 
-            Properties.Settings.Default.LeaveAdminModeOnClose = LeaveAdminModeOnClose;
-            Properties.Settings.Default.LeaveAdminModeOnInactivity = LeaveAdminModeOnInactivity;
-            Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout = LeaveAdminModeOnInactivityTimeout;
-            Properties.Settings.Default.Save();
+            settings.LeaveAdminModeOnClose = LeaveAdminModeOnClose;
+            settings.LeaveAdminModeOnInactivity = LeaveAdminModeOnInactivity;
+            settings.LeaveAdminModeOnInactivityTimeout = LeaveAdminModeOnInactivityTimeout;
+            settings.Save();
 
             return true;
         }
@@ -70,6 +72,5 @@ namespace Up2dateConsole.Dialogs.Settings
                 OnPropertyChanged();
             }
         }
-
     }
 }
