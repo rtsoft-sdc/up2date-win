@@ -107,7 +107,7 @@ namespace Up2dateTests.Up2dateClient
 
             // assert
             Assert.AreEqual(ClientStatus.Reconnecting, client.State.Status);
-            Assert.AreEqual(message, client.State.LastError);
+            StringAssert.Contains(client.State.LastError, message);
             wrapperMock.Verify(m => m.DeleteDispatcher(wrapperMock.Dispatcher));
         }
 
