@@ -55,7 +55,8 @@
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <MenuItem x:Uid="MenuItem_4" Header="Stop service" Command="{Binding StopServiceCommand}"
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <MenuItem x:Uid="MenuItem_5" Header="Settings..." Command="{Binding SettingsCommand}"/>
+                    <MenuItem x:Uid="MenuItem_5" Header="Settings..." Command="{Binding SettingsCommand}"
+                              Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <MenuItem x:Uid="MenuItem_7" Header="Leave admin mode" Command="{Binding LeaveAdminModeCommand}"
                               Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <MenuItem x:Uid="MenuItem_6" Header="To admin mode..." Command="{Binding EnterAdminModeCommand}"
@@ -96,10 +97,10 @@
                         <Button x:Uid="Button_4" Width="100" Content="Reject" Command="{Binding RejectCommand}"
                                 ToolTip="Reject installation of the selected package."
                                 Visibility="{Binding CanAcceptReject, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings">
+                            <TextBlock x:Uid="TextBlock_7" Text="{StaticResource wrenchIcon}" Style="{StaticResource ButtonIcon}"/>
+                        </Button>
                     </StackPanel>
-                    <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings">
-                        <TextBlock x:Uid="TextBlock_7" Text="{StaticResource wrenchIcon}" Style="{StaticResource ButtonIcon}"/>
-                    </Button>
                     <Button x:Uid="Button_1" Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages">
                         <TextBlock x:Uid="TextBlock_3" Text="{StaticResource RefreshIcon}" Style="{StaticResource ButtonIcon}"/>
                     </Button>
