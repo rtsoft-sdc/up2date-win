@@ -59,7 +59,7 @@ namespace Up2dateClient
             }
             catch (Exception e)
             {
-                SetState(ClientStatus.Reconnecting, e.Message);
+                SetState(ClientStatus.Reconnecting, e.ToString());
             }
             finally
             {
