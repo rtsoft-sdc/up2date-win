@@ -68,6 +68,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Up2dateClient\ClientTest.cs" />
     <Compile Include="Up2dateConsole\Dialogs\Settings\SettingsDialogViewModelTest.cs" />
+    <Compile Include="Up2dateConsole\Dialogs\Settings\ConsoleSecurityTabViewModelTest.cs" />
+    <Compile Include="Up2dateConsole\Dialogs\Settings\InstallationPolicyTabViewModelTest.cs" />
+    <Compile Include="Up2dateConsole\Dialogs\Settings\ServerConnectionTabViewModelTest.cs" />
     <Compile Include="Up2dateService\SettingsManagerTest.cs" />
     <Compile Include="Up2dateShared\SignatureVerifierTest.cs" />
   </ItemGroup>
