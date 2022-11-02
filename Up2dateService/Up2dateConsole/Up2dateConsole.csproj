@@ -83,8 +83,8 @@
       <DependentUpon>InstallationPolicyTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Settings\InstallationPolicyTabViewModel.cs" />
-    <Compile Include="Dialogs\RequestCertificateDialogViewModel.cs" />
-    <Compile Include="Dialogs\RequestCertificateDialog.xaml.cs">
+    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialogViewModel.cs" />
+    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml.cs">
       <DependentUpon>RequestCertificateDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Settings\ServerConnectionTab.xaml.cs">
@@ -128,7 +128,7 @@
     <Compile Include="ViewService\DialogViewModelBase.cs" />
     <Compile Include="ViewService\ViewService.cs" />
     <Compile Include="WcfClientFactory.cs" />
-    <Page Include="Dialogs\RequestCertificateDialog.xaml">
+    <Page Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

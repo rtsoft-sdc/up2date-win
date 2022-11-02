@@ -12,6 +12,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
