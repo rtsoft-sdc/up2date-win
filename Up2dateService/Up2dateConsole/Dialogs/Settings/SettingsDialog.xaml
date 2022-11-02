@@ -33,7 +33,9 @@
             <RowDefinition x:Uid="RowDefinition_2" Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TabControl x:Uid="TabControl_1" Width="550" Margin="5,5,5,10" ItemsSource="{Binding Tabs}">
+        <TabControl x:Uid="TabControl_1" Width="550" Margin="5,5,5,10"
+                    IsSynchronizedWithCurrentItem="True"
+                    ItemsSource="{Binding Tabs}">
             <TabControl.Resources>
                 <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type local:ConsoleSecurityTabViewModel}">
                     <local:ConsoleSecurityTab x:Uid="local:ConsoleSecurityTab_1" Margin="5"/>

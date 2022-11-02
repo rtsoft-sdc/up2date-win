@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 using System.Windows.Input;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
@@ -35,6 +36,8 @@ namespace Up2dateConsole.Dialogs.Settings
             }
             consoleSecurityTab = new ConsoleSecurityTabViewModel(viewService.GetText(Texts.ConsoleSecurity), settings);
             Tabs.Add(consoleSecurityTab);
+
+            CollectionViewSource.GetDefaultView(Tabs).MoveCurrentTo(Tabs[0]);
 
             IsInitialized = Initialize();
         }
