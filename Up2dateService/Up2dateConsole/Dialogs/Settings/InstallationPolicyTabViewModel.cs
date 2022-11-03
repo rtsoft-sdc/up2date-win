@@ -7,59 +7,60 @@ using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.ViewService;
 
-namespace Up2dateConsole.Dialogs
+namespace Up2dateConsole.Dialogs.Settings
 {
-    public class SettingsDialogViewModel : DialogViewModelBase
+    public class InstallationPolicyTabViewModel : NotifyPropertyChanged
     {
-        private readonly IViewService viewService;
-        private readonly IWcfClientFactory wcfClientFactory;
-        private string tokenUrl;
-        private string dpsUrl;
         private bool checkSignatureStatus;
         private bool confirmBeforeInstallation;
         private SignatureVerificationLevel signatureVerificationLevel;
+        private readonly IViewService viewService;
+        private readonly IWcfClientFactory wcfClientFactory;
 
-        public SettingsDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
+        public InstallationPolicyTabViewModel(string header, IViewService viewService, IWcfClientFactory wcfClientFactory)
         {
+            Header = header;
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
 
-            IsInitialized = Initialize();
-
-            OkCommand = new RelayCommand(ExecuteOk, CanOk);
             AddCertificateCommand = new RelayCommand(ExecuteAddCertificate, CanAddCertificate);
             LaunchCertMgrShapinCommand = new RelayCommand(ExecuteLaunchCertMgrShapin);
         }
 
-        public bool IsInitialized { get; }
+        public string Header { get; }
 
-        public ICommand OkCommand { get; }
+        public bool Initialize(IWcfService service)
+        {
+            checkSignatureStatus = service.GetCheckSignature();
+            signatureVerificationLevel = service.GetSignatureVerificationLevel();
+            confirmBeforeInstallation = service.GetConfirmBeforeInstallation();
+
+            return true;
+        }
+
+        public bool IsValid => true;
+
+        public bool Apply(IWcfService service)
+        {
+            if (!IsValid) return false;
+
+            if (SignatureVerificationLevel == SignatureVerificationLevel.SignedByWhitelistedCertificate
+                && service.GetWhitelistedCertificates().Length == 0)
+            {
+                var r = viewService.ShowMessageBox(Texts.NoAnyWhitelistedCertificate, System.Windows.MessageBoxButton.OKCancel);
+                if (r == System.Windows.MessageBoxResult.Cancel) return false;
+            }
+
+            service.SetCheckSignature(CheckSignatureStatus);
+            service.SetSignatureVerificationLevel(SignatureVerificationLevel);
+            service.SetConfirmBeforeInstallation(ConfirmBeforeInstallation);
+
+            return true;
+        }
 
         public ICommand AddCertificateCommand { get; }
 
         public ICommand LaunchCertMgrShapinCommand { get; }
-
-        public string TokenUrl
-        {
-            get => tokenUrl;
-            set
-            {
-                if (tokenUrl == value) return;
-                tokenUrl = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string DpsUrl
-        {
-            get => dpsUrl;
-            set
-            {
-                if (dpsUrl == value) return;
-                dpsUrl = value;
-                OnPropertyChanged();
-            }
-        }
 
         public bool CheckSignatureStatus
         {
@@ -149,78 +150,5 @@ namespace Up2dateConsole.Dialogs
             }
         }
 
-        private bool CanOk(object obj)
-        {
-            return !string.IsNullOrWhiteSpace(TokenUrl) && !string.IsNullOrWhiteSpace(DpsUrl);
-        }
-
-        private void ExecuteOk(object obj)
-        {
-            IWcfService service = null;
-            string error = string.Empty;
-            try
-            {
-                service = wcfClientFactory.CreateClient();
-                if (SignatureVerificationLevel == SignatureVerificationLevel.SignedByWhitelistedCertificate
-                    && service.GetWhitelistedCertificates().Length == 0)
-                {
-                    var r = viewService.ShowMessageBox(Texts.NoAnyWhitelistedCertificate, System.Windows.MessageBoxButton.OKCancel);
-                    if (r == System.Windows.MessageBoxResult.Cancel) return;
-                }
-
-                service.SetRequestCertificateUrl(TokenUrl);
-                service.SetProvisioningUrl(DpsUrl);
-                service.SetCheckSignature(CheckSignatureStatus);
-                service.SetSignatureVerificationLevel(SignatureVerificationLevel);
-                service.SetConfirmBeforeInstallation(ConfirmBeforeInstallation);
-            }
-            catch (Exception e)
-            {
-                error = e.Message;
-            }
-            finally
-            {
-                wcfClientFactory.CloseClient(service);
-            }
-
-            if (!string.IsNullOrEmpty(error))
-            {
-                viewService.ShowMessageBox(Texts.ServiceAccessError);
-                Close(false);
-            }
-
-            Close(true);
-        }
-
-        private bool Initialize()
-        {
-            IWcfService service = null;
-            string error = string.Empty;
-            try
-            {
-                service = wcfClientFactory.CreateClient();
-                TokenUrl = service.GetRequestCertificateUrl();
-                DpsUrl = service.GetProvisioningUrl();
-                checkSignatureStatus = service.GetCheckSignature();
-                signatureVerificationLevel = service.GetSignatureVerificationLevel();
-                confirmBeforeInstallation = service.GetConfirmBeforeInstallation();
-            }
-            catch (Exception e)
-            {
-                error = e.Message;
-            }
-            finally
-            {
-                wcfClientFactory.CloseClient(service);
-            }
-
-            if (!string.IsNullOrEmpty(error))
-            {
-                viewService.ShowMessageBox(Texts.ServiceAccessError);
-                return false;
-            }
-
-            return true;
-        }
     }
 }

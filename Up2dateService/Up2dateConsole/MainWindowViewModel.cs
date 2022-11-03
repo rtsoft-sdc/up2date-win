@@ -12,8 +12,10 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Up2dateConsole.Dialogs;
+using Up2dateConsole.Dialogs.RequestCertificate;
+using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
+using Up2dateConsole.Helpers.InactivityMonitor;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.StateIndicator;
 using Up2dateConsole.ViewService;
@@ -34,18 +36,24 @@ namespace Up2dateConsole
         private readonly Timer timer = new Timer(InitialDelay);
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
+        private readonly IInactivityMonitor inactivityMonitor;
+        private readonly ISettings settings;
         private readonly string ServiceName = "Up2dateService";
         private bool IsSettingsDialogActive = false;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory,
+            IInactivityMonitor inactivityMonitor, ISettings settings)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
+            this.inactivityMonitor = inactivityMonitor ?? throw new ArgumentNullException(nameof(inactivityMonitor));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
             QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
 
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
+            LeaveAdminModeCommand = new RelayCommand(ExecuteLeaveAdminMode);
             RefreshCommand = new RelayCommand(async _ => await ExecuteRefresh(), _ => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
@@ -61,6 +69,23 @@ namespace Up2dateConsole
             timer.AutoReset = false;
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
+
+            if (IsAdminMode)
+            {
+                inactivityMonitor.MonitorKeyboardEvents = true;
+                inactivityMonitor.MonitorMouseEvents = true;
+                inactivityMonitor.Elapsed += InactivityMonitor_Elapsed;
+                UpdateInactivityMonitor();
+            }
+        }
+
+        private void InactivityMonitor_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (IsAdminMode)
+            {
+                ExecuteLeaveAdminMode(null);
+            }
+            inactivityMonitor.Reset();
         }
 
         private async Task ExecuteStopService()
@@ -104,6 +129,7 @@ namespace Up2dateConsole
         }
 
         public ICommand EnterAdminModeCommand { get; }
+        public ICommand LeaveAdminModeCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand InstallCommand { get; }
         public ICommand AcceptCommand { get; }
@@ -244,6 +270,18 @@ namespace Up2dateConsole
             }
         }
 
+        private void ExecuteLeaveAdminMode(object _)
+        {
+            if (!IsAdminMode) return;
+
+            ThreadHelper.SafeInvoke(() =>
+            {
+                Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
+                Application.Current.Shutdown();
+            });
+            return;
+        }
+
         private void ExecuteEnterAdminMode(object _)
         {
             if (IsAdminMode) return;
@@ -283,12 +321,31 @@ namespace Up2dateConsole
 
             if (IsSettingsDialogActive) return;
 
-            SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory);
+            SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory, settings, IsServiceRunning);
             if (!vm.IsInitialized) return;
 
             IsSettingsDialogActive = true;
             viewService.ShowDialog(vm);
             IsSettingsDialogActive = false;
+
+            if (IsAdminMode)
+            {
+                UpdateInactivityMonitor();
+            }
+        }
+
+        private void UpdateInactivityMonitor()
+        {
+            const int MillisecondsInSecond = 1000;
+            const int MinTimeoutSec = 5;
+
+            inactivityMonitor.Enabled = Properties.Settings.Default.LeaveAdminModeOnInactivity;
+            var timeout = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout;
+            if (timeout < MinTimeoutSec)
+            {
+                timeout = MinTimeoutSec;
+            }
+            inactivityMonitor.Interval = timeout * MillisecondsInSecond;
         }
 
         private async Task Accept(bool accept)

@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Up2dateConsole.Dialogs
+namespace Up2dateConsole.Dialogs.Settings
 {
     /// <summary>
-    /// Interaction logic for RequestCertificateDialog.xaml
+    /// Interaction logic for ServerConnectionTab.xaml
     /// </summary>
-    public partial class RequestCertificateDialog : Window
+    public partial class ServerConnectionTab : UserControl
     {
-        public RequestCertificateDialog()
+        public ServerConnectionTab()
         {
             InitializeComponent();
         }
