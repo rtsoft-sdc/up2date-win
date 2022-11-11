@@ -182,5 +182,34 @@ namespace Up2dateService
         {
             return whiteListManager.AddCertificateToWhitelist(certificateFilePath);
         }
+
+        public bool IsUnsafeConnection()
+        {
+            return !settingsManager.SecureAuthorizationMode;
+        }
+
+        public Result SetupUnsafeConnection(string url, string deviceId, string token)
+        {
+            settingsManager.HawkbitUrl = url;
+            settingsManager.DeviceId = deviceId;
+            settingsManager.SecurityToken = token;
+            settingsManager.SecureAuthorizationMode = false;
+            return Result.Successful();
+        }
+
+        public string GetUnsafeConnectionUrl()
+        {
+            return settingsManager.HawkbitUrl;
+        }
+
+        public string GetUnsafeConnectionDeviceId()
+        {
+            return settingsManager.DeviceId;
+        }
+
+        public string GetUnsafeConnectionToken()
+        {
+            return settingsManager.SecurityToken;
+        }
     }
 }

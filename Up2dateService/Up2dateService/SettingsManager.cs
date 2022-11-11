@@ -127,6 +127,50 @@ namespace Up2dateService
             }
         }
 
+        public string HawkbitUrl
+        {
+            get => Properties.Settings.Default.HawkbitUrl;
+            set
+            {
+                Properties.Settings.Default.HawkbitUrl = value;
+                Properties.Settings.Default.Save();
+                WriteSettingsToLog();
+            }
+        }
+
+        public string DeviceId
+        {
+            get => Properties.Settings.Default.DeviceId;
+            set
+            {
+                Properties.Settings.Default.DeviceId = value;
+                Properties.Settings.Default.Save();
+                WriteSettingsToLog();
+            }
+        }
+
+        public string SecurityToken
+        {
+            get => Properties.Settings.Default.SecurityToken;
+            set
+            {
+                Properties.Settings.Default.SecurityToken = value;
+                Properties.Settings.Default.Save();
+                WriteSettingsToLog();
+            }
+        }
+
+        public bool SecureAuthorizationMode
+        {
+            get => Properties.Settings.Default.SecureAuthorizationMode;
+            set
+            {
+                Properties.Settings.Default.SecureAuthorizationMode = value;
+                Properties.Settings.Default.Save();
+                WriteSettingsToLog();
+            }
+        }
+
         private void WriteSettingsToLog()
         {
             StringBuilder sb = new StringBuilder("\n");
@@ -137,6 +181,10 @@ namespace Up2dateService
             sb.AppendLine($"{nameof(CheckSignature)} = {CheckSignature}");
             sb.AppendLine($"{nameof(SignatureVerificationLevel)} = {SignatureVerificationLevel}");
             sb.AppendLine($"{nameof(DefaultChocoSources)} = {DefaultChocoSources}");
+            sb.AppendLine($"{nameof(HawkbitUrl)} = {HawkbitUrl}");
+            sb.AppendLine($"{nameof(DeviceId)} = {DeviceId}");
+            sb.AppendLine($"{nameof(SecurityToken)} = {SecurityToken}");
+            sb.AppendLine($"{nameof(SecureAuthorizationMode)} = {SecureAuthorizationMode}");
             logger.WriteEntry(sb.ToString());
         }
     }

@@ -78,5 +78,20 @@ namespace Up2dateService
 
         [OperationContract]
         Result AddCertificateToWhitelist(string certificateFilePath);
+
+        [OperationContract]
+        bool IsUnsafeConnection();
+
+        [OperationContract]
+        Result SetupUnsafeConnection(string url, string deviceId, string token);
+
+        [OperationContract]
+        string GetUnsafeConnectionUrl();
+
+        [OperationContract]
+        string GetUnsafeConnectionDeviceId();
+
+        [OperationContract]
+        string GetUnsafeConnectionToken();
     }
 }

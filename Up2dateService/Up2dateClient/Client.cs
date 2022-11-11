@@ -43,7 +43,6 @@ namespace Up2dateClient
 
         public void Run()
         {
-            IntPtr dispatcher = IntPtr.Zero;
             try
             {
                 string cert = getCertificate();
@@ -52,21 +51,26 @@ namespace Up2dateClient
                     SetState(ClientStatus.NoCertificate);
                     return;
                 }
-                dispatcher = wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
+
                 SetState(ClientStatus.Running);
-                wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, dispatcher, OnAuthErrorAction);
+
+                if (settingsManager.SecureAuthorizationMode)
+                {
+                    wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnAuthErrorAction, 
+                        OnConfigRequest, OnDeploymentAction, OnCancelAction);
+                }
+                else
+                {
+                    var baseUri = new Uri(settingsManager.HawkbitUrl);
+                    wrapper.RunClientWithDeviceToken(settingsManager.SecurityToken, new Uri(baseUri, settingsManager.DeviceId).ToString(),
+                        OnConfigRequest, OnDeploymentAction, OnCancelAction);
+                }
+
                 SetState(ClientStatus.Reconnecting);
             }
             catch (Exception e)
             {
                 SetState(ClientStatus.Reconnecting, e.Message);
-            }
-            finally
-            {
-                if (dispatcher != IntPtr.Zero)
-                {
-                    wrapper.DeleteDispatcher(dispatcher);
-                }
             }
         }
 

@@ -14,5 +14,9 @@ namespace Up2dateShared
         string PackageInProgress { get; set; }
         string DefaultChocoSources { get; set; }
         bool RequiresConfirmationBeforeInstall { get; set; }
+        string HawkbitUrl { get; set; }
+        string DeviceId { get; set; }
+        string SecurityToken { get; set; }
+        bool SecureAuthorizationMode { get; set; }
     }
 }
