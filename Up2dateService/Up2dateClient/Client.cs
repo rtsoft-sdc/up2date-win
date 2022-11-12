@@ -45,22 +45,21 @@ namespace Up2dateClient
         {
             try
             {
-                string cert = getCertificate();
-                if (string.IsNullOrEmpty(cert))
-                {
-                    SetState(ClientStatus.NoCertificate);
-                    return;
-                }
-
-                SetState(ClientStatus.Running);
-
                 if (settingsManager.SecureAuthorizationMode)
                 {
+                    string cert = getCertificate();
+                    if (string.IsNullOrEmpty(cert))
+                    {
+                        SetState(ClientStatus.NoCertificate);
+                        return;
+                    }
+                    SetState(ClientStatus.Running);
                     wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnAuthErrorAction, 
                         OnConfigRequest, OnDeploymentAction, OnCancelAction);
                 }
                 else
                 {
+                    SetState(ClientStatus.Running);
                     var uri = settingsManager.HawkbitUrl.TrimEnd('/') + "/" + settingsManager.DeviceId;
                     wrapper.RunClientWithDeviceToken(settingsManager.SecurityToken, uri,
                         OnConfigRequest, OnDeploymentAction, OnCancelAction);
