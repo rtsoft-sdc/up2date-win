@@ -211,5 +211,11 @@ namespace Up2dateService
         {
             return settingsManager.SecurityToken;
         }
+
+        public Result SetupSecureConnection()
+        {
+            settingsManager.SecureAuthorizationMode = true;
+            return Result.Successful();
+        }
     }
 }

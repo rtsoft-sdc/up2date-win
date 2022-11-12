@@ -59,6 +59,8 @@
         CannotStartService,
         ServerConnection,
         InstallationPolicy,
-        ConsoleSecurity
+        ConsoleSecurity,
+        BadConnectionMessage,
+        GoodConnectionMessage
     }
 }

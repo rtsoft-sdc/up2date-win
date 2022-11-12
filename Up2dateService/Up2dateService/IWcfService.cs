@@ -93,5 +93,8 @@ namespace Up2dateService
 
         [OperationContract]
         string GetUnsafeConnectionToken();
+
+        [OperationContract]
+        Result SetupSecureConnection();
     }
 }

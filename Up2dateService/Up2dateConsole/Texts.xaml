@@ -68,4 +68,7 @@
     <clr:String x:Uid="clr:String_59" x:Key="ServerConnection">Server Connection</clr:String>
     <clr:String x:Uid="clr:String_60" x:Key="InstallationPolicy">Installation Policy</clr:String>
     <clr:String x:Uid="clr:String_61" x:Key="ConsoleSecurity">Console Security</clr:String>
+
+    <clr:String x:Uid="clr:String_62" x:Key="BadConnectionMessage">Failed to establish server connection. Please check entered URL, device ID and token.</clr:String>
+    <clr:String x:Uid="clr:String_63" x:Key="GoodConnectionMessage">Server connection successfully established.</clr:String>
 </ResourceDictionary>

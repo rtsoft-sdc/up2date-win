@@ -363,4 +363,16 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SetupSecureConnection">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetupSecureConnectionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="SetupSecureConnectionResult" type="q14:Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

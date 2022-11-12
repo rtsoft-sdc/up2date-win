@@ -184,7 +184,7 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
             IsInProgress = true;
 
             IWcfService service = null;
-            string error = string.Empty;
+            string certificateError = string.Empty;
             try
             {
                 service = wcfClientFactory.CreateClient();
@@ -194,16 +194,21 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
                 }
                 else
                 {
-                    ResultOfstring result = string.IsNullOrEmpty(certFilePath)
-                        ? await service.RequestCertificateAsync(RemoveWhiteSpaces(OneTimeKey))
-                        : await service.ImportCertificateAsync(certFilePath);
+                    ResultOfstring result = new ResultOfstring { Success = true };
+                    if (!string.IsNullOrWhiteSpace(certFilePath))
+                    {
+                        result = await service.ImportCertificateAsync(certFilePath);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(OneTimeKey))
+                    {
+                        result = await service.RequestCertificateAsync(RemoveWhiteSpaces(OneTimeKey));
+                    }
 
-                    //todo!!!
-                    // service.SetupSecureConnectionAsync();
+                    await service.SetupSecureConnectionAsync();
 
                     if (!result.Success)
                     {
-                        error = result.ErrorMessage;
+                        certificateError = result.ErrorMessage;
                     }
                     else
                     {
@@ -213,7 +218,9 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
             }
             catch (Exception e)
             {
-                error = e.Message;
+                string message = viewService.GetText(Texts.ServiceAccessError) + $"\n\n{e.Message}";
+                viewService.ShowMessageBox(message);
+                return;
             }
             finally
             {
@@ -221,7 +228,7 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
                 IsInProgress = false;
             }
 
-            if (string.IsNullOrEmpty(error))
+            if (string.IsNullOrEmpty(certificateError))
             {
                 IsInProgress = true;
                 await Task.Run(() => RestartService(20000));
@@ -230,7 +237,7 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
             }
             else
             {
-                string message = viewService.GetText(Texts.FailedToAcquireCertificate) + $"\n\n{error}";
+                string message = viewService.GetText(Texts.FailedToAcquireCertificate) + $"\n\n{certificateError}";
                 viewService.ShowMessageBox(message);
             }
         }

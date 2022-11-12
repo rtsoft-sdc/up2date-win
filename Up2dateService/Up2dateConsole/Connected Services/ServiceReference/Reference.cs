@@ -987,6 +987,12 @@ namespace Up2dateConsole.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetUnsafeConnectionToken", ReplyAction="http://tempuri.org/IWcfService/GetUnsafeConnectionTokenResponse")]
         System.Threading.Tasks.Task<string> GetUnsafeConnectionTokenAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetupSecureConnection", ReplyAction="http://tempuri.org/IWcfService/SetupSecureConnectionResponse")]
+        Up2dateConsole.ServiceReference.Result SetupSecureConnection();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetupSecureConnection", ReplyAction="http://tempuri.org/IWcfService/SetupSecureConnectionResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> SetupSecureConnectionAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1246,6 +1252,14 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task<string> GetUnsafeConnectionTokenAsync() {
             return base.Channel.GetUnsafeConnectionTokenAsync();
+        }
+        
+        public Up2dateConsole.ServiceReference.Result SetupSecureConnection() {
+            return base.Channel.SetupSecureConnection();
+        }
+        
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> SetupSecureConnectionAsync() {
+            return base.Channel.SetupSecureConnectionAsync();
         }
     }
 }

@@ -257,15 +257,21 @@ namespace Up2dateConsole
             if (success)
             {
                 await ExecuteRefresh();
-                if (ServiceState == ServiceState.AuthorizationError)
+
+                if (vm.IsSecureConnection)
                 {
-                    string message = string.Format(GetText(Texts.BadCertificateMessage), vm.DeviceId);
+                    Texts text = ServiceState == ServiceState.AuthorizationError
+                        ? Texts.BadCertificateMessage
+                        : Texts.GoodCertificateMessage;
+                    string message = string.Format(GetText(text), vm.DeviceId);
                     viewService.ShowMessageBox(message);
                 }
                 else
                 {
-                    string message = string.Format(GetText(Texts.GoodCertificateMessage), vm.DeviceId);
-                    viewService.ShowMessageBox(message);
+                    Texts text = ServiceState == ServiceState.AuthorizationError
+                        ? Texts.BadConnectionMessage
+                        : Texts.GoodConnectionMessage;
+                    viewService.ShowMessageBox(GetText(text));
                 }
             }
         }
