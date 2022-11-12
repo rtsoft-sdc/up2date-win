@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="WcfService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="WcfService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -1008,6 +1008,196 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_IsUnsafeConnection_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_IsUnsafeConnection_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_SetupUnsafeConnection_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_SetupUnsafeConnection_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetUnsafeConnectionUrl_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetUnsafeConnectionUrl_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetUnsafeConnectionDeviceId_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetUnsafeConnectionDeviceId_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetUnsafeConnectionToken_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetUnsafeConnectionToken_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
@@ -1162,6 +1352,36 @@
   <wsdl:message name="IWcfService_AddCertificateToWhitelist_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddCertificateToWhitelistResponse" />
   </wsdl:message>
+  <wsdl:message name="IWcfService_IsUnsafeConnection_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsUnsafeConnection" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_IsUnsafeConnection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsUnsafeConnectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SetupUnsafeConnection_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetupUnsafeConnection" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SetupUnsafeConnection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetupUnsafeConnectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetUnsafeConnectionUrl_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUnsafeConnectionUrl" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetUnsafeConnectionUrl_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUnsafeConnectionUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetUnsafeConnectionDeviceId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUnsafeConnectionDeviceId" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetUnsafeConnectionDeviceId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUnsafeConnectionDeviceIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetUnsafeConnectionToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUnsafeConnectionToken" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetUnsafeConnectionToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUnsafeConnectionTokenResponse" />
+  </wsdl:message>
   <wsdl:portType name="IWcfService">
     <wsdl:operation name="GetPackages">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetPackages" message="tns:IWcfService_GetPackages_InputMessage" />
@@ -1258,6 +1478,26 @@
     <wsdl:operation name="AddCertificateToWhitelist">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/AddCertificateToWhitelist" message="tns:IWcfService_AddCertificateToWhitelist_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/AddCertificateToWhitelistResponse" message="tns:IWcfService_AddCertificateToWhitelist_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsUnsafeConnection">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/IsUnsafeConnection" message="tns:IWcfService_IsUnsafeConnection_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/IsUnsafeConnectionResponse" message="tns:IWcfService_IsUnsafeConnection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetupUnsafeConnection">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SetupUnsafeConnection" message="tns:IWcfService_SetupUnsafeConnection_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SetupUnsafeConnectionResponse" message="tns:IWcfService_SetupUnsafeConnection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUnsafeConnectionUrl">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetUnsafeConnectionUrl" message="tns:IWcfService_GetUnsafeConnectionUrl_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetUnsafeConnectionUrlResponse" message="tns:IWcfService_GetUnsafeConnectionUrl_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUnsafeConnectionDeviceId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetUnsafeConnectionDeviceId" message="tns:IWcfService_GetUnsafeConnectionDeviceId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetUnsafeConnectionDeviceIdResponse" message="tns:IWcfService_GetUnsafeConnectionDeviceId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUnsafeConnectionToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetUnsafeConnectionToken" message="tns:IWcfService_GetUnsafeConnectionToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetUnsafeConnectionTokenResponse" message="tns:IWcfService_GetUnsafeConnectionToken_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSHttpBinding_IWcfService" type="tns:IWcfService">
@@ -1524,6 +1764,61 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_AddCertificateToWhitelist_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsUnsafeConnection">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/IsUnsafeConnection" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_IsUnsafeConnection_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_IsUnsafeConnection_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetupUnsafeConnection">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/SetupUnsafeConnection" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_SetupUnsafeConnection_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_SetupUnsafeConnection_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUnsafeConnectionUrl">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/GetUnsafeConnectionUrl" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetUnsafeConnectionUrl_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetUnsafeConnectionUrl_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUnsafeConnectionDeviceId">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/GetUnsafeConnectionDeviceId" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetUnsafeConnectionDeviceId_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetUnsafeConnectionDeviceId_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUnsafeConnectionToken">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/GetUnsafeConnectionToken" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetUnsafeConnectionToken_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetUnsafeConnectionToken_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

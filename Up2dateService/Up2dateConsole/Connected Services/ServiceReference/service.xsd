@@ -299,4 +299,68 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="IsUnsafeConnection">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsUnsafeConnectionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsUnsafeConnectionResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetupUnsafeConnection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="url" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="token" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetupUnsafeConnectionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="SetupUnsafeConnectionResult" type="q13:Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnsafeConnectionUrl">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnsafeConnectionUrlResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetUnsafeConnectionUrlResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnsafeConnectionDeviceId">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnsafeConnectionDeviceIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetUnsafeConnectionDeviceIdResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnsafeConnectionToken">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUnsafeConnectionTokenResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetUnsafeConnectionTokenResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

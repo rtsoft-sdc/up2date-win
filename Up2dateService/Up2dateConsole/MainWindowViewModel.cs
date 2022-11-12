@@ -58,7 +58,7 @@ namespace Up2dateConsole
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
             RejectCommand = new RelayCommand(async _ => await Accept(false), _ => CanAcceptReject);
-            RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync());
+            RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync(), _ => IsServiceRunning);
             SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);

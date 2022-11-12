@@ -957,6 +957,36 @@ namespace Up2dateConsole.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/AddCertificateToWhitelist", ReplyAction="http://tempuri.org/IWcfService/AddCertificateToWhitelistResponse")]
         System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> AddCertificateToWhitelistAsync(string certificateFilePath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/IsUnsafeConnection", ReplyAction="http://tempuri.org/IWcfService/IsUnsafeConnectionResponse")]
+        bool IsUnsafeConnection();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/IsUnsafeConnection", ReplyAction="http://tempuri.org/IWcfService/IsUnsafeConnectionResponse")]
+        System.Threading.Tasks.Task<bool> IsUnsafeConnectionAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetupUnsafeConnection", ReplyAction="http://tempuri.org/IWcfService/SetupUnsafeConnectionResponse")]
+        Up2dateConsole.ServiceReference.Result SetupUnsafeConnection(string url, string deviceId, string token);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetupUnsafeConnection", ReplyAction="http://tempuri.org/IWcfService/SetupUnsafeConnectionResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> SetupUnsafeConnectionAsync(string url, string deviceId, string token);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetUnsafeConnectionUrl", ReplyAction="http://tempuri.org/IWcfService/GetUnsafeConnectionUrlResponse")]
+        string GetUnsafeConnectionUrl();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetUnsafeConnectionUrl", ReplyAction="http://tempuri.org/IWcfService/GetUnsafeConnectionUrlResponse")]
+        System.Threading.Tasks.Task<string> GetUnsafeConnectionUrlAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetUnsafeConnectionDeviceId", ReplyAction="http://tempuri.org/IWcfService/GetUnsafeConnectionDeviceIdResponse")]
+        string GetUnsafeConnectionDeviceId();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetUnsafeConnectionDeviceId", ReplyAction="http://tempuri.org/IWcfService/GetUnsafeConnectionDeviceIdResponse")]
+        System.Threading.Tasks.Task<string> GetUnsafeConnectionDeviceIdAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetUnsafeConnectionToken", ReplyAction="http://tempuri.org/IWcfService/GetUnsafeConnectionTokenResponse")]
+        string GetUnsafeConnectionToken();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetUnsafeConnectionToken", ReplyAction="http://tempuri.org/IWcfService/GetUnsafeConnectionTokenResponse")]
+        System.Threading.Tasks.Task<string> GetUnsafeConnectionTokenAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1176,6 +1206,46 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> AddCertificateToWhitelistAsync(string certificateFilePath) {
             return base.Channel.AddCertificateToWhitelistAsync(certificateFilePath);
+        }
+        
+        public bool IsUnsafeConnection() {
+            return base.Channel.IsUnsafeConnection();
+        }
+        
+        public System.Threading.Tasks.Task<bool> IsUnsafeConnectionAsync() {
+            return base.Channel.IsUnsafeConnectionAsync();
+        }
+        
+        public Up2dateConsole.ServiceReference.Result SetupUnsafeConnection(string url, string deviceId, string token) {
+            return base.Channel.SetupUnsafeConnection(url, deviceId, token);
+        }
+        
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> SetupUnsafeConnectionAsync(string url, string deviceId, string token) {
+            return base.Channel.SetupUnsafeConnectionAsync(url, deviceId, token);
+        }
+        
+        public string GetUnsafeConnectionUrl() {
+            return base.Channel.GetUnsafeConnectionUrl();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetUnsafeConnectionUrlAsync() {
+            return base.Channel.GetUnsafeConnectionUrlAsync();
+        }
+        
+        public string GetUnsafeConnectionDeviceId() {
+            return base.Channel.GetUnsafeConnectionDeviceId();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetUnsafeConnectionDeviceIdAsync() {
+            return base.Channel.GetUnsafeConnectionDeviceIdAsync();
+        }
+        
+        public string GetUnsafeConnectionToken() {
+            return base.Channel.GetUnsafeConnectionToken();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetUnsafeConnectionTokenAsync() {
+            return base.Channel.GetUnsafeConnectionTokenAsync();
         }
     }
 }
