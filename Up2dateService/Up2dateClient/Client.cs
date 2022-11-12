@@ -61,8 +61,8 @@ namespace Up2dateClient
                 }
                 else
                 {
-                    var baseUri = new Uri(settingsManager.HawkbitUrl);
-                    wrapper.RunClientWithDeviceToken(settingsManager.SecurityToken, new Uri(baseUri, settingsManager.DeviceId).ToString(),
+                    var uri = settingsManager.HawkbitUrl.TrimEnd('/') + "/" + settingsManager.DeviceId;
+                    wrapper.RunClientWithDeviceToken(settingsManager.SecurityToken, uri,
                         OnConfigRequest, OnDeploymentAction, OnCancelAction);
                 }
 
