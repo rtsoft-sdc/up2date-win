@@ -67,6 +67,10 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Up2dateClient\ClientTest.cs" />
+    <Compile Include="Up2dateConsole\Dialogs\Settings\SettingsDialogViewModelTest.cs" />
+    <Compile Include="Up2dateConsole\Dialogs\Settings\ConsoleSecurityTabViewModelTest.cs" />
+    <Compile Include="Up2dateConsole\Dialogs\Settings\InstallationPolicyTabViewModelTest.cs" />
+    <Compile Include="Up2dateConsole\Dialogs\Settings\ServerConnectionTabViewModelTest.cs" />
     <Compile Include="Up2dateService\SettingsManagerTest.cs" />
     <Compile Include="Up2dateShared\SignatureVerifierTest.cs" />
   </ItemGroup>
@@ -82,6 +86,10 @@
     <ProjectReference Include="..\..\Up2dateClient\Up2dateClient.csproj">
       <Project>{adee0fe0-364f-4f37-ba76-57dd948e99fd}</Project>
       <Name>Up2dateClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Up2dateConsole\Up2dateConsole.csproj">
+      <Project>{06A754B8-B045-40FE-BADB-2F0469BC43BA}</Project>
+      <Name>Up2dateConsole</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Up2dateService\Up2dateService.csproj">
       <Project>{4c1f9730-09e5-4694-864b-4b39aa93d813}</Project>

@@ -75,27 +75,46 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Controls\SqueezeContentControl.cs" />
-    <Compile Include="Dialogs\RequestCertificateDialogViewModel.cs" />
-    <Compile Include="Dialogs\RequestCertificateDialog.xaml.cs">
+    <Compile Include="Dialogs\Settings\ConsoleSecurityTab.xaml.cs">
+      <DependentUpon>ConsoleSecurityTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Settings\ConsoleSecurityTabViewModel.cs" />
+    <Compile Include="Dialogs\Settings\InstallationPolicyTab.xaml.cs">
+      <DependentUpon>InstallationPolicyTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Settings\InstallationPolicyTabViewModel.cs" />
+    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialogViewModel.cs" />
+    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml.cs">
       <DependentUpon>RequestCertificateDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\SettingsDialog.xaml.cs">
+    <Compile Include="Dialogs\Settings\ServerConnectionTab.xaml.cs">
+      <DependentUpon>ServerConnectionTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Settings\ServerConnectionTabViewModel.cs" />
+    <Compile Include="Dialogs\Settings\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\SettingsDialogViewModel.cs" />
+    <Compile Include="Dialogs\Settings\SettingsDialogViewModel.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
+    <Compile Include="Helpers\InactivityMonitor\IInactivityMonitor.cs" />
+    <Compile Include="Helpers\InactivityMonitor\HookMonitor.cs" />
+    <Compile Include="Helpers\InactivityMonitor\MonitorBase.cs" />
+    <Compile Include="Helpers\InactivityMonitor\User32.cs" />
+    <Compile Include="Helpers\InactivityMonitor\Win32Hook.cs" />
     <Compile Include="Helpers\InvertBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
+    <Compile Include="ISettings.cs" />
     <Compile Include="IWcfClientFactory.cs" />
     <Compile Include="Properties\Resources.ru-RU.Designer.cs">
       <DependentUpon>Resources.ru-RU.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="StateIndicator\StateIndicatorViewModel.cs" />
     <Compile Include="StateIndicator\StateIndicator.xaml.cs">
       <DependentUpon>StateIndicator.xaml</DependentUpon>
@@ -109,11 +128,23 @@
     <Compile Include="ViewService\DialogViewModelBase.cs" />
     <Compile Include="ViewService\ViewService.cs" />
     <Compile Include="WcfClientFactory.cs" />
-    <Page Include="Dialogs\RequestCertificateDialog.xaml">
+    <Page Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\SettingsDialog.xaml">
+    <Page Include="Dialogs\Settings\ConsoleSecurityTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Settings\InstallationPolicyTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Settings\ServerConnectionTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Settings\SettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -253,6 +284,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ServiceReference\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)Localization\CheckAndGenerate.cmd" ru-RU $(TargetDir) $(TargetName) $(ProjectDir) $(ProjectName)

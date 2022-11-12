@@ -65,4 +65,7 @@
     <clr:String x:Uid="clr:String_57" x:Key="CannotStopService">Failed to stop service.</clr:String>
     <clr:String x:Uid="clr:String_58" x:Key="CannotStartService">Failed to start service.</clr:String>
 
+    <clr:String x:Uid="clr:String_59" x:Key="ServerConnection">Server Connection</clr:String>
+    <clr:String x:Uid="clr:String_60" x:Key="InstallationPolicy">Installation Policy</clr:String>
+    <clr:String x:Uid="clr:String_61" x:Key="ConsoleSecurity">Console Security</clr:String>
 </ResourceDictionary>
