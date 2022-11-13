@@ -166,7 +166,7 @@ Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_5:System.
 Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBox_5:System.Windows.FrameworkElement.Width,None,False,True,,500,500,
 Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_6:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
 Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_6:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
-Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_6:System.Windows.FrameworkElement.Margin,None,False,True,,"0,10,0,10","0,10,0,10",
+Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,StackPanel_6:System.Windows.FrameworkElement.Margin,None,False,True,,"0,20,0,10","0,20,0,10",
 Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_7:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
 Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_7:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
 Up2dateConsole.g.en-US.resources:requestcertificatedialog.baml,TextBlock_7:System.Windows.Controls.TextBlock.Text,Text,True,True,,Идентификатор компьютера:,Machine GUID:,

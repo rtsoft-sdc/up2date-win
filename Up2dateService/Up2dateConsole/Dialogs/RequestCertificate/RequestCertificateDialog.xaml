@@ -65,7 +65,7 @@
                         <TextBlock x:Uid="TextBlock_10" Text="Target token (paste here generated token copied from dashboard):"/>
                         <TextBox x:Uid="TextBox_5" Margin="0,5" Width="500" Text="{Binding DeviceToken, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10,0,10"
+                    <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,10"
                                 Visibility="{Binding MachineGuid, Converter={StaticResource NullToVisibilityConverter}}">
                         <TextBlock x:Uid="TextBlock_7" VerticalAlignment="Center" Text="Machine GUID:"/>
                         <TextBox x:Uid="TextBox_2" VerticalAlignment="Center" Margin="5,0"
