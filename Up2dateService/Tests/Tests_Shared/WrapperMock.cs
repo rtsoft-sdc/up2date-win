@@ -1,7 +1,6 @@
 ﻿using Moq;
 using System;
 using System.Threading;
-using Up2dateClient;
 using Up2dateDotNet;
 
 namespace Tests_Shared
@@ -9,22 +8,24 @@ namespace Tests_Shared
     public class WrapperMock : Mock<IWrapper>
     {
         private ManualResetEvent runExitEvent = new ManualResetEvent(false);
-        private IntPtr dispatcher;
+        private IntPtr client;
 
         public AuthErrorActionFunc AuthErrorCallback { get; private set; }
         public ConfigRequestFunc ConfigRequestFunc { get; private set; }
         public DeploymentActionFunc DeploymentActionFunc { get; private set; }
         public CancelActionFunc CancelActionFunc { get; private set; }
 
-        public IntPtr Dispatcher
+        public IntPtr Client
         {
-            get => dispatcher;
+            get => client;
             set
             {
-                dispatcher = value;
-                Setup(m => m.CreateDispatcher(It.IsAny<ConfigRequestFunc>(), It.IsAny<DeploymentActionFunc>(), It.IsAny<CancelActionFunc>())).Returns(dispatcher)
-                    .Callback<ConfigRequestFunc, DeploymentActionFunc, CancelActionFunc>((cr, da, ca) =>
+                client = value;
+                Setup(m => m.BuildClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthErrorActionFunc>(),
+                    It.IsAny<ConfigRequestFunc>(), It.IsAny<DeploymentActionFunc>(), It.IsAny<CancelActionFunc>())).Returns(client)
+                    .Callback<string, string, string, AuthErrorActionFunc, ConfigRequestFunc, DeploymentActionFunc, CancelActionFunc>((c, e, t, ae, cr, da, ca) =>
                     {
+                        AuthErrorCallback = ae;
                         ConfigRequestFunc = cr;
                         DeploymentActionFunc = da;
                         CancelActionFunc = ca;
@@ -34,11 +35,11 @@ namespace Tests_Shared
 
         public WrapperMock()
         {
-            Dispatcher = new IntPtr(-1);
-            Setup(m => m.RunClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IntPtr>(), It.IsAny<AuthErrorActionFunc>()))
-                .Callback<string, string, string, IntPtr, AuthErrorActionFunc>((p1, p2, p3, p4, ae) => 
+            Client = new IntPtr(-1);
+            Setup(m => m.Run(It.IsAny<IntPtr>()))
+                .Callback<IntPtr>(client => 
                 {
-                    AuthErrorCallback = ae;
+                    Client = client;
                     runExitEvent.WaitOne(); 
                 });
         }
