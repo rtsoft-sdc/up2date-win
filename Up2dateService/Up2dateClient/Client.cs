@@ -45,9 +45,9 @@ namespace Up2dateClient
         {
             try
             {
+                string cert = getCertificate();
                 if (settingsManager.SecureAuthorizationMode)
                 {
-                    string cert = getCertificate();
                     if (string.IsNullOrEmpty(cert))
                     {
                         SetState(ClientStatus.NoCertificate);
