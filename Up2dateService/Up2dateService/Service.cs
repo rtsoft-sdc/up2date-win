@@ -23,9 +23,9 @@ namespace Up2dateService
 
         protected override void OnStart(string[] args)
         {
-            const int clientStartRertyPeriodMs = 30000;
+            const int clientRestartOnErrorPeriodMs = 30000;
 
-            //System.Diagnostics.Debugger.Launch(); //todo: remove!
+            // System.Diagnostics.Debugger.Launch(); //todo: remove!
 
             serviceHost?.Close();
             EventLog.WriteEntry($"Packages folder: '{GetCreatePackagesFolder()}'");
@@ -41,7 +41,7 @@ namespace Up2dateService
 
             Client client = new Client(new Wrapper(), settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)));
 
-            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State,
+            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State, () => client.RequestStop(),
                 certificateProvider, certificateManager, settingsManager, signatureVerifier, whiteListManager);
             serviceHost = new ServiceHost(wcfService);
             serviceHost.Open();
@@ -50,8 +50,8 @@ namespace Up2dateService
             {
                 while (true)
                 {
-                    client.Run();
-                    Thread.Sleep(clientStartRertyPeriodMs);
+                    string stopReason = client.Run();
+                    Thread.Sleep(string.IsNullOrEmpty(stopReason) ? 0 : clientRestartOnErrorPeriodMs);
                 }
             });
         }

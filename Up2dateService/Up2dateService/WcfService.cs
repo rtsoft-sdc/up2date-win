@@ -5,6 +5,7 @@ using System.Security.Permissions;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using Up2dateClient;
 using Up2dateShared;
 
 namespace Up2dateService
@@ -17,13 +18,14 @@ namespace Up2dateService
         private readonly Func<SystemInfo> getSysInfo;
         private readonly Func<string> getDownloadLocation;
         private readonly Func<ClientState> getClientState;
+        private readonly Action forceClientPoll;
         private readonly ICertificateProvider certificateProvider;
         private readonly ICertificateManager certificateManager;
         private readonly ISettingsManager settingsManager;
         private readonly ISignatureVerifier signatureVerifier;
         private readonly IWhiteListManager whiteListManager;
 
-        public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, Func<ClientState> getClientState,
+        public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, Func<ClientState> getClientState, Action forceClientPoll,
             ICertificateProvider certificateProvider, ICertificateManager certificateManager,
             ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager)
         {
@@ -31,6 +33,7 @@ namespace Up2dateService
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
             this.getDownloadLocation = getDownloadLocation ?? throw new ArgumentNullException(nameof(getDownloadLocation));
             this.getClientState = getClientState ?? throw new ArgumentNullException(nameof(getClientState));
+            this.forceClientPoll = forceClientPoll ?? throw new ArgumentNullException(nameof(forceClientPoll));
             this.certificateProvider = certificateProvider ?? throw new ArgumentNullException(nameof(certificateProvider));
             this.certificateManager = certificateManager ?? throw new ArgumentNullException(nameof(certificateManager));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
@@ -57,11 +60,13 @@ namespace Up2dateService
         public void AcceptInstallation(Package package)
         {
             setupManager.AcceptPackage(package);
+            forceClientPoll();
         }
 
         public void RejectInstallation(Package package)
         {
             setupManager.RejectPackage(package);
+            forceClientPoll();
         }
 
         public string GetMsiFolder()
@@ -76,9 +81,13 @@ namespace Up2dateService
 
         public string GetDeviceId()
         {
-            return certificateManager.IsCertificateAvailable()
-                ? $"{certificateManager.CertificateIssuerName}:{certificateManager.CertificateSubjectName}"
-                : string.Empty;
+            if (settingsManager.SecureAuthorizationMode)
+            {
+                return certificateManager.IsCertificateAvailable()
+                    ? certificateManager.CertificateSubjectName
+                    : string.Empty;
+            }
+            return settingsManager.DeviceId;
         }
 
         public bool IsCertificateAvailable()
@@ -181,6 +190,41 @@ namespace Up2dateService
         public Result AddCertificateToWhitelist(string certificateFilePath)
         {
             return whiteListManager.AddCertificateToWhitelist(certificateFilePath);
+        }
+
+        public bool IsUnsafeConnection()
+        {
+            return !settingsManager.SecureAuthorizationMode;
+        }
+
+        public Result SetupUnsafeConnection(string url, string deviceId, string token)
+        {
+            settingsManager.HawkbitUrl = url;
+            settingsManager.DeviceId = deviceId;
+            settingsManager.SecurityToken = token;
+            settingsManager.SecureAuthorizationMode = false;
+            return Result.Successful();
+        }
+
+        public string GetUnsafeConnectionUrl()
+        {
+            return settingsManager.HawkbitUrl;
+        }
+
+        public string GetUnsafeConnectionDeviceId()
+        {
+            return settingsManager.DeviceId;
+        }
+
+        public string GetUnsafeConnectionToken()
+        {
+            return settingsManager.SecurityToken;
+        }
+
+        public Result SetupSecureConnection()
+        {
+            settingsManager.SecureAuthorizationMode = true;
+            return Result.Successful();
         }
     }
 }
