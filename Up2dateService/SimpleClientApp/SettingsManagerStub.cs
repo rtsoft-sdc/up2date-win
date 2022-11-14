@@ -39,5 +39,9 @@ namespace SimpleClientApp
         public SignatureVerificationLevel SignatureVerificationLevel { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public string CertificateThumbprint { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public bool RequiresConfirmationBeforeInstall { get; set; }
+        public string HawkbitUrl { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public string DeviceId { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public string SecurityToken { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool SecureAuthorizationMode { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }
