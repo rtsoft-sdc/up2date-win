@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using Up2dateDotNet;
 using Up2dateShared;
 
@@ -21,8 +19,6 @@ namespace Up2dateClient
         private readonly Func<SystemInfo> getSysInfo;
         private ClientState state;
         private int lastStopID = -1;
-        IntPtr client = IntPtr.Zero;
-        TaskCompletionSource<bool> runCompletion;
 
         public Client(IWrapper wrapper, ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, ILogger logger)
         {
@@ -47,7 +43,6 @@ namespace Up2dateClient
 
         public string Run()
         {
-            runCompletion = new TaskCompletionSource<bool>();
             try
             {
                 string cert = getCertificate();
@@ -59,20 +54,15 @@ namespace Up2dateClient
                         return "No certificate.";
                     }
                     SetState(ClientStatus.Running);
-                    client = wrapper.BuildClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnAuthErrorAction, 
+                    wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnAuthErrorAction, 
                         OnConfigRequest, OnDeploymentAction, OnCancelAction);
                 }
                 else
                 {
                     SetState(ClientStatus.Running);
                     var uri = settingsManager.HawkbitUrl.TrimEnd('/') + "/" + settingsManager.DeviceId;
-                    client = wrapper.BuildClientWithDeviceToken(settingsManager.SecurityToken, uri,
+                    wrapper.RunClientWithDeviceToken(settingsManager.SecurityToken, uri,
                         OnConfigRequest, OnDeploymentAction, OnCancelAction);
-                }
-
-                if (client != IntPtr.Zero)
-                {
-                    wrapper.Run(client);
                 }
 
                 SetState(ClientStatus.Reconnecting);
@@ -82,30 +72,12 @@ namespace Up2dateClient
                 SetState(ClientStatus.Reconnecting, e.ToString());
                 return e.Message;
             }
-            finally
-            {
-                if (client != IntPtr.Zero)
-                {
-                    wrapper.Delete(client);
-                    client = IntPtr.Zero;
-                    runCompletion.SetResult(true);
-                }
-            }
             return string.Empty;
-        }
-
-        public Task<bool> StopAsync()
-        {
-            RequestStop();
-            return runCompletion.Task;
         }
 
         public void RequestStop()
         {
-            if (client != IntPtr.Zero)
-            {
-                wrapper.Stop(client);
-            }
+            wrapper.StopClient();
         }
 
         private void SetState(ClientStatus status, string lastError = null)
