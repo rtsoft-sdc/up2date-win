@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using Up2dateService.Interfaces;
 using Up2dateShared;
@@ -28,7 +29,7 @@ namespace Up2dateService.SetupManager
             this.installerFactory = installerFactory ?? throw new ArgumentNullException(nameof(installerFactory));
             this.validatorFactory = validatorFactory ?? throw new ArgumentNullException(nameof(validatorFactory));
 
-            SafeRefreshPackageList();
+            SafeRefreshPackageList(initializing:true);
         }
 
         public List<Package> GetAvaliablePackages()
@@ -385,8 +386,9 @@ namespace Up2dateService.SetupManager
             package.ErrorCode = result;
         }
 
-        private void SafeRefreshPackageList()
+        private void SafeRefreshPackageList(bool initializing = false)
         {
+            var logBuilder = new StringBuilder("\nPackages:\n");
             lock (packagesLock)
             {
                 string downloadFolder = downloadLocationProvider();
@@ -422,9 +424,10 @@ namespace Up2dateService.SetupManager
                 {
                     Package updatedPackage = packages[i];
 
-                    // Don't update package status while it is being installed - status may be invalid
+                    // Don't update package status while it is being installed right now - status may be invalid
                     // (e.g. Choco reports product as installed at the very beginning of the installation process)
-                    if (IsSetPackageInProgressFlag(updatedPackage)) continue;
+                    // Except the case when service had been restared during or because of installation process.
+                    if (!initializing && IsSetPackageInProgressFlag(updatedPackage)) continue;
 
                     if (!installerFactory.IsInstallerAvailable(updatedPackage)) continue;
 
@@ -459,6 +462,11 @@ namespace Up2dateService.SetupManager
                     }
 
                     packages[i] = updatedPackage;
+                    logBuilder.AppendLine($"{updatedPackage.Status} {updatedPackage.ProductName}");
+                }
+                if (initializing)
+                {
+                    logger.WriteEntry(logBuilder.ToString());
                 }
             };
         }

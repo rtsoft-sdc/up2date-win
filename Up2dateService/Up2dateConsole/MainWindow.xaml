@@ -191,9 +191,9 @@
                     <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
                     <ColumnDefinition x:Uid="ColumnDefinition_7"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Uid="TextBlock_4" Text="RITMS UP2DATE:" VerticalAlignment="Center"/>
+                <TextBlock x:Uid="TextBlock_4" Text="Controller Id:" VerticalAlignment="Center"/>
                 <controls:SqueezeContentControl x:Uid="controls:ModestContainer_1" Grid.Column="1" Margin="5,0,10,0" HorizontalAlignment="Left">
-                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center" 
+                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center"
                              Style="{StaticResource ReadOnlyInfoField}"
                              Text="{Binding DeviceId, Mode=OneWay}"/>
                 </controls:SqueezeContentControl>
