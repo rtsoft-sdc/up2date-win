@@ -361,7 +361,7 @@ Up2dateConsole.g.en-US.resources:mainwindow.baml,controls:ModestContainer_1:Up2d
 Up2dateConsole.g.en-US.resources:mainwindow.baml,controls:ModestContainer_1:System.Windows.Controls.Grid.Column,None,False,True,,1,1,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,controls:ModestContainer_1:System.Windows.FrameworkElement.Margin,None,False,True,,"5,0,10,0","5,0,10,0",
 Up2dateConsole.g.en-US.resources:mainwindow.baml,controls:ModestContainer_1:System.Windows.FrameworkElement.HorizontalAlignment,None,False,True,,Left,Left,
-Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.TextBox.$Content,Text,True,True,,,,Fix translation
+Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.Controls.TextBox.$Content,Text,True,True,,,,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBox_1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_2:System.Windows.Controls.Button.$Content,Button,True,True,,#StackPanel_6;,#StackPanel_6;,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,Button_2:System.Windows.Controls.Grid.Column,None,False,True,,3,3,
