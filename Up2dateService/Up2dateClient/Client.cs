@@ -41,33 +41,43 @@ namespace Up2dateClient
             }
         }
 
-        public void Run()
+        public string Run()
         {
-            IntPtr dispatcher = IntPtr.Zero;
             try
             {
                 string cert = getCertificate();
-                if (string.IsNullOrEmpty(cert))
+                if (settingsManager.SecureAuthorizationMode)
                 {
-                    SetState(ClientStatus.NoCertificate);
-                    return;
+                    if (string.IsNullOrEmpty(cert))
+                    {
+                        SetState(ClientStatus.NoCertificate);
+                        return "No certificate.";
+                    }
+                    SetState(ClientStatus.Running);
+                    wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnAuthErrorAction, 
+                        OnConfigRequest, OnDeploymentAction, OnCancelAction);
                 }
-                dispatcher = wrapper.CreateDispatcher(OnConfigRequest, OnDeploymentAction, OnCancelAction);
-                SetState(ClientStatus.Running);
-                wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, dispatcher, OnAuthErrorAction);
+                else
+                {
+                    SetState(ClientStatus.Running);
+                    var uri = settingsManager.HawkbitUrl.TrimEnd('/') + "/" + settingsManager.DeviceId;
+                    wrapper.RunClientWithDeviceToken(settingsManager.SecurityToken, uri,
+                        OnConfigRequest, OnDeploymentAction, OnCancelAction);
+                }
+
                 SetState(ClientStatus.Reconnecting);
             }
             catch (Exception e)
             {
                 SetState(ClientStatus.Reconnecting, e.ToString());
+                return e.Message;
             }
-            finally
-            {
-                if (dispatcher != IntPtr.Zero)
-                {
-                    wrapper.DeleteDispatcher(dispatcher);
-                }
-            }
+            return string.Empty;
+        }
+
+        public void RequestStop()
+        {
+            wrapper.StopClient();
         }
 
         private void SetState(ClientStatus status, string lastError = null)

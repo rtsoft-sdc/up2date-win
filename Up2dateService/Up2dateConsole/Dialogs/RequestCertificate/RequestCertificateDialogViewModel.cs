@@ -11,10 +11,21 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
 {
     public class RequestCertificateDialogViewModel : DialogViewModelBase
     {
+        enum ConnectionMode
+        {
+            Secure,
+            Test
+        };
+
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
         private string oneTimeKey;
         private bool isInProgress;
+        private ConnectionMode connectionMode;
+        private string hawkbitUrl;
+        private string controllerId;
+        private string deviceToken;
+        private bool isCertificateAvailable;
 
         public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation, string machineGuid)
         {
@@ -25,6 +36,36 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
 
             RequestCommand = new RelayCommand(async (_) => await ExecuteRequestAsync(), CanRequest);
             LoadCommand = new RelayCommand(async (_) => await ExecuteLoadAsync());
+
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            IWcfService service = null;
+            string error = string.Empty;
+            try
+            {
+                service = wcfClientFactory.CreateClient();
+                isCertificateAvailable = service.IsCertificateAvailable();
+                connectionMode = service.IsUnsafeConnection() ? ConnectionMode.Test : ConnectionMode.Secure;
+                hawkbitUrl = service.GetUnsafeConnectionUrl();
+                controllerId = service.GetUnsafeConnectionDeviceId();
+                if (string.IsNullOrEmpty(controllerId))
+                {
+                    controllerId = MachineGuid;
+                }
+                deviceToken = service.GetUnsafeConnectionToken();
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+            }
+            finally
+            {
+                wcfClientFactory.CloseClient(service);
+                IsInProgress = false;
+            }
         }
 
         public ICommand RequestCommand { get; }
@@ -62,9 +103,66 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
 
         public bool ShowExplanation { get; }
 
+        public bool IsSecureConnection
+        {
+            get => connectionMode == ConnectionMode.Secure;
+            set => SetSecureConnectionMode(value);
+        }
+
+        public bool IsTestConnection
+        {
+            get => connectionMode == ConnectionMode.Test;
+            set => SetSecureConnectionMode(!value);
+        }
+
+        public string HawkbitUrl
+        {
+            get => hawkbitUrl;
+            set
+            {
+                if (hawkbitUrl == value) return;
+                hawkbitUrl = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ControllerId
+        {
+            get => controllerId;
+            set
+            {
+                if (controllerId == value) return;
+                controllerId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string DeviceToken
+        {
+            get => deviceToken;
+            set
+            {
+                if (deviceToken == value) return;
+                deviceToken = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void SetSecureConnectionMode(bool value)
+        {
+            var newConnectionMode = value ? ConnectionMode.Secure : ConnectionMode.Test;
+            if (connectionMode == newConnectionMode) return;
+            connectionMode = newConnectionMode;
+
+            OnPropertyChanged(nameof(IsTestConnection));
+            OnPropertyChanged(nameof(IsSecureConnection));
+        }
+
         private bool CanRequest(object _)
         {
-            return !string.IsNullOrWhiteSpace(OneTimeKey);
+            if (IsSecureConnection) return isCertificateAvailable || !string.IsNullOrWhiteSpace(OneTimeKey);
+            if (IsTestConnection) return !string.IsNullOrWhiteSpace(HawkbitUrl) && !string.IsNullOrWhiteSpace(ControllerId) && !string.IsNullOrEmpty(DeviceToken);
+            return false;
         }
 
         private async Task ExecuteRequestAsync()
@@ -86,26 +184,43 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
             IsInProgress = true;
 
             IWcfService service = null;
-            string error = string.Empty;
+            string certificateError = string.Empty;
             try
             {
                 service = wcfClientFactory.CreateClient();
-                ResultOfstring result = string.IsNullOrEmpty(certFilePath)
-                    ? await service.RequestCertificateAsync(RemoveWhiteSpaces(OneTimeKey))
-                    : await service.ImportCertificateAsync(certFilePath);
-
-                if (!result.Success)
+                if (IsTestConnection)
                 {
-                    error = result.ErrorMessage;
+                    await service.SetupUnsafeConnectionAsync(HawkbitUrl, ControllerId, DeviceToken);
                 }
                 else
                 {
-                    DeviceId = result.Value;
+                    ResultOfstring result = new ResultOfstring { Success = true };
+                    if (!string.IsNullOrWhiteSpace(certFilePath))
+                    {
+                        result = await service.ImportCertificateAsync(certFilePath);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(OneTimeKey))
+                    {
+                        result = await service.RequestCertificateAsync(RemoveWhiteSpaces(OneTimeKey));
+                    }
+
+                    await service.SetupSecureConnectionAsync();
+
+                    if (!result.Success)
+                    {
+                        certificateError = result.ErrorMessage;
+                    }
+                    else
+                    {
+                        DeviceId = result.Value;
+                    }
                 }
             }
             catch (Exception e)
             {
-                error = e.Message;
+                string message = viewService.GetText(Texts.ServiceAccessError) + $"\n\n{e.Message}";
+                viewService.ShowMessageBox(message);
+                return;
             }
             finally
             {
@@ -113,7 +228,7 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
                 IsInProgress = false;
             }
 
-            if (string.IsNullOrEmpty(error))
+            if (string.IsNullOrEmpty(certificateError))
             {
                 IsInProgress = true;
                 await Task.Run(() => RestartService(20000));
@@ -122,7 +237,7 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
             }
             else
             {
-                string message = viewService.GetText(Texts.FailedToAcquireCertificate) + $"\n\n{error}";
+                string message = viewService.GetText(Texts.FailedToAcquireCertificate) + $"\n\n{certificateError}";
                 viewService.ShowMessageBox(message);
             }
         }

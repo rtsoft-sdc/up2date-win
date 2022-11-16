@@ -73,11 +73,11 @@ namespace Up2dateTests.Up2dateClient
 
             // assert
             wrapperMock.Verify(m => m.RunClient(certificate, settingsManagerMock.Object.ProvisioningUrl, settingsManagerMock.Object.XApigToken,
-                wrapperMock.Dispatcher, It.IsNotNull<AuthErrorActionFunc>()));
+                It.IsNotNull<AuthErrorActionFunc>(), It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()));
         }
 
         [TestMethod]
-        public void GivenClientRunning_WhenWrapperClientRunExited_ThenStatusIsReconnectingWithoutMessage_AndDispatcherIsDeleted()
+        public void GivenClientRunning_WhenWrapperClientRunExited_ThenStatusIsReconnectingWithoutMessage()
         {
             // arrange
             Client client = CreateClient();
@@ -90,16 +90,16 @@ namespace Up2dateTests.Up2dateClient
             // assert
             Assert.AreEqual(ClientStatus.Reconnecting, client.State.Status);
             Assert.IsTrue(string.IsNullOrEmpty(client.State.LastError));
-            wrapperMock.Verify(m => m.DeleteDispatcher(wrapperMock.Dispatcher));
         }
 
         [TestMethod]
-        public void GivenClientRunning_WhenWrapperClientThrewException_ThenStatusIsReconnectingWithMessage_AndDispatcherIsDeleted()
+        public void GivenClientRunning_WhenWrapperClientThrewException_ThenStatusIsReconnectingWithMessage()
         {
             // arrange
             Client client = CreateClient();
             string message = "exception message";
-            wrapperMock.Setup(m => m.RunClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IntPtr>(), It.IsAny<AuthErrorActionFunc>()))
+            wrapperMock.Setup(m => m.RunClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsNotNull<AuthErrorActionFunc>(), It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()))
                 .Throws(new Exception(message));
 
             // act
@@ -108,7 +108,6 @@ namespace Up2dateTests.Up2dateClient
             // assert
             Assert.AreEqual(ClientStatus.Reconnecting, client.State.Status);
             StringAssert.Contains(client.State.LastError, message);
-            wrapperMock.Verify(m => m.DeleteDispatcher(wrapperMock.Dispatcher));
         }
 
         [TestMethod]
@@ -321,10 +320,11 @@ namespace Up2dateTests.Up2dateClient
             StartClient(client);
 
             // act
-            wrapperMock.DeploymentActionFunc(artifact, new DeploymentInfo { 
-                artifactFileName = fileName, 
+            wrapperMock.DeploymentActionFunc(artifact, new DeploymentInfo
+            {
+                artifactFileName = fileName,
                 isInMaintenanceWindow = true,
-                updateType = "skip" 
+                updateType = "skip"
             }, out ClientResult result);
 
             // assert
@@ -602,6 +602,7 @@ namespace Up2dateTests.Up2dateClient
         {
             wrapperMock = new WrapperMock();
             settingsManagerMock = new SettingsManagerMock();
+            settingsManagerMock.Object.SecureAuthorizationMode = true;
             setupManagerMock = new SetupManagerMock();
             loggerMock = new LoggerMock();
             certificate = "certificate body";

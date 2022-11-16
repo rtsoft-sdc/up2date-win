@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <Version>2.0.1</Version>
+    <Version>2.1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="rtsoft.ritms.up2date.net" Version="1.0.0" />
+    <PackageReference Include="rtsoft.ritms.up2date.net" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

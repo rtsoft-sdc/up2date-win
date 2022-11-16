@@ -58,7 +58,7 @@ namespace Up2dateConsole
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
             RejectCommand = new RelayCommand(async _ => await Accept(false), _ => CanAcceptReject);
-            RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync());
+            RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync(), _ => IsServiceRunning);
             SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
@@ -257,16 +257,14 @@ namespace Up2dateConsole
             if (success)
             {
                 await ExecuteRefresh();
-                if (ServiceState == ServiceState.AuthorizationError)
-                {
-                    string message = string.Format(GetText(Texts.BadCertificateMessage), vm.DeviceId);
-                    viewService.ShowMessageBox(message);
-                }
-                else
-                {
-                    string message = string.Format(GetText(Texts.GoodCertificateMessage), vm.DeviceId);
-                    viewService.ShowMessageBox(message);
-                }
+
+                string message = ServiceState == ServiceState.Active
+                    ? GetText(Texts.GoodConnectionMessage)
+                    : vm.IsSecureConnection
+                        ? GetText(Texts.BadCertificateMessage)
+                        : GetText(Texts.BadConnectionMessage);
+
+                viewService.ShowMessageBox(message);
             }
         }
 

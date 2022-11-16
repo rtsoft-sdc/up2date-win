@@ -30,7 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Localization.md = Localization.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Up2dateClient", "Up2dateClient\Up2dateClient.csproj", "{ADEE0FE0-364F-4F37-BA76-57DD948E99FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Up2dateClient", "Up2dateClient\Up2dateClient.csproj", "{ADEE0FE0-364F-4F37-BA76-57DD948E99FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,7 +49,6 @@ Global
 		{DCB11B13-2CEB-4057-AAE7-AD2818E48EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DCB11B13-2CEB-4057-AAE7-AD2818E48EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCB11B13-2CEB-4057-AAE7-AD2818E48EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCB11B13-2CEB-4057-AAE7-AD2818E48EB5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C40CD08-B1B8-4EC1-A41A-719F1E0B3690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C40CD08-B1B8-4EC1-A41A-719F1E0B3690}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C40CD08-B1B8-4EC1-A41A-719F1E0B3690}.Release|Any CPU.ActiveCfg = Release|Any CPU
