@@ -61,7 +61,7 @@
       <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Up2dateDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\rtsoft.ritms.up2date.net.2.0.0\lib\net472\Up2dateDotNet.dll</HintPath>
+      <HintPath>..\..\packages\up2date.net.2.0.0\lib\net472\Up2dateDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
