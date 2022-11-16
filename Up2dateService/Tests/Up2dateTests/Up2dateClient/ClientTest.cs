@@ -166,6 +166,7 @@ namespace Up2dateTests.Up2dateClient
                 .Callback<IntPtr, string, string>((ptr, key, value) => { callSequence.Add((ptr, key, value)); });
             settingsManagerMock.Object.CheckSignature = checkSignature;
             settingsManagerMock.Object.SignatureVerificationLevel = signatureVerificationLevel;
+            settingsManagerMock.Object.SecureAuthorizationMode = true;
             StartClient(client);
 
             // act
@@ -194,6 +195,9 @@ namespace Up2dateTests.Up2dateClient
             expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "settings.signature_verification_level",
                 settingsManagerMock.Object.CheckSignature ? settingsManagerMock.Object.SignatureVerificationLevel.ToString() : "off"));
+            expectedCount++;
+            CollectionAssert.Contains(callSequence, (responseBuilder, "settings.connection_mode",
+                settingsManagerMock.Object.SecureAuthorizationMode ? "secure" : "by token (unsafe)"));
             expectedCount++;
 
             Assert.AreEqual(expectedCount, callSequence.Count);
