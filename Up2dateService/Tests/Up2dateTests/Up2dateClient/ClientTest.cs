@@ -20,6 +20,7 @@ namespace Up2dateTests.Up2dateClient
         private LoggerMock loggerMock;
         private string certificate;
         private SystemInfo sysInfo = SystemInfo.Retrieve();
+        private readonly Version version = new Version(1, 2, 3);
 
         [TestCleanup]
         public void Cleanup()
@@ -165,6 +166,7 @@ namespace Up2dateTests.Up2dateClient
                 .Callback<IntPtr, string, string>((ptr, key, value) => { callSequence.Add((ptr, key, value)); });
             settingsManagerMock.Object.CheckSignature = checkSignature;
             settingsManagerMock.Object.SignatureVerificationLevel = signatureVerificationLevel;
+            settingsManagerMock.Object.SecureAuthorizationMode = true;
             StartClient(client);
 
             // act
@@ -174,23 +176,28 @@ namespace Up2dateTests.Up2dateClient
             int expectedCount = 0;
             CollectionAssert.Contains(callSequence, (responseBuilder, "client", "RITMS UP2DATE for Windows"));
             expectedCount++;
+            CollectionAssert.Contains(callSequence, (responseBuilder, "client version", $"{version.Major}.{version.Minor}.{version.Build}"));
+            expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "computer", sysInfo.MachineName));
             expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "machine GUID", sysInfo.MachineGuid));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "platform", sysInfo.PlatformID.ToString()));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "OS platform", sysInfo.PlatformID.ToString()));
             expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit"));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "version", sysInfo.VersionString));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "OS version", sysInfo.VersionString));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "service pack", sysInfo.ServicePack));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "OS service pack", sysInfo.ServicePack));
             expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "settings.requires_confirmation_before_update",
                 settingsManagerMock.Object.RequiresConfirmationBeforeInstall ? "yes" : "no"));
             expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "settings.signature_verification_level",
                 settingsManagerMock.Object.CheckSignature ? settingsManagerMock.Object.SignatureVerificationLevel.ToString() : "off"));
+            expectedCount++;
+            CollectionAssert.Contains(callSequence, (responseBuilder, "settings.connection_mode",
+                settingsManagerMock.Object.SecureAuthorizationMode ? "secure" : "by token (unsafe)"));
             expectedCount++;
 
             Assert.AreEqual(expectedCount, callSequence.Count);
@@ -606,7 +613,7 @@ namespace Up2dateTests.Up2dateClient
             setupManagerMock = new SetupManagerMock();
             loggerMock = new LoggerMock();
             certificate = "certificate body";
-            Client client = new Client(wrapperMock.Object, settingsManagerMock.Object, () => certificate, setupManagerMock.Object, () => sysInfo, loggerMock.Object);
+            Client client = new Client(wrapperMock.Object, settingsManagerMock.Object, () => certificate, setupManagerMock.Object, () => sysInfo, loggerMock.Object, version);
 
             return client;
         }

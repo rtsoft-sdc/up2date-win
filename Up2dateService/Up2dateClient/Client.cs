@@ -12,6 +12,7 @@ namespace Up2dateClient
         private const string ClientType = "RITMS UP2DATE for Windows";
 
         private readonly ILogger logger;
+        private readonly Version clientVersion;
         private readonly IWrapper wrapper;
         private readonly ISettingsManager settingsManager;
         private readonly Func<string> getCertificate;
@@ -20,7 +21,7 @@ namespace Up2dateClient
         private ClientState state;
         private int lastStopID = -1;
 
-        public Client(IWrapper wrapper, ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, ILogger logger)
+        public Client(IWrapper wrapper, ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, ILogger logger, Version clientVersion)
         {
             this.wrapper = wrapper ?? throw new ArgumentNullException(nameof(wrapper));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
@@ -28,6 +29,7 @@ namespace Up2dateClient
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.clientVersion = clientVersion ?? throw new ArgumentNullException(nameof(clientVersion));
         }
 
         public ClientState State
@@ -89,12 +91,13 @@ namespace Up2dateClient
         {
             SystemInfo sysInfo = getSysInfo();
             yield return new KeyValuePair("client", ClientType);
+            yield return new KeyValuePair("client version", $"{clientVersion.Major}.{clientVersion.Minor}.{clientVersion.Build}");
             yield return new KeyValuePair("computer", sysInfo.MachineName);
             yield return new KeyValuePair("machine GUID", sysInfo.MachineGuid);
-            yield return new KeyValuePair("platform", sysInfo.PlatformID.ToString());
+            yield return new KeyValuePair("OS platform", sysInfo.PlatformID.ToString());
             yield return new KeyValuePair("OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit");
-            yield return new KeyValuePair("version", sysInfo.VersionString);
-            yield return new KeyValuePair("service pack", sysInfo.ServicePack);
+            yield return new KeyValuePair("OS version", sysInfo.VersionString);
+            yield return new KeyValuePair("OS service pack", sysInfo.ServicePack);
         }
 
         private void OnConfigRequest(IntPtr responseBuilder)
@@ -112,6 +115,8 @@ namespace Up2dateClient
                 settingsManager.RequiresConfirmationBeforeInstall ? "yes" : "no");
             wrapper.AddConfigAttribute(responseBuilder, "settings.signature_verification_level",
                 settingsManager.CheckSignature ? settingsManager.SignatureVerificationLevel.ToString() : "off");
+            wrapper.AddConfigAttribute(responseBuilder, "settings.connection_mode",
+                settingsManager.SecureAuthorizationMode ? "secure" : "by token (unsafe)");
         }
 
         private void OnDeploymentAction(IntPtr artifact, DeploymentInfo info, out ClientResult result)
