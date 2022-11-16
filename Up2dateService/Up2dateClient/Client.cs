@@ -91,10 +91,10 @@ namespace Up2dateClient
             yield return new KeyValuePair("client", ClientType);
             yield return new KeyValuePair("computer", sysInfo.MachineName);
             yield return new KeyValuePair("machine GUID", sysInfo.MachineGuid);
-            yield return new KeyValuePair("platform", sysInfo.PlatformID.ToString());
+            yield return new KeyValuePair("OS platform", sysInfo.PlatformID.ToString());
             yield return new KeyValuePair("OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit");
-            yield return new KeyValuePair("version", sysInfo.VersionString);
-            yield return new KeyValuePair("service pack", sysInfo.ServicePack);
+            yield return new KeyValuePair("OS version", sysInfo.VersionString);
+            yield return new KeyValuePair("OS service pack", sysInfo.ServicePack);
         }
 
         private void OnConfigRequest(IntPtr responseBuilder)
