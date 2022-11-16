@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Up2dateClient;
 using Up2dateDotNet;
 using Up2dateShared;
@@ -15,7 +16,8 @@ namespace SimpleClientApp
                 () => File.OpenText(args[0]).ReadToEnd(), 
                 new SetupManagerStub(), 
                 SystemInfo.Retrieve, 
-                new LoggerStub("Client"));
+                new LoggerStub("Client"),
+                new Version(2,0,0));
 
             client.Run();
         }

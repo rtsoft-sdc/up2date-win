@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_02938B99DFDD481D97829D1CE6D01099"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_03DB1189DA6087DBE14295166BF28B1E"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
@@ -2135,6 +2141,18 @@
         {
         "MsmKey" = "8:_53FE0DB2F6303BD1E824F5A643FC6396"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_550E63DB827D26477A590F31AAE09B75"
+        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_550E63DB827D26477A590F31AAE09B75"
+        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -4395,18 +4413,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CE46A67BF9DCF327D80F02CEB153584B"
-        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CE46A67BF9DCF327D80F02CEB153584B"
-        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CECB35E2BC92A1C42AA6EE0511F47B05"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
@@ -4517,6 +4523,12 @@
         {
         "MsmKey" = "8:_DD07199305674DE39C32320FB3609686"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DD2CA33F507B4D45856A6025D8D7C336"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -5140,7 +5152,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CE46A67BF9DCF327D80F02CEB153584B"
+        "OwnerKey" = "8:_550E63DB827D26477A590F31AAE09B75"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -6612,6 +6624,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_02938B99DFDD481D97829D1CE6D01099"
+            {
+            "SourcePath" = "8:..\\Script\\SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 6475a64cc2909438b757e014.cer"
+            "TargetName" = "8:SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 6475a64cc2909438b757e014.cer"
+            "Tag" = "8:"
+            "Folder" = "8:_C816C0AAB0E04BC39744FDC550ED93C6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_03DB1189DA6087DBE14295166BF28B1E"
             {
             "AssemblyRegister" = "3:1"
@@ -6647,7 +6679,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_07005A70F2BEFDF14C4F99119595EA1D"
@@ -7535,7 +7567,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1E5ED1531F976AEF0218491EC9C96CEB"
@@ -8836,6 +8868,37 @@
                     }
                 }
             "SourcePath" = "8:System.Security.Principal.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_550E63DB827D26477A590F31AAE09B75"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_550E63DB827D26477A590F31AAE09B75"
+                    {
+                    "Name" = "8:Up2dateDotNet.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Up2dateDotNet.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
@@ -12002,37 +12065,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CE46A67BF9DCF327D80F02CEB153584B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_CE46A67BF9DCF327D80F02CEB153584B"
-                    {
-                    "Name" = "8:Up2dateDotNet.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Up2dateDotNet.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CECB35E2BC92A1C42AA6EE0511F47B05"
             {
             "AssemblyRegister" = "3:1"
@@ -12558,6 +12590,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DD2CA33F507B4D45856A6025D8D7C336"
+            {
+            "SourcePath" = "8:..\\Script\\SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 33b508a477470f4bf7a557d6.cer"
+            "TargetName" = "8:SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 33b508a477470f4bf7a557d6.cer"
+            "Tag" = "8:"
+            "Folder" = "8:_C816C0AAB0E04BC39744FDC550ED93C6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DEC2C1546869D4AD525D00D0A3D7D118"
