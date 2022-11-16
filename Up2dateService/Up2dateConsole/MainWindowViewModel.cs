@@ -240,7 +240,7 @@ namespace Up2dateConsole
             }
             if (!OperationInProgress)
             {
-                await ExecuteRefresh();
+                await ThreadHelper.SafeInvokeAsync(ExecuteRefresh);
             }
             timer.Start();
         }
