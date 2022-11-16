@@ -1347,6 +1347,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2361FC7AE472402B8F12A0C850E6C8D0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2139,8 +2145,26 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_550E63DB827D26477A590F31AAE09B75"
+        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_550E63DB827D26477A590F31AAE09B75"
+        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5526064863FE4B8A103A2A0FE5D3B11C"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_554649DF62B240CBA73945E4F86722D8"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -4389,18 +4413,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CE46A67BF9DCF327D80F02CEB153584B"
-        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CE46A67BF9DCF327D80F02CEB153584B"
-        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CECB35E2BC92A1C42AA6EE0511F47B05"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
@@ -5140,7 +5152,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CE46A67BF9DCF327D80F02CEB153584B"
+        "OwnerKey" = "8:_550E63DB827D26477A590F31AAE09B75"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -6665,7 +6677,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_07005A70F2BEFDF14C4F99119595EA1D"
@@ -7533,7 +7545,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1E5ED1531F976AEF0218491EC9C96CEB"
@@ -7775,6 +7787,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2361FC7AE472402B8F12A0C850E6C8D0"
+            {
+            "SourcePath" = "8:..\\Script\\SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 33b508a477470f4bf7a557d6.cer"
+            "TargetName" = "8:SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 33b508a477470f4bf7a557d6.cer"
+            "Tag" = "8:"
+            "Folder" = "8:_AD9867C08CC3403488CAE4E6A991BCF6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_266704AEE8E635BCD2EDCAE91D05F67B"
@@ -8871,6 +8903,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_550E63DB827D26477A590F31AAE09B75"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_550E63DB827D26477A590F31AAE09B75"
+                    {
+                    "Name" = "8:Up2dateDotNet.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Up2dateDotNet.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5526064863FE4B8A103A2A0FE5D3B11C"
             {
             "AssemblyRegister" = "3:1"
@@ -8900,6 +8963,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_554649DF62B240CBA73945E4F86722D8"
+            {
+            "SourcePath" = "8:..\\Script\\SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 6475a64cc2909438b757e014.cer"
+            "TargetName" = "8:SOFTWARE DEVELOPMENT CENTRE RTSOFT OOO 6475a64cc2909438b757e014.cer"
+            "Tag" = "8:"
+            "Folder" = "8:_AD9867C08CC3403488CAE4E6A991BCF6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5647DD9E93B63C19F3C45AFC458A1B2E"
@@ -11983,37 +12066,6 @@
                     }
                 }
             "SourcePath" = "8:Windows.Gaming.Preview.GamesEnumerationContract.winmd"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CE46A67BF9DCF327D80F02CEB153584B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_CE46A67BF9DCF327D80F02CEB153584B"
-                    {
-                    "Name" = "8:Up2dateDotNet.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Up2dateDotNet.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
