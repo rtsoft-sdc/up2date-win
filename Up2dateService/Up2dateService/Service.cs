@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.ServiceModel;
 using System.ServiceProcess;
 using System.Threading;
@@ -39,7 +40,9 @@ namespace Up2dateService
             IPackageValidatorFactory validatorFactory = new PackageValidatorFactory(settingsManager, signatureVerifier, whiteListManager);
             ISetupManager setupManager = new SetupManager.SetupManager(new Logger(EventLog, nameof(SetupManager)), GetCreatePackagesFolder, settingsManager, installerFactory, validatorFactory);
 
-            Client client = new Client(new Wrapper(), settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)));
+            Version clientVersion = Assembly.GetEntryAssembly().GetName().Version;
+
+            Client client = new Client(new Wrapper(), settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)), clientVersion);
 
             WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State, () => client.RequestStop(),
                 certificateProvider, certificateManager, settingsManager, signatureVerifier, whiteListManager);
