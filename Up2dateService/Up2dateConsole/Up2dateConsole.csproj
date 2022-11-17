@@ -248,6 +248,9 @@
     <None Include="Localization\CheckAndGenerate.cmd" />
     <None Include="Localization\Up2dateConsole_ru-RU.csv" />
     <None Include="Localization\Update.cmd" />
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -265,6 +268,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="NLog">
+      <Version>5.0.5</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
