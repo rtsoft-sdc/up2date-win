@@ -66,20 +66,7 @@ namespace Up2dateConsole
 
         private void LogUnhandledException(Exception exception, string source)
         {
-            string message = $"Unhandled exception ({source})";
-            try
-            {
-                AssemblyName assemblyName = Assembly.GetExecutingAssembly().GetName();
-                message = string.Format("Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Exception in LogUnhandledException");
-            }
-            finally
-            {
-                logger.Error(exception, message);
-            }
+            logger.Error(exception, $"Unhandled exception ({source})");
         }
 
         private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat toastArgs)

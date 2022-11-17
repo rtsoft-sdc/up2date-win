@@ -248,9 +248,9 @@
     <None Include="Localization\CheckAndGenerate.cmd" />
     <None Include="Localization\Up2dateConsole_ru-RU.csv" />
     <None Include="Localization\Update.cmd" />
-    <None Include="nlog.config">
+    <Content Include="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
