@@ -101,6 +101,12 @@ namespace Up2dateConsole.Session
             }
         }
 
+        public void OnWindowsSessionEnding()
+        {
+            IsShuttingDown = true;
+            ShuttingDown?.Invoke(this, EventArgs.Empty);
+        }
+
         private void InactivityMonitor_Elapsed(object sender, ElapsedEventArgs e)
         {
             ToUserMode();

@@ -10,6 +10,7 @@ namespace Up2dateConsole.Session
         void Shutdown();
         void OnSettingsUpdated();
         void OnWindowClosing();
+        void OnWindowsSessionEnding();
 
         bool IsAdminMode { get; }
         bool IsShuttingDown { get; }

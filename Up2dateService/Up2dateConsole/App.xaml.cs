@@ -21,8 +21,6 @@ namespace Up2dateConsole
         protected override void OnStartup(StartupEventArgs e)
         {
             //Debugger.Launch(); // todo remove for production
-            logger.Info("Console start.");
-
             if (Up2dateConsole.Properties.Settings.Default.UpgradeFlag)
             {
                 logger.Info("First start after installation or upgrade - upgrading settings.");
@@ -68,7 +66,7 @@ namespace Up2dateConsole
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
             ISettings settings = new Settings();
-            var session = new Session.Session(new HookMonitor(false), settings);
+            ISession session = new Session.Session(new HookMonitor(false), settings);
             mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session);
 
             mainWindow.Closing += (w, e) =>
@@ -77,6 +75,15 @@ namespace Up2dateConsole
                 ((Window)w).Hide();
                 e.Cancel = true;
             };
+
+            SessionEnding += (w, e) =>
+            {
+                logger.Info($"Console exiting due to {e.ReasonSessionEnding}");
+                session.OnWindowsSessionEnding();
+            };
+
+            string mode = session.IsAdminMode ? "Admin" : "User";
+            logger.Info($"Console started in {mode} mode");
 
             return mainWindow;
         }
