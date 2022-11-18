@@ -20,7 +20,7 @@ namespace Up2dateConsole
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
             ISettings settings = new Settings();
-            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false), settings, Application.Current.Shutdown);
+            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false), settings, new Session.Session());
 
             if (!CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
             {

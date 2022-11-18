@@ -114,6 +114,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Session\ISession.cs" />
+    <Compile Include="Session\Session.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="StateIndicator\StateIndicatorViewModel.cs" />
     <Compile Include="StateIndicator\StateIndicator.xaml.cs">
