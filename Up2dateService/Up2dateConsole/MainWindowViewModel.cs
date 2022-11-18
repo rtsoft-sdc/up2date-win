@@ -73,7 +73,6 @@ namespace Up2dateConsole
         private void Session_ShuttingDown(object sender, EventArgs e)
         {
             timer.Stop();
-            //todo break all loops and wait for async tasks to complete
         }
 
         private async Task ExecuteStopService()
@@ -229,7 +228,11 @@ namespace Up2dateConsole
             {
                 await ThreadHelper.SafeInvokeAsync(ExecuteRefresh);
             }
-            timer.Start();
+
+            if (!session.IsShuttingDown)
+            {
+                timer.Start();
+            }
         }
 
         private async Task ExecuteRequestCertificateAsync()
