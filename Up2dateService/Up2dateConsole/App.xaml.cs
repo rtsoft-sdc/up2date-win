@@ -20,7 +20,10 @@ namespace Up2dateConsole
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            //Debugger.Launch(); // todo remove for production
+            Debugger.Launch(); // todo remove for production
+
+            SetupExceptionHandling();
+
             if (Up2dateConsole.Properties.Settings.Default.UpgradeFlag)
             {
                 logger.Info("First start after installation or upgrade - upgrading settings.");
@@ -45,8 +48,6 @@ namespace Up2dateConsole
             new SingleInstanceHelper(this, ShowMainWindow).Guard(suppressGuard);
 
             base.OnStartup(e);
-
-            SetupExceptionHandling();
 
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
 
