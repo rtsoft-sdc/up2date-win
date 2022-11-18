@@ -1,5 +1,4 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -16,13 +15,11 @@ namespace Up2dateConsole
 {
     public partial class App
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = new Logger();
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Debugger.Launch(); // todo remove for production
-
-            SetupExceptionHandling();
+            //Debugger.Launch(); // todo remove for production
 
             if (Up2dateConsole.Properties.Settings.Default.UpgradeFlag)
             {
@@ -42,8 +39,6 @@ namespace Up2dateConsole
                 return;
             }
 
-            MainWindow = CreateMainWindow();
-
             var suppressGuard = CommandLineHelper.IsPresent(CommandLineHelper.AllowSecondInstanceCommand);
             new SingleInstanceHelper(this, ShowMainWindow).Guard(suppressGuard);
 
@@ -51,10 +46,14 @@ namespace Up2dateConsole
 
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
 
+            MainWindow = CreateMainWindow();
+
             if (CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
             {
                 MainWindow.Show();
             }
+
+            SetupExceptionHandling();
         }
 
         private Window CreateMainWindow()
