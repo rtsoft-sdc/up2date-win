@@ -90,7 +90,7 @@ namespace Up2dateConsole
 
         public void OnWindowClosing()
         {
-            if (session.IsAdminMode && Properties.Settings.Default.LeaveAdminModeOnClose && !session.IsShuttingDown)
+            if (session.IsAdminMode && settings.LeaveAdminModeOnClose && !session.IsShuttingDown)
             {
                 session.ToUserMode();
             }
@@ -308,8 +308,8 @@ namespace Up2dateConsole
             const int MillisecondsInSecond = 1000;
             const int MinTimeoutSec = 5;
 
-            inactivityMonitor.Enabled = Properties.Settings.Default.LeaveAdminModeOnInactivity;
-            var timeout = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout;
+            inactivityMonitor.Enabled = settings.LeaveAdminModeOnInactivity;
+            var timeout = settings.LeaveAdminModeOnInactivityTimeout;
             if (timeout < MinTimeoutSec)
             {
                 timeout = MinTimeoutSec;
