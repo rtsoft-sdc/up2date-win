@@ -5,7 +5,12 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using Up2dateConsole.Dialogs.RequestCertificate;
+using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
+using Up2dateConsole.Helpers.InactivityMonitor;
+using Up2dateConsole.Session;
+using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
 {
@@ -36,6 +41,8 @@ namespace Up2dateConsole
                 return;
             }
 
+            MainWindow = CreateMainWindow();
+
             var suppressGuard = CommandLineHelper.IsPresent(CommandLineHelper.AllowSecondInstanceCommand);
             new SingleInstanceHelper(this, ShowMainWindow).Guard(suppressGuard);
 
@@ -44,6 +51,34 @@ namespace Up2dateConsole
             SetupExceptionHandling();
 
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
+
+            if (CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
+            {
+                MainWindow.Show();
+            }
+        }
+
+        private Window CreateMainWindow()
+        {
+            var mainWindow = new MainWindow();
+
+            IViewService viewService = new ViewService.ViewService();
+            viewService.RegisterDialog(typeof(RequestCertificateDialogViewModel), typeof(RequestCertificateDialog));
+            viewService.RegisterDialog(typeof(SettingsDialogViewModel), typeof(SettingsDialog));
+
+            IWcfClientFactory wcfClientFactory = new WcfClientFactory();
+            ISettings settings = new Settings();
+            var session = new Session.Session(new HookMonitor(false), settings);
+            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session);
+
+            mainWindow.Closing += (w, e) =>
+            {
+                session.OnWindowClosing();
+                ((Window)w).Hide();
+                e.Cancel = true;
+            };
+
+            return mainWindow;
         }
 
         private void SetupExceptionHandling()
