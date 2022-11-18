@@ -485,6 +485,7 @@ Up2dateConsole.g.en-US.resources:texts.baml,clr:String_61:System.String.$Content
 Up2dateConsole.g.en-US.resources:texts.baml,clr:String_62:System.String.$Content,None,True,True,,"Не удалось установить соединение с сервером. Проверьте URL, ID устройства и токен.","Failed to establish server connection. Please check entered URL, device ID and token.",
 Up2dateConsole.g.en-US.resources:texts.baml,clr:String_63:System.String.$Content,None,True,True,,Соединение с сервером успешно установлено.,Server connection successfully established.,
 Up2dateConsole.g.en-US.resources:app.baml,Application_1:Up2dateConsole.App.$Content,None,True,True,,,,
+Up2dateConsole.g.en-US.resources:app.baml,Application_1:System.Windows.Application.ShutdownMode,None,True,False,,OnExplicitShutdown,OnExplicitShutdown,
 Up2dateConsole.g.en-US.resources:app.baml,FontFamily_1:System.Windows.Media.FontFamily.$Content,Font,True,True,,/fonts/fontawesome-webfont.ttf\#FontAwesome,/fonts/fontawesome-webfont.ttf\#FontAwesome,
 Up2dateConsole.g.en-US.resources:app.baml,Setter_1:System.Windows.Setter.Property,None,False,False,,ToolTipService.ShowDuration,ToolTipService.ShowDuration,
 Up2dateConsole.g.en-US.resources:app.baml,Setter_1:System.Windows.Setter.Value,None,False,True,,20000,20000,

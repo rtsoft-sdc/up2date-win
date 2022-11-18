@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
@@ -19,7 +20,7 @@ namespace Up2dateConsole
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
             ISettings settings = new Settings();
-            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false), settings);
+            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false), settings, Application.Current.Shutdown);
 
             if (!CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
             {
@@ -30,11 +31,7 @@ namespace Up2dateConsole
         protected override void OnClosing(CancelEventArgs e)
         {
             var viewModel = DataContext as MainWindowViewModel;
-            if (viewModel != null && viewModel.IsAdminMode && Properties.Settings.Default.LeaveAdminModeOnClose)
-            {
-                viewModel.LeaveAdminModeCommand.Execute(this);
-                return;
-            }
+            viewModel?.OnWindowClosing();
 
             Hide();
             e.Cancel = true;

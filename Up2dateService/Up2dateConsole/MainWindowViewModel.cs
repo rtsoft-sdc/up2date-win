@@ -38,22 +38,23 @@ namespace Up2dateConsole
         private readonly IWcfClientFactory wcfClientFactory;
         private readonly IInactivityMonitor inactivityMonitor;
         private readonly ISettings settings;
+        private readonly Action shutDown;
         private readonly string ServiceName = "Up2dateService";
         private bool IsSettingsDialogActive = false;
 
         public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory,
-            IInactivityMonitor inactivityMonitor, ISettings settings)
+            IInactivityMonitor inactivityMonitor, ISettings settings, Action shutDown)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             this.inactivityMonitor = inactivityMonitor ?? throw new ArgumentNullException(nameof(inactivityMonitor));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
+            this.shutDown = shutDown ?? throw new ArgumentNullException(nameof(shutDown));
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
-            QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
+            QuitCommand = new RelayCommand(_ => Terminate());
 
             EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
-            LeaveAdminModeCommand = new RelayCommand(ExecuteLeaveAdminMode);
+            LeaveAdminModeCommand = new RelayCommand(_ => LeaveAdminMode());
             RefreshCommand = new RelayCommand(async _ => await ExecuteRefresh(), _ => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
@@ -79,11 +80,19 @@ namespace Up2dateConsole
             }
         }
 
+        public void OnWindowClosing()
+        {
+            if (IsAdminMode && Properties.Settings.Default.LeaveAdminModeOnClose && !shuttingDown)
+            {
+                LeaveAdminMode();
+            }
+        }
+
         private void InactivityMonitor_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (IsAdminMode)
             {
-                ExecuteLeaveAdminMode(null);
+                LeaveAdminMode();
             }
             inactivityMonitor.Reset();
         }
@@ -179,6 +188,8 @@ namespace Up2dateConsole
         public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId) && ServiceState == ServiceState.Active;
 
         private SystemInfo? systemInfo;
+        private bool shuttingDown;
+
         public SystemInfo SystemInfo
         {
             get
@@ -268,16 +279,24 @@ namespace Up2dateConsole
             }
         }
 
-        private void ExecuteLeaveAdminMode(object _)
+        private void LeaveAdminMode()
         {
             if (!IsAdminMode) return;
 
             ThreadHelper.SafeInvoke(() =>
             {
                 Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
-                Application.Current.Shutdown();
+                Terminate();
             });
             return;
+        }
+
+        private void Terminate()
+        {
+            shuttingDown = true; 
+            timer.Stop();
+            //todo wait for async tasks to complete
+            shutDown();
         }
 
         private void ExecuteEnterAdminMode(object _)
@@ -302,7 +321,7 @@ namespace Up2dateConsole
 
                 if (started)
                 {
-                    Application.Current.Shutdown();
+                    Terminate();
                 }
             };
         }
