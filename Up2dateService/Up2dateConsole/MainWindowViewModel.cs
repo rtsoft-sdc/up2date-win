@@ -13,7 +13,6 @@ using System.Windows.Input;
 using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
-using Up2dateConsole.Helpers.InactivityMonitor;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.Session;
 using Up2dateConsole.StateIndicator;
@@ -25,6 +24,7 @@ namespace Up2dateConsole
     {
         private const int InitialDelay = 1000; // milliseconds
         private const int RefreshInterval = 20000; // milliseconds
+        private const string ServiceName = "Up2dateService";
 
         private static bool firstTimeRefresh = true;
 
@@ -35,19 +35,15 @@ namespace Up2dateConsole
         private readonly Timer timer = new Timer(InitialDelay);
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
-        private readonly IInactivityMonitor inactivityMonitor;
         private readonly ISettings settings;
         private readonly ISession session;
-        private readonly string ServiceName = "Up2dateService";
-        private bool IsSettingsDialogActive = false;
+        private bool isSettingsDialogActive = false;
         private SystemInfo? systemInfo;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory,
-            IInactivityMonitor inactivityMonitor, ISettings settings, ISession session)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
-            this.inactivityMonitor = inactivityMonitor ?? throw new ArgumentNullException(nameof(inactivityMonitor));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.session = session ?? throw new ArgumentNullException(nameof(session));
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
@@ -72,37 +68,12 @@ namespace Up2dateConsole
             timer.AutoReset = false;
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
-
-            if (session.IsAdminMode)
-            {
-                inactivityMonitor.MonitorKeyboardEvents = true;
-                inactivityMonitor.MonitorMouseEvents = true;
-                inactivityMonitor.Elapsed += InactivityMonitor_Elapsed;
-                UpdateInactivityMonitor();
-            }
         }
 
         private void Session_ShuttingDown(object sender, EventArgs e)
         {
             timer.Stop();
-            //todo wait for async tasks to complete
-        }
-
-        public void OnWindowClosing()
-        {
-            if (session.IsAdminMode && settings.LeaveAdminModeOnClose && !session.IsShuttingDown)
-            {
-                session.ToUserMode();
-            }
-        }
-
-        private void InactivityMonitor_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (session.IsAdminMode)
-            {
-                session.ToUserMode();
-            }
-            inactivityMonitor.Reset();
+            //todo break all loops and wait for async tasks to complete
         }
 
         private async Task ExecuteStopService()
@@ -288,33 +259,19 @@ namespace Up2dateConsole
         {
             viewService.ShowMainWindow(); // needed for calling the command from tray
 
-            if (IsSettingsDialogActive) return;
+            if (isSettingsDialogActive) return;
 
             SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory, settings, IsServiceRunning);
             if (!vm.IsInitialized) return;
 
-            IsSettingsDialogActive = true;
-            viewService.ShowDialog(vm);
-            IsSettingsDialogActive = false;
+            isSettingsDialogActive = true;
+            bool dialogOK = viewService.ShowDialog(vm);
+            isSettingsDialogActive = false;
 
-            if (session.IsAdminMode)
+            if (dialogOK)
             {
-                UpdateInactivityMonitor();
+                session.OnSettingsUpdated();
             }
-        }
-
-        private void UpdateInactivityMonitor()
-        {
-            const int MillisecondsInSecond = 1000;
-            const int MinTimeoutSec = 5;
-
-            inactivityMonitor.Enabled = settings.LeaveAdminModeOnInactivity;
-            var timeout = settings.LeaveAdminModeOnInactivityTimeout;
-            if (timeout < MinTimeoutSec)
-            {
-                timeout = MinTimeoutSec;
-            }
-            inactivityMonitor.Interval = timeout * MillisecondsInSecond;
         }
 
         private async Task Accept(bool accept)

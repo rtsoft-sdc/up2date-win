@@ -8,6 +8,9 @@ namespace Up2dateConsole.Session
         void ToAdminMode();
         void ToUserMode();
         void Shutdown();
+        void OnSettingsUpdated();
+        void OnWindowClosing();
+
         bool IsAdminMode { get; }
         bool IsShuttingDown { get; }
     }

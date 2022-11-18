@@ -4,12 +4,15 @@ using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
+using Up2dateConsole.Session;
 using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
 {
     public partial class MainWindow
     {
+        ISession session;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -20,7 +23,8 @@ namespace Up2dateConsole
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
             ISettings settings = new Settings();
-            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, new HookMonitor(false), settings, new Session.Session());
+            session = new Session.Session(new HookMonitor(false), settings);
+            DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session);
 
             if (!CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
             {
@@ -30,8 +34,7 @@ namespace Up2dateConsole
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            var viewModel = DataContext as MainWindowViewModel;
-            viewModel?.OnWindowClosing();
+            session.OnWindowClosing();
 
             Hide();
             e.Cancel = true;
