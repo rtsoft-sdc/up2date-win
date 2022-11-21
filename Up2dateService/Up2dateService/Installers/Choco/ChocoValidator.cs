@@ -13,11 +13,13 @@ namespace Up2dateService.Installers.Choco
 
         private readonly ISettingsManager settingsManager;
         private readonly IWhiteListManager whiteListManager;
+        private readonly ILogger logger;
 
-        public ChocoValidator(ISettingsManager settingsManager, IWhiteListManager whiteListManager)
+        public ChocoValidator(ISettingsManager settingsManager, IWhiteListManager whiteListManager, ILogger logger)
         {
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
             this.whiteListManager = whiteListManager ?? throw new ArgumentNullException(nameof(whiteListManager));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public bool VerifySignature(Package package)
@@ -40,22 +42,32 @@ namespace Up2dateService.Installers.Choco
         private bool CheckIfSigned(Package package, bool byAnyCertificate)
         {
             const string ErrorCodeNotSigned = "NU3004";
-
+            string nugetAgruments  = $"verify -Signatures \"{package.Filepath}\" -NonInteractive -Verbosity quiet";
+            var mode = byAnyCertificate ? "any" : "trusted";
             try
             {
                 Process p = new Process();
                 p.StartInfo.FileName = "nuget.exe";
-                p.StartInfo.Arguments = $"verify -Signatures \"{package.Filepath}\" -NonInteractive -Verbosity quiet";
+                p.StartInfo.Arguments = nugetAgruments;
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardError = true;
                 p.Start();
                 p.WaitForExit();
-                bool isSigned = !p.StandardError.ReadToEnd().Contains(ErrorCodeNotSigned);
+                string stdError = p.StandardError.ReadToEnd();
+                bool isSigned = !stdError.Contains(ErrorCodeNotSigned);
 
-                return byAnyCertificate ? isSigned : p.ExitCode == ExitCodeSuccess;
+                var result = byAnyCertificate ? isSigned : p.ExitCode == ExitCodeSuccess;
+
+                if (!result)
+                {
+                    logger.WriteEntry($"Signature verification failed ({mode} certificate mode).\n{nugetAgruments}\n{stdError}");
+                }
+
+                return result;
             }
-            catch
+            catch (Exception ex)
             {
+                logger.WriteEntry($"Exception during signature verification ({mode} certificate mode).\nnuget.exe {nugetAgruments}", ex);
                 return false;
             }
         }
@@ -67,27 +79,36 @@ namespace Up2dateService.Installers.Choco
             // join SHA256 strings to reduce the number of calls to nuget: each call costs about 0.7 sec
             IEnumerable<string> certificateSha256sets = JoinStrings(certificateSha256s, ";", 2);
 
+            var logFaultBuilder = new StringBuilder();
+
             foreach (var certificateSha256set in certificateSha256sets)
             {
+                string nugetAgruments = $"verify -Signatures \"{package.Filepath}\" -CertificateFingerprint {certificateSha256set} -NonInteractive -Verbosity quiet";
                 try
                 {
                     Process p = new Process();
                     p.StartInfo.FileName = "nuget.exe";
-                    p.StartInfo.Arguments = $"verify -Signatures \"{package.Filepath}\" -CertificateFingerprint {certificateSha256set} -NonInteractive -Verbosity quiet";
+                    p.StartInfo.Arguments = nugetAgruments;
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.RedirectStandardError = true;
                     p.Start();
                     p.WaitForExit();
-                    bool isAvailable = !p.StandardError.ReadToEnd().Contains(ErrorCodeNoSuchCertificate);
+                    string stdError = p.StandardError.ReadToEnd();
+                    bool isAvailable = !stdError.Contains(ErrorCodeNoSuchCertificate);
 
                     if (isAvailable) return true;
+
+                    logFaultBuilder.AppendLine(nugetAgruments);
+                    logFaultBuilder.AppendLine(stdError);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    logger.WriteEntry($"Exception during signature verification (white list mode).\nnuget.exe {nugetAgruments}", ex);
                     return false;
                 }
             }
 
+            logger.WriteEntry($"Signature verification failed (white list mode).\n{logFaultBuilder}");
             return false;
         }
 

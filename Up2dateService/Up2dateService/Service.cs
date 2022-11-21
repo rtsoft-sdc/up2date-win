@@ -36,8 +36,8 @@ namespace Up2dateService
             ICertificateProvider certificateProvider = new CertificateProvider(settingsManager);
             ICertificateManager certificateManager = new CertificateManager(settingsManager, new Logger(EventLog, nameof(CertificateManager)));
             ISignatureVerifier signatureVerifier = new SignatureVerifier();
-            IPackageInstallerFactory installerFactory = new PackageInstallerFactory(settingsManager, signatureVerifier, whiteListManager, new Logger(EventLog));
-            IPackageValidatorFactory validatorFactory = new PackageValidatorFactory(settingsManager, signatureVerifier, whiteListManager);
+            IPackageInstallerFactory installerFactory = new PackageInstallerFactory(settingsManager, signatureVerifier, whiteListManager, new Logger(EventLog, "Package Installer"));
+            IPackageValidatorFactory validatorFactory = new PackageValidatorFactory(settingsManager, signatureVerifier, whiteListManager, new Logger(EventLog, "Package Validator"));
             ISetupManager setupManager = new SetupManager.SetupManager(new Logger(EventLog, nameof(SetupManager)), GetCreatePackagesFolder, settingsManager, installerFactory, validatorFactory);
 
             Version clientVersion = Assembly.GetEntryAssembly().GetName().Version;
