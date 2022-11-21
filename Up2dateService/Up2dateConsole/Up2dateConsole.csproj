@@ -109,11 +109,14 @@
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="ISettings.cs" />
     <Compile Include="IWcfClientFactory.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\Resources.ru-RU.Designer.cs">
       <DependentUpon>Resources.ru-RU.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Session\ISession.cs" />
+    <Compile Include="Session\Session.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="StateIndicator\StateIndicatorViewModel.cs" />
     <Compile Include="StateIndicator\StateIndicator.xaml.cs">
@@ -248,6 +251,9 @@
     <None Include="Localization\CheckAndGenerate.cmd" />
     <None Include="Localization\Up2dateConsole_ru-RU.csv" />
     <None Include="Localization\Update.cmd" />
+    <Content Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
