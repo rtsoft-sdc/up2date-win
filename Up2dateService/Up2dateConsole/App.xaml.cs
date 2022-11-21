@@ -1,22 +1,25 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using Up2dateConsole.Dialogs.RequestCertificate;
+using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
+using Up2dateConsole.Helpers.InactivityMonitor;
+using Up2dateConsole.Session;
+using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
 {
     public partial class App
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = new Logger();
 
         protected override void OnStartup(StartupEventArgs e)
         {
             //Debugger.Launch(); // todo remove for production
-            logger.Info("Console start.");
 
             if (Up2dateConsole.Properties.Settings.Default.UpgradeFlag)
             {
@@ -41,9 +44,48 @@ namespace Up2dateConsole
 
             base.OnStartup(e);
 
-            SetupExceptionHandling();
-
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
+
+            MainWindow = CreateMainWindow();
+
+            if (CommandLineHelper.IsPresent(CommandLineHelper.VisibleMainWindowCommand))
+            {
+                MainWindow.Show();
+            }
+
+            SetupExceptionHandling();
+        }
+
+        private Window CreateMainWindow()
+        {
+            var mainWindow = new MainWindow();
+
+            IViewService viewService = new ViewService.ViewService();
+            viewService.RegisterDialog(typeof(RequestCertificateDialogViewModel), typeof(RequestCertificateDialog));
+            viewService.RegisterDialog(typeof(SettingsDialogViewModel), typeof(SettingsDialog));
+
+            IWcfClientFactory wcfClientFactory = new WcfClientFactory();
+            ISettings settings = new Settings();
+            ISession session = new Session.Session(new HookMonitor(false), settings);
+            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session);
+
+            mainWindow.Closing += (w, e) =>
+            {
+                session.OnWindowClosing();
+                ((Window)w).Hide();
+                e.Cancel = true;
+            };
+
+            SessionEnding += (w, e) =>
+            {
+                logger.Info($"Console exiting due to {e.ReasonSessionEnding}");
+                session.OnWindowsSessionEnding();
+            };
+
+            string mode = session.IsAdminMode ? "Admin" : "User";
+            logger.Info($"Console started in {mode} mode");
+
+            return mainWindow;
         }
 
         private void SetupExceptionHandling()

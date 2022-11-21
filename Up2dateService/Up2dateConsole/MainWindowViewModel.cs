@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Security.Principal;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
@@ -15,8 +13,8 @@ using System.Windows.Input;
 using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
-using Up2dateConsole.Helpers.InactivityMonitor;
 using Up2dateConsole.ServiceReference;
+using Up2dateConsole.Session;
 using Up2dateConsole.StateIndicator;
 using Up2dateConsole.ViewService;
 
@@ -26,6 +24,7 @@ namespace Up2dateConsole
     {
         private const int InitialDelay = 1000; // milliseconds
         private const int RefreshInterval = 20000; // milliseconds
+        private const string ServiceName = "Up2dateService";
 
         private static bool firstTimeRefresh = true;
 
@@ -36,32 +35,32 @@ namespace Up2dateConsole
         private readonly Timer timer = new Timer(InitialDelay);
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
-        private readonly IInactivityMonitor inactivityMonitor;
         private readonly ISettings settings;
-        private readonly string ServiceName = "Up2dateService";
-        private bool IsSettingsDialogActive = false;
+        private readonly ISession session;
+        private bool isSettingsDialogActive = false;
+        private SystemInfo? systemInfo;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory,
-            IInactivityMonitor inactivityMonitor, ISettings settings)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
-            this.inactivityMonitor = inactivityMonitor ?? throw new ArgumentNullException(nameof(inactivityMonitor));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
+            this.session = session ?? throw new ArgumentNullException(nameof(session));
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
-            QuitCommand = new RelayCommand(_ => Application.Current.Shutdown());
+            QuitCommand = new RelayCommand(_ => session.Shutdown());
 
-            EnterAdminModeCommand = new RelayCommand(ExecuteEnterAdminMode);
-            LeaveAdminModeCommand = new RelayCommand(ExecuteLeaveAdminMode);
+            EnterAdminModeCommand = new RelayCommand(_ => session.ToAdminMode());
+            LeaveAdminModeCommand = new RelayCommand(_ => session.ToUserMode());
             RefreshCommand = new RelayCommand(async _ => await ExecuteRefresh(), _ => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
             RejectCommand = new RelayCommand(async _ => await Accept(false), _ => CanAcceptReject);
             RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync(), _ => IsServiceRunning);
-            SettingsCommand = new RelayCommand(ExecuteSettings, CanSettings);
+            SettingsCommand = new RelayCommand(ExecuteSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
+
+            session.ShuttingDown += Session_ShuttingDown;
 
             AvailablePackages = new ObservableCollection<PackageItem>();
             CollectionViewSource.GetDefaultView(AvailablePackages).CurrentChanged += (o, e) => OnPropertyChanged(nameof(CanAcceptReject));
@@ -69,23 +68,11 @@ namespace Up2dateConsole
             timer.AutoReset = false;
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
-
-            if (IsAdminMode)
-            {
-                inactivityMonitor.MonitorKeyboardEvents = true;
-                inactivityMonitor.MonitorMouseEvents = true;
-                inactivityMonitor.Elapsed += InactivityMonitor_Elapsed;
-                UpdateInactivityMonitor();
-            }
         }
 
-        private void InactivityMonitor_Elapsed(object sender, ElapsedEventArgs e)
+        private void Session_ShuttingDown(object sender, EventArgs e)
         {
-            if (IsAdminMode)
-            {
-                ExecuteLeaveAdminMode(null);
-            }
-            inactivityMonitor.Reset();
+            timer.Stop();
         }
 
         private async Task ExecuteStopService()
@@ -143,9 +130,9 @@ namespace Up2dateConsole
 
         public StateIndicatorViewModel StateIndicator { get; } = new StateIndicatorViewModel();
 
-        public bool IsAdminMode => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        public bool IsAdminMode => session.IsAdminMode;
 
-        public bool IsUserMode => !IsAdminMode;
+        public bool IsUserMode => !session.IsAdminMode;
 
         public ServiceState ServiceState
         {
@@ -178,7 +165,6 @@ namespace Up2dateConsole
 
         public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId) && ServiceState == ServiceState.Active;
 
-        private SystemInfo? systemInfo;
         public SystemInfo SystemInfo
         {
             get
@@ -242,7 +228,11 @@ namespace Up2dateConsole
             {
                 await ThreadHelper.SafeInvokeAsync(ExecuteRefresh);
             }
-            timer.Start();
+
+            if (!session.IsShuttingDown)
+            {
+                timer.Start();
+            }
         }
 
         private async Task ExecuteRequestCertificateAsync()
@@ -268,82 +258,23 @@ namespace Up2dateConsole
             }
         }
 
-        private void ExecuteLeaveAdminMode(object _)
-        {
-            if (!IsAdminMode) return;
-
-            ThreadHelper.SafeInvoke(() =>
-            {
-                Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
-                Application.Current.Shutdown();
-            });
-            return;
-        }
-
-        private void ExecuteEnterAdminMode(object _)
-        {
-            if (IsAdminMode) return;
-
-            using (Process p = new Process())
-            {
-                p.StartInfo.FileName = Assembly.GetEntryAssembly().Location;
-                p.StartInfo.Arguments = CommandLineHelper.AllowSecondInstanceCommand + " " + CommandLineHelper.VisibleMainWindowCommand;
-                p.StartInfo.Verb = "runas";
-
-                bool started = false;
-                try
-                {
-                    started = p.Start();
-                }
-                catch (Exception)
-                {
-                    started = false;
-                }
-
-                if (started)
-                {
-                    Application.Current.Shutdown();
-                }
-            };
-        }
-
-        private bool CanSettings(object obj)
-        {
-            // todo block if service is not available
-            return true;
-        }
-
         private void ExecuteSettings(object obj)
         {
             viewService.ShowMainWindow(); // needed for calling the command from tray
 
-            if (IsSettingsDialogActive) return;
+            if (isSettingsDialogActive) return;
 
             SettingsDialogViewModel vm = new SettingsDialogViewModel(viewService, wcfClientFactory, settings, IsServiceRunning);
             if (!vm.IsInitialized) return;
 
-            IsSettingsDialogActive = true;
-            viewService.ShowDialog(vm);
-            IsSettingsDialogActive = false;
+            isSettingsDialogActive = true;
+            bool dialogOK = viewService.ShowDialog(vm);
+            isSettingsDialogActive = false;
 
-            if (IsAdminMode)
+            if (dialogOK)
             {
-                UpdateInactivityMonitor();
+                session.OnSettingsUpdated();
             }
-        }
-
-        private void UpdateInactivityMonitor()
-        {
-            const int MillisecondsInSecond = 1000;
-            const int MinTimeoutSec = 5;
-
-            inactivityMonitor.Enabled = Properties.Settings.Default.LeaveAdminModeOnInactivity;
-            var timeout = Properties.Settings.Default.LeaveAdminModeOnInactivityTimeout;
-            if (timeout < MinTimeoutSec)
-            {
-                timeout = MinTimeoutSec;
-            }
-            inactivityMonitor.Interval = timeout * MillisecondsInSecond;
         }
 
         private async Task Accept(bool accept)
@@ -519,7 +450,7 @@ namespace Up2dateConsole
             {
                 ThreadHelper.SafeInvoke(async () =>
                 {
-                    if (IsAdminMode)
+                    if (session.IsAdminMode)
                     {
                         await RequestCertificateAsync(showExplanation: true);
                     }
@@ -529,7 +460,7 @@ namespace Up2dateConsole
                         MessageBoxResult r = viewService.ShowMessageBox(message, buttons: MessageBoxButton.OKCancel);
                         if (r == MessageBoxResult.OK)
                         {
-                            ExecuteEnterAdminMode(null);
+                            session.ToAdminMode();
                         }
                     }
                 });
