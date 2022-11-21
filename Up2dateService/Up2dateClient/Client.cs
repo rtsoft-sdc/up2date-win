@@ -270,7 +270,7 @@ namespace Up2dateClient
                     message += "Failed to start installer process";
                     break;
                 case InstallPackageResult.Success:
-                    message = string.Empty;
+                    message = "Installation successfully completed";
                     break;
                 case InstallPackageResult.RestartNeeded:
                     message = "To complete installation system restart is needed.";
