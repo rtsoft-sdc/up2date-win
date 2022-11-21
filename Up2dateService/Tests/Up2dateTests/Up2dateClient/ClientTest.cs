@@ -197,7 +197,7 @@ namespace Up2dateTests.Up2dateClient
                 settingsManagerMock.Object.CheckSignature ? settingsManagerMock.Object.SignatureVerificationLevel.ToString() : "off"));
             expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "settings.connection_mode",
-                settingsManagerMock.Object.SecureAuthorizationMode ? "secure" : "by token (unsafe)"));
+                settingsManagerMock.Object.SecureAuthorizationMode ? "mTLS" : "plain token"));
             expectedCount++;
 
             Assert.AreEqual(expectedCount, callSequence.Count);
