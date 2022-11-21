@@ -91,13 +91,13 @@ namespace Up2dateClient
         {
             SystemInfo sysInfo = getSysInfo();
             yield return new KeyValuePair("client", ClientType);
-            yield return new KeyValuePair("client version", $"{clientVersion.Major}.{clientVersion.Minor}.{clientVersion.Build}");
+            yield return new KeyValuePair("client_version", $"{clientVersion.Major}.{clientVersion.Minor}.{clientVersion.Build}");
             yield return new KeyValuePair("computer", sysInfo.MachineName);
-            yield return new KeyValuePair("machine GUID", sysInfo.MachineGuid);
-            yield return new KeyValuePair("OS platform", sysInfo.PlatformID.ToString());
-            yield return new KeyValuePair("OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit");
-            yield return new KeyValuePair("OS version", sysInfo.VersionString);
-            yield return new KeyValuePair("OS service pack", sysInfo.ServicePack);
+            yield return new KeyValuePair("machine_GUID", sysInfo.MachineGuid);
+            yield return new KeyValuePair("OS/platform", sysInfo.PlatformID.ToString());
+            yield return new KeyValuePair("OS/type", sysInfo.Is64Bit ? "64-bit" : "32-bit");
+            yield return new KeyValuePair("OS/version", sysInfo.VersionString);
+            yield return new KeyValuePair("OS/service_pack", sysInfo.ServicePack);
         }
 
         private void OnConfigRequest(IntPtr responseBuilder)
@@ -111,11 +111,11 @@ namespace Up2dateClient
             }
 
             // settings
-            wrapper.AddConfigAttribute(responseBuilder, "settings.requires_confirmation_before_update",
+            wrapper.AddConfigAttribute(responseBuilder, "settings/requires_confirmation_before_update",
                 settingsManager.RequiresConfirmationBeforeInstall ? "yes" : "no");
-            wrapper.AddConfigAttribute(responseBuilder, "settings.signature_verification_level",
+            wrapper.AddConfigAttribute(responseBuilder, "settings/signature_verification_level",
                 settingsManager.CheckSignature ? settingsManager.SignatureVerificationLevel.ToString() : "off");
-            wrapper.AddConfigAttribute(responseBuilder, "settings.connection_mode",
+            wrapper.AddConfigAttribute(responseBuilder, "settings/connection_mode",
                 settingsManager.SecureAuthorizationMode ? "mTLS" : "plain token");
         }
 
