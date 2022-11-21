@@ -116,7 +116,7 @@ namespace Up2dateClient
             wrapper.AddConfigAttribute(responseBuilder, "settings.signature_verification_level",
                 settingsManager.CheckSignature ? settingsManager.SignatureVerificationLevel.ToString() : "off");
             wrapper.AddConfigAttribute(responseBuilder, "settings.connection_mode",
-                settingsManager.SecureAuthorizationMode ? "secure" : "by token (unsafe)");
+                settingsManager.SecureAuthorizationMode ? "mTLS" : "plain token");
         }
 
         private void OnDeploymentAction(IntPtr artifact, DeploymentInfo info, out ClientResult result)
