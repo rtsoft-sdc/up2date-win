@@ -46,16 +46,19 @@
                            Text="{StaticResource KeyIcon}" Foreground="DarkOrange" 
                            FontSize="42" FontFamily="{StaticResource FontAwesome}"/>
                 <StackPanel x:Uid="StackPanel_3">
-                    <TextBlock x:Uid="TextBlock_2" Margin="0,0,0,10" Text="This device has not initialized to connect RITMS UP2DATE"
+                    <TextBlock x:Uid="TextBlock_2" Margin="0,0,0,10" Text="Service connection has not been initialized yet"
                                Visibility="{Binding ShowExplanation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <GroupBox x:Uid="GroupBox_1" Margin="0,0,0,10" Padding="0,4,0,0">
                         <Grid x:Uid="Grid_2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Uid="ColumnDefinition_1"/>
-                                <ColumnDefinition x:Uid="ColumnDefinition_2"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_3"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_4"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto"/>
+                                <ColumnDefinition x:Uid="ColumnDefinition_5"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton x:Uid="RadioButton_1" Grid.Column="0" Margin="0,5" HorizontalAlignment="Center" Content="Secure connection" IsChecked="{Binding IsSecureConnection}"/>
-                            <RadioButton x:Uid="RadioButton_2" Grid.Column="1" Margin="0,5" HorizontalAlignment="Center" Content="Test connection (unsafe)" IsChecked="{Binding IsTestConnection}"/>
+                            <RadioButton x:Uid="RadioButton_1" Grid.Column="1" Margin="0,5" HorizontalAlignment="Center" Content="Full protection (mTLS)" IsChecked="{Binding IsSecureConnection}"/>
+                            <RadioButton x:Uid="RadioButton_2" Grid.Column="3" Margin="0,5" HorizontalAlignment="Center" Content="Development mode (plain token)" IsChecked="{Binding IsTestConnection}"/>
                         </Grid>
                     </GroupBox>
                     <StackPanel x:Uid="StackPanel_7" Visibility="{Binding IsSecureConnection, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -78,11 +81,11 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel x:Uid="StackPanel_8" Visibility="{Binding IsTestConnection, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock x:Uid="TextBlock_8" Text="Server URL:"/>
+                        <TextBlock x:Uid="TextBlock_8" Text="DDI URL:"/>
                         <TextBox x:Uid="TextBox_3" Margin="0,5" Width="500" Text="{Binding HawkbitUrl, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock x:Uid="TextBlock_9" Text="Device ID:"/>
+                        <TextBlock x:Uid="TextBlock_9" Text="Controller ID:"/>
                         <TextBox x:Uid="TextBox_4" Margin="0,5" Width="500" Text="{Binding ControllerId, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock x:Uid="TextBlock_10" Text="Target token (paste here generated token copied from dashboard):"/>
+                        <TextBlock x:Uid="TextBlock_10" Text="Security token (paste here generated token copied from dashboard):"/>
                         <TextBox x:Uid="TextBox_5" Margin="0,5" Width="500" Text="{Binding DeviceToken, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </StackPanel>
