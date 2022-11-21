@@ -126,9 +126,7 @@
                     <DataGridTextColumn x:Uid="DataGridTextColumn_2" Header="Product name" Binding="{Binding ProductName}" Width="2*"/>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_3" Header="Publisher" Binding="{Binding Publisher}" Width="1*"/>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_4" Header="Version" Binding="{Binding Version}" MinWidth="80"/>
-                    <DataGridTextColumn x:Uid="DataGridTextColumn_5" Header="Size (MB)" Binding="{Binding SizeMb}" MinWidth="60"/>
-                    <DataGridTextColumn x:Uid="DataGridTextColumn_6" Header="Installed" Binding="{Binding InstallDate}" MinWidth="80"/>
-                    <DataGridTemplateColumn x:Uid="DataGridTextColumn_7" Header="Status" MinWidth="90">
+                    <DataGridTemplateColumn x:Uid="DataGridTextColumn_7" Header="Status" MinWidth="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Uid="DataTemplate_1">
                                 <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">

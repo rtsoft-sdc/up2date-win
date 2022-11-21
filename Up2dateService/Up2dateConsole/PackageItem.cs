@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
@@ -40,20 +39,6 @@ namespace Up2dateConsole
         public string Version => Package.DisplayVersion;
 
         public string UrlInfoAbout => Package.UrlInfoAbout;
-
-        public int? SizeMb => Package.EstimatedSize / 1024;
-
-        public string InstallDate
-        {
-            get
-            {
-                if (Package.InstallDate == null) return null;
-
-                return DateTime.TryParseExact(Package.InstallDate, "yyyyMMdd", null, DateTimeStyles.None, out DateTime date)
-                    ? date.ToString("d")
-                    : Package.InstallDate;
-            }
-        }
 
         public bool IsSelected
         {
