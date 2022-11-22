@@ -176,27 +176,27 @@ namespace Up2dateTests.Up2dateClient
             int expectedCount = 0;
             CollectionAssert.Contains(callSequence, (responseBuilder, "client", "RITMS UP2DATE for Windows"));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "client version", $"{version.Major}.{version.Minor}.{version.Build}"));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "client_version", $"{version.Major}.{version.Minor}.{version.Build}"));
             expectedCount++;
             CollectionAssert.Contains(callSequence, (responseBuilder, "computer", sysInfo.MachineName));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "machine GUID", sysInfo.MachineGuid));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "machine_GUID", sysInfo.MachineGuid));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "OS platform", sysInfo.PlatformID.ToString()));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "OS/platform", sysInfo.PlatformID.ToString()));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "OS type", sysInfo.Is64Bit ? "64-bit" : "32-bit"));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "OS/type", sysInfo.Is64Bit ? "64-bit" : "32-bit"));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "OS version", sysInfo.VersionString));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "OS/version", sysInfo.VersionString));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "OS service pack", sysInfo.ServicePack));
+            CollectionAssert.Contains(callSequence, (responseBuilder, "OS/service_pack", sysInfo.ServicePack));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "settings.requires_confirmation_before_update",
+            CollectionAssert.Contains(callSequence, (responseBuilder, "settings/requires_confirmation_before_update",
                 settingsManagerMock.Object.RequiresConfirmationBeforeInstall ? "yes" : "no"));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "settings.signature_verification_level",
+            CollectionAssert.Contains(callSequence, (responseBuilder, "settings/signature_verification_level",
                 settingsManagerMock.Object.CheckSignature ? settingsManagerMock.Object.SignatureVerificationLevel.ToString() : "off"));
             expectedCount++;
-            CollectionAssert.Contains(callSequence, (responseBuilder, "settings.connection_mode",
+            CollectionAssert.Contains(callSequence, (responseBuilder, "settings/connection_mode",
                 settingsManagerMock.Object.SecureAuthorizationMode ? "mTLS" : "plain token"));
             expectedCount++;
 
