@@ -2145,18 +2145,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_550E63DB827D26477A590F31AAE09B75"
-        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_550E63DB827D26477A590F31AAE09B75"
-        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5526064863FE4B8A103A2A0FE5D3B11C"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
@@ -3867,6 +3855,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_781CEC2532832A0B5961FB4AF00E5E45"
+        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_781CEC2532832A0B5961FB4AF00E5E45"
+        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_78B097364083540FA203E9A91F809195"
         "OwnerKey" = "8:_A0C9A0298B50A7FE35B5036875C575DC"
         "MsmSig" = "8:_UNDEFINED"
@@ -5152,7 +5152,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_550E63DB827D26477A590F31AAE09B75"
+        "OwnerKey" = "8:_781CEC2532832A0B5961FB4AF00E5E45"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -8885,37 +8885,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_550E63DB827D26477A590F31AAE09B75"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_550E63DB827D26477A590F31AAE09B75"
-                    {
-                    "Name" = "8:Up2dateDotNet.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Up2dateDotNet.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5526064863FE4B8A103A2A0FE5D3B11C"
             {
             "AssemblyRegister" = "3:1"
@@ -9745,6 +9714,37 @@
                     }
                 }
             "SourcePath" = "8:System.Xml.XDocument.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_781CEC2532832A0B5961FB4AF00E5E45"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_781CEC2532832A0B5961FB4AF00E5E45"
+                    {
+                    "Name" = "8:Up2dateDotNet.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Up2dateDotNet.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
@@ -13485,15 +13485,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RITMS UP2DATE Client"
-        "ProductCode" = "8:{9D18621D-E171-4426-A92F-0E6C8BE3E1E4}"
-        "PackageCode" = "8:{BD8B2B2D-9421-40DE-99AF-8DD45A293170}"
+        "ProductCode" = "8:{5E015308-6E9C-4A01-91D4-81A953EE794B}"
+        "PackageCode" = "8:{9E9C6F50-986D-48A3-8260-EF1BB3D74103}"
         "UpgradeCode" = "8:{BB44110E-D2C1-4DAC-9D8C-FE9737D97AEB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.1.0"
+        "ProductVersion" = "8:2.1.1"
         "Manufacturer" = "8:RTSoft"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
