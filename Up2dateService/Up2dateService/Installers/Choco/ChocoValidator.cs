@@ -9,6 +9,9 @@ namespace Up2dateService.Installers.Choco
 {
     public class ChocoValidator : IPackageValidator
     {
+        private const string NugetErrorCodeNotSigned = "NU3004";
+        const string NugetErrorCodeNoSuchCertificate = "NU3034";
+
         private const int ExitCodeSuccess = 0;
 
         private readonly ISettingsManager settingsManager;
@@ -41,7 +44,6 @@ namespace Up2dateService.Installers.Choco
 
         private bool CheckIfSigned(Package package, bool byAnyCertificate)
         {
-            const string ErrorCodeNotSigned = "NU3004";
             string nugetAgruments  = $"verify -Signatures \"{package.Filepath}\" -NonInteractive -Verbosity quiet";
             var mode = byAnyCertificate ? "any" : "trusted";
             try
@@ -54,7 +56,7 @@ namespace Up2dateService.Installers.Choco
                 p.Start();
                 p.WaitForExit();
                 string stdError = p.StandardError.ReadToEnd();
-                bool isSigned = !stdError.Contains(ErrorCodeNotSigned);
+                bool isSigned = !stdError.Contains(NugetErrorCodeNotSigned);
 
                 var result = byAnyCertificate ? isSigned : p.ExitCode == ExitCodeSuccess;
 
@@ -74,8 +76,6 @@ namespace Up2dateService.Installers.Choco
 
         private bool CheckIfSigned(Package package, IList<string> certificateSha256s)
         {
-            const string ErrorCodeNoSuchCertificate = "NU3034";
-
             // join SHA256 strings to reduce the number of calls to nuget: each call costs about 0.7 sec
             IEnumerable<string> certificateSha256sets = JoinStrings(certificateSha256s, ";", 2);
 
@@ -94,12 +94,14 @@ namespace Up2dateService.Installers.Choco
                     p.Start();
                     p.WaitForExit();
                     string stdError = p.StandardError.ReadToEnd();
-                    bool isAvailable = !stdError.Contains(ErrorCodeNoSuchCertificate);
-
-                    if (isAvailable) return true;
 
                     logFaultBuilder.AppendLine(nugetAgruments);
                     logFaultBuilder.AppendLine(stdError);
+
+                    if (stdError.Contains(NugetErrorCodeNotSigned)) break;
+
+                    bool isAvailable = !stdError.Contains(NugetErrorCodeNoSuchCertificate);
+                    if (isAvailable) return true;
                 }
                 catch (Exception ex)
                 {
