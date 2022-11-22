@@ -18,11 +18,12 @@ namespace Up2dateService.Installers
 
         private readonly Dictionary<string, Func<IPackageValidator>> validators = new Dictionary<string, Func<IPackageValidator>>();
 
-        public PackageValidatorFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager)
+        public PackageValidatorFactory(ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager, ILogger logger)
         {
             if (settingsManager is null) throw new ArgumentNullException(nameof(settingsManager));
             if (signatureVerifier is null) throw new ArgumentNullException(nameof(signatureVerifier));
             if (whiteListManager is null) throw new ArgumentNullException(nameof(whiteListManager));
+            if (logger is null) throw new ArgumentNullException(nameof(logger));
 
             validators.Add(MsiExtension, () =>
             {
@@ -31,7 +32,7 @@ namespace Up2dateService.Installers
             });
             validators.Add(NugetExtension, () =>
             {
-                if (chocoValidator == null) chocoValidator = new ChocoValidator(settingsManager, whiteListManager);
+                if (chocoValidator == null) chocoValidator = new ChocoValidator(settingsManager, whiteListManager, logger);
                 return chocoValidator;
             });
         }
