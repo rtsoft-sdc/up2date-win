@@ -22,7 +22,7 @@ namespace Up2dateConsole.Helpers
             fullPipeName = $"{pipeName}_{Process.GetCurrentProcess().SessionId}";
         }
 
-        private bool CheckInstance()
+        public bool IsAnotherInstanceRunning()
         {
             var sessionId = Process.GetCurrentProcess().SessionId;
             using (var clientPipe = new NamedPipeClientStream(".", fullPipeName, PipeDirection.InOut))
@@ -44,17 +44,8 @@ namespace Up2dateConsole.Helpers
             return false;
         }
 
-        public bool Guard(bool suppressCheck)
+        public void SetGuard()
         {
-            if (!suppressCheck)
-            {
-                if (CheckInstance())
-                {
-                    app.Shutdown();
-                    return false;
-                }
-            }
-
             serverPipe = new NamedPipeServerStream(fullPipeName, PipeDirection.InOut, 2);
 
             Task.Run(() =>
@@ -70,8 +61,6 @@ namespace Up2dateConsole.Helpers
             });
 
             app.Exit += App_Exit;
-
-            return true;
         }
 
         private void App_Exit(object sender, System.Windows.ExitEventArgs e)
