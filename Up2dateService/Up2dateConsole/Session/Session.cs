@@ -70,8 +70,9 @@ namespace Up2dateConsole.Session
 
             ThreadHelper.SafeInvoke(() =>
             {
-                Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
+                // Call shutdown first (it may be quite lengthy), so the new instance would not terminate itself due to "single instance check"
                 Shutdown();
+                Process.Start("explorer.exe", Assembly.GetEntryAssembly().Location);
             });
         }
 
