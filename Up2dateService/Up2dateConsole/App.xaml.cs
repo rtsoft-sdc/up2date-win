@@ -40,7 +40,9 @@ namespace Up2dateConsole
             }
 
             var suppressGuard = CommandLineHelper.IsPresent(CommandLineHelper.AllowSecondInstanceCommand);
-            new SingleInstanceHelper(this, ShowMainWindow).Guard(suppressGuard);
+            var singleInstanceHelper = new SingleInstanceHelper(this, ShowMainWindow);
+
+            if (!singleInstanceHelper.Guard(suppressGuard)) return;
 
             base.OnStartup(e);
 
