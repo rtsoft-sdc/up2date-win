@@ -39,8 +39,15 @@ namespace Up2dateConsole
                 return;
             }
 
-            var suppressGuard = CommandLineHelper.IsPresent(CommandLineHelper.AllowSecondInstanceCommand);
-            new SingleInstanceHelper(this, ShowMainWindow).Guard(suppressGuard);
+            var allowSecondInstance = CommandLineHelper.IsPresent(CommandLineHelper.AllowSecondInstanceCommand);
+
+            var singleInstanceHelper = new SingleInstanceHelper(this, ShowMainWindow);
+            if (singleInstanceHelper.IsAnotherInstanceRunning() && !allowSecondInstance)
+            {
+                Shutdown();
+                return;
+            }
+            singleInstanceHelper.SetGuard();
 
             base.OnStartup(e);
 
