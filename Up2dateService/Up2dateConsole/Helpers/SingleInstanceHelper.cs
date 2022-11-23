@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO.Pipes;
 using System.Threading.Tasks;
+using Up2dateConsole.Session;
 
 namespace Up2dateConsole.Helpers
 {
@@ -11,16 +13,19 @@ namespace Up2dateConsole.Helpers
         private App app;
         private readonly Action onSecondInstance;
         private NamedPipeServerStream serverPipe;
+        private readonly string fullPipeName;
 
         public SingleInstanceHelper(App app, Action onSecondInstance)
         {
             this.app = app ?? throw new ArgumentNullException(nameof(app));
             this.onSecondInstance = onSecondInstance;
+            fullPipeName = $"{pipeName}_{Process.GetCurrentProcess().SessionId}";
         }
 
         private bool CheckInstance()
         {
-            using (var clientPipe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut))
+            var sessionId = Process.GetCurrentProcess().SessionId;
+            using (var clientPipe = new NamedPipeClientStream(".", fullPipeName, PipeDirection.InOut))
             {
                 try
                 {
@@ -39,18 +44,18 @@ namespace Up2dateConsole.Helpers
             return false;
         }
 
-        public void Guard(bool suppressCheck)
+        public bool Guard(bool suppressCheck)
         {
             if (!suppressCheck)
             {
                 if (CheckInstance())
                 {
                     app.Shutdown();
-                    return;
+                    return false;
                 }
             }
 
-            serverPipe = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 2);
+            serverPipe = new NamedPipeServerStream(fullPipeName, PipeDirection.InOut, 2);
 
             Task.Run(() =>
             {
@@ -65,6 +70,8 @@ namespace Up2dateConsole.Helpers
             });
 
             app.Exit += App_Exit;
+
+            return true;
         }
 
         private void App_Exit(object sender, System.Windows.ExitEventArgs e)
