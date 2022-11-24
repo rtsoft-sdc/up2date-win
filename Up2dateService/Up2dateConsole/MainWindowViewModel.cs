@@ -146,20 +146,6 @@ namespace Up2dateConsole
             }
         }
 
-        public SystemInfo SystemInfo
-        {
-            get
-            {
-                if (!systemInfo.HasValue)
-                {
-                    IWcfService service = wcfClientFactory.CreateClient();
-                    systemInfo = service.GetSystemInfo();
-                    wcfClientFactory.CloseClient(service);
-                }
-                return systemInfo.Value;
-            }
-        }
-
         public string MsiFolder
         {
             get => msiFolder;
@@ -223,7 +209,7 @@ namespace Up2dateConsole
 
         private async Task RequestCertificateAsync(bool showExplanation)
         {
-            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation, SystemInfo.MachineGuid);
+            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation);
             bool success = viewService.ShowDialog(vm);
             if (success)
             {
