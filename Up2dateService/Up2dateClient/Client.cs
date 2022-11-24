@@ -7,7 +7,7 @@ using Up2dateShared;
 
 namespace Up2dateClient
 {
-    public class Client
+    public class Client : IClient
     {
         private const string ClientType = "RITMS UP2DATE for Windows";
 
