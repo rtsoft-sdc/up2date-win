@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Up2dateConsole"
         xmlns:service="clr-namespace:Up2dateConsole.ServiceReference"
-        xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
-        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers" xmlns:controls="clr-namespace:Up2dateConsole.Controls"
+        xmlns:helpers="clr-namespace:Up2dateConsole.Helpers" 
         mc:Ignorable="d"
         ShowInTaskbar="True"
         Icon="Images/Logo.ico"
@@ -172,40 +171,6 @@
             </DataGrid>
         </Grid>
 
-        <Grid x:Uid="Grid_4" Grid.Row="1" Margin="10,0,10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
-                <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto"/>
-                <ColumnDefinition x:Uid="ColumnDefinition_3"/>
-                <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto"/>
-                <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
-            <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Grid.Column="1" Width="20" Height="20" Margin="5,0" 
-                                           DataContext="{Binding StateIndicator}"/>
-            <Grid x:Uid="Grid_5" Grid.Column="2" Margin="15,0,0,0" VerticalAlignment="Center"
-                  Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
-                    <ColumnDefinition x:Uid="ColumnDefinition_7"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Uid="TextBlock_4" Text="Controller Id:" VerticalAlignment="Center"/>
-                <controls:SqueezeContentControl x:Uid="controls:ModestContainer_1" Grid.Column="1" Margin="5,0,10,0" HorizontalAlignment="Left">
-                    <TextBox x:Uid="TextBox_1" VerticalAlignment="Center"
-                             Style="{StaticResource ReadOnlyInfoField}"
-                             Text="{Binding DeviceId, Mode=OneWay}"/>
-                </controls:SqueezeContentControl>
-            </Grid>
-            <Button x:Uid="Button_2" Grid.Column="3" ToolTip="Turns console into administration mode (requires administrator privilege)"
-                    Command="{Binding EnterAdminModeCommand}"
-                    Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
-                    <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
-                    <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <TextBlock x:Uid="TextBlock_6" Grid.Column="4" Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
-                        Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        </Grid>
+        <local:StatusBar x:Uid="local:StatusBar_1" Grid.Row="1" Margin="10,0,10,10" DataContext="{Binding StatusBar}"/>
     </Grid>
 </Window>

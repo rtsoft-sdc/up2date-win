@@ -856,6 +856,18 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetClientState", ReplyAction="http://tempuri.org/IWcfService/GetClientStateResponse")]
         System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ClientState> GetClientStateAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetHawkbitEndpoint", ReplyAction="http://tempuri.org/IWcfService/GetHawkbitEndpointResponse")]
+        string GetHawkbitEndpoint();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetHawkbitEndpoint", ReplyAction="http://tempuri.org/IWcfService/GetHawkbitEndpointResponse")]
+        System.Threading.Tasks.Task<string> GetHawkbitEndpointAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetTenant", ReplyAction="http://tempuri.org/IWcfService/GetTenantResponse")]
+        string GetTenant();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetTenant", ReplyAction="http://tempuri.org/IWcfService/GetTenantResponse")]
+        System.Threading.Tasks.Task<string> GetTenantAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetDeviceId", ReplyAction="http://tempuri.org/IWcfService/GetDeviceIdResponse")]
         string GetDeviceId();
         
@@ -1076,6 +1088,22 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ClientState> GetClientStateAsync() {
             return base.Channel.GetClientStateAsync();
+        }
+        
+        public string GetHawkbitEndpoint() {
+            return base.Channel.GetHawkbitEndpoint();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetHawkbitEndpointAsync() {
+            return base.Channel.GetHawkbitEndpointAsync();
+        }
+        
+        public string GetTenant() {
+            return base.Channel.GetTenant();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetTenantAsync() {
+            return base.Channel.GetTenantAsync();
         }
         
         public string GetDeviceId() {
