@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Session;
@@ -11,14 +12,20 @@ namespace Up2dateConsole
         private readonly ISession session;
 
         private string deviceId;
+        private string tenant;
+        private string hawkbitEndpoint;
         private ServiceState serviceState;
 
         public StatusBarViewModel(ISession session, ICommand enterAdminModeCommand)
         {
             this.session = session ?? throw new ArgumentNullException(nameof(session));
             EnterAdminModeCommand = enterAdminModeCommand ?? throw new ArgumentNullException(nameof(enterAdminModeCommand));
+
+            OpenHawkbitUrlCommand = new RelayCommand(OpenHawkbitUrl);
             StateIndicator = new StateIndicatorViewModel();
         }
+
+        public ICommand OpenHawkbitUrlCommand { get; }
 
         public StateIndicatorViewModel StateIndicator { get; }
 
@@ -38,6 +45,9 @@ namespace Up2dateConsole
             serviceState = state;
             StateIndicator.SetState(state);
             OnPropertyChanged(nameof(IsDeviceIdAvailable));
+            OnPropertyChanged(nameof(IsTenantAvailable));
+            OnPropertyChanged(nameof(IsHawkbitEndpointAvailable));
+            OnPropertyChanged(nameof(IsUnprotectedMode));
         }
 
         public void SetInfo(string info)
@@ -45,10 +55,19 @@ namespace Up2dateConsole
             StateIndicator.SetInfo(info);
         }
 
+        public void SetConnectionInfo(string deviceId, string tenant, string hawkbitEndpoint)
+        {
+            DeviceId = deviceId;
+            Tenant = tenant;
+            HawkbitEndpoint = Uri.TryCreate(hawkbitEndpoint, UriKind.Absolute, out Uri uri)
+                ? hawkbitEndpoint.Replace(uri.PathAndQuery, String.Empty)
+                : String.Empty;
+        }
+
         public string DeviceId
         {
             get => deviceId;
-            set
+            private set
             {
                 if (deviceId == value) return;
                 deviceId = value;
@@ -57,6 +76,48 @@ namespace Up2dateConsole
             }
         }
 
+        public string Tenant
+        {
+            get => tenant;
+            private set
+            {
+                if (tenant == value) return;
+                tenant = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsTenantAvailable));
+                OnPropertyChanged(nameof(IsUnprotectedMode));
+            }
+        }
+
+        public string HawkbitEndpoint
+        {
+            get => hawkbitEndpoint;
+            private set
+            {
+                if (hawkbitEndpoint == value) return;
+                hawkbitEndpoint = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsHawkbitEndpointAvailable));
+            }
+        }
+
+        public bool IsHawkbitEndpointAvailable => !string.IsNullOrEmpty(HawkbitEndpoint) && serviceState == ServiceState.Active;
+
+        public bool IsTenantAvailable => !string.IsNullOrEmpty(Tenant) && serviceState == ServiceState.Active;
+
         public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId) && serviceState == ServiceState.Active;
+
+        public bool IsUnprotectedMode => string.IsNullOrEmpty(Tenant) && serviceState == ServiceState.Active;
+
+        private void OpenHawkbitUrl(object _)
+        {
+            if (!IsHawkbitEndpointAvailable) return;
+
+            var sInfo = new System.Diagnostics.ProcessStartInfo(HawkbitEndpoint)
+            {
+                UseShellExecute = true,
+            };
+            Process.Start(sInfo);
+        }
     }
 }

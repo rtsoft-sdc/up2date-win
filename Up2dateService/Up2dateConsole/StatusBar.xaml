@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:stateindicator="clr-namespace:Up2dateConsole.StateIndicator"
-             xmlns:controls="clr-namespace:Up2dateConsole.Controls"
+             xmlns:helpers="clr-namespace:Up2dateConsole.Helpers" 
              xmlns:local="clr-namespace:Up2dateConsole"
              mc:Ignorable="d"
+             Height="32"
              d:DesignWidth="600"
              d:DataContext="{d:DesignInstance local:StatusBarViewModel}">
 
@@ -17,48 +18,76 @@
                 <ResourceDictionary x:Uid="ResourceDictionary_3" Source="Texts.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <Style x:Uid="Style_1" TargetType="{x:Type Button}">
-                <Setter x:Uid="Setter_1" Property="Padding" Value="5,4"/>
-                <Setter x:Uid="Setter_2" Property="Margin" Value="3"/>
-            </Style>
-
             <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
+            <helpers:InvertBooleanToVisibilityConverter x:Uid="helpers:InvertBooleanToVisibilityConverter_1" x:Key="InvertBooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid x:Uid="Grid_4" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Uid="ColumnDefinition_1" Width="Auto"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_11" Width="Auto"/>
             <ColumnDefinition x:Uid="ColumnDefinition_2" Width="Auto"/>
+            <ColumnDefinition x:Uid="ColumnDefinition_8" Width="Auto"/>
             <ColumnDefinition x:Uid="ColumnDefinition_3"/>
             <ColumnDefinition x:Uid="ColumnDefinition_4" Width="Auto"/>
             <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto"/>
         </Grid.ColumnDefinitions>
         <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
         <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Grid.Column="1" Width="20" Height="20" Margin="5,0" 
-                                           DataContext="{Binding StateIndicator}"/>
-        <Grid x:Uid="Grid_5" Grid.Column="2" Margin="15,0,0,0" VerticalAlignment="Center"
-                  Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                       DataContext="{Binding StateIndicator}"/>
+        <Grid x:Uid="Grid_6" Grid.Column="2" Margin="10,0,0,0" VerticalAlignment="Center"
+              Visibility="{Binding IsTenantAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Uid="ColumnDefinition_9" Width="Auto"/>
+                <ColumnDefinition x:Uid="ColumnDefinition_10" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Uid="TextBlock_8" Text="Tenant:" VerticalAlignment="Center"/>
+            <Border x:Uid="Border_2" Grid.Column="1" Margin="5,0,10,0" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    BorderThickness="1" BorderBrush="LightGray" Padding="4,2">
+                <Grid x:Uid="Grid_7">
+                    <TextBlock x:Uid="TextBlock_9" HorizontalAlignment="Left" VerticalAlignment="Center"
+                               Visibility="{Binding IsHawkbitEndpointAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Hyperlink x:Uid="Hyperlink_1" Command="{Binding OpenHawkbitUrlCommand}">
+                            <TextBlock x:Uid="TextBlock_10" Text="{Binding Tenant}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock x:Uid="TextBlock_11" HorizontalAlignment="Left" VerticalAlignment="Center"
+                               Visibility="{Binding IsHawkbitEndpointAvailable, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
+                               Text="{Binding Tenant}"/>
+                </Grid>
+            </Border>
+        </Grid>
+        <Grid x:Uid="Grid_5" Grid.Column="3" Margin="10,0,0,0" VerticalAlignment="Center"
+              Visibility="{Binding IsDeviceIdAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
                 <ColumnDefinition x:Uid="ColumnDefinition_7"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Uid="TextBlock_4" Text="Controller Id:" VerticalAlignment="Center"/>
-            <controls:SqueezeContentControl x:Uid="controls:ModestContainer_1" Grid.Column="1" Margin="5,0,10,0" HorizontalAlignment="Left">
-                <TextBox x:Uid="TextBox_1" VerticalAlignment="Center"
-                             Style="{StaticResource ReadOnlyInfoField}"
-                             Text="{Binding DeviceId, Mode=OneWay}"/>
-            </controls:SqueezeContentControl>
+            <Border x:Uid="Border_1" Grid.Column="1" Margin="5,0,10,0" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                    BorderThickness="1" BorderBrush="LightGray" Padding="4,2">
+                <TextBlock x:Uid="TextBlock_7" HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Text="{Binding DeviceId, Mode=OneWay}"/>
+            </Border>
         </Grid>
-        <Button x:Uid="Button_2" Grid.Column="3" ToolTip="Turns console into administration mode (requires administrator privilege)"
-                    Command="{Binding EnterAdminModeCommand}"
-                    Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid x:Uid="Grid_8" Grid.Column="4" Margin="5,0,0,0" HorizontalAlignment="Left" Background="Transparent" 
+              Visibility="{Binding IsUnprotectedMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+              ToolTip="Warning! System is running in development (uprotected) mode">
+            <TextBlock x:Uid="TextBlock_12" Grid.Column="4" Style="{StaticResource StateIcon}" Text="{StaticResource KeyIcon}" Foreground="DarkOrange" FontSize="14"/>
+            <TextBlock x:Uid="TextBlock_13" Grid.Column="4" Style="{StaticResource StateIcon}" Text="{StaticResource SlashInCircleIcon}" Foreground="#60000000" FontSize="24"/>
+        </Grid>
+        <Button x:Uid="Button_2" Grid.Column="5" 
+                ToolTip="Turns console into administration mode (requires administrator privilege)"
+                Style="{StaticResource StandardButton}"
+                Command="{Binding EnterAdminModeCommand}"
+                Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
                 <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
                 <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
-        <TextBlock x:Uid="TextBlock_6" Grid.Column="4"  VerticalAlignment="Center"
+        <TextBlock x:Uid="TextBlock_6" Grid.Column="6"  VerticalAlignment="Center"
                    Text="Administrator mode" Foreground="DarkRed" FontWeight="DemiBold"
                    Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>

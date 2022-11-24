@@ -37,7 +37,6 @@ namespace Up2dateConsole
         private readonly ISettings settings;
         private readonly ISession session;
         private bool isSettingsDialogActive = false;
-        private SystemInfo? systemInfo;
 
         public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session)
         {
@@ -130,6 +129,8 @@ namespace Up2dateConsole
         public ICommand SettingsCommand { get; }
 
         public StatusBarViewModel StatusBar { get; }
+
+        public bool IsAdminMode => session.IsAdminMode;
 
         public ServiceState ServiceState
         {
@@ -352,13 +353,13 @@ namespace Up2dateConsole
                 packages = await service.GetPackagesAsync();
                 MsiFolder = await service.GetMsiFolderAsync();
                 clientState = service.GetClientState();
-                StatusBar.DeviceId = await service.GetDeviceIdAsync();
+                StatusBar.SetConnectionInfo(await service.GetDeviceIdAsync(), await service.GetTenantAsync(), await service.GetHawkbitEndpointAsync());
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
                 StatusBar.SetInfo(GetText(Texts.ServiceNotResponding));
-                StatusBar.DeviceId = null;
+                StatusBar.SetConnectionInfo(null, null, null);
                 OperationInProgress = false;
                 return;
             }
@@ -366,7 +367,7 @@ namespace Up2dateConsole
             {
                 ServiceState = ServiceState.ClientUnaccessible;
                 StatusBar.SetInfo($"{GetText(Texts.ServiceAccessError)}\n{e.Message}\n\n{e.StackTrace}");
-                StatusBar.DeviceId = null;
+                StatusBar.SetConnectionInfo(null, null, null);
                 OperationInProgress = false;
                 return;
             }
