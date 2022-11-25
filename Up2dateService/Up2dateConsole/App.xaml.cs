@@ -67,7 +67,8 @@ namespace Up2dateConsole
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
             ISettings settings = new Settings();
             ISession session = new Session.Session(new HookMonitor(false), settings);
-            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session);
+            IProcessHelper processHelper = new ProcessHelper();
+            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session, processHelper);
 
             mainWindow.Closing += (w, e) =>
             {

@@ -1,5 +1,4 @@
 ﻿using Moq;
-using System;
 using System.Threading;
 using Up2dateDotNet;
 
@@ -9,18 +8,21 @@ namespace Tests_Shared
     {
         private ManualResetEvent runExitEvent = new ManualResetEvent(false);
 
-        public AuthErrorActionFunc AuthErrorCallback { get; private set; }
+        public ProvErrorCallbackFunc ProvErrorCallback { get; private set; }
+        public ProvSuccessCallbackFunc ProvSuccessCallback { get; private set; }
         public ConfigRequestFunc ConfigRequestFunc { get; private set; }
         public DeploymentActionFunc DeploymentActionFunc { get; private set; }
         public CancelActionFunc CancelActionFunc { get; private set; }
 
         public WrapperMock()
         {
-            Setup(m => m.RunClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AuthErrorActionFunc>(),
+            Setup(m => m.RunClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsNotNull<ProvErrorCallbackFunc>(), It.IsNotNull<ProvSuccessCallbackFunc>(),
                 It.IsAny<ConfigRequestFunc>(), It.IsAny<DeploymentActionFunc>(), It.IsAny<CancelActionFunc>()))
-                .Callback<string, string, string, AuthErrorActionFunc, ConfigRequestFunc, DeploymentActionFunc, CancelActionFunc>((c, e, t, ae, cr, da, ca) =>
+                .Callback<string, string, string, ProvErrorCallbackFunc, ProvSuccessCallbackFunc, ConfigRequestFunc, DeploymentActionFunc, CancelActionFunc>((c, e, t, pe, ps, cr, da, ca) =>
                 {
-                    AuthErrorCallback = ae;
+                    ProvErrorCallback = pe;
+                    ProvSuccessCallback = ps;
                     ConfigRequestFunc = cr;
                     DeploymentActionFunc = da;
                     CancelActionFunc = ca;

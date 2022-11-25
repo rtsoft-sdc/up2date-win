@@ -102,9 +102,11 @@
     <Compile Include="Helpers\InactivityMonitor\User32.cs" />
     <Compile Include="Helpers\InactivityMonitor\Win32Hook.cs" />
     <Compile Include="Helpers\InvertBooleanToVisibilityConverter.cs" />
+    <Compile Include="Helpers\IProcessHelper.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
+    <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="ISettings.cs" />
@@ -122,10 +124,10 @@
     <Compile Include="StateIndicator\StateIndicator.xaml.cs">
       <DependentUpon>StateIndicator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StatusBar.xaml.cs">
+    <Compile Include="StatusBar\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StatusBarViewModel.cs" />
+    <Compile Include="StatusBar\StatusBarViewModel.cs" />
     <Compile Include="Texts.cs" />
     <Compile Include="ViewService\IDialogViewModel.cs" />
     <Compile Include="ViewService\IViewService.cs" />
@@ -173,7 +175,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StatusBar.xaml">
+    <Page Include="StatusBar\StatusBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

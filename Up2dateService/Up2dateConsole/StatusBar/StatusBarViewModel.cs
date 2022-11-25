@@ -5,21 +5,22 @@ using Up2dateConsole.Helpers;
 using Up2dateConsole.Session;
 using Up2dateConsole.StateIndicator;
 
-namespace Up2dateConsole
+namespace Up2dateConsole.StatusBar
 {
     public class StatusBarViewModel : NotifyPropertyChanged
     {
         private readonly ISession session;
-
+        private readonly IProcessHelper processHelper;
         private string deviceId;
         private string tenant;
         private string hawkbitEndpoint;
         private ServiceState serviceState;
 
-        public StatusBarViewModel(ISession session, ICommand enterAdminModeCommand)
+        public StatusBarViewModel(ISession session, ICommand enterAdminModeCommand, IProcessHelper processHelper)
         {
             this.session = session ?? throw new ArgumentNullException(nameof(session));
             EnterAdminModeCommand = enterAdminModeCommand ?? throw new ArgumentNullException(nameof(enterAdminModeCommand));
+            this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
 
             OpenHawkbitUrlCommand = new RelayCommand(OpenHawkbitUrl);
             StateIndicator = new StateIndicatorViewModel();
@@ -113,11 +114,11 @@ namespace Up2dateConsole
         {
             if (!IsHawkbitEndpointAvailable) return;
 
-            var sInfo = new System.Diagnostics.ProcessStartInfo(HawkbitEndpoint)
+            var sInfo = new ProcessStartInfo(HawkbitEndpoint)
             {
-                UseShellExecute = true,
+                UseShellExecute = true
             };
-            Process.Start(sInfo);
+            processHelper.StartProcess(sInfo);
         }
     }
 }

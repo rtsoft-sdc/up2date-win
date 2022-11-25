@@ -16,6 +16,7 @@ using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.Session;
 using Up2dateConsole.StateIndicator;
+using Up2dateConsole.StatusBar;
 using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
@@ -36,14 +37,16 @@ namespace Up2dateConsole
         private readonly IWcfClientFactory wcfClientFactory;
         private readonly ISettings settings;
         private readonly ISession session;
+        private readonly IProcessHelper processHelper;
         private bool isSettingsDialogActive = false;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session, IProcessHelper processHelper)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.session = session ?? throw new ArgumentNullException(nameof(session));
+            this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
             QuitCommand = new RelayCommand(_ => session.Shutdown());
 
@@ -58,7 +61,7 @@ namespace Up2dateConsole
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
 
-            StatusBar = new StatusBarViewModel(session, EnterAdminModeCommand);
+            StatusBar = new StatusBarViewModel(session, EnterAdminModeCommand, processHelper);
 
             session.ShuttingDown += Session_ShuttingDown;
 

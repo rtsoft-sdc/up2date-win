@@ -7,6 +7,7 @@
         xmlns:service="clr-namespace:Up2dateConsole.ServiceReference"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
         xmlns:helpers="clr-namespace:Up2dateConsole.Helpers" 
+        xmlns:statusBar="clr-namespace:Up2dateConsole.StatusBar" 
         mc:Ignorable="d"
         ShowInTaskbar="True"
         Icon="Images/Logo.ico"
@@ -170,6 +171,6 @@
             </DataGrid>
         </Grid>
 
-        <local:StatusBar x:Uid="local:StatusBar_1" Grid.Row="1" Margin="10,0,10,10" DataContext="{Binding StatusBar}"/>
+        <statusBar:StatusBar x:Uid="local:StatusBar_1" Grid.Row="1" Margin="10,0,10,10" DataContext="{Binding StatusBar}"/>
     </Grid>
 </Window>

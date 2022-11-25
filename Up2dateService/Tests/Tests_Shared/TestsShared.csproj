@@ -57,7 +57,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandMock.cs" />
     <Compile Include="LoggerMock.cs" />
+    <Compile Include="ProcessHelperMock.cs" />
+    <Compile Include="SessionMock.cs" />
     <Compile Include="SettingsManagerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsMock.cs" />
