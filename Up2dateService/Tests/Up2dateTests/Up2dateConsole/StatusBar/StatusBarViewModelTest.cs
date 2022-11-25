@@ -30,14 +30,6 @@ namespace Up2dateTests.Up2dateConsole.StatusBar
             Assert.AreEqual(commandMock.Object, vm.EnterAdminModeCommand);
             Assert.IsNotNull(vm.OpenHawkbitUrlCommand);
             Assert.IsInstanceOfType(vm.StateIndicator, typeof(StateIndicatorViewModel));
-
-            //vm.DeviceId;
-            //vm.Tenant;
-            //vm.HawkbitEndpoint;
-            //vm.IsDeviceIdAvailable;
-            //vm.IsHawkbitEndpointAvailable;
-            //vm.IsUnprotectedMode;
-            //vm.IsTenantAvailable;
         }
 
         [DataTestMethod]
