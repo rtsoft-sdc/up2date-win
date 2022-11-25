@@ -11,6 +11,13 @@
     <clr:String x:Uid="clr:String_7" x:Key="wrenchIcon">&#xf0ad;</clr:String>
     <clr:String  x:Uid="clr:String_8" x:Key="InfoCircleIcon">&#xf05a;</clr:String>
     <clr:String  x:Uid="clr:String_9" x:Key="FolderOpenIcon">&#xf07c;</clr:String>
+    <clr:String  x:Uid="clr:String_10" x:Key="SlashInCircleIcon">&#xF05E;</clr:String>
+
+    <Style x:Uid="Style_6" x:Key="StandardButton" TargetType="{x:Type Button}">
+        <Setter x:Uid="Setter_12" Property="Padding" Value="5,4"/>
+        <Setter x:Uid="Setter_13" Property="Margin" Value="3,0"/>
+        <Setter x:Uid="Setter_14" Property="Height" Value="26"/>
+    </Style>
 
     <Style x:Uid="Style_1" x:Key="AwesomeIcon" TargetType="{x:Type TextBlock}">
         <Setter x:Uid="Setter_1" Property="FontFamily" Value="{StaticResource FontAwesome}"/>
