@@ -7,7 +7,7 @@ using Up2dateShared;
 
 namespace Up2dateClient
 {
-    public class Client
+    public class Client : IClient
     {
         private const string ClientType = "RITMS UP2DATE for Windows";
 
@@ -19,6 +19,7 @@ namespace Up2dateClient
         private readonly ISetupManager setupManager;
         private readonly Func<SystemInfo> getSysInfo;
         private ClientState state;
+        private string hawkbitEndpoint;
         private int lastStopID = -1;
 
         public Client(IWrapper wrapper, ISettingsManager settingsManager, Func<string> getCertificate, ISetupManager setupManager, Func<SystemInfo> getSysInfo, ILogger logger, Version clientVersion)
@@ -43,6 +44,20 @@ namespace Up2dateClient
             }
         }
 
+        public string HawkbitEndpoint
+        {
+            get => hawkbitEndpoint;
+            private set
+            {
+                if (hawkbitEndpoint == value) return;
+                hawkbitEndpoint = value;
+                if (!string.IsNullOrEmpty(hawkbitEndpoint))
+                {
+                    WriteLogEntry($"HawkbitEndpoint={hawkbitEndpoint}");
+                }
+            }
+        }
+
         public string Run()
         {
             try
@@ -56,7 +71,7 @@ namespace Up2dateClient
                         return "No certificate.";
                     }
                     SetState(ClientStatus.Running);
-                    wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnAuthErrorAction, 
+                    wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnProvisioningErrorAction, OnProvisioningSuccessAction,
                         OnConfigRequest, OnDeploymentAction, OnCancelAction);
                 }
                 else
@@ -80,6 +95,11 @@ namespace Up2dateClient
         public void RequestStop()
         {
             wrapper.StopClient();
+        }
+
+        public void RequestToPoll()
+        {
+            wrapper.RequestToPoll();
         }
 
         private void SetState(ClientStatus status, string lastError = null)
@@ -299,16 +319,16 @@ namespace Up2dateClient
             return true;
         }
 
-        private void OnAuthErrorAction(string errorMessage)
+        private void OnProvisioningErrorAction(string errorMessage)
         {
-            if (string.IsNullOrEmpty(errorMessage)) // means that provisioning error is fixed
-            {
-                SetState(ClientStatus.Running);
-            }
-            else
-            {
-                SetState(ClientStatus.AuthorizationError, errorMessage);
-            }
+            HawkbitEndpoint = string.Empty;
+            SetState(ClientStatus.AuthorizationError, errorMessage);
+        }
+
+        private void OnProvisioningSuccessAction(string up2DateEndpoint)
+        {
+            HawkbitEndpoint = up2DateEndpoint;
+            SetState(ClientStatus.Running);
         }
 
         private void WriteLogEntry(string message, DeploymentInfo? info = null)

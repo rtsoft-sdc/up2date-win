@@ -16,6 +16,7 @@ using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.Session;
 using Up2dateConsole.StateIndicator;
+using Up2dateConsole.StatusBar;
 using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
@@ -31,21 +32,21 @@ namespace Up2dateConsole
         private string msiFolder;
         private bool operationInProgress;
         private ServiceState serviceState;
-        private string deviceId;
         private readonly Timer timer = new Timer(InitialDelay);
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
         private readonly ISettings settings;
         private readonly ISession session;
+        private readonly IProcessHelper processHelper;
         private bool isSettingsDialogActive = false;
-        private SystemInfo? systemInfo;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session, IProcessHelper processHelper)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.session = session ?? throw new ArgumentNullException(nameof(session));
+            this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
             QuitCommand = new RelayCommand(_ => session.Shutdown());
 
@@ -59,6 +60,8 @@ namespace Up2dateConsole
             SettingsCommand = new RelayCommand(ExecuteSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
+
+            StatusBar = new StatusBarViewModel(session, EnterAdminModeCommand, processHelper);
 
             session.ShuttingDown += Session_ShuttingDown;
 
@@ -128,11 +131,9 @@ namespace Up2dateConsole
         public ICommand RequestCertificateCommand { get; }
         public ICommand SettingsCommand { get; }
 
-        public StateIndicatorViewModel StateIndicator { get; } = new StateIndicatorViewModel();
+        public StatusBarViewModel StatusBar { get; }
 
         public bool IsAdminMode => session.IsAdminMode;
-
-        public bool IsUserMode => !session.IsAdminMode;
 
         public ServiceState ServiceState
         {
@@ -144,38 +145,8 @@ namespace Up2dateConsole
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TaskbarIcon));
                 OnPropertyChanged(nameof(TaskbarIconText));
-                OnPropertyChanged(nameof(IsDeviceIdAvailable));
-                StateIndicator.SetState(value);
+                StatusBar.SetState(value);
                 ThreadHelper.SafeInvoke(CommandManager.InvalidateRequerySuggested);
-            }
-        }
-
-
-        public string DeviceId
-        {
-            get => deviceId;
-            private set
-            {
-                if (deviceId == value) return;
-                deviceId = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsDeviceIdAvailable));
-            }
-        }
-
-        public bool IsDeviceIdAvailable => !string.IsNullOrEmpty(DeviceId) && ServiceState == ServiceState.Active;
-
-        public SystemInfo SystemInfo
-        {
-            get
-            {
-                if (!systemInfo.HasValue)
-                {
-                    IWcfService service = wcfClientFactory.CreateClient();
-                    systemInfo = service.GetSystemInfo();
-                    wcfClientFactory.CloseClient(service);
-                }
-                return systemInfo.Value;
             }
         }
 
@@ -198,7 +169,7 @@ namespace Up2dateConsole
                 if (operationInProgress == value) return;
                 operationInProgress = value;
                 OnPropertyChanged();
-                StateIndicator.IsBusy = operationInProgress;
+                StatusBar.SetBusy(operationInProgress);
                 CommandManager.InvalidateRequerySuggested();
             }
         }
@@ -242,7 +213,7 @@ namespace Up2dateConsole
 
         private async Task RequestCertificateAsync(bool showExplanation)
         {
-            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation, SystemInfo.MachineGuid);
+            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation);
             bool success = viewService.ShowDialog(vm);
             if (success)
             {
@@ -299,20 +270,20 @@ namespace Up2dateConsole
                     await service.RejectInstallationAsync(package);
                 }
                 ServiceState = ServiceState.Active;
-                StateIndicator.SetInfo($"{GetText(Texts.Active)}");
+                StatusBar.SetInfo($"{GetText(Texts.Active)}");
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
                 var message = GetText(Texts.CannotRejectInstallation);
-                StateIndicator.SetInfo(message);
+                StatusBar.SetInfo(message);
                 viewService.ShowMessageBox($"{GetText(Texts.CannotRejectInstallation)}\n{message}");
             }
             catch (Exception e)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
                 var message = e.Message;
-                StateIndicator.SetInfo(message);
+                StatusBar.SetInfo(message);
                 viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}\n\n{e.StackTrace}");
             }
             finally
@@ -348,20 +319,20 @@ namespace Up2dateConsole
                 service = wcfClientFactory.CreateClient();
                 await service.StartInstallationAsync(selectedPackages);
                 ServiceState = ServiceState.Active;
-                StateIndicator.SetInfo($"{GetText(Texts.Active)}");
+                StatusBar.SetInfo($"{GetText(Texts.Active)}");
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
                 var message = GetText(Texts.CannotStartInstallation);
-                StateIndicator.SetInfo(message);
+                StatusBar.SetInfo(message);
                 viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}");
             }
             catch (Exception e)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
                 var message = e.Message;
-                StateIndicator.SetInfo(message);
+                StatusBar.SetInfo(message);
                 viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}\n\n{e.StackTrace}");
             }
             finally
@@ -385,21 +356,21 @@ namespace Up2dateConsole
                 packages = await service.GetPackagesAsync();
                 MsiFolder = await service.GetMsiFolderAsync();
                 clientState = service.GetClientState();
-                DeviceId = await service.GetDeviceIdAsync();
+                StatusBar.SetConnectionInfo(await service.GetDeviceIdAsync(), await service.GetTenantAsync(), await service.GetHawkbitEndpointAsync());
             }
             catch (System.ServiceModel.EndpointNotFoundException)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                StateIndicator.SetInfo(GetText(Texts.ServiceNotResponding));
-                DeviceId = null;
+                StatusBar.SetInfo(GetText(Texts.ServiceNotResponding));
+                StatusBar.SetConnectionInfo(null, null, null);
                 OperationInProgress = false;
                 return;
             }
             catch (Exception e)
             {
                 ServiceState = ServiceState.ClientUnaccessible;
-                StateIndicator.SetInfo($"{GetText(Texts.ServiceAccessError)}\n{e.Message}\n\n{e.StackTrace}");
-                DeviceId = null;
+                StatusBar.SetInfo($"{GetText(Texts.ServiceAccessError)}\n{e.Message}\n\n{e.StackTrace}");
+                StatusBar.SetConnectionInfo(null, null, null);
                 OperationInProgress = false;
                 return;
             }
@@ -473,23 +444,23 @@ namespace Up2dateConsole
             {
                 case ClientStatus.Running:
                     ServiceState = ServiceState.Active;
-                    StateIndicator.SetInfo($"{GetText(Texts.Active)}");
+                    StatusBar.SetInfo($"{GetText(Texts.Active)}");
                     break;
                 case ClientStatus.Stopped:
                     ServiceState = ServiceState.Error;
-                    StateIndicator.SetInfo($"{GetText(Texts.UnexpectedStop)} {clientState.LastError}");
+                    StatusBar.SetInfo($"{GetText(Texts.UnexpectedStop)} {clientState.LastError}");
                     break;
                 case ClientStatus.Reconnecting:
                     ServiceState = ServiceState.Error;
-                    StateIndicator.SetInfo($"{GetText(Texts.Reconnecting)}");
+                    StatusBar.SetInfo($"{GetText(Texts.Reconnecting)}");
                     break;
                 case ClientStatus.AuthorizationError:
                     ServiceState = ServiceState.AuthorizationError;
-                    StateIndicator.SetInfo($"{GetText(Texts.AuthorizationError)} {clientState.LastError}");
+                    StatusBar.SetInfo($"{GetText(Texts.AuthorizationError)} {clientState.LastError}");
                     break;
                 case ClientStatus.NoCertificate:
                     ServiceState = ServiceState.NoCertificate;
-                    StateIndicator.SetInfo(GetText(Texts.CertificateNotAvailable));
+                    StatusBar.SetInfo(GetText(Texts.CertificateNotAvailable));
                     break;
                 default:
                     throw new InvalidOperationException($"unsupported status {clientState.Status}");

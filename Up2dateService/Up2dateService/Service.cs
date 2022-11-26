@@ -26,7 +26,7 @@ namespace Up2dateService
         {
             const int clientRestartOnErrorPeriodMs = 30000;
 
-            // System.Diagnostics.Debugger.Launch(); //todo: remove!
+            //System.Diagnostics.Debugger.Launch(); //todo: remove!
 
             serviceHost?.Close();
             EventLog.WriteEntry($"Packages folder: '{GetCreatePackagesFolder()}'");
@@ -42,9 +42,9 @@ namespace Up2dateService
 
             Version clientVersion = Assembly.GetEntryAssembly().GetName().Version;
 
-            Client client = new Client(new Wrapper(), settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)), clientVersion);
+            IClient client = new Client(new Wrapper(), settingsManager, certificateManager.GetCertificateString, setupManager, SystemInfo.Retrieve, new Logger(EventLog, nameof(Client)), clientVersion);
 
-            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, () => client.State, () => client.RequestStop(),
+            WcfService wcfService = new WcfService(setupManager, SystemInfo.Retrieve, GetCreatePackagesFolder, client,
                 certificateProvider, certificateManager, settingsManager, signatureVerifier, whiteListManager);
             serviceHost = new ServiceHost(wcfService);
             serviceHost.Open();

@@ -29,6 +29,12 @@ namespace Up2dateService
         ClientState GetClientState();
 
         [OperationContract]
+        string GetHawkbitEndpoint();
+
+        [OperationContract]
+        string GetTenant();
+
+        [OperationContract]
         string GetDeviceId();
 
         [OperationContract]

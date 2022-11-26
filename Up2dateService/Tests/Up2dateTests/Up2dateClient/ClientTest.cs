@@ -74,7 +74,8 @@ namespace Up2dateTests.Up2dateClient
 
             // assert
             wrapperMock.Verify(m => m.RunClient(certificate, settingsManagerMock.Object.ProvisioningUrl, settingsManagerMock.Object.XApigToken,
-                It.IsNotNull<AuthErrorActionFunc>(), It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()));
+                It.IsNotNull<ProvErrorCallbackFunc>(), It.IsNotNull<ProvSuccessCallbackFunc>(),
+                It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()));
         }
 
         [TestMethod]
@@ -100,7 +101,8 @@ namespace Up2dateTests.Up2dateClient
             Client client = CreateClient();
             string message = "exception message";
             wrapperMock.Setup(m => m.RunClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsNotNull<AuthErrorActionFunc>(), It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()))
+                It.IsNotNull<ProvErrorCallbackFunc>(), It.IsNotNull<ProvSuccessCallbackFunc>(),
+                It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()))
                 .Throws(new Exception(message));
 
             // act
@@ -127,23 +129,39 @@ namespace Up2dateTests.Up2dateClient
 
 
         //
-        //  Authorization error callback tests
+        //  Provisioning callback tests
         //
 
         [TestMethod]
-        public void WhenAuthErrorActionBringsErrorMessage_ThenStatusIsAuthorizationError()
+        public void WhenProvErrorActionBringsErrorMessage_ThenStatusIsAuthorizationError()
         {
             // arrange
             Client client = CreateClient();
-            string message = "Authorization Error message";
+            string message = "Provisioning Error message";
             StartClient(client);
 
             // act
-            wrapperMock.AuthErrorCallback(message);
+            wrapperMock.ProvErrorCallback(message);
 
             // assert
             Assert.AreEqual(ClientStatus.AuthorizationError, client.State.Status);
             Assert.AreEqual(message, client.State.LastError);
+        }
+
+        [TestMethod]
+        public void WhenProvSuccessActionIsCalled_ThenStatusIsRunningAndHawkbitEndpointIsSet()
+        {
+            // arrange
+            Client client = CreateClient();
+            string hawkbitEndpoint = "https://hawkbit.domain.org/ddi/sub.path";
+            StartClient(client);
+
+            // act
+            wrapperMock.ProvSuccessCallback(hawkbitEndpoint);
+
+            // assert
+            Assert.AreEqual(ClientStatus.Running, client.State.Status);
+            Assert.AreEqual(hawkbitEndpoint, client.HawkbitEndpoint);
         }
 
 
