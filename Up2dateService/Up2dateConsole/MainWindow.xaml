@@ -7,6 +7,7 @@
         xmlns:service="clr-namespace:Up2dateConsole.ServiceReference"
         xmlns:tb="http://www.hardcodet.net/taskbar" 
         xmlns:helpers="clr-namespace:Up2dateConsole.Helpers" 
+        xmlns:toolBar="clr-namespace:Up2dateConsole.ToolBar" 
         xmlns:statusBar="clr-namespace:Up2dateConsole.StatusBar" 
         mc:Ignorable="d"
         ShowInTaskbar="True"
@@ -73,37 +74,7 @@
             </Grid.RowDefinitions>
             <Grid x:Uid="Grid_3" Margin="10,5" >
                 <TextBlock x:Uid="TextBlock_1" VerticalAlignment="Center" Text="Software packages:"/>
-                <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button x:Uid="Button_5" Width="100" Content="Accept" Command="{Binding AcceptCommand}"
-                            Style="{StaticResource StandardButton}"
-                            ToolTip="Accept installation of the selected package. Installation will start automatically soon after acceptance."
-                            Visibility="{Binding CanAcceptReject, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button x:Uid="Button_4" Width="100" Content="Reject" Command="{Binding RejectCommand}"
-                            Style="{StaticResource StandardButton}"
-                            ToolTip="Reject installation of the selected package."
-                            Visibility="{Binding CanAcceptReject, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal" VerticalAlignment="Center"
-                                Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <Button x:Uid="Button2" Width="100" Content="Install" Command="{Binding InstallCommand}"
-                                Style="{StaticResource StandardButton}"
-                                ToolTip="Install selected package"
-                                Visibility="{Binding CanAcceptReject, Converter={StaticResource InvertBooleanToVisibilityConverter}}"/>
-                        <Button x:Uid="Button1" ToolTip="Request UP2DATE service authorization data (key is provided by the administrator)"
-                                Style="{StaticResource StandardButton}"
-                                Command="{Binding RequestCertificateCommand}">
-                            <StackPanel x:Uid="StackPanel_2" Orientation="Horizontal">
-                                <TextBlock x:Uid="TextBlock_2" Text="{StaticResource KeyIcon}" Foreground="DarkOrange" Style="{StaticResource ButtonIcon}"/>
-                                <TextBlock x:Uid="TextBlock1" Margin="5,0,0,0" Text="Authorization..." VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                        <Button x:Uid="Button_3" Command="{Binding SettingsCommand}" ToolTip="View or change settings" Style="{StaticResource StandardButton}">
-                            <TextBlock x:Uid="TextBlock_7" Text="{StaticResource wrenchIcon}" Style="{StaticResource ButtonIcon}"/>
-                        </Button>
-                    </StackPanel>
-                    <Button x:Uid="Button_1" Command="{Binding RefreshCommand}" ToolTip="Refresh the list of packages" Style="{StaticResource StandardButton}">
-                        <TextBlock x:Uid="TextBlock_3" Text="{StaticResource RefreshIcon}" Style="{StaticResource ButtonIcon}"/>
-                    </Button>
-                </StackPanel>
+                <toolBar:ToolBar x:Uid="toolBar:ToolBar_1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
             <DataGrid x:Uid="DataGrid_1" Grid.Row="1" Margin="10,0,10,4" 
                         Background="White"

@@ -129,6 +129,10 @@
     </Compile>
     <Compile Include="StatusBar\StatusBarViewModel.cs" />
     <Compile Include="Texts.cs" />
+    <Compile Include="ToolBar\ToolBar.xaml.cs">
+      <DependentUpon>ToolBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ToolBar\ToolBarViewModel.cs" />
     <Compile Include="ViewService\IDialogViewModel.cs" />
     <Compile Include="ViewService\IViewService.cs" />
     <Compile Include="Helpers\ThreadHelper.cs" />
@@ -184,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Texts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ToolBar\ToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
