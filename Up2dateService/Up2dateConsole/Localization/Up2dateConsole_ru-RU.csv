@@ -117,7 +117,7 @@ Up2dateConsole.g.en-US.resources:statusbar.baml,Image_1:System.Windows.Controls.
 Up2dateConsole.g.en-US.resources:statusbar.baml,Image_1:System.Windows.Controls.Image.Stretch,None,True,False,,Fill,Fill,
 Up2dateConsole.g.en-US.resources:statusbar.baml,Image_1:System.Windows.FrameworkElement.Width,None,False,True,,16,16,
 Up2dateConsole.g.en-US.resources:statusbar.baml,Image_1:System.Windows.FrameworkElement.Height,None,False,True,,16,16,
-Up2dateConsole.g.en-US.resources:statusbar.baml,Image_1:System.Windows.Controls.Image.Source,None,False,True,,Images/UAC.png,Images/UAC.png,
+Up2dateConsole.g.en-US.resources:statusbar.baml,Image_1:System.Windows.Controls.Image.Source,None,False,True,,../Images/UAC.png,../Images/UAC.png,
 Up2dateConsole.g.en-US.resources:statusbar.baml,Image_1:System.Windows.FrameworkElement.VerticalAlignment,None,False,True,,Center,Center,
 Up2dateConsole.g.en-US.resources:statusbar.baml,TextBlock_5:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
 Up2dateConsole.g.en-US.resources:statusbar.baml,TextBlock_5:System.Windows.FrameworkElement.Margin,None,False,True,,"5,0,0,0","5,0,0,0",
