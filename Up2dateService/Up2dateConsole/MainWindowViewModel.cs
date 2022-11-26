@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -62,7 +61,7 @@ namespace Up2dateConsole
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => canAcceptReject);
             RejectCommand = new RelayCommand(async _ => await Accept(false), _ => canAcceptReject);
-            RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync(), _ => IsServiceRunning);
+            RequestCertificateCommand = new RelayCommand(async _ => await RequestCertificateAsync(showExplanation: false), _ => IsServiceRunning);
             SettingsCommand = new RelayCommand(ExecuteSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
@@ -217,11 +216,6 @@ namespace Up2dateConsole
             }
         }
 
-        private async Task ExecuteRequestCertificateAsync()
-        {
-            await RequestCertificateAsync(showExplanation: false);
-        }
-
         private async Task RequestCertificateAsync(bool showExplanation)
         {
             RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation);
@@ -264,14 +258,10 @@ namespace Up2dateConsole
             IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
             if (selectedItems.Count != 1) return;
 
-            OperationInProgress = true;
-            IWcfService service = null;
-
             Package package = selectedItems.First().Package;
 
-            try
+            string error = await CallServiceAsync(async service =>
             {
-                service = wcfClientFactory.CreateClient();
                 if (accept)
                 {
                     await service.AcceptInstallationAsync(package);
@@ -280,27 +270,11 @@ namespace Up2dateConsole
                 {
                     await service.RejectInstallationAsync(package);
                 }
-                ServiceState = ServiceState.Active;
-                StatusBar.SetInfo($"{GetText(Texts.Active)}");
-            }
-            catch (System.ServiceModel.EndpointNotFoundException)
+            });
+
+            if (!string.IsNullOrEmpty(error))
             {
-                ServiceState = ServiceState.ClientUnaccessible;
-                var message = GetText(Texts.CannotRejectInstallation);
-                StatusBar.SetInfo(message);
-                viewService.ShowMessageBox($"{GetText(Texts.CannotRejectInstallation)}\n{message}");
-            }
-            catch (Exception e)
-            {
-                ServiceState = ServiceState.ClientUnaccessible;
-                var message = e.Message;
-                StatusBar.SetInfo(message);
-                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}\n\n{e.StackTrace}");
-            }
-            finally
-            {
-                wcfClientFactory.CloseClient(service);
-                OperationInProgress = false;
+                viewService.ShowMessageBox($"{GetText(Texts.CannotRejectInstallation)}\n{error}");
             }
 
             await ExecuteRefresh();
@@ -316,40 +290,21 @@ namespace Up2dateConsole
 
         private async void ExecuteInstall(object _)
         {
-            OperationInProgress = true;
-            IWcfService service = null;
-
             Package[] selectedPackages = AvailablePackages
                 .Where(p => p.IsSelected && (p.Package.Status == PackageStatus.Downloaded
                                          || p.Package.Status == PackageStatus.Rejected
                                          || p.Package.Status == PackageStatus.Failed))
                 .Select(p => p.Package)
                 .ToArray();
-            try
+
+            string error = await CallServiceAsync(async service =>
             {
-                service = wcfClientFactory.CreateClient();
                 await service.StartInstallationAsync(selectedPackages);
-                ServiceState = ServiceState.Active;
-                StatusBar.SetInfo($"{GetText(Texts.Active)}");
-            }
-            catch (System.ServiceModel.EndpointNotFoundException)
+            });
+
+            if (!string.IsNullOrEmpty(error))
             {
-                ServiceState = ServiceState.ClientUnaccessible;
-                var message = GetText(Texts.CannotStartInstallation);
-                StatusBar.SetInfo(message);
-                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}");
-            }
-            catch (Exception e)
-            {
-                ServiceState = ServiceState.ClientUnaccessible;
-                var message = e.Message;
-                StatusBar.SetInfo(message);
-                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{message}\n\n{e.StackTrace}");
-            }
-            finally
-            {
-                wcfClientFactory.CloseClient(service);
-                OperationInProgress = false;
+                viewService.ShowMessageBox($"{GetText(Texts.CannotStartInstallation)}\n{error}");
             }
 
             await ExecuteRefresh();
@@ -357,38 +312,22 @@ namespace Up2dateConsole
 
         private async Task ExecuteRefresh()
         {
-            OperationInProgress = true;
-            IWcfService service = null;
             Package[] packages = null;
-            ClientState clientState;
-            try
+
+            string error = await CallServiceAsync(async service =>
             {
-                service = wcfClientFactory.CreateClient();
                 packages = await service.GetPackagesAsync();
                 MsiFolder = await service.GetMsiFolderAsync();
-                clientState = service.GetClientState();
                 StatusBar.SetConnectionInfo(await service.GetDeviceIdAsync(), await service.GetTenantAsync(), await service.GetHawkbitEndpointAsync());
-            }
-            catch (System.ServiceModel.EndpointNotFoundException)
+            });
+
+            if (!string.IsNullOrEmpty(error))
             {
-                ServiceState = ServiceState.ClientUnaccessible;
-                StatusBar.SetInfo(GetText(Texts.ServiceNotResponding));
                 StatusBar.SetConnectionInfo(null, null, null);
-                OperationInProgress = false;
                 return;
             }
-            catch (Exception e)
-            {
-                ServiceState = ServiceState.ClientUnaccessible;
-                StatusBar.SetInfo($"{GetText(Texts.ServiceAccessError)}\n{e.Message}\n\n{e.StackTrace}");
-                StatusBar.SetConnectionInfo(null, null, null);
-                OperationInProgress = false;
-                return;
-            }
-            finally
-            {
-                wcfClientFactory.CloseClient(service);
-            }
+
+            OperationInProgress = true;
 
             List<Package> selected = AvailablePackages.Where(p => p.IsSelected).Select(p => p.Package).ToList();
 
@@ -412,8 +351,6 @@ namespace Up2dateConsole
                     AvailablePackages.Add(pi);
                 }
             });
-
-            UpdateState(clientState);
 
             if (firstTimeRefresh)
             {
@@ -547,6 +484,41 @@ namespace Up2dateConsole
         private string GetText(Texts text)
         {
             return viewService.GetText(text);
+        }
+
+        private async Task<string> CallServiceAsync(Func<IWcfService, Task> callAsync)
+        {
+            OperationInProgress = true;
+            string error = string.Empty;
+            IWcfService service = null;
+            try
+            {
+                service = wcfClientFactory.CreateClient();
+                await callAsync(service);
+                ServiceState = ServiceState.Active;
+                StatusBar.SetInfo(GetText(Texts.Active));
+                var clientState = service.GetClientState();
+                UpdateState(clientState);
+            }
+            catch (System.ServiceModel.EndpointNotFoundException)
+            {
+                ServiceState = ServiceState.ClientUnaccessible;
+                error = GetText(Texts.ServiceNotResponding);
+                StatusBar.SetInfo(error);
+            }
+            catch (Exception e)
+            {
+                ServiceState = ServiceState.ClientUnaccessible;
+                error = $"{e.Message}\n\n{e.StackTrace}";
+                StatusBar.SetInfo($"{GetText(Texts.ServiceAccessError)}\n{error}");
+            }
+            finally
+            {
+                wcfClientFactory.CloseClient(service);
+            }
+            OperationInProgress = false;
+
+            return error;
         }
     }
 }
