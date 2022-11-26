@@ -13,10 +13,12 @@ using System.Windows.Input;
 using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
+using Up2dateConsole.Notifier;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.Session;
 using Up2dateConsole.StateIndicator;
 using Up2dateConsole.StatusBar;
+using Up2dateConsole.ToolBar;
 using Up2dateConsole.ViewService;
 
 namespace Up2dateConsole
@@ -38,15 +40,19 @@ namespace Up2dateConsole
         private readonly ISettings settings;
         private readonly ISession session;
         private readonly IProcessHelper processHelper;
+        private readonly INotifier notifier;
         private bool isSettingsDialogActive = false;
+        private bool canAcceptReject;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session, IProcessHelper processHelper)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session, IProcessHelper processHelper, INotifier notifier)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.session = session ?? throw new ArgumentNullException(nameof(session));
             this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
+            this.notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
+
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
             QuitCommand = new RelayCommand(_ => session.Shutdown());
 
@@ -54,19 +60,20 @@ namespace Up2dateConsole
             LeaveAdminModeCommand = new RelayCommand(_ => session.ToUserMode());
             RefreshCommand = new RelayCommand(async _ => await ExecuteRefresh(), _ => !OperationInProgress);
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
-            AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => CanAcceptReject);
-            RejectCommand = new RelayCommand(async _ => await Accept(false), _ => CanAcceptReject);
+            AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => canAcceptReject);
+            RejectCommand = new RelayCommand(async _ => await Accept(false), _ => canAcceptReject);
             RequestCertificateCommand = new RelayCommand(async _ => await ExecuteRequestCertificateAsync(), _ => IsServiceRunning);
             SettingsCommand = new RelayCommand(ExecuteSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
 
             StatusBar = new StatusBarViewModel(session, EnterAdminModeCommand, processHelper);
+            ToolBar = new ToolBarViewModel(session, RefreshCommand, InstallCommand, AcceptCommand, RejectCommand, RequestCertificateCommand, SettingsCommand);
 
             session.ShuttingDown += Session_ShuttingDown;
 
             AvailablePackages = new ObservableCollection<PackageItem>();
-            CollectionViewSource.GetDefaultView(AvailablePackages).CurrentChanged += (o, e) => OnPropertyChanged(nameof(CanAcceptReject));
+            CollectionViewSource.GetDefaultView(AvailablePackages).CurrentChanged += (o, e) => UpdateCanAcceptReject();
 
             timer.AutoReset = false;
             timer.Start();
@@ -132,6 +139,7 @@ namespace Up2dateConsole
         public ICommand SettingsCommand { get; }
 
         public StatusBarViewModel StatusBar { get; }
+        public ToolBarViewModel ToolBar { get; }
 
         public bool IsAdminMode => session.IsAdminMode;
 
@@ -176,17 +184,20 @@ namespace Up2dateConsole
 
         public ObservableCollection<PackageItem> AvailablePackages { get; }
 
-        public bool CanAcceptReject
+        private void UpdateCanAcceptReject()
         {
-            get
+            IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
+            if (selectedItems.Count != 1)
             {
-                IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
-                if (selectedItems.Count != 1) return false;
-
+                canAcceptReject = false;
+            }
+            else
+            {
                 Package package = selectedItems.First().Package;
-                return package.Status == PackageStatus.WaitingForConfirmation
+                canAcceptReject =  package.Status == PackageStatus.WaitingForConfirmation
                     || package.Status == PackageStatus.WaitingForConfirmationForced;
             }
+            ToolBar.CanAcceptReject = canAcceptReject;
         }
 
         private async Task Timer_Elapsed()
@@ -390,7 +401,7 @@ namespace Up2dateConsole
 
             if (!firstTimeRefresh)
             {
-                NotifyAboutChanges(AvailablePackages, packageItems);
+                notifier.NotifyAboutChanges(AvailablePackages, packageItems);
             }
 
             ThreadHelper.SafeInvoke(() => // collection view can be updated only from UI thread!
@@ -412,7 +423,7 @@ namespace Up2dateConsole
 
             OperationInProgress = false;
 
-            OnPropertyChanged(nameof(CanAcceptReject));
+            UpdateCanAcceptReject();
         }
 
         private void PromptIfCertificateNotAvailable()
@@ -464,83 +475,6 @@ namespace Up2dateConsole
                     break;
                 default:
                     throw new InvalidOperationException($"unsupported status {clientState.Status}");
-            }
-        }
-
-        private void NotifyAboutChanges(IReadOnlyList<PackageItem> oldList, IReadOnlyList<PackageItem> newList)
-        {
-            var changes = new List<(PackageStatus oldStatus, PackageStatus newStatus, PackageItem item)>();
-            foreach (var newListItem in newList)
-            {
-                var oldStatus = oldList.FirstOrDefault(pi => pi.Package.Filepath.Equals(newListItem.Package.Filepath, StringComparison.InvariantCultureIgnoreCase))?.Package.Status ?? PackageStatus.Unavailable;
-                if (oldStatus == newListItem.Package.Status) continue;
-                changes.Add((oldStatus, newListItem.Package.Status, newListItem));
-            }
-
-            IList<PackageItem> SelectChangedItems(Func<PackageStatus, bool> oldStatusCondition, Func<PackageStatus, bool> newStatusCondition)
-            {
-                return changes.Where(p => oldStatusCondition(p.oldStatus) && newStatusCondition(p.newStatus)).Select(p => p.item).ToList();
-            }
-
-            var downloaded = SelectChangedItems(oldStatus => oldStatus == PackageStatus.Unavailable || oldStatus == PackageStatus.Downloading,
-                                                newStatus => newStatus == PackageStatus.Downloaded);
-            if (downloaded.Any())
-            {
-                TryShowToastNotification(Texts.NewPackageAvailable, downloaded.Select(p => GetProductNameAndVersion(p)).Distinct());
-            }
-
-            var waiting = SelectChangedItems(oldStatus => oldStatus != PackageStatus.WaitingForConfirmation,
-                                                newStatus => newStatus == PackageStatus.WaitingForConfirmation);
-            if (waiting.Any())
-            {
-                TryShowToastNotification(Texts.NewPackageWaitingForConfirmation, waiting.Select(p => GetProductNameAndVersion(p)).Distinct());
-            }
-
-            var waitingForced = SelectChangedItems(oldStatus => oldStatus != PackageStatus.WaitingForConfirmationForced,
-                                                newStatus => newStatus == PackageStatus.WaitingForConfirmationForced);
-            if (waitingForced.Any())
-            {
-                TryShowToastNotification(Texts.NewPackageWaitingForConfirmationForced, waitingForced.Select(p => GetProductNameAndVersion(p)).Distinct());
-            }
-
-            var failed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Failed,
-                                            newStatus => newStatus == PackageStatus.Failed);
-            if (failed.Any())
-            {
-                TryShowToastNotification(Texts.PackageInstallationFailed, failed.Select(p => $"{GetProductNameAndVersion(p)}\n({p.ExtraInfo})").Distinct());
-            }
-
-            var installed = SelectChangedItems(oldStatus => oldStatus != PackageStatus.Installed,
-                                               newStatus => newStatus == PackageStatus.Installed);
-            if (installed.Any())
-            {
-                TryShowToastNotification(Texts.NewPackageInstalled, installed.Select(p => GetProductNameAndVersion(p)).Distinct());
-            }
-        }
-
-        private string GetProductNameAndVersion(PackageItem item)
-        {
-            return $"{item.ProductName} {item.Version}";
-        }
-
-        private void TryShowToastNotification(Texts titleId, IEnumerable<string> details = null)
-        {
-            string title = GetText(titleId);
-            try
-            {
-                ToastContentBuilder builder = new ToastContentBuilder().AddText(title);
-                if (details != null)
-                {
-                    foreach (string text in details)
-                    {
-                        builder.AddText(text);
-                    }
-                }
-                builder.Show();
-            }
-            catch
-            {
-                // Just ignore if cannot pop up the tost
             }
         }
 

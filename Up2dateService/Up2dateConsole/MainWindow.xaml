@@ -74,7 +74,7 @@
             </Grid.RowDefinitions>
             <Grid x:Uid="Grid_3" Margin="10,5" >
                 <TextBlock x:Uid="TextBlock_1" VerticalAlignment="Center" Text="Software packages:"/>
-                <toolBar:ToolBar x:Uid="toolBar:ToolBar_1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <toolBar:ToolBar x:Uid="toolBar:ToolBar_1" HorizontalAlignment="Right" VerticalAlignment="Center" DataContext="{Binding ToolBar}"/>
             </Grid>
             <DataGrid x:Uid="DataGrid_1" Grid.Row="1" Margin="10,0,10,4" 
                         Background="White"

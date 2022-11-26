@@ -112,6 +112,8 @@
     <Compile Include="ISettings.cs" />
     <Compile Include="IWcfClientFactory.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Notifier\INotifier.cs" />
+    <Compile Include="Notifier\Notifier.cs" />
     <Compile Include="Properties\Resources.ru-RU.Designer.cs">
       <DependentUpon>Resources.ru-RU.resx</DependentUpon>
       <AutoGen>True</AutoGen>
