@@ -51,6 +51,7 @@
         NewPackageWaitingForConfirmationForced,
         StronglyRecommended,
         CannotRejectInstallation,
+        CannotAcceptInstallation,
         PackageStatusWaiting,
         PackageStatusWaitingForced,
         PackageStatusAccepting,

@@ -77,7 +77,8 @@ namespace Up2dateConsole
             ISession session = new Session.Session(new HookMonitor(false), settings);
             IProcessHelper processHelper = new ProcessHelper();
             INotifier notifier = new Notifier.Notifier(viewService);
-            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session, processHelper, notifier);
+            IServiceHelper serviceHelper = new ServiceHelper();
+            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session, processHelper, notifier, serviceHelper);
 
             mainWindow.Closing += (w, e) =>
             {

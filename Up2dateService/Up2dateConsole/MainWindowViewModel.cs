@@ -26,7 +26,6 @@ namespace Up2dateConsole
     {
         private const int InitialDelay = 1000; // milliseconds
         private const int RefreshInterval = 20000; // milliseconds
-        private const string ServiceName = "Up2dateService";
 
         private static bool firstTimeRefresh = true;
 
@@ -40,11 +39,13 @@ namespace Up2dateConsole
         private readonly ISession session;
         private readonly IProcessHelper processHelper;
         private readonly INotifier notifier;
+        private readonly IServiceHelper serviceHelper;
         private bool isSettingsDialogActive = false;
         private bool canAcceptReject;
         private bool canDelete;
 
-        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session, IProcessHelper processHelper, INotifier notifier)
+        public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session,
+            IProcessHelper processHelper, INotifier notifier, IServiceHelper serviceHelper)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
@@ -52,7 +53,7 @@ namespace Up2dateConsole
             this.session = session ?? throw new ArgumentNullException(nameof(session));
             this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
             this.notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
-
+            this.serviceHelper = serviceHelper ?? throw new ArgumentNullException(nameof(serviceHelper));
             ShowConsoleCommand = new RelayCommand(_ => viewService.ShowMainWindow());
             QuitCommand = new RelayCommand(_ => session.Shutdown());
 
@@ -114,40 +115,20 @@ namespace Up2dateConsole
 
         private async Task ExecuteStopService()
         {
-            try
+            string error = serviceHelper.StopService();
+            if (!string.IsNullOrEmpty(error))
             {
-                using (ServiceController sc = new ServiceController(ServiceName))
-                {
-                    if (!sc.Status.Equals(ServiceControllerStatus.Stopped) && !sc.Status.Equals(ServiceControllerStatus.StopPending))
-                    {
-                        sc.Stop();
-                        ServiceHelper.ChangeStartMode(sc, ServiceStartMode.Manual);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                viewService.ShowMessageBox(viewService.GetText(Texts.CannotStopService) + "\n" + e.Message);
+                viewService.ShowMessageBox(viewService.GetText(Texts.CannotStopService) + "\n" + error);
             }
             await ExecuteRefresh();
         }
 
         private async Task ExecuteStartService()
         {
-            try
+            string error = serviceHelper.StartService();
+            if (!string.IsNullOrEmpty(error))
             {
-                using (ServiceController sc = new ServiceController(ServiceName))
-                {
-                    if (!sc.Status.Equals(ServiceControllerStatus.Running) && !sc.Status.Equals(ServiceControllerStatus.StartPending))
-                    {
-                        ServiceHelper.ChangeStartMode(sc, ServiceStartMode.Automatic);
-                        sc.Start();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                viewService.ShowMessageBox(viewService.GetText(Texts.CannotStartService) + "\n" + e.Message);
+                viewService.ShowMessageBox(viewService.GetText(Texts.CannotStopService) + "\n" + error);
             }
             await ExecuteRefresh();
         }
@@ -308,7 +289,7 @@ namespace Up2dateConsole
 
             if (!string.IsNullOrEmpty(error))
             {
-                viewService.ShowMessageBox($"{GetText(Texts.CannotRejectInstallation)}\n{error}");
+                viewService.ShowMessageBox($"{GetText(accept ? Texts.CannotAcceptInstallation : Texts.CannotRejectInstallation)}\n{error}");
             }
 
             await ExecuteRefresh();
@@ -506,16 +487,7 @@ namespace Up2dateConsole
             }
         }
 
-        public bool IsServiceRunning
-        {
-            get
-            {
-                using (ServiceController sc = new ServiceController(ServiceName))
-                {
-                    return sc.Status.Equals(ServiceControllerStatus.Running);
-                }
-            }
-        }
+        public bool IsServiceRunning => serviceHelper.IsServiceRunning;
 
         private string GetText(Texts text)
         {
