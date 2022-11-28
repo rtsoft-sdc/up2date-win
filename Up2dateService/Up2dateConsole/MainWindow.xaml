@@ -78,7 +78,7 @@
             </Grid>
             <DataGrid x:Uid="DataGrid_1" Grid.Row="1" Margin="10,0,10,4" 
                         Background="White"
-                        SelectionMode="Extended"
+                        SelectionMode="Single"
                         RowHeight="20"
                         SelectionUnit="FullRow"
                         AutoGenerateColumns="False"
