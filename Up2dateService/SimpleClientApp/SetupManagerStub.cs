@@ -19,6 +19,11 @@ namespace SimpleClientApp
         {
         }
 
+        public Result DeletePackage(Package package)
+        {
+            return Result.Successful();
+        }
+
         public Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact)
         {
             return Result.Successful();
