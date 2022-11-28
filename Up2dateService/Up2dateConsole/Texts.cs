@@ -61,6 +61,8 @@
         InstallationPolicy,
         ConsoleSecurity,
         BadConnectionMessage,
-        GoodConnectionMessage
+        GoodConnectionMessage,
+        ConfirmDeleteFmt,
+        CannotDeletePackage
     }
 }

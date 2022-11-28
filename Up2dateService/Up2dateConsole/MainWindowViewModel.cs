@@ -42,6 +42,7 @@ namespace Up2dateConsole
         private readonly INotifier notifier;
         private bool isSettingsDialogActive = false;
         private bool canAcceptReject;
+        private bool canDelete;
 
         public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session, IProcessHelper processHelper, INotifier notifier)
         {
@@ -61,22 +62,49 @@ namespace Up2dateConsole
             InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
             AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => canAcceptReject);
             RejectCommand = new RelayCommand(async _ => await Accept(false), _ => canAcceptReject);
+            DeleteCommand = new RelayCommand(async _ => await Delete(), _ => canDelete);
             RequestCertificateCommand = new RelayCommand(async _ => await RequestCertificateAsync(showExplanation: false), _ => IsServiceRunning);
             SettingsCommand = new RelayCommand(ExecuteSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
             StopServiceCommand = new RelayCommand(async _ => await ExecuteStopService(), _ => IsServiceRunning);
 
             StatusBar = new StatusBarViewModel(session, EnterAdminModeCommand, processHelper);
-            ToolBar = new ToolBarViewModel(session, RefreshCommand, InstallCommand, AcceptCommand, RejectCommand, RequestCertificateCommand, SettingsCommand);
+            ToolBar = new ToolBarViewModel(session, RefreshCommand, InstallCommand, AcceptCommand, RejectCommand, DeleteCommand, RequestCertificateCommand, SettingsCommand);
 
             session.ShuttingDown += Session_ShuttingDown;
 
             AvailablePackages = new ObservableCollection<PackageItem>();
-            CollectionViewSource.GetDefaultView(AvailablePackages).CurrentChanged += (o, e) => UpdateCanAcceptReject();
+            CollectionViewSource.GetDefaultView(AvailablePackages).CurrentChanged += (o, e) => OnCurrentChanged();
 
             timer.AutoReset = false;
             timer.Start();
             timer.Elapsed += async (o, e) => await Timer_Elapsed();
+        }
+
+        private async Task Delete()
+        {
+            IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
+            if (selectedItems.Count != 1) return;
+
+            PackageItem seletedItem = selectedItems.First();
+
+            if (MessageBoxResult.Cancel == viewService.ShowMessageBox(string.Format(GetText(Texts.ConfirmDeleteFmt), seletedItem.ProductName, seletedItem.Version), MessageBoxButton.OKCancel))
+            {
+                return;
+            }
+
+            string error = await CallServiceAsync(async service =>
+            {
+                Result r = await service.DeletePackageAsync(seletedItem.Package);
+                return r.Success ? string.Empty : r.ErrorMessage;
+            });
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                viewService.ShowMessageBox($"{GetText(Texts.CannotDeletePackage)}\n{error}");
+            }
+
+            await ExecuteRefresh();
         }
 
         private void Session_ShuttingDown(object sender, EventArgs e)
@@ -130,6 +158,7 @@ namespace Up2dateConsole
         public ICommand InstallCommand { get; }
         public ICommand AcceptCommand { get; }
         public ICommand RejectCommand { get; }
+        public ICommand DeleteCommand { get; }
         public ICommand ShowConsoleCommand { get; }
         public ICommand StartServiceCommand { get; }
         public ICommand StopServiceCommand { get; }
@@ -183,20 +212,24 @@ namespace Up2dateConsole
 
         public ObservableCollection<PackageItem> AvailablePackages { get; }
 
-        private void UpdateCanAcceptReject()
+        private void OnCurrentChanged()
         {
             IList<PackageItem> selectedItems = AvailablePackages.Where(p => p.IsSelected).ToList();
             if (selectedItems.Count != 1)
             {
                 canAcceptReject = false;
+                canDelete = false;
             }
             else
             {
                 Package package = selectedItems.First().Package;
                 canAcceptReject =  package.Status == PackageStatus.WaitingForConfirmation
                     || package.Status == PackageStatus.WaitingForConfirmationForced;
+                canDelete = package.Status == PackageStatus.Rejected
+                    || package.Status == PackageStatus.Downloaded;
             }
             ToolBar.CanAcceptReject = canAcceptReject;
+            ToolBar.CanDelete = canDelete;
         }
 
         private async Task Timer_Elapsed()
@@ -270,6 +303,7 @@ namespace Up2dateConsole
                 {
                     await service.RejectInstallationAsync(package);
                 }
+                return string.Empty;
             });
 
             if (!string.IsNullOrEmpty(error))
@@ -300,6 +334,7 @@ namespace Up2dateConsole
             string error = await CallServiceAsync(async service =>
             {
                 await service.StartInstallationAsync(selectedPackages);
+                return string.Empty;
             });
 
             if (!string.IsNullOrEmpty(error))
@@ -319,6 +354,7 @@ namespace Up2dateConsole
                 packages = await service.GetPackagesAsync();
                 MsiFolder = await service.GetMsiFolderAsync();
                 StatusBar.SetConnectionInfo(await service.GetDeviceIdAsync(), await service.GetTenantAsync(), await service.GetHawkbitEndpointAsync());
+                return string.Empty;
             });
 
             if (!string.IsNullOrEmpty(error))
@@ -360,7 +396,7 @@ namespace Up2dateConsole
 
             OperationInProgress = false;
 
-            UpdateCanAcceptReject();
+            OnCurrentChanged();
         }
 
         private void PromptIfCertificateNotAvailable()
@@ -486,15 +522,15 @@ namespace Up2dateConsole
             return viewService.GetText(text);
         }
 
-        private async Task<string> CallServiceAsync(Func<IWcfService, Task> callAsync)
+        private async Task<string> CallServiceAsync(Func<IWcfService, Task<string>> callAsync)
         {
             OperationInProgress = true;
-            string error = string.Empty;
             IWcfService service = null;
+            string error = string.Empty;
             try
             {
                 service = wcfClientFactory.CreateClient();
-                await callAsync(service);
+                error = await callAsync(service);
                 ServiceState = ServiceState.Active;
                 StatusBar.SetInfo(GetText(Texts.Active));
                 var clientState = service.GetClientState();
@@ -515,8 +551,8 @@ namespace Up2dateConsole
             finally
             {
                 wcfClientFactory.CloseClient(service);
+                OperationInProgress = false;
             }
-            OperationInProgress = false;
 
             return error;
         }

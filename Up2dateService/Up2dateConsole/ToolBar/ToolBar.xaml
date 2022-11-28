@@ -31,6 +31,10 @@
                 Style="{StaticResource StandardButton}"
                 ToolTip="Reject installation of the selected package."
                 Visibility="{Binding CanAcceptReject, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Button x:Uid="Button_6" Width="100" Content="Delete" Command="{Binding DeleteCommand}"
+                Style="{StaticResource StandardButton}"
+                ToolTip="Delete selected package."
+                Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <StackPanel x:Uid="StackPanel_8" Orientation="Horizontal" VerticalAlignment="Center"
                     Visibility="{Binding IsAdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button x:Uid="Button2" Width="100" Content="Install" Command="{Binding InstallCommand}"
