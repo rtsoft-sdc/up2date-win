@@ -9,6 +9,7 @@ namespace Up2dateConsole.ToolBar
         private readonly ISession session;
         private bool canAcceptReject;
         private bool canDelete;
+        private bool canInstall;
 
         public ToolBarViewModel(ISession session, ICommand refreshCommand, ICommand installCommand, ICommand acceptCommand,
             ICommand rejectCommand, ICommand deleteCommand, ICommand requestCertificateCommand, ICommand settingsCommand)
@@ -42,6 +43,17 @@ namespace Up2dateConsole.ToolBar
             {
                 if (canDelete == value) return;
                 canDelete = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool CanInstall
+        {
+            get => canInstall;
+            set
+            {
+                if (canInstall == value) return;
+                canInstall = value;
                 OnPropertyChanged();
             }
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -43,6 +42,7 @@ namespace Up2dateConsole
         private bool isSettingsDialogActive = false;
         private bool canAcceptReject;
         private bool canDelete;
+        private bool canInstall;
 
         public MainWindowViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, ISettings settings, ISession session,
             IProcessHelper processHelper, INotifier notifier, IServiceHelper serviceHelper)
@@ -60,10 +60,10 @@ namespace Up2dateConsole
             EnterAdminModeCommand = new RelayCommand(_ => session.ToAdminMode());
             LeaveAdminModeCommand = new RelayCommand(_ => session.ToUserMode());
             RefreshCommand = new RelayCommand(async _ => await ExecuteRefresh(), _ => !OperationInProgress);
-            InstallCommand = new RelayCommand(ExecuteInstall, CanInstall);
-            AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => canAcceptReject);
-            RejectCommand = new RelayCommand(async _ => await Accept(false), _ => canAcceptReject);
-            DeleteCommand = new RelayCommand(async _ => await Delete(), _ => canDelete);
+            InstallCommand = new RelayCommand(ExecuteInstall, _ => canInstall && IsServiceRunning);
+            AcceptCommand = new RelayCommand(async _ => await Accept(true), _ => canAcceptReject && IsServiceRunning);
+            RejectCommand = new RelayCommand(async _ => await Accept(false), _ => canAcceptReject && IsServiceRunning);
+            DeleteCommand = new RelayCommand(async _ => await Delete(), _ => canDelete && IsServiceRunning);
             RequestCertificateCommand = new RelayCommand(async _ => await RequestCertificateAsync(showExplanation: false), _ => IsServiceRunning);
             SettingsCommand = new RelayCommand(ExecuteSettings);
             StartServiceCommand = new RelayCommand(async _ => await ExecuteStartService(), _ => !IsServiceRunning);
@@ -200,17 +200,23 @@ namespace Up2dateConsole
             {
                 canAcceptReject = false;
                 canDelete = false;
+                canInstall = false;
             }
             else
             {
                 Package package = selectedItems.First().Package;
                 canAcceptReject =  package.Status == PackageStatus.WaitingForConfirmation
                     || package.Status == PackageStatus.WaitingForConfirmationForced;
-                canDelete = package.Status == PackageStatus.Rejected
-                    || package.Status == PackageStatus.Downloaded;
+                canDelete = package.Status == PackageStatus.Downloaded
+                    || package.Status == PackageStatus.Rejected
+                    || package.Status == PackageStatus.Failed;
+                canInstall = package.Status == PackageStatus.Downloaded
+                    || package.Status == PackageStatus.Rejected
+                    || package.Status == PackageStatus.Failed;
             }
             ToolBar.CanAcceptReject = canAcceptReject;
             ToolBar.CanDelete = canDelete;
+            ToolBar.CanInstall = canInstall;
         }
 
         private async Task Timer_Elapsed()
@@ -293,14 +299,6 @@ namespace Up2dateConsole
             }
 
             await ExecuteRefresh();
-        }
-
-        private bool CanInstall(object _)
-        {
-            List<PackageItem> selected = AvailablePackages.Where(p => p.IsSelected).ToList();
-            return selected.Any() && selected.All(p => p.Package.Status == PackageStatus.Downloaded
-                                                    || p.Package.Status == PackageStatus.Rejected
-                                                    || p.Package.Status == PackageStatus.Failed);
         }
 
         private async void ExecuteInstall(object _)
