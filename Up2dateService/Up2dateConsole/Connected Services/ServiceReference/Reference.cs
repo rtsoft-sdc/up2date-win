@@ -1005,6 +1005,12 @@ namespace Up2dateConsole.ServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetupSecureConnection", ReplyAction="http://tempuri.org/IWcfService/SetupSecureConnectionResponse")]
         System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> SetupSecureConnectionAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/DeletePackage", ReplyAction="http://tempuri.org/IWcfService/DeletePackageResponse")]
+        Up2dateConsole.ServiceReference.Result DeletePackage(Up2dateConsole.ServiceReference.Package package);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/DeletePackage", ReplyAction="http://tempuri.org/IWcfService/DeletePackageResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> DeletePackageAsync(Up2dateConsole.ServiceReference.Package package);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1288,6 +1294,14 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> SetupSecureConnectionAsync() {
             return base.Channel.SetupSecureConnectionAsync();
+        }
+        
+        public Up2dateConsole.ServiceReference.Result DeletePackage(Up2dateConsole.ServiceReference.Package package) {
+            return base.Channel.DeletePackage(package);
+        }
+        
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.Result> DeletePackageAsync(Up2dateConsole.ServiceReference.Package package) {
+            return base.Channel.DeletePackageAsync(package);
         }
     }
 }

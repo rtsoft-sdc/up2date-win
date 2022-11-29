@@ -83,7 +83,7 @@
                 Command="{Binding EnterAdminModeCommand}"
                 Visibility="{Binding IsUserMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel x:Uid="StackPanel_6" Orientation="Horizontal">
-                <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="Images/UAC.png" VerticalAlignment="Center"/>
+                <Image x:Uid="Image_1" Stretch="Fill" Width="16" Height="16" Source="../Images/UAC.png" VerticalAlignment="Center"/>
                 <TextBlock x:Uid="TextBlock_5" Margin="5,0,0,0" Text="To admin mode..."  VerticalAlignment="Center"/>
             </StackPanel>
         </Button>

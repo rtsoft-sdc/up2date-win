@@ -102,5 +102,8 @@ namespace Up2dateService
 
         [OperationContract]
         Result SetupSecureConnection();
+
+        [OperationContract]
+        Result DeletePackage(Package package);
     }
 }

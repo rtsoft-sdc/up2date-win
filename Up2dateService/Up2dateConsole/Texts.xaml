@@ -7,6 +7,8 @@
     <clr:String x:Uid="clr:String_3" x:Key="ServiceNotResponding">RITMS UP2DATE Agent service is not responding. Please check if Up2dateService is running.</clr:String>
     <clr:String x:Uid="clr:String_4" x:Key="CannotStartInstallation">Cannot start installation:</clr:String>
     <clr:String x:Uid="clr:String_52" x:Key="CannotRejectInstallation">Cannot reject installation:</clr:String>
+    <clr:String x:Uid="clr:String_66" x:Key="CannotAcceptInstallation">Cannot accept installation:</clr:String>
+    <clr:String x:Uid="clr:String_65" x:Key="CannotDeletePackage">Cannot delete package:</clr:String>
     <clr:String x:Uid="clr:String_5" x:Key="ServiceAccessError">Error accessing RITMS UP2DATE Agent service.</clr:String>
     <clr:String x:Uid="clr:String_6" x:Key="DeviceNotInitialized">This device has not initialized to connect RITMS UP2DATE. You should enter one-time key or directly load authorization certificate. Note that this action requires administrative privileges.</clr:String>
     <clr:String x:Uid="clr:String_48" x:Key="MachineGuidHint">Requesting one-time key from RITMS UP2DATE administartor you should provide your machine GUID, which you can find and copy at the bottom of the authorization window. Click OK to proceed.</clr:String>
@@ -71,4 +73,5 @@
 
     <clr:String x:Uid="clr:String_62" x:Key="BadConnectionMessage">Failed to establish server connection. Please check entered URL, device ID and token.</clr:String>
     <clr:String x:Uid="clr:String_63" x:Key="GoodConnectionMessage">Server connection successfully established.</clr:String>
+    <clr:String x:Uid="clr:String_64" x:Key="ConfirmDeleteFmt">Are you sure you want to delete package {0} {1}?</clr:String>
 </ResourceDictionary>

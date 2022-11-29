@@ -399,4 +399,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="DeletePackage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="package" type="q15:Package" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeletePackageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://RTSoft.Ritms.Up2date.win" minOccurs="0" name="DeletePackageResult" type="q16:Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

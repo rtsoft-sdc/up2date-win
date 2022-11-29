@@ -240,5 +240,10 @@ namespace Up2dateService
             settingsManager.SecureAuthorizationMode = true;
             return Result.Successful();
         }
+
+        public Result DeletePackage(Package package)
+        {
+            return setupManager.DeletePackage(package);
+        }
     }
 }

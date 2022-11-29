@@ -8,6 +8,7 @@ using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
+using Up2dateConsole.Notifier;
 using Up2dateConsole.Session;
 using Up2dateConsole.ViewService;
 
@@ -75,7 +76,9 @@ namespace Up2dateConsole
             ISettings settings = new Settings();
             ISession session = new Session.Session(new HookMonitor(false), settings);
             IProcessHelper processHelper = new ProcessHelper();
-            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session, processHelper);
+            INotifier notifier = new Notifier.Notifier(viewService);
+            IServiceHelper serviceHelper = new ServiceHelper();
+            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session, processHelper, notifier, serviceHelper);
 
             mainWindow.Closing += (w, e) =>
             {
