@@ -29,6 +29,12 @@ namespace Up2dateService
         ClientState GetClientState();
 
         [OperationContract]
+        string GetHawkbitEndpoint();
+
+        [OperationContract]
+        string GetTenant();
+
+        [OperationContract]
         string GetDeviceId();
 
         [OperationContract]
@@ -96,5 +102,8 @@ namespace Up2dateService
 
         [OperationContract]
         Result SetupSecureConnection();
+
+        [OperationContract]
+        Result DeletePackage(Package package);
     }
 }

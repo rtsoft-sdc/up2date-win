@@ -184,6 +184,11 @@ namespace Up2dateService.SetupManager
             return false;
         }
 
+        public Result DeletePackage(Package package)
+        {
+            return SafeRemovePackage(package.Filepath, deleteFile: true);
+        }
+
         private Result<bool> CheckMD5(string filename, string expectedMd5hex)
         {
             const int maxAttempts = 10; // max attemts to read the file in case it is blocked by another process
@@ -341,15 +346,27 @@ namespace Up2dateService.SetupManager
             };
         }
 
-        private void SafeRemovePackage(string filepath, PackageStatus status)
+        private Result SafeRemovePackage(string filepath, bool deleteFile)
         {
             lock (packagesLock)
             {
                 Package package = FindPackage(filepath);
-                if (package.Status == status)
+                if (package.Status != PackageStatus.Unavailable)
                 {
+                    if (deleteFile)
+                    {
+                        try
+                        {
+                            File.Delete(package.Filepath);
+                        }
+                        catch (Exception ex)
+                        {
+                            return Result.Failed(ex.Message);
+                        }
+                    }
                     packages.Remove(package);
                 }
+                return Result.Successful();
             };
         }
 

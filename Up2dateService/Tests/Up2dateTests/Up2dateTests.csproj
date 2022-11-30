@@ -60,8 +60,8 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Up2dateDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\up2date.net.2.0.0\lib\net472\Up2dateDotNet.dll</HintPath>
+    <Reference Include="Up2dateDotNet, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\up2date.net.2.1.0\lib\net472\Up2dateDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +71,7 @@
     <Compile Include="Up2dateConsole\Dialogs\Settings\ConsoleSecurityTabViewModelTest.cs" />
     <Compile Include="Up2dateConsole\Dialogs\Settings\InstallationPolicyTabViewModelTest.cs" />
     <Compile Include="Up2dateConsole\Dialogs\Settings\ServerConnectionTabViewModelTest.cs" />
+    <Compile Include="Up2dateConsole\StatusBar\StatusBarViewModelTest.cs" />
     <Compile Include="Up2dateService\SettingsManagerTest.cs" />
     <Compile Include="Up2dateShared\SignatureVerifierTest.cs" />
   </ItemGroup>

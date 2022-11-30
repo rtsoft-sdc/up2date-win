@@ -102,14 +102,19 @@
     <Compile Include="Helpers\InactivityMonitor\User32.cs" />
     <Compile Include="Helpers\InactivityMonitor\Win32Hook.cs" />
     <Compile Include="Helpers\InvertBooleanToVisibilityConverter.cs" />
+    <Compile Include="Helpers\IProcessHelper.cs" />
+    <Compile Include="Helpers\IServiceHelper.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
+    <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="ISettings.cs" />
     <Compile Include="IWcfClientFactory.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Notifier\INotifier.cs" />
+    <Compile Include="Notifier\Notifier.cs" />
     <Compile Include="Properties\Resources.ru-RU.Designer.cs">
       <DependentUpon>Resources.ru-RU.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -122,7 +127,15 @@
     <Compile Include="StateIndicator\StateIndicator.xaml.cs">
       <DependentUpon>StateIndicator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StatusBar\StatusBar.xaml.cs">
+      <DependentUpon>StatusBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StatusBar\StatusBarViewModel.cs" />
     <Compile Include="Texts.cs" />
+    <Compile Include="ToolBar\ToolBar.xaml.cs">
+      <DependentUpon>ToolBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ToolBar\ToolBarViewModel.cs" />
     <Compile Include="ViewService\IDialogViewModel.cs" />
     <Compile Include="ViewService\IViewService.cs" />
     <Compile Include="Helpers\ThreadHelper.cs" />
@@ -169,11 +182,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="StatusBar\StatusBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Texts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ToolBar\ToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

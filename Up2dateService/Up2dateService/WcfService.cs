@@ -17,23 +17,21 @@ namespace Up2dateService
         private readonly ISetupManager setupManager;
         private readonly Func<SystemInfo> getSysInfo;
         private readonly Func<string> getDownloadLocation;
-        private readonly Func<ClientState> getClientState;
-        private readonly Action forceClientPoll;
+        private readonly IClient client;
         private readonly ICertificateProvider certificateProvider;
         private readonly ICertificateManager certificateManager;
         private readonly ISettingsManager settingsManager;
         private readonly ISignatureVerifier signatureVerifier;
         private readonly IWhiteListManager whiteListManager;
 
-        public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, Func<ClientState> getClientState, Action forceClientPoll,
+        public WcfService(ISetupManager setupManager, Func<SystemInfo> getSysInfo, Func<string> getDownloadLocation, IClient client,
             ICertificateProvider certificateProvider, ICertificateManager certificateManager,
             ISettingsManager settingsManager, ISignatureVerifier signatureVerifier, IWhiteListManager whiteListManager)
         {
             this.setupManager = setupManager ?? throw new ArgumentNullException(nameof(setupManager));
             this.getSysInfo = getSysInfo ?? throw new ArgumentNullException(nameof(getSysInfo));
             this.getDownloadLocation = getDownloadLocation ?? throw new ArgumentNullException(nameof(getDownloadLocation));
-            this.getClientState = getClientState ?? throw new ArgumentNullException(nameof(getClientState));
-            this.forceClientPoll = forceClientPoll ?? throw new ArgumentNullException(nameof(forceClientPoll));
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
             this.certificateProvider = certificateProvider ?? throw new ArgumentNullException(nameof(certificateProvider));
             this.certificateManager = certificateManager ?? throw new ArgumentNullException(nameof(certificateManager));
             this.settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
@@ -60,13 +58,13 @@ namespace Up2dateService
         public void AcceptInstallation(Package package)
         {
             setupManager.AcceptPackage(package);
-            forceClientPoll();
+            client.RequestToPoll();
         }
 
         public void RejectInstallation(Package package)
         {
             setupManager.RejectPackage(package);
-            forceClientPoll();
+            client.RequestToPoll();
         }
 
         public string GetMsiFolder()
@@ -76,7 +74,23 @@ namespace Up2dateService
 
         public ClientState GetClientState()
         {
-            return getClientState();
+            return client.State;
+        }
+
+        public string GetHawkbitEndpoint()
+        {
+            return client.HawkbitEndpoint;
+        }
+
+        public string GetTenant()
+        {
+            if (settingsManager.SecureAuthorizationMode)
+            {
+                return certificateManager.IsCertificateAvailable()
+                    ? certificateManager.CertificateIssuerName
+                    : string.Empty;
+            }
+            return string.Empty;
         }
 
         public string GetDeviceId()
@@ -225,6 +239,11 @@ namespace Up2dateService
         {
             settingsManager.SecureAuthorizationMode = true;
             return Result.Successful();
+        }
+
+        public Result DeletePackage(Package package)
+        {
+            return setupManager.DeletePackage(package);
         }
     }
 }

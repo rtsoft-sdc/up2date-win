@@ -8,6 +8,7 @@ using Up2dateConsole.Dialogs.RequestCertificate;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
+using Up2dateConsole.Notifier;
 using Up2dateConsole.Session;
 using Up2dateConsole.ViewService;
 
@@ -39,8 +40,15 @@ namespace Up2dateConsole
                 return;
             }
 
-            var suppressGuard = CommandLineHelper.IsPresent(CommandLineHelper.AllowSecondInstanceCommand);
-            new SingleInstanceHelper(this, ShowMainWindow).Guard(suppressGuard);
+            var allowSecondInstance = CommandLineHelper.IsPresent(CommandLineHelper.AllowSecondInstanceCommand);
+
+            var singleInstanceHelper = new SingleInstanceHelper(this, ShowMainWindow);
+            if (singleInstanceHelper.IsAnotherInstanceRunning() && !allowSecondInstance)
+            {
+                Shutdown();
+                return;
+            }
+            singleInstanceHelper.SetGuard();
 
             base.OnStartup(e);
 
@@ -67,7 +75,10 @@ namespace Up2dateConsole
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
             ISettings settings = new Settings();
             ISession session = new Session.Session(new HookMonitor(false), settings);
-            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session);
+            IProcessHelper processHelper = new ProcessHelper();
+            INotifier notifier = new Notifier.Notifier(viewService);
+            IServiceHelper serviceHelper = new ServiceHelper();
+            mainWindow.DataContext = new MainWindowViewModel(viewService, wcfClientFactory, settings, session, processHelper, notifier, serviceHelper);
 
             mainWindow.Closing += (w, e) =>
             {
