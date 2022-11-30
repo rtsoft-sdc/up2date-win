@@ -20,5 +20,6 @@ namespace Up2dateShared
         Result DownloadPackage(string artifactFileName, string artifactFileHashMd5, Action<string> downloadArtifact);
         bool Cancel(int actionId);
         void CreateOrUpdatePackage(string artifactFileName, int id);
+        Result DeletePackage(Package package);
     }
 }

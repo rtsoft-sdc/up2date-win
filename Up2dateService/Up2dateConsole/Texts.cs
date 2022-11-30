@@ -51,6 +51,7 @@
         NewPackageWaitingForConfirmationForced,
         StronglyRecommended,
         CannotRejectInstallation,
+        CannotAcceptInstallation,
         PackageStatusWaiting,
         PackageStatusWaitingForced,
         PackageStatusAccepting,
@@ -61,6 +62,8 @@
         InstallationPolicy,
         ConsoleSecurity,
         BadConnectionMessage,
-        GoodConnectionMessage
+        GoodConnectionMessage,
+        ConfirmDeleteFmt,
+        CannotDeletePackage
     }
 }

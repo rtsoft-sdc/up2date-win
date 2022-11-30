@@ -5,12 +5,65 @@ using System.ServiceProcess;
 
 namespace Up2dateConsole.Helpers
 {
-    public static class ServiceHelper
+    public class ServiceHelper : IServiceHelper
     {
+        private const string ServiceName = "Up2dateService";
+
         private const uint SERVICE_NO_CHANGE = 0xFFFFFFFF;
         private const uint SERVICE_QUERY_CONFIG = 0x00000001;
         private const uint SERVICE_CHANGE_CONFIG = 0x00000002;
         private const uint SC_MANAGER_ALL_ACCESS = 0x000F003F;
+
+        public string StopService()
+        {
+            try
+            {
+                using (ServiceController sc = new ServiceController(ServiceName))
+                {
+                    if (!sc.Status.Equals(ServiceControllerStatus.Stopped) && !sc.Status.Equals(ServiceControllerStatus.StopPending))
+                    {
+                        sc.Stop();
+                        ServiceHelper.ChangeStartMode(sc, ServiceStartMode.Manual);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+            return string.Empty;
+        }
+
+        public string StartService()
+        {
+            try
+            {
+                using (ServiceController sc = new ServiceController(ServiceName))
+                {
+                    if (!sc.Status.Equals(ServiceControllerStatus.Running) && !sc.Status.Equals(ServiceControllerStatus.StartPending))
+                    {
+                        ServiceHelper.ChangeStartMode(sc, ServiceStartMode.Automatic);
+                        sc.Start();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+            return string.Empty;
+        }
+
+        public bool IsServiceRunning
+        {
+            get
+            {
+                using (ServiceController sc = new ServiceController(ServiceName))
+                {
+                    return sc.Status.Equals(ServiceControllerStatus.Running);
+                }
+            }
+        }
 
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool ChangeServiceConfig(
@@ -35,7 +88,7 @@ namespace Up2dateConsole.Helpers
         [DllImport("advapi32.dll", EntryPoint = "CloseServiceHandle")]
         private static extern int CloseServiceHandle(IntPtr hSCObject);
 
-        public static void ChangeStartMode(ServiceController svc, ServiceStartMode mode)
+        private static void ChangeStartMode(ServiceController svc, ServiceStartMode mode)
         {
             IntPtr scManagerHandle = OpenSCManager(null, null, SC_MANAGER_ALL_ACCESS);
             if (scManagerHandle == IntPtr.Zero)

@@ -1312,6 +1312,44 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_DeletePackage_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_DeletePackage_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
@@ -1514,6 +1552,12 @@
   <wsdl:message name="IWcfService_SetupSecureConnection_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetupSecureConnectionResponse" />
   </wsdl:message>
+  <wsdl:message name="IWcfService_DeletePackage_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePackage" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_DeletePackage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePackageResponse" />
+  </wsdl:message>
   <wsdl:portType name="IWcfService">
     <wsdl:operation name="GetPackages">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetPackages" message="tns:IWcfService_GetPackages_InputMessage" />
@@ -1642,6 +1686,10 @@
     <wsdl:operation name="SetupSecureConnection">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SetupSecureConnection" message="tns:IWcfService_SetupSecureConnection_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SetupSecureConnectionResponse" message="tns:IWcfService_SetupSecureConnection_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePackage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/DeletePackage" message="tns:IWcfService_DeletePackage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/DeletePackageResponse" message="tns:IWcfService_DeletePackage_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSHttpBinding_IWcfService" type="tns:IWcfService">
@@ -1996,6 +2044,17 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_SetupSecureConnection_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePackage">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/DeletePackage" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_DeletePackage_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_DeletePackage_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
