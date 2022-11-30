@@ -5,7 +5,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>up2date</id>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
     <packageSourceUrl>https://github.com/rtsoft-gmbh/up2date-win</packageSourceUrl>
     <owners>RTSoft</owners>
     <title>RITMS UP2DATE Client</title>
