@@ -238,6 +238,7 @@ namespace Up2dateService.SetupManager
         {
             if (IsSetPackageInProgressFlag(package))
             {
+                logger.WriteEntry($"PackageInProgress flag is detected for the package {package.ProductName}. Status = {package.Status}");
                 ClearPackageInProgressFlag();
                 if (package.Status == PackageStatus.Installed) return InstallPackageResult.Success;
                 if (package.Status == PackageStatus.RestartNeeded) return InstallPackageResult.RestartNeeded;
