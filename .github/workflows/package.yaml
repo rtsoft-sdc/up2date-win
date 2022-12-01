@@ -43,15 +43,15 @@ jobs:
       - name: Prepare Install Script
         shell: powershell
         run: |
-          $content=(Get-Content -path tools\chocolateyinstall.ps1 -Raw)
+          $contentVerify=(Get-Content -path tools\VERIFICATION.txt -Raw)
           $checksum=(checksum -t sha256 -f tools\Up2dateSetup32.msi)
-          $replaceTo="checksum      = '$checksum'"
-          $replaced=$content -replace 'checksum      = ''(.*)''',$replaceTo
+          $replaceTo="checksum for Up2dateSetup32.msi = '$checksum'"
+          $replacedVerify=$contentVerify -replace 'checksum for Up2dateSetup32.msi = ''(.*)''',$replaceTo
           $checksum=(checksum -t sha256 -f tools\Up2dateSetup64.msi)
-          $content=$replaced
-          $replaceTo="checksum64    = '$checksum'"
-          $replaced=$content -replace 'checksum64    = ''(.*)''',$replaceTo
-          echo $replaced | Set-Content -Path tools\chocolateyinstall.ps1
+          $contentVerify=$replacedVerify
+          $replaceTo="checksum for Up2dateSetup64.msi = '$checksum'"
+          $replacedVerify=$contentVerify -replace 'checksum for Up2dateSetup64.msi = ''(.*)''',$replaceTo
+          echo $replacedVerify | Set-Content -Path tools\VERIFICATION.txt
         working-directory: package\
 
       - name: Pack Choco NUPKG
