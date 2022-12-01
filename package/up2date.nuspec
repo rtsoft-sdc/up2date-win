@@ -14,7 +14,7 @@
     <iconUrl>https://rawcdn.githack.com/rtsoft-gmbh/up2date-win/f344a0daeab66758538d53a6255a1d1f0c4bef72/Up2dateService/Up2dateConsole/Images/Logo.ico</iconUrl>
     <copyright>2022 RTSoft</copyright>
     <licenseUrl>https://raw.githubusercontent.com/rtsoft-gmbh/up2date-win/master/LICENSE</licenseUrl>
-	<requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <bugTrackerUrl>https://github.com/rtsoft-gmbh/up2date-win/issues</bugTrackerUrl>
     <tags>up2date</tags>
     <summary>RITMS UP2DATE Client</summary>
