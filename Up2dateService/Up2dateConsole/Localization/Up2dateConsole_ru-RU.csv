@@ -402,6 +402,7 @@ Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_4:System.Win
 Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridTemplateColumn.$Content,None,True,True,,,,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridColumn.Header,None,True,True,,Статус,Status,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridColumn.MinWidth,None,False,True,,100,100,
+Up2dateConsole.g.en-US.resources:mainwindow.baml,DataGridTextColumn_7:System.Windows.Controls.DataGridColumn.SortMemberPath,None,True,True,,Status,Status,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,StackPanel_7:System.Windows.Controls.StackPanel.Orientation,None,False,True,,Horizontal,Horizontal,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,TextBlock_8:System.Windows.Controls.TextBlock.$Content,Text,True,True,,,,
 Up2dateConsole.g.en-US.resources:mainwindow.baml,DataTrigger_3:System.Windows.DataTrigger.$Content,None,False,True,,#Setter_8;,#Setter_8;,
