@@ -14,7 +14,7 @@
         Icon="Images/Logo.ico"
         Title="RITMS UP2DATE Console" 
         Height="600" Width="1000"
-        MinHeight="300" MinWidth="600"
+        MinHeight="300" MinWidth="800"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
 
@@ -96,7 +96,7 @@
                     <DataGridTextColumn x:Uid="DataGridTextColumn_2" Header="Product name" Binding="{Binding ProductName}" Width="2*"/>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_3" Header="Publisher" Binding="{Binding Publisher}" Width="1*"/>
                     <DataGridTextColumn x:Uid="DataGridTextColumn_4" Header="Version" Binding="{Binding Version}" MinWidth="80"/>
-                    <DataGridTemplateColumn x:Uid="DataGridTextColumn_7" Header="Status" MinWidth="100">
+                    <DataGridTemplateColumn x:Uid="DataGridTextColumn_7" Header="Status" MinWidth="100" SortMemberPath="Status">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Uid="DataTemplate_1">
                                 <StackPanel x:Uid="StackPanel_7" Orientation="Horizontal">

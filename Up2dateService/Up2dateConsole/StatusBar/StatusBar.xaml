@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:Up2dateConsole.StatusBar"
              mc:Ignorable="d"
              Height="32"
-             d:DesignWidth="600"
+             d:DesignWidth="620"
              d:DataContext="{d:DesignInstance local:StatusBarViewModel}">
 
     <UserControl.Resources>
@@ -34,7 +34,7 @@
             <ColumnDefinition x:Uid="ColumnDefinition_5" Width="Auto"/>
         </Grid.ColumnDefinitions>
         <TextBlock x:Uid="TextBlock2" Text="Service state:" VerticalAlignment="Center"/>
-        <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Grid.Column="1" Width="20" Height="20" Margin="5,0" 
+        <stateindicator:StateIndicator x:Uid="stateindicator:StateIndicator_1" Grid.Column="1" Width="20" Height="20" Margin="5,0,15,0" 
                                        DataContext="{Binding StateIndicator}"/>
         <Grid x:Uid="Grid_6" Grid.Column="2" Margin="10,0,0,0" VerticalAlignment="Center"
               Visibility="{Binding IsTenantAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -43,7 +43,7 @@
                 <ColumnDefinition x:Uid="ColumnDefinition_10" />
             </Grid.ColumnDefinitions>
             <TextBlock x:Uid="TextBlock_8" Text="Tenant:" VerticalAlignment="Center"/>
-            <Border x:Uid="Border_2" Grid.Column="1" Margin="5,0,10,0" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Center"
+            <Border x:Uid="Border_2" Grid.Column="1" Margin="5,0,0,0" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Center"
                     BorderThickness="1" BorderBrush="LightGray" Padding="4,2">
                 <Grid x:Uid="Grid_7">
                     <TextBlock x:Uid="TextBlock_9" HorizontalAlignment="Left" VerticalAlignment="Center"
@@ -52,7 +52,7 @@
                             <TextBlock x:Uid="TextBlock_10" Text="{Binding Tenant}"/>
                         </Hyperlink>
                     </TextBlock>
-                    <TextBlock x:Uid="TextBlock_11" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    <TextBlock x:Uid="TextBlock_11" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="30"
                                Visibility="{Binding IsHawkbitEndpointAvailable, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
                                Text="{Binding Tenant}"/>
                 </Grid>
@@ -65,13 +65,13 @@
                 <ColumnDefinition x:Uid="ColumnDefinition_7"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Uid="TextBlock_4" Text="Controller Id:" VerticalAlignment="Center"/>
-            <Border x:Uid="Border_1" Grid.Column="1" Margin="5,0,10,0" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            <Border x:Uid="Border_1" Grid.Column="1" Margin="5,0,0,0" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Center" 
                     BorderThickness="1" BorderBrush="LightGray" Padding="4,2">
-                <TextBlock x:Uid="TextBlock_7" HorizontalAlignment="Left" VerticalAlignment="Center"
+                <TextBlock x:Uid="TextBlock_7" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="30"
                        Text="{Binding DeviceId, Mode=OneWay}"/>
             </Border>
         </Grid>
-        <Grid x:Uid="Grid_8" Grid.Column="4" Margin="5,0,0,0" HorizontalAlignment="Left" Background="Transparent" 
+        <Grid x:Uid="Grid_8" Grid.Column="4" Margin="15,0,0,0" HorizontalAlignment="Left" Background="Transparent" 
               Visibility="{Binding IsUnprotectedMode, Converter={StaticResource BooleanToVisibilityConverter}}"
               ToolTip="Warning! System is running in development (uprotected) mode">
             <TextBlock x:Uid="TextBlock_12" Grid.Column="4" Style="{StaticResource StateIcon}" Text="{StaticResource KeyIcon}" Foreground="DarkOrange" FontSize="14"/>

@@ -18,7 +18,14 @@ namespace Up2dateConsole
             WcfServiceClient sc = (WcfServiceClient)client;
             if (sc.State == System.ServiceModel.CommunicationState.Opened)
             {
-                sc.Close();
+                try
+                {
+                    sc.Close();
+                }
+                catch
+                {
+                    // Possible when service is not responding after successfully opened -- nothing to do here, just ignore
+                }
             }
         }
     }
