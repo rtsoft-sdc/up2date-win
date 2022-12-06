@@ -75,7 +75,7 @@ namespace Up2dateTests.Up2dateClient
             // assert
             wrapperMock.Verify(m => m.RunClient(certificate, settingsManagerMock.Object.ProvisioningUrl, settingsManagerMock.Object.XApigToken,
                 It.IsNotNull<ProvErrorCallbackFunc>(), It.IsNotNull<ProvSuccessCallbackFunc>(),
-                It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()));
+                It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>(), It.IsNotNull<NoActionFunc>()));
         }
 
         [TestMethod]
@@ -102,7 +102,7 @@ namespace Up2dateTests.Up2dateClient
             string message = "exception message";
             wrapperMock.Setup(m => m.RunClient(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
                 It.IsNotNull<ProvErrorCallbackFunc>(), It.IsNotNull<ProvSuccessCallbackFunc>(),
-                It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>()))
+                It.IsNotNull<ConfigRequestFunc>(), It.IsNotNull<DeploymentActionFunc>(), It.IsNotNull<CancelActionFunc>(), It.IsNotNull<NoActionFunc>()))
                 .Throws(new Exception(message));
 
             // act

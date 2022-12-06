@@ -72,14 +72,14 @@ namespace Up2dateClient
                     }
                     SetState(ClientStatus.Running);
                     wrapper.RunClient(cert, settingsManager.ProvisioningUrl, settingsManager.XApigToken, OnProvisioningErrorAction, OnProvisioningSuccessAction,
-                        OnConfigRequest, OnDeploymentAction, OnCancelAction);
+                        OnConfigRequest, OnDeploymentAction, OnCancelAction, OnNoAction);
                 }
                 else
                 {
                     SetState(ClientStatus.Running);
                     var uri = settingsManager.HawkbitUrl.TrimEnd('/') + "/" + settingsManager.DeviceId;
                     wrapper.RunClientWithDeviceToken(settingsManager.SecurityToken, uri,
-                        OnConfigRequest, OnDeploymentAction, OnCancelAction);
+                        OnConfigRequest, OnDeploymentAction, OnCancelAction, OnNoAction);
                 }
 
                 SetState(ClientStatus.Reconnecting);
@@ -317,6 +317,11 @@ namespace Up2dateClient
             lastStopID = stopId;
             setupManager.Cancel(stopId);
             return true;
+        }
+
+        private void OnNoAction()
+        {
+            // Could be used as indication that connection to the hawkbit server "successfully established" or "is still functional"
         }
 
         private void OnProvisioningErrorAction(string errorMessage)
