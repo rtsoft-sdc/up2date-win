@@ -11,7 +11,7 @@ MacOS
 shasum -a 256 filename
 The issue that comes with checking a hash from a website is that it doesn't determine that the file is safe to use, just that what you have obtained is the correct file, byte for byte. If the website has been compromised then you could be shown the hash for a different file, which in turn could be malicious.
 
-checksum for Up2dateSetup32.msi: 'ECBF4D47B610A6F83C2D07AE937BD8E6644B89839149FE833D93B61CAE804CC1'
-checksum for Up2dateSetup64.msi: '65744F1E7910F73EC8B8E390E9D8908C8824F89996E717C403417B52628DF6BD'
+checksum for Up2dateSetup32.msi = 'ECBF4D47B610A6F83C2D07AE937BD8E6644B89839149FE833D93B61CAE804CC1'
+checksum for Up2dateSetup64.msi = '65744F1E7910F73EC8B8E390E9D8908C8824F89996E717C403417B52628DF6BD'
 
 You can download up2date v2.3.0 using github: https://github.com/rtsoft-gmbh/up2date-win/releases/tag/v2.3.0
