@@ -52,8 +52,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="Up2dateDotNet, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\up2date.net.2.1.0\lib\net472\Up2dateDotNet.dll</HintPath>
+    <Reference Include="Up2dateDotNet, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\up2date.net.2.2.0\lib\net472\Up2dateDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
