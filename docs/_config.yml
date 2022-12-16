@@ -144,6 +144,8 @@ plugins:
   - jekyll-feed
   - jekyll-include-cache
 
+github: [metadata]
+
 # mimic GitHub Pages with --safe
 whitelist:
   - jekyll-paginate
