@@ -1,6 +1,6 @@
 ---
 title: "Quick Start with UP2DATE agent for Windows"
-permalink: /docs/install
+permalink: /install
 excerpt: "Quick-Start Guide."
 toc: true
 ---

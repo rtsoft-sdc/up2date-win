@@ -1,6 +1,6 @@
 ---
 title: "Advanced options"
-permalink: /docs/up2date-advanced
+permalink: /up2date-advanced
 excerpt: "Customize UP2DATE agent and Extended Capabilities."
 toc: true
 ---
