@@ -7,7 +7,7 @@ header:
   overlay_image: /assets/images/home-page-feature.jpg
   actions:
     - label: "<i class='fas fa-download'></i> Quick Start"
-      url: "/install/"
+      url: "/install.html"
 excerpt: >
   Remotely install software on PCs with <span style="white-space:nowrap;">Eclipse hawkBit™</span>.<br />
   Any MSI and Chocolatey packages.<br />
@@ -31,7 +31,7 @@ feature_row:
       Opensource Eclipse hawkBit™ guarantees full-functional solution focused on software updates in the IoT space.
       Commercial grade cloud solutions like <a href="https://up2date.ritms.online/">RITMS UP2DATE</a>, Bosch IoT Rollouts, etc. just **add** *scalability*, *multitenancy*, *hardware cryptography (HSM) onboarding*, ... <br />
       Choose between SaaS or **self-hosted** <span style="white-space:nowrap;">Eclipse hawkBit™</span> instance.
-    url: "/hawkbit-registration/"
+    url: "/hawkbit-registration.html"
     btn_class: "btn--primary"
     btn_label: "Learn more"      
 ---

@@ -8,13 +8,13 @@ docs:
   - title: Getting Started
     children:
       - title: "Installation"
-        url: /install/
+        url: /install.html
       - title: "Rollout Software"
-        url: /up2date/
+        url: /up2date.html
 
   - title: Customization
     children:
       - title: "Advanced options"
-        url: /up2date-advanced/
+        url: /up2date-advanced.html
       - title: "Hawkbit Registration"
-        url: /hawkbit-registration/
+        url: /hawkbit-registration.html
