@@ -2,11 +2,19 @@
 main:
   - title: "RITMS UP2DATE"
     url: https://up2date.ritms.online
-  # - title: "About"
-  #   url: https://mmistakes.github.io/minimal-mistakes/about/
-  # - title: "Sample Posts"
-  #   url: /year-archive/
-  # - title: "Sample Collections"
-  #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
+    description: "Navigate to RITMS Cloud Service product page"
+
+docs:
+  - title: Getting Started
+    children:
+      - title: "Installation"
+        url: /docs/install/
+      - title: "Rollout Software"
+        url: /docs/up2date/
+
+  - title: Customization
+    children:
+      - title: "Advanced options"
+        url: /docs/up2date-advanced/
+      - title: "Hawkbit Registration"
+        url: /docs/hawkbit-registration/
