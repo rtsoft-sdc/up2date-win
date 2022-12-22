@@ -8,6 +8,13 @@
 
 # UP2DATE CLIENT for Windows
 
+## QUICKSTART
+
+1. Contact [RITMS UP2DATE](https://ritms.online) to get cloud service access and PC keys.
+2. Proceed with [Documentation containing Installation manual](https://rtsoft-gmbh.github.io/up2date-win). 
+
+or read documentation on how to setup management in your own Eclipse hawkBit deployment.
+
 ## INTRODUCTION
 
 [RITMS UP2DATE](https://up2date.ritms.online) is a cloud ready solution for unified software and firmware management. Use this for implementing lifecycle management for the full stack of drivers and firmware of connected devices.
@@ -35,18 +42,3 @@ Benefits:
 * Collect status from each managed PC.
 * X509 certificate authorization.
 * Single management point.
-
-## QUICKSTART
-
-1. Contact [RITMS UP2DATE](https://ritms.online) to get cloud service access and PC keys.
-2. run `setup.exe` on each PC to be controlled from UP2DATE Cloud (admin privileges required)
-3. Input unique one-time registration key requested after installation.
-4. Log in [https://your.tenant.ritms.online](https://tenant.up2date.poc.ritms.online), upload a deployment, assign it to a distribution and drag-n-drop to dedicated PC(s)
-5. Check a notification about installed deployment
-
-## Build Wrapper for [up2date-cpp](https://github.com/rtsoft-gmbh/up2date-cpp) library
-1. Clone [VCPKG repo](https://github.com/microsoft/vcpkg) in directory ../ from basic installation
-2. run ../vcpkg/bootstrap-vcpkg.bat
-3. Add Environment Variable %VCPKG_ROOT% with path to VCPKG storage
-4. Install CMAKE 
-5. Build via normal visual studio or msbuild compiler
