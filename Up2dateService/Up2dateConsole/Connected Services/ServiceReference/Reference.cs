@@ -916,6 +916,18 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetProvisioningUrl", ReplyAction="http://tempuri.org/IWcfService/SetProvisioningUrlResponse")]
         System.Threading.Tasks.Task SetProvisioningUrlAsync(string url);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetRequestOneTimeTokenUrl", ReplyAction="http://tempuri.org/IWcfService/GetRequestOneTimeTokenUrlResponse")]
+        string GetRequestOneTimeTokenUrl();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetRequestOneTimeTokenUrl", ReplyAction="http://tempuri.org/IWcfService/GetRequestOneTimeTokenUrlResponse")]
+        System.Threading.Tasks.Task<string> GetRequestOneTimeTokenUrlAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetRequestOneTimeTokenUrl", ReplyAction="http://tempuri.org/IWcfService/SetRequestOneTimeTokenUrlResponse")]
+        void SetRequestOneTimeTokenUrl(string url);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SetRequestOneTimeTokenUrl", ReplyAction="http://tempuri.org/IWcfService/SetRequestOneTimeTokenUrlResponse")]
+        System.Threading.Tasks.Task SetRequestOneTimeTokenUrlAsync(string url);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetCheckSignature", ReplyAction="http://tempuri.org/IWcfService/GetCheckSignatureResponse")]
         bool GetCheckSignature();
         
@@ -1174,6 +1186,22 @@ namespace Up2dateConsole.ServiceReference {
         
         public System.Threading.Tasks.Task SetProvisioningUrlAsync(string url) {
             return base.Channel.SetProvisioningUrlAsync(url);
+        }
+        
+        public string GetRequestOneTimeTokenUrl() {
+            return base.Channel.GetRequestOneTimeTokenUrl();
+        }
+        
+        public System.Threading.Tasks.Task<string> GetRequestOneTimeTokenUrlAsync() {
+            return base.Channel.GetRequestOneTimeTokenUrlAsync();
+        }
+        
+        public void SetRequestOneTimeTokenUrl(string url) {
+            base.Channel.SetRequestOneTimeTokenUrl(url);
+        }
+        
+        public System.Threading.Tasks.Task SetRequestOneTimeTokenUrlAsync(string url) {
+            return base.Channel.SetRequestOneTimeTokenUrlAsync(url);
         }
         
         public bool GetCheckSignature() {

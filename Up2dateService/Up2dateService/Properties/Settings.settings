@@ -47,5 +47,8 @@
     <Setting Name="SecureAuthorizationMode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="RequestOneTimeTokenUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://enter.dev.ritms.online:8000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -18,5 +18,6 @@ namespace Up2dateShared
         string DeviceId { get; set; }
         string SecurityToken { get; set; }
         bool SecureAuthorizationMode { get; set; }
+        string RequestOneTimeTokenUrl { get; set; }
     }
 }

@@ -59,6 +59,12 @@ namespace Up2dateService
         void SetProvisioningUrl(string url);
 
         [OperationContract]
+        string GetRequestOneTimeTokenUrl();
+
+        [OperationContract]
+        void SetRequestOneTimeTokenUrl(string url);
+
+        [OperationContract]
         bool GetCheckSignature();
 
         [OperationContract]

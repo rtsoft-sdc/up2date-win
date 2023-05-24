@@ -48,6 +48,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
@@ -75,6 +76,10 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Controls\SqueezeContentControl.cs" />
+    <Compile Include="Dialogs\QrCode\QrCodeDialog.xaml.cs">
+      <DependentUpon>QrCodeDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QrCode\QrCodeDialogViewModel.cs" />
     <Compile Include="Dialogs\Settings\ConsoleSecurityTab.xaml.cs">
       <DependentUpon>ConsoleSecurityTab.xaml</DependentUpon>
     </Compile>
@@ -95,6 +100,7 @@
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Settings\SettingsDialogViewModel.cs" />
+    <Compile Include="Helpers\BitmapToImageSourceConverter.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
     <Compile Include="Helpers\InactivityMonitor\IInactivityMonitor.cs" />
     <Compile Include="Helpers\InactivityMonitor\HookMonitor.cs" />
@@ -103,11 +109,13 @@
     <Compile Include="Helpers\InactivityMonitor\Win32Hook.cs" />
     <Compile Include="Helpers\InvertBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\IProcessHelper.cs" />
+    <Compile Include="Helpers\IQrCodeHelper.cs" />
     <Compile Include="Helpers\IServiceHelper.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
+    <Compile Include="Helpers\QrCodeHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="ISettings.cs" />
@@ -144,6 +152,10 @@
     <Compile Include="ViewService\DialogViewModelBase.cs" />
     <Compile Include="ViewService\ViewService.cs" />
     <Compile Include="WcfClientFactory.cs" />
+    <Page Include="Dialogs\QrCode\QrCodeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -290,6 +302,12 @@
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.1.2</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="QRCoder">
+      <Version>1.4.3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\UAC.png" />
@@ -308,7 +326,6 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ServiceReference\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)Localization\CheckAndGenerate.cmd" ru-RU $(TargetDir) $(TargetName) $(ProjectDir) $(ProjectName)

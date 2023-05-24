@@ -161,6 +161,16 @@ namespace Up2dateService
             settingsManager.ProvisioningUrl = url;
         }
 
+        public string GetRequestOneTimeTokenUrl()
+        {
+            return settingsManager.RequestOneTimeTokenUrl;
+        }
+
+        public void SetRequestOneTimeTokenUrl(string url)
+        {
+            settingsManager.RequestOneTimeTokenUrl = url;
+        }
+
         public bool GetCheckSignature()
         {
             return settingsManager.CheckSignature;

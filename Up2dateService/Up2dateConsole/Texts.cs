@@ -64,6 +64,7 @@
         BadConnectionMessage,
         GoodConnectionMessage,
         ConfirmDeleteFmt,
-        CannotDeletePackage
+        CannotDeletePackage,
+        RequestOneTimeTokenUrlAccessError
     }
 }
