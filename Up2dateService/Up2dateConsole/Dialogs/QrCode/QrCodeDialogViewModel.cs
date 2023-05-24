@@ -43,7 +43,7 @@ namespace Up2dateConsole.Dialogs.QrCode
         private async Task LongPoll(string requestOneTimeTokenUrl, string clientID, string requestID)
         {
             HttpClient client = new HttpClient();
-            client.Timeout = new TimeSpan(0,5,0;
+            client.Timeout = new TimeSpan(0,5,0);
             var uri = $"{requestOneTimeTokenUrl}/request-ott?client_id={clientID}&request_id={requestID}";
             try
             {
