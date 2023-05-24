@@ -42,25 +42,26 @@ namespace Up2dateConsole.Dialogs.QrCode
 
         private async Task LongPoll(string requestOneTimeTokenUrl, string clientID, string requestID)
         {
-            HttpClient client = new HttpClient();
-            client.Timeout = new TimeSpan(0,5,0);
-            var uri = $"{requestOneTimeTokenUrl}/request-ott?client_id={clientID}&request_id={requestID}";
+            string uri = $"{requestOneTimeTokenUrl}/request-ott?client_id={clientID}&request_id={requestID}";
             try
             {
-                using (var msg = await client.GetAsync(uri))
+                using (HttpClient client = new HttpClient { Timeout = TimeSpan.FromSeconds(300) })
                 {
-                    if (msg.IsSuccessStatusCode)
+                    using (var msg = await client.GetAsync(uri))
                     {
-                        var response = await msg.Content.ReadAsStringAsync();
-                        var json = JObject.Parse(response);
-                        OTT = json["ott"].ToString();
-                        Close(true);
+                        if (msg.IsSuccessStatusCode)
+                        {
+                            string response = await msg.Content.ReadAsStringAsync();
+                            JObject json = JObject.Parse(response);
+                            OTT = json["ott"].ToString();
+                            Close(true);
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
-                string message = viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError) + $"\n\n{e.Message}";
+                string message = string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestOneTimeTokenUrl) + $"\n\n{e.Message}";
                 viewService.ShowMessageBox(message);
             }
             Close(false);

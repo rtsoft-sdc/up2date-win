@@ -75,5 +75,5 @@
     <clr:String x:Uid="clr:String_63" x:Key="GoodConnectionMessage">Server connection successfully established.</clr:String>
     <clr:String x:Uid="clr:String_64" x:Key="ConfirmDeleteFmt">Are you sure you want to delete package {0} {1}?</clr:String>
 
-    <clr:String x:Key="RequestOneTimeTokenUrlAccessError">Failed to access One Time Token provider</clr:String>
+    <clr:String x:Key="RequestOneTimeTokenUrlAccessError">Failed to acquire one time token from {0}</clr:String>
 </ResourceDictionary>
