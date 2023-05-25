@@ -19,9 +19,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
-        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="400" Height="400" 
-               Source="{Binding Bitmap, Mode=OneTime}"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Connecting to OTT provider..."/>
+        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="400" Height="400" Source="{Binding Bitmap}"/>
     </Grid>
 </Window>

@@ -83,11 +83,17 @@ namespace Up2dateConsole.ViewService
             dlg.DataContext = viewModel;
             dlg.Owner = TopWindow.IsVisible ? TopWindow : null;
             dlg.Closed += ActiveDialog_Closed;
+            dlg.Closing += (sender, e) => e.Cancel = !viewModel.OnClosing();
 
             viewModel.CloseDialog += ViewModel_CloseDialog;
             nestedWindows.Push(dlg);
 
             return dlg.ShowDialog() == true;
+        }
+
+        private void Dlg_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public string GetText<TTextEnum>(TTextEnum textEnum) where TTextEnum : Enum
