@@ -44,6 +44,15 @@ namespace Up2dateService
         Result<string> RequestCertificate(string oneTimeKey);
 
         [OperationContract]
+        Result<string> OpenRequestCertificateSession();
+
+        [OperationContract]
+        Result<string> GetCertificateBySessionHandle(string handle);
+
+        [OperationContract]
+        void CloseRequestCertificateSession(string handle);
+
+        [OperationContract]
         Result<string> ImportCertificate(string filePath);
 
         [OperationContract]

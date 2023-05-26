@@ -128,6 +128,40 @@ namespace Up2dateService
 
         [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
         [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public Result<string> OpenRequestCertificateSession()
+        {
+            return certificateProvider.OpenRequestCertificateSessionAsync().Result;
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public Result<string> GetCertificateBySessionHandle(string handle)
+        {
+            Result<string> result = certificateProvider.GetCertificateBySessionHandleAsync(handle).Result;
+            if (!result.Success) return result;
+
+            string certString = result.Value;
+            try
+            {
+                byte[] certData = Encoding.UTF8.GetBytes(certString);
+                certificateManager.ImportCertificate(certData);
+            }
+            catch (Exception e)
+            {
+                return Result<string>.Failed(e);
+            }
+            return Result<string>.Successful(GetDeviceId());
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public void CloseRequestCertificateSession(string handle)
+        {
+            certificateProvider.CloseRequestCertificateSession(handle);
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
         public Result<string> ImportCertificate(string filePath)
         {
             try

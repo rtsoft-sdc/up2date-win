@@ -24,11 +24,9 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
         private bool isInProgress;
         private ConnectionMode connectionMode;
         private string hawkbitUrl;
-        private string requestOneTimeTokenUrl;
         private string controllerId;
         private string deviceToken;
         private bool isCertificateAvailable;
-        private Random random;
 
         public RequestCertificateDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation)
         {
@@ -39,8 +37,6 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
             RequestCommand = new RelayCommand(async (_) => await ExecuteRequestAsync(), CanRequest);
             LoadCommand = new RelayCommand(async (_) => await ExecuteLoadAsync());
             QrCodeCommand = new RelayCommand(async (_) => await ExecuteQrCodeAsync(), (_) => IsSecureConnection);
-
-            random = new Random(DateTime.Now.Millisecond);
 
             Initialize();
         }
@@ -57,7 +53,6 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
                 hawkbitUrl = service.GetUnsafeConnectionUrl();
                 controllerId = service.GetUnsafeConnectionDeviceId();
                 MachineGuid = service.GetSystemInfo().MachineGuid;
-                requestOneTimeTokenUrl = service.GetRequestOneTimeTokenUrl();
                 if (string.IsNullOrEmpty(controllerId))
                 {
                     controllerId = MachineGuid;
@@ -181,13 +176,12 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
 
         private async Task ExecuteQrCodeAsync()
         {
-            var requestID = random.Next();
-            var vm = new QrCodeDialogViewModel(viewService, new QrCodeHelper(), MachineGuid, requestID.ToString(), requestOneTimeTokenUrl);
-            if (!viewService.ShowDialog(vm) || string.IsNullOrWhiteSpace(vm.OTT)) return;
-
-            OneTimeKey = vm.OTT;
-
-            await ImportAndApplyCertificateAsync();
+            var vm = new QrCodeDialogViewModel(viewService, new QrCodeHelper(), wcfClientFactory, MachineGuid);
+            bool ok = viewService.ShowDialog(vm);
+            if (ok && !string.IsNullOrWhiteSpace(vm.Cert))
+            {
+                await ImportAndApplyCertificateAsync(cert: vm.Cert);
+            }
         }
 
         private async Task ExecuteLoadAsync()
@@ -199,7 +193,7 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
             await ImportAndApplyCertificateAsync(certFilePath);
         }
 
-        private async Task ImportAndApplyCertificateAsync(string certFilePath = null)
+        private async Task ImportAndApplyCertificateAsync(string certFilePath = null, string cert = null)
         {
             IsInProgress = true;
 
@@ -215,6 +209,10 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
                 else
                 {
                     ResultOfstring result = new ResultOfstring { Success = true };
+                    if (!string.IsNullOrWhiteSpace(cert))
+                    {
+                        result = await service.ImportCertificateAsync(cert);
+                    }
                     if (!string.IsNullOrWhiteSpace(certFilePath))
                     {
                         result = await service.ImportCertificateAsync(certFilePath);

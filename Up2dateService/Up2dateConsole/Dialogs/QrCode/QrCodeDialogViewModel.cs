@@ -6,6 +6,11 @@ using System.Threading;
 using System.Windows.Media.Imaging;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ViewService;
+using System.Security.Cryptography;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Up2dateConsole.Dialogs.QrCode
 {
@@ -13,32 +18,23 @@ namespace Up2dateConsole.Dialogs.QrCode
     {
         private readonly IViewService viewService;
         private readonly IQrCodeHelper qrCodeHelper;
+        private readonly IWcfClientFactory wcfClientFactory;
         private readonly CancellationTokenSource cancellationTokenSource;
         private BitmapSource bitmap;
 
-        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, string clientID, string requestID, string requestOneTimeTokenUrl)
+        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, IWcfClientFactory wcfClientFactory, string clientID)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.qrCodeHelper = qrCodeHelper ?? throw new ArgumentNullException(nameof(qrCodeHelper));
-
+            this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             if (string.IsNullOrWhiteSpace(clientID))
             {
                 throw new ArgumentException($"'{nameof(clientID)}' cannot be null or whitespace.", nameof(clientID));
             }
 
-            if (string.IsNullOrWhiteSpace(requestID))
-            {
-                throw new ArgumentException($"'{nameof(requestID)}' cannot be null or whitespace.", nameof(requestID));
-            }
-
-            if (string.IsNullOrWhiteSpace(requestOneTimeTokenUrl))
-            {
-                throw new System.ArgumentException($"'{nameof(requestOneTimeTokenUrl)}' cannot be null or whitespace.", nameof(requestOneTimeTokenUrl));
-            }
-
             cancellationTokenSource = new CancellationTokenSource();
 
-            GetAttAsync(requestOneTimeTokenUrl, clientID, requestID);
+            GetCertAsync(clientID);
         }
 
         public override bool OnClosing()
@@ -47,45 +43,61 @@ namespace Up2dateConsole.Dialogs.QrCode
             return base.OnClosing();
         }
 
-        private async void GetAttAsync(string requestOneTimeTokenUrl, string clientID, string requestID)
+        private async void GetCertAsync(string clientID)
         {
-            using (ClientWebSocket client = new ClientWebSocket())
+            string handle = string.Empty;
+            ServiceReference.IWcfService server = null;
+            try
             {
-                try
+                server = wcfClientFactory.CreateClient();
+
+                var result = await server.OpenRequestCertificateSessionAsync();
+                if (!result.Success)
                 {
-                    await client.ConnectAsync(
-                        new Uri($"{requestOneTimeTokenUrl}/request-ott?client_id={clientID}&request_id={requestID}"), 
-                        cancellationTokenSource.Token);
-
-                    Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start={clientID}_{requestID}");
-
-                    ArraySegment<byte> response = new ArraySegment<byte>(new byte[2048]);
-                    WebSocketReceiveResult r = await client.ReceiveAsync(response, cancellationTokenSource.Token);
-                    string s = Encoding.UTF8.GetString(response.Array, 0, r.Count);
-                    JObject json = JObject.Parse(s);
-                    OTT = json["ott"].ToString();
-
-                    Close(true);
+                    string message = result.ErrorMessage; //string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestCertUrl) + $"\n\n{result.ErrorMessage}";
+                    viewService.ShowMessageBox(message);
+                    Close(false);
+                    return;
                 }
-                catch (Exception e)
+
+                handle = result.Value;
+
+                Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start={clientID}_{handle}");
+
+                const int period = 2; // sec
+                const int timeout = 120; // sec
+                string cert = string.Empty;
+                for (int i = 0; i < timeout; i += period)
                 {
-                    if (!cancellationTokenSource.IsCancellationRequested)
+                    result = await server.GetCertificateBySessionHandleAsync(handle);
+                    if (!result.Success)
                     {
-                        string message = string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestOneTimeTokenUrl) + $"\n\n{e.Message}";
+                        await server.CloseRequestCertificateSessionAsync(handle);
+                        string message = result.ErrorMessage; //string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestCertUrl) + $"\n\n{result.ErrorMessage}";
                         viewService.ShowMessageBox(message);
+                        Close(false);
+                        return;
                     }
+
+                    Cert = result.Value;
+                    if (!string.IsNullOrWhiteSpace(Cert) || cancellationTokenSource.IsCancellationRequested)
+                        break;
+                    await Task.Delay(period * 1000);
                 }
-                finally
-                {
-                    if (client.State == WebSocketState.Open || client.State == WebSocketState.Aborted)
-                    {
-                        await client.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                    }
-                }
+                Close(!string.IsNullOrWhiteSpace(Cert));
             }
-            if (!cancellationTokenSource.IsCancellationRequested)
+            catch (HttpRequestException e)
             {
-                Close(false);
+                string message = e.Message; //string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestCertUrl) + $"\n\n{e.Message}";
+                viewService.ShowMessageBox(message);
+                return;
+            }
+            finally
+            {
+                if (!string.IsNullOrEmpty(handle))
+                {
+                    server?.CloseRequestCertificateSessionAsync(handle);
+                }
             }
         }
 
@@ -99,6 +111,6 @@ namespace Up2dateConsole.Dialogs.QrCode
             }
         }
 
-        public string OTT { get; private set; }
+        public string Cert { get; private set; }
     }
 }

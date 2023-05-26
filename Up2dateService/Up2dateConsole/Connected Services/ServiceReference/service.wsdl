@@ -552,6 +552,120 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_OpenRequestCertificateSession_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_OpenRequestCertificateSession_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetCertificateBySessionHandle_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_GetCertificateBySessionHandle_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_CloseRequestCertificateSession_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_CloseRequestCertificateSession_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IWcfService_ImportCertificate_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -1508,6 +1622,24 @@
   <wsdl:message name="IWcfService_RequestCertificate_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequestCertificateResponse" />
   </wsdl:message>
+  <wsdl:message name="IWcfService_OpenRequestCertificateSession_InputMessage">
+    <wsdl:part name="parameters" element="tns:OpenRequestCertificateSession" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_OpenRequestCertificateSession_OutputMessage">
+    <wsdl:part name="parameters" element="tns:OpenRequestCertificateSessionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetCertificateBySessionHandle_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCertificateBySessionHandle" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetCertificateBySessionHandle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCertificateBySessionHandleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_CloseRequestCertificateSession_InputMessage">
+    <wsdl:part name="parameters" element="tns:CloseRequestCertificateSession" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_CloseRequestCertificateSession_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CloseRequestCertificateSessionResponse" />
+  </wsdl:message>
   <wsdl:message name="IWcfService_ImportCertificate_InputMessage">
     <wsdl:part name="parameters" element="tns:ImportCertificate" />
   </wsdl:message>
@@ -1694,6 +1826,18 @@
     <wsdl:operation name="RequestCertificate">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/RequestCertificate" message="tns:IWcfService_RequestCertificate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/RequestCertificateResponse" message="tns:IWcfService_RequestCertificate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenRequestCertificateSession">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/OpenRequestCertificateSession" message="tns:IWcfService_OpenRequestCertificateSession_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/OpenRequestCertificateSessionResponse" message="tns:IWcfService_OpenRequestCertificateSession_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCertificateBySessionHandle">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetCertificateBySessionHandle" message="tns:IWcfService_GetCertificateBySessionHandle_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetCertificateBySessionHandleResponse" message="tns:IWcfService_GetCertificateBySessionHandle_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CloseRequestCertificateSession">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/CloseRequestCertificateSession" message="tns:IWcfService_CloseRequestCertificateSession_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/CloseRequestCertificateSessionResponse" message="tns:IWcfService_CloseRequestCertificateSession_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ImportCertificate">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/ImportCertificate" message="tns:IWcfService_ImportCertificate_InputMessage" />
@@ -1920,6 +2064,39 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_RequestCertificate_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenRequestCertificateSession">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/OpenRequestCertificateSession" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_OpenRequestCertificateSession_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_OpenRequestCertificateSession_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCertificateBySessionHandle">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/GetCertificateBySessionHandle" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetCertificateBySessionHandle_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_GetCertificateBySessionHandle_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseRequestCertificateSession">
+      <soap12:operation soapAction="http://tempuri.org/IWcfService/CloseRequestCertificateSession" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_CloseRequestCertificateSession_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IWcfService_CloseRequestCertificateSession_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
