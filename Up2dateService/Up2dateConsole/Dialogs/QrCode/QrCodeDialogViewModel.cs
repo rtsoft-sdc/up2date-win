@@ -15,6 +15,7 @@ namespace Up2dateConsole.Dialogs.QrCode
         private readonly IWcfClientFactory wcfClientFactory;
         private readonly CancellationTokenSource cancellationTokenSource;
         private BitmapSource bitmap;
+        private TimeSpan timeLeft;
 
         public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, IWcfClientFactory wcfClientFactory, string clientID)
         {
@@ -60,35 +61,43 @@ namespace Up2dateConsole.Dialogs.QrCode
 
                 Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start={clientID}_{handle}");
 
-                const int period = 2; // sec
+                const int period = 3; // sec
                 const int timeout = 120; // sec
                 int t;
-                for (t = 0; t < timeout; t += period)
+                for (t = timeout; t > 0; t--)
                 {
-                    result = await server.GetCertificateBySessionHandleAsync(handle);
-                    if (cancellationTokenSource.IsCancellationRequested) return;
+                    TimeLeft = TimeSpan.FromSeconds(t);
 
-                    if (!result.Success)
+                    if ((t % period) == 0)
                     {
-                        await server.CloseRequestCertificateSessionAsync(handle);
+                        result = await server.GetCertificateBySessionHandleAsync(handle);
                         if (cancellationTokenSource.IsCancellationRequested) return;
 
-                        string message = viewService.GetText(Texts.GetCertificateError) + $"\n\n{result.ErrorMessage}";
-                        viewService.ShowMessageBox(message);
-                        Close(false);
-                        return;
+                        if (!result.Success)
+                        {
+                            await server.CloseRequestCertificateSessionAsync(handle);
+                            if (cancellationTokenSource.IsCancellationRequested) return;
+
+                            string message = viewService.GetText(Texts.GetCertificateError) + $"\n\n{result.ErrorMessage}";
+                            viewService.ShowMessageBox(message);
+                            Close(false);
+                            return;
+                        }
+
+                        Cert = result.Value;
                     }
 
-                    Cert = result.Value;
                     if (!string.IsNullOrWhiteSpace(Cert) || cancellationTokenSource.IsCancellationRequested)
                         break;
-                    await Task.Delay(period * 1000, cancellationTokenSource.Token);
+                    await Task.Delay(1000, cancellationTokenSource.Token);
                 }
+
+                TimeLeft = TimeSpan.FromSeconds(t);
 
                 if (!cancellationTokenSource.IsCancellationRequested && string.IsNullOrWhiteSpace(Cert))
                 {
                     viewService.ShowMessageBox(viewService.GetText(
-                        t < timeout ? Texts.ServerRefusedProvidingCertificate : Texts.TimeoutGettingCertificate));
+                        t > 0 ? Texts.ServerRefusedProvidingCertificate : Texts.TimeoutGettingCertificate));
                 }
 
                 Close(!string.IsNullOrWhiteSpace(Cert));
@@ -117,6 +126,16 @@ namespace Up2dateConsole.Dialogs.QrCode
             private set
             {
                 bitmap = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public TimeSpan TimeLeft
+        {
+            get => timeLeft;
+            private set
+            {
+                timeLeft = value;
                 OnPropertyChanged();
             }
         }
