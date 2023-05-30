@@ -1,15 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Net.WebSockets;
-using System.Text;
+﻿using System;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.ViewService;
-using System.Security.Cryptography;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Up2dateConsole.Dialogs.QrCode
@@ -52,9 +46,11 @@ namespace Up2dateConsole.Dialogs.QrCode
                 server = wcfClientFactory.CreateClient();
 
                 var result = await server.OpenRequestCertificateSessionAsync();
+                if (cancellationTokenSource.IsCancellationRequested) return;
+
                 if (!result.Success)
                 {
-                    string message = result.ErrorMessage; //string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestCertUrl) + $"\n\n{result.ErrorMessage}";
+                    string message = viewService.GetText(Texts.RequestCertificateError) + $"\n\n{result.ErrorMessage}";
                     viewService.ShowMessageBox(message);
                     Close(false);
                     return;
@@ -66,14 +62,18 @@ namespace Up2dateConsole.Dialogs.QrCode
 
                 const int period = 2; // sec
                 const int timeout = 120; // sec
-                string cert = string.Empty;
-                for (int i = 0; i < timeout; i += period)
+                int t;
+                for (t = 0; t < timeout; t += period)
                 {
                     result = await server.GetCertificateBySessionHandleAsync(handle);
+                    if (cancellationTokenSource.IsCancellationRequested) return;
+
                     if (!result.Success)
                     {
                         await server.CloseRequestCertificateSessionAsync(handle);
-                        string message = result.ErrorMessage; //string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestCertUrl) + $"\n\n{result.ErrorMessage}";
+                        if (cancellationTokenSource.IsCancellationRequested) return;
+
+                        string message = viewService.GetText(Texts.GetCertificateError) + $"\n\n{result.ErrorMessage}";
                         viewService.ShowMessageBox(message);
                         Close(false);
                         return;
@@ -82,14 +82,24 @@ namespace Up2dateConsole.Dialogs.QrCode
                     Cert = result.Value;
                     if (!string.IsNullOrWhiteSpace(Cert) || cancellationTokenSource.IsCancellationRequested)
                         break;
-                    await Task.Delay(period * 1000);
+                    await Task.Delay(period * 1000, cancellationTokenSource.Token);
                 }
+
+                if (!cancellationTokenSource.IsCancellationRequested && string.IsNullOrWhiteSpace(Cert))
+                {
+                    viewService.ShowMessageBox(viewService.GetText(
+                        t < timeout ? Texts.ServerRefusedProvidingCertificate : Texts.TimeoutGettingCertificate));
+                }
+
                 Close(!string.IsNullOrWhiteSpace(Cert));
+            }
+            catch (TaskCanceledException)
+            {
             }
             catch (HttpRequestException e)
             {
-                string message = e.Message; //string.Format(viewService.GetText(Texts.RequestOneTimeTokenUrlAccessError), requestCertUrl) + $"\n\n{e.Message}";
-                viewService.ShowMessageBox(message);
+                viewService.ShowMessageBox(e.Message);
+                Close(false);
                 return;
             }
             finally

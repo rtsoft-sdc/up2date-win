@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance local:ServerConnectionTabViewModel}">
     
     <StackPanel x:Uid="StackPanel_5">
-        <TextBlock x:Uid="TextBlock_1" Margin="0,15,0,5" Text="URL for getting authorization certificate by one-time key:"/>
+        <TextBlock x:Uid="TextBlock_1" Margin="0,15,0,5" Text="URL for getting authorization certificate:"/>
         <TextBox x:Uid="TextBox_1" Margin="0,0,0,5" Text="{Binding TokenUrl, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock x:Uid="TextBlock_2" Margin="0,5,0,5" Text="Provisioning URL:"/>
         <TextBox x:Uid="TextBox_2" Margin="0,0,0,5" Text="{Binding DpsUrl, UpdateSourceTrigger=PropertyChanged}"/>

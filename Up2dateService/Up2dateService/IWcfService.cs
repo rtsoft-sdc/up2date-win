@@ -53,7 +53,10 @@ namespace Up2dateService
         void CloseRequestCertificateSession(string handle);
 
         [OperationContract]
-        Result<string> ImportCertificate(string filePath);
+        Result<string> ImportCertificateFile(string filePath);
+
+        [OperationContract]
+        Result<string> ImportCertificate(string certString);
 
         [OperationContract]
         string GetRequestCertificateUrl();

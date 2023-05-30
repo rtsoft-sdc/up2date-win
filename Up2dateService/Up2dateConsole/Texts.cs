@@ -65,6 +65,9 @@
         GoodConnectionMessage,
         ConfirmDeleteFmt,
         CannotDeletePackage,
-        RequestOneTimeTokenUrlAccessError
+        RequestCertificateError,
+        GetCertificateError,
+        ServerRefusedProvidingCertificate,
+        TimeoutGettingCertificate
     }
 }

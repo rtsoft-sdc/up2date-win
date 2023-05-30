@@ -21,7 +21,7 @@ namespace Up2dateShared
             public string crt { get; set; }
         }
 
-        private struct PubliKeyDto
+        private struct PublicKeyDto
         {
             public string modulus { get; set; }
             public string exponent { get; set; }
@@ -67,7 +67,7 @@ namespace Up2dateShared
 
             try
             {
-                string publicKeyJson = JsonConvert.SerializeObject(new PubliKeyDto
+                string publicKeyJson = JsonConvert.SerializeObject(new PublicKeyDto
                 {
                     modulus = Convert.ToBase64String(key.Modulus),
                     exponent = Convert.ToBase64String(key.Exponent)
@@ -83,7 +83,7 @@ namespace Up2dateShared
                             string handle = JsonConvert.DeserializeObject<HandleDto>(handleJson).handle_id;
                             if (string.IsNullOrWhiteSpace(handle))
                             {
-                                result = Result<string>.Failed("Server responded wirh empty handle.");
+                                result = Result<string>.Failed("Server responded with empty handle.");
                             }
                             else
                             {
@@ -134,11 +134,19 @@ namespace Up2dateShared
                     }
                     if (response.StatusCode == System.Net.HttpStatusCode.Created || response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
+                        const int chunkSize = 128;
                         string crtJson = await response.Content.ReadAsStringAsync();
                         string encodedCertBase64 = JsonConvert.DeserializeObject<CrtDto>(crtJson).crt;
                         byte[] encodedCert = Convert.FromBase64String(encodedCertBase64);
-                        byte[] certBlob = rsa.Decrypt(encodedCert, RSAEncryptionPadding.Pkcs1);
-                        string cert = Encoding.UTF8.GetString(certBlob);
+                        List<byte> certBlob = new List<byte>();
+                        for (int i = 0; i < encodedCert.Length; i += chunkSize)
+                        {
+                            byte[] chunk = new byte[chunkSize];
+                            Array.Copy(encodedCert, i, chunk, 0, chunkSize);
+                            byte[] decodedChunk = rsa.Decrypt(chunk, RSAEncryptionPadding.Pkcs1);
+                            certBlob.AddRange(decodedChunk);
+                        }
+                        string cert = Encoding.UTF8.GetString(certBlob.ToArray());
                         return Result<string>.Successful(cert);
                     }
                     return Result<string>.Failed(response.ReasonPhrase);

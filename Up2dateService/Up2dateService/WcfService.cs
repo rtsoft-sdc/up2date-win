@@ -137,20 +137,7 @@ namespace Up2dateService
         [OperationBehavior(Impersonation = ImpersonationOption.Required)]
         public Result<string> GetCertificateBySessionHandle(string handle)
         {
-            Result<string> result = certificateProvider.GetCertificateBySessionHandleAsync(handle).Result;
-            if (!result.Success) return result;
-
-            string certString = result.Value;
-            try
-            {
-                byte[] certData = Encoding.UTF8.GetBytes(certString);
-                certificateManager.ImportCertificate(certData);
-            }
-            catch (Exception e)
-            {
-                return Result<string>.Failed(e);
-            }
-            return Result<string>.Successful(GetDeviceId());
+            return certificateProvider.GetCertificateBySessionHandleAsync(handle).Result;
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
@@ -162,11 +149,27 @@ namespace Up2dateService
 
         [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
         [OperationBehavior(Impersonation = ImpersonationOption.Required)]
-        public Result<string> ImportCertificate(string filePath)
+        public Result<string> ImportCertificateFile(string filePath)
         {
             try
             {
                 certificateManager.ImportCertificate(filePath);
+            }
+            catch (Exception e)
+            {
+                return Result<string>.Failed(e);
+            }
+            return Result<string>.Successful(GetDeviceId());
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public Result<string> ImportCertificate(string certString)
+        {
+            try
+            {
+                byte[] certData = Encoding.UTF8.GetBytes(certString);
+                certificateManager.ImportCertificate(certData);
             }
             catch (Exception e)
             {

@@ -1,4 +1,4 @@
-﻿<Window  x:Class="Up2dateConsole.Dialogs.QrCode.QrCodeDialog"
+﻿<Window  x:Uid="Window_1" x:Class="Up2dateConsole.Dialogs.QrCode.QrCodeDialog"
          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,15 +13,15 @@
          d:DataContext="{d:DesignInstance local:QrCodeDialogViewModel}">
 
     <Window.Resources>
-        <ResourceDictionary>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\..\Styles.xaml"/>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="..\..\Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Connecting to OTT provider..."/>
-        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="400" Height="400" Source="{Binding Bitmap}"/>
+    <Grid x:Uid="Grid_1">
+        <TextBlock x:Uid="TextBlock_1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Connecting to certificate provider..."/>
+        <Image x:Uid="Image_1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="400" Height="400" Source="{Binding Bitmap}"/>
     </Grid>
 </Window>

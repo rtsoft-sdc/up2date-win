@@ -215,7 +215,7 @@ namespace Up2dateConsole.Dialogs.RequestCertificate
                     }
                     if (!string.IsNullOrWhiteSpace(certFilePath))
                     {
-                        result = await service.ImportCertificateAsync(certFilePath);
+                        result = await service.ImportCertificateFileAsync(certFilePath);
                     }
                     else if (!string.IsNullOrWhiteSpace(OneTimeKey))
                     {
