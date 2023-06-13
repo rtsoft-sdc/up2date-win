@@ -115,8 +115,10 @@ namespace Up2dateService
         {
             try
             {
-                string certString = certificateProvider.RequestCertificateAsync(oneTimeKey).Result;
-                byte[] certData = Encoding.UTF8.GetBytes(certString);
+                Result<string> r = certificateProvider.RequestCertificateAsync(oneTimeKey).Result;
+                if (!r.Success) return r;
+
+                byte[] certData = Encoding.UTF8.GetBytes(r.Value);
                 certificateManager.ImportCertificate(certData);
             }
             catch (Exception e)

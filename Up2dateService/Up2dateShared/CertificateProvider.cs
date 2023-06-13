@@ -32,6 +32,11 @@ namespace Up2dateShared
             public string handle_id { get; set; }
         }
 
+        private struct ErrDetailDto
+        {
+            public string detail { get; set; }
+        }
+
         private readonly HttpClient client;
         private readonly ISettingsManager settingsManager;
         private readonly Dictionary<string, RSACryptoServiceProvider> sessions = new Dictionary<string, RSACryptoServiceProvider>();
@@ -45,15 +50,27 @@ namespace Up2dateShared
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<string> RequestCertificateAsync(string ott)
+        public async Task<Result<string>> RequestCertificateAsync(string ott)
         {
             string oneTimeTokenJson = JsonConvert.SerializeObject(new OneTimeTokenDto { oneTimeToken = ott });
             using (StringContent content = new StringContent(oneTimeTokenJson, Encoding.UTF8, "application/json"))
             {
                 using (HttpResponseMessage response = await client.PostAsync(settingsManager.RequestCertificateUrl, content))
                 {
-                    string crtJson = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<CrtDto>(crtJson).crt;
+                    string resp_str = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        try
+                        {
+                            ErrDetailDto err = JsonConvert.DeserializeObject<ErrDetailDto>(resp_str);
+                            return Result<string>.Failed(err.detail ?? response.ReasonPhrase);
+                        }
+                        catch
+                        {
+                            return Result<string>.Failed(response.ReasonPhrase);
+                        }
+                    }
+                    return Result<string>.Successful(JsonConvert.DeserializeObject<CrtDto>(resp_str).crt);
                 }
             }
         }
@@ -149,7 +166,8 @@ namespace Up2dateShared
                         string cert = Encoding.UTF8.GetString(certBlob.ToArray());
                         return Result<string>.Successful(cert);
                     }
-                    return Result<string>.Failed(response.ReasonPhrase);
+                    string error = await response.Content?.ReadAsStringAsync();
+                    return Result<string>.Failed(string.IsNullOrEmpty(error) ? response.ReasonPhrase : error);
                 }
             }
             catch (Exception e)
