@@ -202,17 +202,5 @@ namespace Up2dateService.Properties {
                 this["SecureAuthorizationMode"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://enter.dev.ritms.online:8000")]
-        public string RequestOneTimeTokenUrl {
-            get {
-                return ((string)(this["RequestOneTimeTokenUrl"]));
-            }
-            set {
-                this["RequestOneTimeTokenUrl"] = value;
-            }
-        }
     }
 }

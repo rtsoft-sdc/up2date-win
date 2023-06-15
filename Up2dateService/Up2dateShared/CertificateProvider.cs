@@ -58,19 +58,9 @@ namespace Up2dateShared
                 using (HttpResponseMessage response = await client.PostAsync(settingsManager.RequestCertificateUrl, content))
                 {
                     string resp_str = await response.Content.ReadAsStringAsync();
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        try
-                        {
-                            ErrDetailDto err = JsonConvert.DeserializeObject<ErrDetailDto>(resp_str);
-                            return Result<string>.Failed(err.detail ?? response.ReasonPhrase);
-                        }
-                        catch
-                        {
-                            return Result<string>.Failed(response.ReasonPhrase);
-                        }
-                    }
-                    return Result<string>.Successful(JsonConvert.DeserializeObject<CrtDto>(resp_str).crt);
+                    return response.IsSuccessStatusCode
+                        ? Result<string>.Successful(JsonConvert.DeserializeObject<CrtDto>(resp_str).crt)
+                        : await GetError(response);
                 }
             }
         }
@@ -94,23 +84,10 @@ namespace Up2dateShared
                     using (HttpResponseMessage response = await client.PutAsync(
                         $"{settingsManager.RequestCertificateUrl}/certificate", content))
                     {
-                        if (response.StatusCode == System.Net.HttpStatusCode.Created || response.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                            string handleJson = await response.Content.ReadAsStringAsync();
-                            string handle = JsonConvert.DeserializeObject<HandleDto>(handleJson).handle_id;
-                            if (string.IsNullOrWhiteSpace(handle))
-                            {
-                                result = Result<string>.Failed("Server responded with empty handle.");
-                            }
-                            else
-                            {
-                                result = Result<string>.Successful(handle);
-                            }
-                        }
-                        else
-                        {
-                            result = Result<string>.Failed(response.ReasonPhrase);
-                        }
+                        string resp_str = await response.Content.ReadAsStringAsync();
+                        result = response.IsSuccessStatusCode
+                            ? Result<string>.Successful(JsonConvert.DeserializeObject<HandleDto>(resp_str).handle_id)
+                            : await GetError(response);
                     }
                 }
             }
@@ -149,25 +126,26 @@ namespace Up2dateShared
                     {
                         return Result<string>.Successful(string.Empty);
                     }
-                    if (response.StatusCode == System.Net.HttpStatusCode.Created || response.StatusCode == System.Net.HttpStatusCode.OK)
+
+                    string resp_str = await response.Content.ReadAsStringAsync();
+                    
+                    if (!response.IsSuccessStatusCode)
+                        return await GetError(response);
+
+                    const int chunkSize = 128;
+                    string crtJson = await response.Content.ReadAsStringAsync();
+                    string encodedCertBase64 = JsonConvert.DeserializeObject<CrtDto>(crtJson).crt;
+                    byte[] encodedCert = Convert.FromBase64String(encodedCertBase64);
+                    List<byte> certBlob = new List<byte>();
+                    for (int i = 0; i < encodedCert.Length; i += chunkSize)
                     {
-                        const int chunkSize = 128;
-                        string crtJson = await response.Content.ReadAsStringAsync();
-                        string encodedCertBase64 = JsonConvert.DeserializeObject<CrtDto>(crtJson).crt;
-                        byte[] encodedCert = Convert.FromBase64String(encodedCertBase64);
-                        List<byte> certBlob = new List<byte>();
-                        for (int i = 0; i < encodedCert.Length; i += chunkSize)
-                        {
-                            byte[] chunk = new byte[chunkSize];
-                            Array.Copy(encodedCert, i, chunk, 0, chunkSize);
-                            byte[] decodedChunk = rsa.Decrypt(chunk, RSAEncryptionPadding.Pkcs1);
-                            certBlob.AddRange(decodedChunk);
-                        }
-                        string cert = Encoding.UTF8.GetString(certBlob.ToArray());
-                        return Result<string>.Successful(cert);
+                        byte[] chunk = new byte[chunkSize];
+                        Array.Copy(encodedCert, i, chunk, 0, chunkSize);
+                        byte[] decodedChunk = rsa.Decrypt(chunk, RSAEncryptionPadding.Pkcs1);
+                        certBlob.AddRange(decodedChunk);
                     }
-                    string error = await response.Content?.ReadAsStringAsync();
-                    return Result<string>.Failed(string.IsNullOrEmpty(error) ? response.ReasonPhrase : error);
+                    string cert = Encoding.UTF8.GetString(certBlob.ToArray());
+                    return Result<string>.Successful(cert);
                 }
             }
             catch (Exception e)
@@ -182,6 +160,20 @@ namespace Up2dateShared
             {
                 sessions[handle].Dispose();
                 sessions.Remove(handle);
+            }
+        }
+
+        private async Task<Result<string>> GetError(HttpResponseMessage response)
+        {
+            string resp_str = await response.Content.ReadAsStringAsync();
+            try
+            {
+                ErrDetailDto err = JsonConvert.DeserializeObject<ErrDetailDto>(resp_str);
+                return Result<string>.Failed(err.detail ?? response.ReasonPhrase);
+            }
+            catch
+            {
+                return Result<string>.Failed(response.ReasonPhrase);
             }
         }
     }

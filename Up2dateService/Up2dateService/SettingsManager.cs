@@ -171,17 +171,6 @@ namespace Up2dateService
             }
         }
 
-        public string RequestOneTimeTokenUrl
-        {
-            get => Properties.Settings.Default.RequestOneTimeTokenUrl;
-            set
-            {
-                Properties.Settings.Default.RequestOneTimeTokenUrl = value;
-                Properties.Settings.Default.Save();
-                WriteSettingsToLog();
-            }
-        }
-
         private void WriteSettingsToLog()
         {
             StringBuilder sb = new StringBuilder("\n");
