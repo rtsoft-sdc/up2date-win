@@ -57,7 +57,7 @@ namespace Up2dateConsole.Dialogs.QrCode
 
                 handle = result.Value;
 
-                Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start={clientID}_{handle}");
+                Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start=approve_{clientID}_{handle}");
 
                 const int period = 3; // sec
                 const int timeout = 120; // sec
