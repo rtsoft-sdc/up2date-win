@@ -76,10 +76,34 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Controls\SqueezeContentControl.cs" />
+    <Compile Include="Dialogs\Authorization\AuthorizationDialog.xaml.cs">
+      <DependentUpon>AuthorizationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\AuthorizationDialogViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\ImportCertificatePage.xaml.cs">
+      <DependentUpon>ImportCertificatePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\ImportCertificatePageViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\OneTimeTokenPage.xaml.cs">
+      <DependentUpon>OneTimeTokenPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\OneTimeTokenPageViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\PlainTokenPage.xaml.cs">
+      <DependentUpon>PlainTokenPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\PlainTokenPageViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\ReconnectPage.xaml.cs">
+      <DependentUpon>ReconnectPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\ReconnectPageViewModel.cs" />
     <Compile Include="Dialogs\QrCode\QrCodeDialog.xaml.cs">
       <DependentUpon>QrCodeDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\QrCode\QrCodeDialogViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\QrCodePage.xaml.cs">
+      <DependentUpon>QrCodePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\QrCodePageViewModel.cs" />
     <Compile Include="Dialogs\Settings\ConsoleSecurityTab.xaml.cs">
       <DependentUpon>ConsoleSecurityTab.xaml</DependentUpon>
     </Compile>
@@ -88,10 +112,6 @@
       <DependentUpon>InstallationPolicyTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Settings\InstallationPolicyTabViewModel.cs" />
-    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialogViewModel.cs" />
-    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml.cs">
-      <DependentUpon>RequestCertificateDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\Settings\ServerConnectionTab.xaml.cs">
       <DependentUpon>ServerConnectionTab.xaml</DependentUpon>
     </Compile>
@@ -152,11 +172,31 @@
     <Compile Include="ViewService\DialogViewModelBase.cs" />
     <Compile Include="ViewService\ViewService.cs" />
     <Compile Include="WcfClientFactory.cs" />
+    <Page Include="Dialogs\Authorization\AuthorizationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\ImportCertificatePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\OneTimeTokenPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\PlainTokenPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\ReconnectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\QrCode\QrCodeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml">
+    <Page Include="Dialogs\Authorization\QrCodePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

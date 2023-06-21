@@ -17,19 +17,15 @@ namespace Up2dateConsole.Dialogs.QrCode
         private BitmapSource bitmap;
         private TimeSpan timeLeft;
 
-        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, IWcfClientFactory wcfClientFactory, string clientID)
+        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, IWcfClientFactory wcfClientFactory)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.qrCodeHelper = qrCodeHelper ?? throw new ArgumentNullException(nameof(qrCodeHelper));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
-            if (string.IsNullOrWhiteSpace(clientID))
-            {
-                throw new ArgumentException($"'{nameof(clientID)}' cannot be null or whitespace.", nameof(clientID));
-            }
 
             cancellationTokenSource = new CancellationTokenSource();
 
-            GetCertAsync(clientID);
+            GetCertAsync();
         }
 
         public override bool OnClosing()
@@ -38,13 +34,15 @@ namespace Up2dateConsole.Dialogs.QrCode
             return base.OnClosing();
         }
 
-        private async void GetCertAsync(string clientID)
+        private async void GetCertAsync()
         {
             string handle = string.Empty;
             ServiceReference.IWcfService server = null;
             try
             {
                 server = wcfClientFactory.CreateClient();
+
+                string clientID = server.GetDeviceId();
 
                 var result = await server.OpenRequestCertificateSessionAsync();
                 if (cancellationTokenSource.IsCancellationRequested) return;
