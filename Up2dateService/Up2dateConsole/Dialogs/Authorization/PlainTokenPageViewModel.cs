@@ -11,6 +11,8 @@ namespace Up2dateConsole.Dialogs.Authorization
         private Func<Func<IWcfService, Task<ResultOfstring>>, bool, Task> establishConnection;
         private string hawkbitUrl;
         private string controllerId;
+        private bool isUnsafeConnection;
+        private bool isCertificateAvailable;
         private string deviceToken;
 
         public PlainTokenPageViewModel(Func<Func<IWcfService, Task<ResultOfstring>>, bool, Task> establishConnection)
@@ -18,6 +20,7 @@ namespace Up2dateConsole.Dialogs.Authorization
             this.establishConnection = establishConnection ?? throw new ArgumentNullException(nameof(establishConnection));
 
             RequestCommand = new RelayCommand(async (_) => await ExecuteRequestAsync(), CanRequest);
+            BackToProtectedModeCommand = new RelayCommand(async (_) => await ExecuteBackToProtectedModeAsync());
         }
 
         public string HawkbitUrl
@@ -55,6 +58,10 @@ namespace Up2dateConsole.Dialogs.Authorization
 
         public ICommand RequestCommand { get; }
 
+        public ICommand BackToProtectedModeCommand { get; }
+
+        public bool CanBackToProtectedMode => isUnsafeConnection && isCertificateAvailable;
+
         internal void Initialize(IWcfService service)
         {
             hawkbitUrl = service.GetUnsafeConnectionUrl();
@@ -63,6 +70,8 @@ namespace Up2dateConsole.Dialogs.Authorization
             {
                 controllerId = service.GetSystemInfo().MachineGuid;
             }
+            isUnsafeConnection = service.IsUnsafeConnection();
+            isCertificateAvailable = service.IsCertificateAvailable();
             deviceToken = service.GetUnsafeConnectionToken();
         }
 
@@ -82,5 +91,9 @@ namespace Up2dateConsole.Dialogs.Authorization
             return new ResultOfstring() { Success = r.Success, ErrorMessage = r.ErrorMessage, Value = string.Empty };
         }
 
+        private async Task ExecuteBackToProtectedModeAsync()
+        {
+            await establishConnection(null, true);
+        }
     }
 }

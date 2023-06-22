@@ -92,10 +92,6 @@
       <DependentUpon>PlainTokenPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Authorization\PlainTokenPageViewModel.cs" />
-    <Compile Include="Dialogs\Authorization\ReconnectPage.xaml.cs">
-      <DependentUpon>ReconnectPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\Authorization\ReconnectPageViewModel.cs" />
     <Compile Include="Dialogs\QrCode\QrCodeDialog.xaml.cs">
       <DependentUpon>QrCodeDialog.xaml</DependentUpon>
     </Compile>
@@ -185,10 +181,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\Authorization\PlainTokenPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\Authorization\ReconnectPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,6 +18,8 @@
                 <Setter x:Uid="Setter_2" Property="Margin" Value="5"/>
                 <Setter x:Uid="Setter_3" Property="MinWidth" Value="70"/>
             </Style>
+
+            <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     
@@ -28,6 +30,11 @@
         <TextBox x:Uid="TextBox_2" Margin="0,5" Text="{Binding ControllerId, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock x:Uid="TextBlock_3" Text="Security token (paste here generated token copied from dashboard):"/>
         <TextBox x:Uid="TextBox_3" Margin="0,5" Text="{Binding DeviceToken, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button x:Uid="Button_1" Grid.Row="2" HorizontalAlignment="Left" Content="Authorize" Command="{Binding RequestCommand}"/>
+        <Grid x:Uid="Grid_1" Grid.Row="2" >
+            <Button x:Uid="Button_1" HorizontalAlignment="Left" Content="Authorize" Command="{Binding RequestCommand}"/>
+            <Button x:Uid="Button_2" HorizontalAlignment="Right" Content="Back to protected mode" 
+                    Visibility="{Binding CanBackToProtectedMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding BackToProtectedModeCommand}"/>
+        </Grid>
     </StackPanel>
 </UserControl>

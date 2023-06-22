@@ -32,7 +32,6 @@ namespace Up2dateConsole.Dialogs.Authorization
             OneTimeTokenPage = new OneTimeTokenPageViewModel(EstablishConnection);
             ImportCertificatePage = new ImportCertificatePageViewModel(EstablishConnection, viewService);
             PlainTokenPage = new PlainTokenPageViewModel(EstablishConnection);
-            ReconnectPage = new ReconnectPageViewModel(EstablishConnection);
 
             Initialize();
         }
@@ -85,8 +84,6 @@ namespace Up2dateConsole.Dialogs.Authorization
         public OneTimeTokenPageViewModel OneTimeTokenPage { get; }
 
         public ImportCertificatePageViewModel ImportCertificatePage { get; }
-
-        public ReconnectPageViewModel ReconnectPage { get; }
 
         public PlainTokenPageViewModel PlainTokenPage { get; }
 

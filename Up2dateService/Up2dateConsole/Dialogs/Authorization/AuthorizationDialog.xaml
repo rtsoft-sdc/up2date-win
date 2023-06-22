@@ -68,12 +68,6 @@
                 <local:ImportCertificatePage x:Uid="local:ImportCertificatePage_1" DataContext="{Binding ImportCertificatePage}"/>
             </ContentControl>
 
-            <RadioButton x:Uid="RadioButton_4" Margin="0,5" Content="Reconnect using existing certificate" IsChecked="{Binding IsReconnectMode}"
-                         Visibility="{Binding IsCertificateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <ContentControl x:Uid="ContentControl_4" Visibility="{Binding IsReconnectMode, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="20,0,0,10">
-                <local:ReconnectPage x:Uid="local:ReconnectPage_1" DataContext="{Binding ReconnectPage}"/>
-            </ContentControl>
-
             <RadioButton x:Uid="RadioButton_5" Margin="0,5" Content="Development mode (plain token)" IsChecked="{Binding IsPlainTokenMode}"/>
             <ContentControl x:Uid="ContentControl_5" Visibility="{Binding IsPlainTokenMode, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="20,0,0,10">
                 <local:PlainTokenPage x:Uid="local:PlainTokenPage_1" DataContext="{Binding PlainTokenPage}"/>
