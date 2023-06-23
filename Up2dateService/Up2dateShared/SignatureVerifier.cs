@@ -67,9 +67,9 @@ namespace Up2dateShared
             // Relaxing the revocation check is needed to support certificates from authorities without revocation service
             theCertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
             theCertificateChain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
-            theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
-
-            return theCertificateChain.Build(certificate);
+            theCertificateChain.ChainPolicy.VerificationFlags = X509VerificationFlags.IgnoreNotTimeValid;
+            var r = theCertificateChain.Build(certificate);
+            return r;
         }
     }
 }

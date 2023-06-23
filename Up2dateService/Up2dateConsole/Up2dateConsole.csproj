@@ -48,6 +48,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
@@ -75,6 +76,30 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Controls\SqueezeContentControl.cs" />
+    <Compile Include="Dialogs\Authorization\AuthorizationDialog.xaml.cs">
+      <DependentUpon>AuthorizationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\AuthorizationDialogViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\ImportCertificatePage.xaml.cs">
+      <DependentUpon>ImportCertificatePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\ImportCertificatePageViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\OneTimeTokenPage.xaml.cs">
+      <DependentUpon>OneTimeTokenPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\OneTimeTokenPageViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\PlainTokenPage.xaml.cs">
+      <DependentUpon>PlainTokenPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\PlainTokenPageViewModel.cs" />
+    <Compile Include="Dialogs\QrCode\QrCodeDialog.xaml.cs">
+      <DependentUpon>QrCodeDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QrCode\QrCodeDialogViewModel.cs" />
+    <Compile Include="Dialogs\Authorization\QrCodePage.xaml.cs">
+      <DependentUpon>QrCodePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Authorization\QrCodePageViewModel.cs" />
     <Compile Include="Dialogs\Settings\ConsoleSecurityTab.xaml.cs">
       <DependentUpon>ConsoleSecurityTab.xaml</DependentUpon>
     </Compile>
@@ -83,10 +108,6 @@
       <DependentUpon>InstallationPolicyTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Settings\InstallationPolicyTabViewModel.cs" />
-    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialogViewModel.cs" />
-    <Compile Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml.cs">
-      <DependentUpon>RequestCertificateDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\Settings\ServerConnectionTab.xaml.cs">
       <DependentUpon>ServerConnectionTab.xaml</DependentUpon>
     </Compile>
@@ -95,6 +116,7 @@
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Settings\SettingsDialogViewModel.cs" />
+    <Compile Include="Helpers\BitmapToImageSourceConverter.cs" />
     <Compile Include="Helpers\CommandLineHelper.cs" />
     <Compile Include="Helpers\InactivityMonitor\IInactivityMonitor.cs" />
     <Compile Include="Helpers\InactivityMonitor\HookMonitor.cs" />
@@ -103,11 +125,13 @@
     <Compile Include="Helpers\InactivityMonitor\Win32Hook.cs" />
     <Compile Include="Helpers\InvertBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\IProcessHelper.cs" />
+    <Compile Include="Helpers\IQrCodeHelper.cs" />
     <Compile Include="Helpers\IServiceHelper.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\EnumToVisibilityConverter.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
+    <Compile Include="Helpers\QrCodeHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SingleInstanceHelper.cs" />
     <Compile Include="ISettings.cs" />
@@ -144,7 +168,27 @@
     <Compile Include="ViewService\DialogViewModelBase.cs" />
     <Compile Include="ViewService\ViewService.cs" />
     <Compile Include="WcfClientFactory.cs" />
-    <Page Include="Dialogs\RequestCertificate\RequestCertificateDialog.xaml">
+    <Page Include="Dialogs\Authorization\AuthorizationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\ImportCertificatePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\OneTimeTokenPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\PlainTokenPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\QrCode\QrCodeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Authorization\QrCodePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -290,6 +334,9 @@
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.1.2</Version>
     </PackageReference>
+    <PackageReference Include="QRCoder">
+      <Version>1.4.3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\UAC.png" />
@@ -308,7 +355,6 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ServiceReference\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)Localization\CheckAndGenerate.cmd" ru-RU $(TargetDir) $(TargetName) $(ProjectDir) $(ProjectName)

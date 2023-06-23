@@ -4,7 +4,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using Up2dateConsole.Dialogs.RequestCertificate;
+using Up2dateConsole.Dialogs.Authorization;
+using Up2dateConsole.Dialogs.QrCode;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Helpers.InactivityMonitor;
@@ -69,8 +70,9 @@ namespace Up2dateConsole
             var mainWindow = new MainWindow();
 
             IViewService viewService = new ViewService.ViewService();
-            viewService.RegisterDialog(typeof(RequestCertificateDialogViewModel), typeof(RequestCertificateDialog));
+            viewService.RegisterDialog(typeof(AuthorizationDialogViewModel), typeof(AuthorizationDialog));
             viewService.RegisterDialog(typeof(SettingsDialogViewModel), typeof(SettingsDialog));
+            viewService.RegisterDialog(typeof(QrCodeDialogViewModel), typeof(QrCodeDialog));
 
             IWcfClientFactory wcfClientFactory = new WcfClientFactory();
             ISettings settings = new Settings();

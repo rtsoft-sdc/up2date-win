@@ -115,8 +115,10 @@ namespace Up2dateService
         {
             try
             {
-                string certString = certificateProvider.RequestCertificateAsync(oneTimeKey).Result;
-                byte[] certData = Encoding.UTF8.GetBytes(certString);
+                Result<string> r = certificateProvider.RequestCertificateAsync(oneTimeKey).Result;
+                if (!r.Success) return r;
+
+                byte[] certData = Encoding.UTF8.GetBytes(r.Value);
                 certificateManager.ImportCertificate(certData);
             }
             catch (Exception e)
@@ -128,11 +130,48 @@ namespace Up2dateService
 
         [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
         [OperationBehavior(Impersonation = ImpersonationOption.Required)]
-        public Result<string> ImportCertificate(string filePath)
+        public Result<string> OpenRequestCertificateSession()
+        {
+            return certificateProvider.OpenRequestCertificateSessionAsync().Result;
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public Result<string> GetCertificateBySessionHandle(string handle)
+        {
+            return certificateProvider.GetCertificateBySessionHandleAsync(handle).Result;
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public void CloseRequestCertificateSession(string handle)
+        {
+            certificateProvider.CloseRequestCertificateSession(handle);
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public Result<string> ImportCertificateFile(string filePath)
         {
             try
             {
                 certificateManager.ImportCertificate(filePath);
+            }
+            catch (Exception e)
+            {
+                return Result<string>.Failed(e);
+            }
+            return Result<string>.Successful(GetDeviceId());
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]
+        [OperationBehavior(Impersonation = ImpersonationOption.Required)]
+        public Result<string> ImportCertificate(string certString)
+        {
+            try
+            {
+                byte[] certData = Encoding.UTF8.GetBytes(certString);
+                certificateManager.ImportCertificate(certData);
             }
             catch (Exception e)
             {

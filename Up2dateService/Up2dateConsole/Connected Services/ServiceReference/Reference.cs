@@ -886,11 +886,35 @@ namespace Up2dateConsole.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/RequestCertificate", ReplyAction="http://tempuri.org/IWcfService/RequestCertificateResponse")]
         System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> RequestCertificateAsync(string oneTimeKey);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/ImportCertificate", ReplyAction="http://tempuri.org/IWcfService/ImportCertificateResponse")]
-        Up2dateConsole.ServiceReference.ResultOfstring ImportCertificate(string filePath);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/OpenRequestCertificateSession", ReplyAction="http://tempuri.org/IWcfService/OpenRequestCertificateSessionResponse")]
+        Up2dateConsole.ServiceReference.ResultOfstring OpenRequestCertificateSession();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/OpenRequestCertificateSession", ReplyAction="http://tempuri.org/IWcfService/OpenRequestCertificateSessionResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> OpenRequestCertificateSessionAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetCertificateBySessionHandle", ReplyAction="http://tempuri.org/IWcfService/GetCertificateBySessionHandleResponse")]
+        Up2dateConsole.ServiceReference.ResultOfstring GetCertificateBySessionHandle(string handle);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetCertificateBySessionHandle", ReplyAction="http://tempuri.org/IWcfService/GetCertificateBySessionHandleResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> GetCertificateBySessionHandleAsync(string handle);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/CloseRequestCertificateSession", ReplyAction="http://tempuri.org/IWcfService/CloseRequestCertificateSessionResponse")]
+        void CloseRequestCertificateSession(string handle);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/CloseRequestCertificateSession", ReplyAction="http://tempuri.org/IWcfService/CloseRequestCertificateSessionResponse")]
+        System.Threading.Tasks.Task CloseRequestCertificateSessionAsync(string handle);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/ImportCertificateFile", ReplyAction="http://tempuri.org/IWcfService/ImportCertificateFileResponse")]
+        Up2dateConsole.ServiceReference.ResultOfstring ImportCertificateFile(string filePath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/ImportCertificateFile", ReplyAction="http://tempuri.org/IWcfService/ImportCertificateFileResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> ImportCertificateFileAsync(string filePath);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/ImportCertificate", ReplyAction="http://tempuri.org/IWcfService/ImportCertificateResponse")]
-        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> ImportCertificateAsync(string filePath);
+        Up2dateConsole.ServiceReference.ResultOfstring ImportCertificate(string certString);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/ImportCertificate", ReplyAction="http://tempuri.org/IWcfService/ImportCertificateResponse")]
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> ImportCertificateAsync(string certString);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetRequestCertificateUrl", ReplyAction="http://tempuri.org/IWcfService/GetRequestCertificateUrlResponse")]
         string GetRequestCertificateUrl();
@@ -1136,12 +1160,44 @@ namespace Up2dateConsole.ServiceReference {
             return base.Channel.RequestCertificateAsync(oneTimeKey);
         }
         
-        public Up2dateConsole.ServiceReference.ResultOfstring ImportCertificate(string filePath) {
-            return base.Channel.ImportCertificate(filePath);
+        public Up2dateConsole.ServiceReference.ResultOfstring OpenRequestCertificateSession() {
+            return base.Channel.OpenRequestCertificateSession();
         }
         
-        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> ImportCertificateAsync(string filePath) {
-            return base.Channel.ImportCertificateAsync(filePath);
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> OpenRequestCertificateSessionAsync() {
+            return base.Channel.OpenRequestCertificateSessionAsync();
+        }
+        
+        public Up2dateConsole.ServiceReference.ResultOfstring GetCertificateBySessionHandle(string handle) {
+            return base.Channel.GetCertificateBySessionHandle(handle);
+        }
+        
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> GetCertificateBySessionHandleAsync(string handle) {
+            return base.Channel.GetCertificateBySessionHandleAsync(handle);
+        }
+        
+        public void CloseRequestCertificateSession(string handle) {
+            base.Channel.CloseRequestCertificateSession(handle);
+        }
+        
+        public System.Threading.Tasks.Task CloseRequestCertificateSessionAsync(string handle) {
+            return base.Channel.CloseRequestCertificateSessionAsync(handle);
+        }
+        
+        public Up2dateConsole.ServiceReference.ResultOfstring ImportCertificateFile(string filePath) {
+            return base.Channel.ImportCertificateFile(filePath);
+        }
+        
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> ImportCertificateFileAsync(string filePath) {
+            return base.Channel.ImportCertificateFileAsync(filePath);
+        }
+        
+        public Up2dateConsole.ServiceReference.ResultOfstring ImportCertificate(string certString) {
+            return base.Channel.ImportCertificate(certString);
+        }
+        
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> ImportCertificateAsync(string certString) {
+            return base.Channel.ImportCertificateAsync(certString);
         }
         
         public string GetRequestCertificateUrl() {
