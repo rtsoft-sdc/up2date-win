@@ -64,6 +64,10 @@
         BadConnectionMessage,
         GoodConnectionMessage,
         ConfirmDeleteFmt,
-        CannotDeletePackage
+        CannotDeletePackage,
+        RequestCertificateError,
+        GetCertificateError,
+        ServerRefusedProvidingCertificate,
+        TimeoutGettingCertificate
     }
 }

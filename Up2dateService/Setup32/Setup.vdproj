@@ -2127,18 +2127,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_51C8A05A77AE3426572788C5E0EC509C"
-        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_51C8A05A77AE3426572788C5E0EC509C"
-        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_53131A64E3416AC86C06A2B3ABBB3C20"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
@@ -3867,12 +3855,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_781CEC2532832A0B5961FB4AF00E5E45"
-        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_78B097364083540FA203E9A91F809195"
         "OwnerKey" = "8:_A0C9A0298B50A7FE35B5036875C575DC"
         "MsmSig" = "8:_UNDEFINED"
@@ -4049,6 +4031,12 @@
         {
         "MsmKey" = "8:_98C009EE76457489DC5ABE4BC13E104A"
         "OwnerKey" = "8:_973D29D5F723B5D515DB9923BD1BAE2E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_99CCCD202B07878B7F7A82BD9A5DEDEC"
+        "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -4337,6 +4325,18 @@
         {
         "MsmKey" = "8:_C06272E6AA6AB75B389802F33664AD20"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C2AFDABF3E29B649AB4A158019FEED52"
+        "OwnerKey" = "8:_A892E60A46D243C58D68C48619724791"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C2AFDABF3E29B649AB4A158019FEED52"
+        "OwnerKey" = "8:_1E5ED1531F976AEF0218491EC9C96CEB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -5158,13 +5158,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_51C8A05A77AE3426572788C5E0EC509C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_781CEC2532832A0B5961FB4AF00E5E45"
+        "OwnerKey" = "8:_C2AFDABF3E29B649AB4A158019FEED52"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -5213,6 +5207,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_251BE027A6F24E1693C88BE8EF6674A4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_99CCCD202B07878B7F7A82BD9A5DEDEC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -6689,7 +6689,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateShared, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_07005A70F2BEFDF14C4F99119595EA1D"
@@ -7557,7 +7557,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Up2dateClient, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1E5ED1531F976AEF0218491EC9C96CEB"
@@ -8822,37 +8822,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_51C8A05A77AE3426572788C5E0EC509C"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_51C8A05A77AE3426572788C5E0EC509C"
-                    {
-                    "Name" = "8:Up2dateDotNet.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Up2dateDotNet.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_53131A64E3416AC86C06A2B3ABBB3C20"
             {
             "AssemblyRegister" = "3:1"
@@ -9792,37 +9761,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_781CEC2532832A0B5961FB4AF00E5E45"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_781CEC2532832A0B5961FB4AF00E5E45"
-                    {
-                    "Name" = "8:Up2dateDotNet.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Up2dateDotNet.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_78B097364083540FA203E9A91F809195"
             {
             "AssemblyRegister" = "3:1"
@@ -10550,6 +10488,37 @@
                     }
                 }
             "SourcePath" = "8:System.IO.Compression.FileSystem.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_99CCCD202B07878B7F7A82BD9A5DEDEC"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QRCoder, Version=1.4.3.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_99CCCD202B07878B7F7A82BD9A5DEDEC"
+                    {
+                    "Name" = "8:QRCoder.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QRCoder.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
@@ -11768,6 +11737,37 @@
                     }
                 }
             "SourcePath" = "8:Windows.ApplicationModel.Wallet.WalletContract.winmd"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C2AFDABF3E29B649AB4A158019FEED52"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Up2dateDotNet, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C2AFDABF3E29B649AB4A158019FEED52"
+                    {
+                    "Name" = "8:Up2dateDotNet.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Up2dateDotNet.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_444A693ED8EA4027BF886B7C64D5D65B"
@@ -13566,15 +13566,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RITMS UP2DATE Client"
-        "ProductCode" = "8:{9A6C6726-1E62-4525-9F9E-3B771D8A9E64}"
-        "PackageCode" = "8:{473B2F8E-9E01-4F80-A588-3F548ABE6238}"
+        "ProductCode" = "8:{4BEC228B-E568-4851-903C-D0C48A54DF6A}"
+        "PackageCode" = "8:{F774EC76-8C1E-4D33-BBCE-D80579554A1D}"
         "UpgradeCode" = "8:{A4D493F8-CC2D-4DA5-A6CC-98A5D6CBD926}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.3.0"
+        "ProductVersion" = "8:2.4.0"
         "Manufacturer" = "8:RTSoft"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

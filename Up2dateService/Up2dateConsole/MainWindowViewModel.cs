@@ -8,7 +8,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Up2dateConsole.Dialogs.RequestCertificate;
+using Up2dateConsole.Dialogs.Authorization;
 using Up2dateConsole.Dialogs.Settings;
 using Up2dateConsole.Helpers;
 using Up2dateConsole.Notifier;
@@ -238,7 +238,7 @@ namespace Up2dateConsole
 
         private async Task RequestCertificateAsync(bool showExplanation)
         {
-            RequestCertificateDialogViewModel vm = new RequestCertificateDialogViewModel(viewService, wcfClientFactory, showExplanation);
+            AuthorizationDialogViewModel vm = new AuthorizationDialogViewModel(viewService, wcfClientFactory, showExplanation);
             bool success = viewService.ShowDialog(vm);
             if (success)
             {
@@ -246,9 +246,9 @@ namespace Up2dateConsole
 
                 string message = ServiceState == ServiceState.Active
                     ? GetText(Texts.GoodConnectionMessage)
-                    : vm.IsSecureConnection
-                        ? GetText(Texts.BadCertificateMessage)
-                        : GetText(Texts.BadConnectionMessage);
+                    : vm.IsPlainTokenMode
+                        ? GetText(Texts.BadConnectionMessage)
+                        : GetText(Texts.BadCertificateMessage);
 
                 viewService.ShowMessageBox(message);
             }

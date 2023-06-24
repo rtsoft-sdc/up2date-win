@@ -1,0 +1,31 @@
+﻿<UserControl x:Uid="UserControl_1" x:Class="Up2dateConsole.Dialogs.Authorization.ImportCertificatePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Up2dateConsole.Dialogs.Authorization"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance local:ImportCertificatePageViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Uid="ResourceDictionary_2" Source="..\..\Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Uid="Style_1" TargetType="{x:Type Button}">
+                <Setter x:Uid="Setter_1" Property="Padding" Value="5,4"/>
+                <Setter x:Uid="Setter_2" Property="Margin" Value="5"/>
+                <Setter x:Uid="Setter_3" Property="MinWidth" Value="70"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel x:Uid="StackPanel_1" Orientation="Horizontal">
+        <TextBlock x:Uid="TextBlock_1" Text="Load the authorization certificate directly from file:" VerticalAlignment="Center"/>
+        <Button x:Uid="Button_1" Margin="10,0,0,0" Padding="5,4" MinWidth="0" VerticalAlignment="Center"
+                            Command="{Binding LoadCommand}" ToolTip="Load certificate from file">
+            <TextBlock x:Uid="TextBlock_2" Text="{StaticResource FolderOpenIcon}" Style="{StaticResource ButtonIcon}"/>
+        </Button>
+    </StackPanel>
+</UserControl>
