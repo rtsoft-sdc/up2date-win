@@ -21,8 +21,9 @@ namespace Up2dateShared
             public string crt { get; set; }
         }
 
-        private struct PublicKeyDto
+        private struct RequestDto
         {
+            public string machineGUID { get; set; }
             public string modulus { get; set; }
             public string exponent { get; set; }
         }
@@ -65,7 +66,7 @@ namespace Up2dateShared
             }
         }
 
-        public async Task<Result<string>> OpenRequestCertificateSessionAsync()
+        public async Task<Result<string>> OpenRequestCertificateSessionAsync(string machineGuid)
         {
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024);
             RSAParameters key = rsa.ExportParameters(false);
@@ -74,8 +75,9 @@ namespace Up2dateShared
 
             try
             {
-                string publicKeyJson = JsonConvert.SerializeObject(new PublicKeyDto
+                string publicKeyJson = JsonConvert.SerializeObject(new RequestDto
                 {
+                    machineGUID = machineGuid,
                     modulus = Convert.ToBase64String(key.Modulus),
                     exponent = Convert.ToBase64String(key.Exponent)
                 });

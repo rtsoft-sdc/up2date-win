@@ -42,8 +42,6 @@ namespace Up2dateConsole.Dialogs.QrCode
             {
                 server = wcfClientFactory.CreateClient();
 
-                string clientID = server.GetDeviceId();
-
                 var result = await server.OpenRequestCertificateSessionAsync();
                 if (cancellationTokenSource.IsCancellationRequested) return;
 
@@ -57,10 +55,10 @@ namespace Up2dateConsole.Dialogs.QrCode
 
                 handle = result.Value;
 
-                Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start=approve_{clientID}_{handle}");
+                Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start=approve_{handle}");
 
                 const int period = 3; // sec
-                const int timeout = 120; // sec
+                const int timeout = 180; // sec
                 int t;
                 for (t = timeout; t > 0; t--)
                 {
