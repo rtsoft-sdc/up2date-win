@@ -5,6 +5,8 @@ using Up2dateConsole.Helpers;
 using Up2dateConsole.ViewService;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Diagnostics;
 
 namespace Up2dateConsole.Dialogs.QrCode
 {
@@ -13,17 +15,22 @@ namespace Up2dateConsole.Dialogs.QrCode
         private readonly IViewService viewService;
         private readonly IQrCodeHelper qrCodeHelper;
         private readonly IWcfClientFactory wcfClientFactory;
+        private readonly IProcessHelper processHelper;
         private readonly CancellationTokenSource cancellationTokenSource;
         private BitmapSource bitmap;
         private TimeSpan timeLeft;
+        private string handle;
+        private string approveUrl;
 
-        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, IWcfClientFactory wcfClientFactory)
+        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, IWcfClientFactory wcfClientFactory, IProcessHelper processHelper)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.qrCodeHelper = qrCodeHelper ?? throw new ArgumentNullException(nameof(qrCodeHelper));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
-
+            this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
             cancellationTokenSource = new CancellationTokenSource();
+
+            ApproveUrlCommand = new RelayCommand(ExecuteApproveUrlCommand);
 
             GetCertAsync();
         }
@@ -36,7 +43,6 @@ namespace Up2dateConsole.Dialogs.QrCode
 
         private async void GetCertAsync()
         {
-            string handle = string.Empty;
             ServiceReference.IWcfService server = null;
             try
             {
@@ -53,9 +59,11 @@ namespace Up2dateConsole.Dialogs.QrCode
                     return;
                 }
 
-                handle = result.Value;
+                Handle = result.Value;
 
-                Bitmap = qrCodeHelper.CreateQrCode($"t.me/RTSOFTbot?start=approve_{handle}");
+                ApproveUrl = $"http://t.me/RTSOFTbot?start=approve_{Handle}";
+
+                Bitmap = qrCodeHelper.CreateQrCode(ApproveUrl);
 
                 const int period = 3; // sec
                 const int timeout = 180; // sec
@@ -66,12 +74,12 @@ namespace Up2dateConsole.Dialogs.QrCode
 
                     if ((t % period) == 0)
                     {
-                        result = await server.GetCertificateBySessionHandleAsync(handle);
+                        result = await server.GetCertificateBySessionHandleAsync(Handle);
                         if (cancellationTokenSource.IsCancellationRequested) return;
 
                         if (!result.Success)
                         {
-                            await server.CloseRequestCertificateSessionAsync(handle);
+                            await server.CloseRequestCertificateSessionAsync(Handle);
                             if (cancellationTokenSource.IsCancellationRequested) return;
 
                             string message = viewService.GetText(Texts.GetCertificateError) + $"\n\n{result.ErrorMessage}";
@@ -109,10 +117,35 @@ namespace Up2dateConsole.Dialogs.QrCode
             }
             finally
             {
-                if (!string.IsNullOrEmpty(handle))
+                if (!string.IsNullOrEmpty(Handle))
                 {
-                    server?.CloseRequestCertificateSessionAsync(handle);
+                    server?.CloseRequestCertificateSessionAsync(Handle);
                 }
+            }
+        }
+
+
+        public ICommand ApproveUrlCommand { get; }
+
+        public bool IsConnecting => Bitmap == null;
+
+        public string ApproveUrl
+        {
+            get => approveUrl;
+            set
+            {
+                approveUrl = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Handle
+        {
+            get => handle;
+            private set
+            {
+                handle = value;
+                OnPropertyChanged();
             }
         }
 
@@ -123,6 +156,7 @@ namespace Up2dateConsole.Dialogs.QrCode
             {
                 bitmap = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsConnecting));
             }
         }
 
@@ -137,5 +171,14 @@ namespace Up2dateConsole.Dialogs.QrCode
         }
 
         public string Cert { get; private set; }
+
+        private void ExecuteApproveUrlCommand(object _)
+        {
+            var sInfo = new ProcessStartInfo(ApproveUrl)
+            {
+                UseShellExecute = true
+            };
+            processHelper.StartProcess(sInfo);
+        }
     }
 }
