@@ -23,7 +23,7 @@ namespace Up2dateShared
 
         private struct RequestDto
         {
-            public string machineGUID { get; set; }
+            public string device_id { get; set; }
             public string modulus { get; set; }
             public string exponent { get; set; }
         }
@@ -77,7 +77,7 @@ namespace Up2dateShared
             {
                 string publicKeyJson = JsonConvert.SerializeObject(new RequestDto
                 {
-                    machineGUID = machineGuid,
+                    device_id = machineGuid,
                     modulus = Convert.ToBase64String(key.Modulus),
                     exponent = Convert.ToBase64String(key.Exponent)
                 });
