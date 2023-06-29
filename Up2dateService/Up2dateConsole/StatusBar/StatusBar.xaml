@@ -64,12 +64,10 @@
                 <ColumnDefinition x:Uid="ColumnDefinition_6" Width="Auto"/>
                 <ColumnDefinition x:Uid="ColumnDefinition_7"/>
             </Grid.ColumnDefinitions>
-            <TextBlock x:Uid="TextBlock_4" Text="Controller Id:" VerticalAlignment="Center"/>
-            <Border x:Uid="Border_1" Grid.Column="1" Margin="5,0,0,0" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                    BorderThickness="1" BorderBrush="LightGray" Padding="4,2">
-                <TextBlock x:Uid="TextBlock_7" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="30"
-                       Text="{Binding DeviceId, Mode=OneWay}"/>
-            </Border>
+            <TextBlock x:Uid="TextBlock_14" VerticalAlignment="Center" Text="Controller Id:"/>
+            <TextBox x:Uid="TextBox_1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" MaxWidth="270" MinWidth="30"
+                         Style="{StaticResource ReadOnlyInfoField}"
+                         Text="{Binding DeviceId, Mode=OneWay}"/>
         </Grid>
         <Grid x:Uid="Grid_8" Grid.Column="4" Margin="15,0,0,0" HorizontalAlignment="Left" Background="Transparent" 
               Visibility="{Binding IsUnprotectedMode, Converter={StaticResource BooleanToVisibilityConverter}}"
