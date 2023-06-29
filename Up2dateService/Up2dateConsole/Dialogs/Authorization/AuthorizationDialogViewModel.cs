@@ -23,7 +23,8 @@ namespace Up2dateConsole.Dialogs.Authorization
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
 
-        public AuthorizationDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation, IProcessHelper processHelper)
+        public AuthorizationDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory,
+            bool showExplanation, IProcessHelper processHelper)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
@@ -47,6 +48,7 @@ namespace Up2dateConsole.Dialogs.Authorization
                 IsCertificateAvailable = service.IsCertificateAvailable();
                 mode = service.IsUnsafeConnection() ? Mode.PlainToken : Mode.QrCode;
                 MachineGuid = service.GetSystemInfo().MachineGuid;
+                QrCodePage.Initialize(service);
                 PlainTokenPage.Initialize(service);
             }
             catch (Exception e)

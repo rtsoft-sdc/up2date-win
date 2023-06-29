@@ -57,6 +57,7 @@
         <Setter x:Uid="Setter_9" Property="Padding" Value="2,4,2,2"/>
         <Setter x:Uid="Setter_10" Property="FontFamily" Value="Courier New"/>
         <Setter x:Uid="Setter_11" Property="IsReadOnly" Value="True"/>
+        <Setter x:Uid="Setter_15" Property="BorderBrush" Value="LightGray"/>
     </Style>
 
 </ResourceDictionary>

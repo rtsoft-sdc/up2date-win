@@ -22,17 +22,21 @@ namespace Up2dateConsole.Dialogs.QrCode
         private string handle;
         private string approveUrl;
 
-        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper, IWcfClientFactory wcfClientFactory, IProcessHelper processHelper)
+        public QrCodeDialogViewModel(IViewService viewService, IQrCodeHelper qrCodeHelper,
+            IWcfClientFactory wcfClientFactory, IProcessHelper processHelper, string controllerId)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.qrCodeHelper = qrCodeHelper ?? throw new ArgumentNullException(nameof(qrCodeHelper));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
+            if (string.IsNullOrWhiteSpace(controllerId))
+                throw new ArgumentException($"'{nameof(controllerId)}' cannot be null or whitespace.", nameof(controllerId));
+
             cancellationTokenSource = new CancellationTokenSource();
 
             ApproveUrlCommand = new RelayCommand(ExecuteApproveUrlCommand);
 
-            GetCertAsync();
+            GetCertAsync(controllerId);
         }
 
         public override bool OnClosing()
@@ -41,14 +45,14 @@ namespace Up2dateConsole.Dialogs.QrCode
             return base.OnClosing();
         }
 
-        private async void GetCertAsync()
+        private async void GetCertAsync(string controllerId)
         {
             ServiceReference.IWcfService server = null;
             try
             {
                 server = wcfClientFactory.CreateClient();
 
-                var result = await server.OpenRequestCertificateSessionAsync();
+                var result = await server.OpenRequestCertificateSessionAsync(controllerId);
                 if (cancellationTokenSource.IsCancellationRequested) return;
 
                 if (!result.Success)

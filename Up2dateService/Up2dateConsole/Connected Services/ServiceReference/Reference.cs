@@ -887,10 +887,10 @@ namespace Up2dateConsole.ServiceReference {
         System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> RequestCertificateAsync(string oneTimeKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/OpenRequestCertificateSession", ReplyAction="http://tempuri.org/IWcfService/OpenRequestCertificateSessionResponse")]
-        Up2dateConsole.ServiceReference.ResultOfstring OpenRequestCertificateSession();
+        Up2dateConsole.ServiceReference.ResultOfstring OpenRequestCertificateSession(string controllerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/OpenRequestCertificateSession", ReplyAction="http://tempuri.org/IWcfService/OpenRequestCertificateSessionResponse")]
-        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> OpenRequestCertificateSessionAsync();
+        System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> OpenRequestCertificateSessionAsync(string controllerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetCertificateBySessionHandle", ReplyAction="http://tempuri.org/IWcfService/GetCertificateBySessionHandleResponse")]
         Up2dateConsole.ServiceReference.ResultOfstring GetCertificateBySessionHandle(string handle);
@@ -1160,12 +1160,12 @@ namespace Up2dateConsole.ServiceReference {
             return base.Channel.RequestCertificateAsync(oneTimeKey);
         }
         
-        public Up2dateConsole.ServiceReference.ResultOfstring OpenRequestCertificateSession() {
-            return base.Channel.OpenRequestCertificateSession();
+        public Up2dateConsole.ServiceReference.ResultOfstring OpenRequestCertificateSession(string controllerId) {
+            return base.Channel.OpenRequestCertificateSession(controllerId);
         }
         
-        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> OpenRequestCertificateSessionAsync() {
-            return base.Channel.OpenRequestCertificateSessionAsync();
+        public System.Threading.Tasks.Task<Up2dateConsole.ServiceReference.ResultOfstring> OpenRequestCertificateSessionAsync(string controllerId) {
+            return base.Channel.OpenRequestCertificateSessionAsync(controllerId);
         }
         
         public Up2dateConsole.ServiceReference.ResultOfstring GetCertificateBySessionHandle(string handle) {

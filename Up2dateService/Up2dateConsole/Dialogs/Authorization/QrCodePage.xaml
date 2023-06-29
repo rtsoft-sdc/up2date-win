@@ -21,24 +21,9 @@
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Grid x:Uid="Grid_1">
+    <StackPanel x:Uid="StackPanel_1">
+        <TextBlock x:Uid="TextBlock_1" Text="Controller ID:"/>
+        <TextBox x:Uid="TextBox_1" Margin="0,5" Text="{Binding ControllerId, UpdateSourceTrigger=PropertyChanged}"/>
         <Button x:Uid="Button_1" Content="QR code" HorizontalAlignment="Left" Command="{Binding QrCodeCommand}"/>
-        <!--<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Connecting to certificate provider..."/>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" MaxWidth="350" Margin="10,10,0,10" HorizontalAlignment="Left" TextWrapping="Wrap"
-                    Text="Follow the QR code link redirecting you to telegram bot and confirm the authorization request." Grid.ColumnSpan="5"/>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="4" Margin="0,7">
-                <Border BorderThickness="1" BorderBrush="LightGray" Margin="5" >
-                    <TextBlock Foreground="Gray" Margin="5"
-                            VerticalAlignment="Center"
-                            Text="{Binding TimeLeft, StringFormat=m\\:ss}"/>
-                </Border>
-            </StackPanel>
-            <Image Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="400" Height="400" Source="{Binding Bitmap}" Grid.ColumnSpan="5" Margin="0,0,1,0"/>
-        </Grid>-->
-    </Grid>
+    </StackPanel>
 </UserControl>
