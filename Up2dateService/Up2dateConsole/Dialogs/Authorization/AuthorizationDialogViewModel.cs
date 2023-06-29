@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using Up2dateConsole.Helpers;
 using Up2dateConsole.ServiceReference;
 using Up2dateConsole.ViewService;
 
@@ -22,13 +23,13 @@ namespace Up2dateConsole.Dialogs.Authorization
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
 
-        public AuthorizationDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation)
+        public AuthorizationDialogViewModel(IViewService viewService, IWcfClientFactory wcfClientFactory, bool showExplanation, IProcessHelper processHelper)
         {
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
             ShowExplanation = showExplanation;
 
-            QrCodePage = new QrCodePageViewModel(EstablishConnection, viewService, wcfClientFactory);
+            QrCodePage = new QrCodePageViewModel(EstablishConnection, viewService, wcfClientFactory, processHelper);
             OneTimeTokenPage = new OneTimeTokenPageViewModel(EstablishConnection);
             ImportCertificatePage = new ImportCertificatePageViewModel(EstablishConnection, viewService);
             PlainTokenPage = new PlainTokenPageViewModel(EstablishConnection);

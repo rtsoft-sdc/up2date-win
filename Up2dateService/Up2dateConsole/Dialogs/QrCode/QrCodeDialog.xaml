@@ -17,11 +17,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Uid="ResourceDictionary_2" Source="..\..\Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Uid="BooleanToVisibilityConverter_1" x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid x:Uid="Grid_1">
-        <TextBlock x:Uid="TextBlock_1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Connecting to certificate provider..."/>
         <Grid x:Uid="Grid_2" Width="420">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Uid="ColumnDefinition_1" Width="*"/>
@@ -33,9 +33,22 @@
                 <RowDefinition x:Uid="RowDefinition_3" Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock x:Uid="TextBlock_3" Grid.Row="0" Grid.ColumnSpan="2" Margin="10" HorizontalAlignment="Left" TextWrapping="Wrap"
-                       Text="Follow the QR code link redirecting you to telegram bot and confirm the authorization request."/>
+                       Text="Follow the QR code link redirecting you to telegram bot in order to confirm the authorization request."/>
             <Border x:Uid="Border_2" BorderThickness="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="10,0" BorderBrush="LightGray">
-                <Image x:Uid="Image_1" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="400" Height="400" Source="{Binding Bitmap}"/>
+                <StackPanel x:Uid="StackPanel_1">
+                    <Image x:Uid="Image_1" Grid.Row="1" Grid.ColumnSpan="2"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="400" Height="400"
+                           Source="{Binding Bitmap}"/>
+                    <TextBlock x:Uid="TextBlock_5" Margin="10,0,10,0" HorizontalAlignment="Center">
+                        <Hyperlink x:Uid="Hyperlink_1" Command="{Binding ApproveUrlCommand}">
+                            <TextBlock x:Uid="TextBlock_6" Text="{Binding ApproveUrl}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    <StackPanel x:Uid="StackPanel_2" Margin="10,0,10,10" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock x:Uid="TextBlock_7" VerticalAlignment="Center" Text="Request handle:"/>
+                        <TextBox x:Uid="TextBox_1" Margin="5,0,0,0" VerticalAlignment="Center" BorderThickness="0" Text="{Binding Handle, Mode=OneWay}" IsReadOnly="True" Foreground="Gray"/>
+                    </StackPanel>
+                </StackPanel>
             </Border>
             <TextBlock x:Uid="TextBlock_4" Grid.Row="2" Grid.Column="0" Margin="10" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"
                        Text="Do not close this window unless you want to cancel the authorization process. The window will close automatically upon completion of authorization."/>
@@ -46,5 +59,9 @@
                             Text="{Binding TimeLeft, StringFormat=m\\:ss}"/>
             </Border>
         </Grid>
+        <Border x:Uid="Border_3" Background="White" Visibility="{Binding IsConnecting, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock x:Uid="TextBlock_1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                   Text="Connecting to certificate provider..."/>
+        </Border>
     </Grid>
 </Window>

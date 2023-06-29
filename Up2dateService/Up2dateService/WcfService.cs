@@ -132,7 +132,8 @@ namespace Up2dateService
         [OperationBehavior(Impersonation = ImpersonationOption.Required)]
         public Result<string> OpenRequestCertificateSession()
         {
-            return certificateProvider.OpenRequestCertificateSessionAsync().Result;
+            string machineGuid = getSysInfo().MachineGuid;
+            return certificateProvider.OpenRequestCertificateSessionAsync(machineGuid).Result;
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = AdministratorsGroupSID)]

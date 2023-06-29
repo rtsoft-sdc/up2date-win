@@ -13,13 +13,15 @@ namespace Up2dateConsole.Dialogs.Authorization
         private Func<Func<IWcfService, Task<ResultOfstring>>, bool, Task> establishConnection;
         private readonly IViewService viewService;
         private readonly IWcfClientFactory wcfClientFactory;
+        private readonly IProcessHelper processHelper;
 
-        public QrCodePageViewModel(Func<Func<IWcfService, Task<ResultOfstring>>, bool, Task> establishConnection, IViewService viewService, IWcfClientFactory wcfClientFactory)
+        public QrCodePageViewModel(Func<Func<IWcfService, Task<ResultOfstring>>, bool, Task> establishConnection,
+            IViewService viewService, IWcfClientFactory wcfClientFactory, IProcessHelper processHelper)
         {
             this.establishConnection = establishConnection ?? throw new ArgumentNullException(nameof(establishConnection));
             this.viewService = viewService ?? throw new ArgumentNullException(nameof(viewService));
             this.wcfClientFactory = wcfClientFactory ?? throw new ArgumentNullException(nameof(wcfClientFactory));
-
+            this.processHelper = processHelper ?? throw new ArgumentNullException(nameof(processHelper));
             QrCodeCommand = new RelayCommand(async (_) => await ExecuteQrCodeAsync());
         }
 
@@ -27,7 +29,7 @@ namespace Up2dateConsole.Dialogs.Authorization
 
         private async Task ExecuteQrCodeAsync()
         {
-            var vm = new QrCodeDialogViewModel(viewService, new QrCodeHelper(), wcfClientFactory);
+            var vm = new QrCodeDialogViewModel(viewService, new QrCodeHelper(), wcfClientFactory, processHelper);
             bool ok = viewService.ShowDialog(vm);
             if (ok && !string.IsNullOrWhiteSpace(vm.Cert))
             {

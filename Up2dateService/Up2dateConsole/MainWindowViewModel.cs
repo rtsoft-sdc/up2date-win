@@ -238,7 +238,7 @@ namespace Up2dateConsole
 
         private async Task RequestCertificateAsync(bool showExplanation)
         {
-            AuthorizationDialogViewModel vm = new AuthorizationDialogViewModel(viewService, wcfClientFactory, showExplanation);
+            AuthorizationDialogViewModel vm = new AuthorizationDialogViewModel(viewService, wcfClientFactory, showExplanation, processHelper);
             bool success = viewService.ShowDialog(vm);
             if (success)
             {
