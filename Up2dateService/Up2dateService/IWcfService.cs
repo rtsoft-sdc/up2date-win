@@ -44,7 +44,7 @@ namespace Up2dateService
         Result<string> RequestCertificate(string oneTimeKey);
 
         [OperationContract]
-        Result<string> OpenRequestCertificateSession();
+        Result<string> OpenRequestCertificateSession(string controllerId);
 
         [OperationContract]
         Result<string> GetCertificateBySessionHandle(string handle);
